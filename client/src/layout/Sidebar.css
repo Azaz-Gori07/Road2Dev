@@ -16,12 +16,13 @@
     justify-content: space-between;
     align-items: center;
     background-color: black;
-    max-width: 23%;
-    min-width: 250px;
+    max-width: 300px;
+    min-width: 280px;
     transition: all 0.3s ease;
+    position: relative;
 }
 
-#sidebar-close{
+#sidebar-close {
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -30,8 +31,9 @@
     align-items: center;
     background-color: black;
     max-width: 100px;
-    overflow: hidden;
+    min-width: 100px;
     transition: all 0.3s ease;
+    position: relative;
 }
 
 .section {
@@ -43,14 +45,56 @@
     justify-content: center;
 }
 
-.menubtn{
+.menubtn {
     color: #9ca3af;
     font-size: 30px;
     cursor: pointer;
     transition: color 0.3s ease;
+    position: relative;
 }
 
-.menubtn:hover{
+.menutitle{
+    position: relative;
+}
+
+.menutitle::after {
+    content: attr(data-title);
+    position: absolute;
+    left: 110%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1f1e1e;
+    color: #e5e7eb;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+}
+
+.menutitle::before {
+    content: "";
+    position: absolute;
+    left: 102%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-right-color: #111;
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 9999;
+}
+
+.menutitle:hover::after,
+.menutitle:hover::before {
+    opacity: 1;
+}
+
+.menubtn:hover {
     color: white;
 }
 
@@ -69,8 +113,8 @@
 }
 
 .logoImg {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     margin-right: 10px;
     mix-blend-mode: lighten;
 }
@@ -78,26 +122,26 @@
 .logo {
     color: white;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 26px;
+    font-size: 20px;
     font-weight: 700;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: end;
     background: linear-gradient(90deg, #3b82f6, #22c55e);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.logo b{
+.logo b {
     font-weight: 900;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 32px;
+    font-size: 27px;
 }
 
 .sidebar-links {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 25px;
     width: 100%;
 }
 
@@ -145,6 +189,65 @@
     gap: 10px;
 }
 
+#sidebar-close .link-text {
+    display: none;
+}
+
+#sidebar-close .sidebar-link {
+    justify-content: center;
+    padding: 12px 0;
+    position: relative;
+}
+
+.sidebar-link::after {
+    content: attr(data-title);
+    position: absolute;
+    left: 110%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1f1e1e;
+    color: #e5e7eb;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+}
+
+.sidebar-link::before {
+    content: "";
+    position: absolute;
+    left: 102%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-right-color: #111;
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 9999;
+}
+
+#sidebar-close .sidebar-link:hover::after,
+#sidebar-close .sidebar-link:hover::before {
+    opacity: 1;
+}
+
+
+#sidebar-close .sidebar-link:hover,
+#sidebar-close .isActive {
+    padding: 12px 0;
+    border-left: none;
+    border-radius: 8px;
+    background-color: #272626;
+    display: flex;
+    justify-content: center;
+}
+
+
 .logoutdiv {
     width: 100%;
     display: flex;
@@ -185,4 +288,66 @@
     background-color: #000;
     border-left: 4px red solid;
     border-radius: 2px;
+}
+
+#sidebar-close .logoutbtn {
+    width: auto;
+    justify-content: center;
+    padding: 12px 0;
+    position: relative;
+}
+
+#sidebar-close .logoutbtn:hover {
+    width: auto;
+    justify-content: center;
+    padding: 12px 12px;
+    border-left: none;
+    border-radius: 8px;
+    background-color: #272626;
+}
+
+#sidebar-close .logoutdiv {
+    justify-content: center;
+}
+
+#sidebar-close .logout-text {
+    display: none;
+}
+
+.logoutbtn::after {
+    content: attr(data-title);
+    position: absolute;
+    left: 110%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1f1e1e;
+    color: #e5e7eb;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+}
+
+.logoutbtn::before {
+    content: "";
+    position: absolute;
+    left: 102%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-right-color: #111;
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 9999;
+}
+
+
+#sidebar-close .logoutbtn:hover::after,
+#sidebar-close .logoutbtn:hover::before {
+    opacity: 1;
 }

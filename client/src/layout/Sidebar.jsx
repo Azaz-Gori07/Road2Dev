@@ -1,6 +1,6 @@
 import React from 'react'
 import './Sidebar.css'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
     Home,
     BookOpen,
@@ -21,24 +21,24 @@ function Sidebar() {
 
 
     return (
-        <section id={close ? "sidebar-close" : "sidebar-open"} className="sidebar">
+        <section id={close ? "sidebar-close" : "sidebar-open"}>
             <div className="section">
                 <div className={"logodiv"}>
                     <h2 className={close ? "logo-close" : "logo"}><img src="logo.png" alt="Logo" className='logoImg'/> Road<b>2</b>Dev</h2>
-                    <BiFoodMenu className="menubtn"onClick={() => setClose(!close)}/>
+                    <span className='menutitle' data-title="open/close"><BiFoodMenu className="menubtn" onClick={() => setClose(!close)} data-title="open/close" /></span>
                 </div>
                 <ul className="sidebar-links">
-                    <li onClick={() => setActiveLink("home")} className={activeLink === 'home' ? 'isActive' : 'sidebar-link'}><Home size={20} /> Home</li>
-                    <li onClick={() => setActiveLink("learning")} className={activeLink === 'learning' ? 'isActive' : 'sidebar-link'}><BookOpen size={20} /> Learning</li>
-                    <li onClick={() => setActiveLink("interview")} className={activeLink === 'interview' ? 'isActive' : 'sidebar-link'}><Mic size={20} /> Interview Prep</li>
-                    <li onClick={() => setActiveLink("score")} className={activeLink === 'score' ? 'isActive' : 'sidebar-link'}><BarChart3 size={20} /> My Score</li>
-                    <li onClick={() => setActiveLink("profile")} className={activeLink === 'profile' ? 'isActive' : 'sidebar-link'}><User size={20} /> Profile</li>
-                    <li onClick={() => setActiveLink("about")} className={activeLink === 'about' ? 'isActive' : 'sidebar-link'}><Info size={20} /> About</li>
+                    <Link to="/"><li onClick={() => setActiveLink("home")} className={activeLink === 'home' ? 'isActive' : 'sidebar-link'} data-title='Home'><Home size={20} /> <span className='link-text'>Home</span></li></Link>
+                    <li onClick={() => setActiveLink("learning")} className={activeLink === 'learning' ? 'isActive' : 'sidebar-link'} data-title='Learning'><BookOpen size={20} /> <span className='link-text'>Learning</span></li>
+                    <li onClick={() => setActiveLink("interview")} className={activeLink === 'interview' ? 'isActive' : 'sidebar-link'} data-title='Interview Prep'><Mic size={20} /> <span className='link-text'>Interview Prep</span></li>
+                    <li onClick={() => setActiveLink("score")} className={activeLink === 'score' ? 'isActive' : 'sidebar-link'} data-title='My Score'><BarChart3 size={20} /> <span className='link-text'>My Score</span></li>
+                    <li onClick={() => setActiveLink("profile")} className={activeLink === 'profile' ? 'isActive' : 'sidebar-link'} data-title='Profile'><User size={20} /> <span className='link-text'>Profile</span></li>
+                    <Link to="/about"><li onClick={() => setActiveLink("about")} className={activeLink === 'about' ? 'isActive' : 'sidebar-link'} data-title='About'><Info size={20} /> <span className='link-text'>About</span></li></Link>
                 </ul>
             </div>
 
             <div className="logoutdiv">
-                <button className="logoutbtn"><LogOut size={22} /> Log Out</button>
+                <button className="logoutbtn"  data-title='SignOut'><LogOut size={22} /> <span className='logout-text'>Log Out</span></button>
             </div>
         </section>
     )
