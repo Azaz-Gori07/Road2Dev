@@ -1,0 +1,22 @@
+.topbar {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 16px;
+    background-color: black;
+    position: sticky;
+    top: 0;
+    z-index: 99999;
+  }
+
+  .topbar-title {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}

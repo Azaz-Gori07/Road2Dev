@@ -6,12 +6,13 @@
     text-decoration: none;
     scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
+    background-color: #000;
 }
 
 #sidebar-open {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 98%;
     padding: 30px;
     justify-content: space-between;
     align-items: center;
@@ -25,7 +26,7 @@
 #sidebar-close {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 98%;
     padding: 30px;
     justify-content: space-between;
     align-items: center;
@@ -120,7 +121,6 @@
 }
 
 .logo {
-    color: white;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 20px;
     font-weight: 700;
@@ -133,9 +133,9 @@
 }
 
 .logo b {
-    font-weight: 900;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 27px;
+    -webkit-text-fill-color: transparent;
+    background: inherit;
+    -webkit-background-clip: text;
 }
 
 .sidebar-links {
@@ -350,4 +350,49 @@
 #sidebar-close .logoutbtn:hover::after,
 #sidebar-close .logoutbtn:hover::before {
     opacity: 1;
+}
+
+@media (min-width: 320px) and (max-width: 800px) {
+
+  #sidebar-open,
+  #sidebar-close {
+    display: none;
+  }
+
+  #sidebar-mobile-open {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    background-color: black;
+    z-index: 9999;
+    padding: 25px;
+    transition: transform 0.3s ease;
+    transform: translateX(0);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  #sidebar-mobile-close {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    background-color: black;
+    z-index: 9999;
+    padding: 25px;
+    transition: transform 0.3s ease;
+    transform: translateX(-100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  #sidebar-mobile-close .menutitle{
+    position: absolute;
+    right: -50px;
+    z-index: 10000;
+  }
 }
