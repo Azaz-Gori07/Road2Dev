@@ -1,10 +1,11 @@
-import React from 'react'
+import React from 'react';
+import './InterviewPrep.css';
 
 function InterviewPrep() {
   return (
-    <div>
-      
-    </div>
+    <section className="interview-prep-section">
+      <h1>P</h1>
+    </section>
   )
 }
 

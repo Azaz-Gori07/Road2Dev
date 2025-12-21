@@ -1,0 +1,58 @@
+.stacks-container {
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.field-title {
+    font-size: 32px;
+    font-weight: bold;
+    /* margin-bottom: 20px; */
+    color: #ddd;
+}
+
+.stacks-section {
+    padding: 50px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 30px;
+    row-gap: 10px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
+}
+
+.stack-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #252525;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 0;
+    min-width: 200px;
+    max-width: 340px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.stackname {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #fff;
+    background: none;
+}
+
+.stack-description {
+    font-size: 16px;
+    color: #ccc;
+    background: none;
+}

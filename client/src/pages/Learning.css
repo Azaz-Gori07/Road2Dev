@@ -1,0 +1,128 @@
+.learning-page {
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+    background-color: #000;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.learning-page .heading {
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    letter-spacing: 10px;
+}
+
+.learning-page .sub-title {
+    font-size: 1.2rem;
+    color: #ccc;
+    margin-top: -10px;
+}
+
+.learning-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.fields-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 3rem;
+    width: 100%;
+    background-color: #000;
+    overflow-y: scroll;
+    align-items: center;
+    scrollbar-width: thin;
+    scrollbar-color: #444 transparent;
+}
+
+.field-card {
+    max-width: 350px;
+    min-width: 200px;
+    height: auto;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #111;
+    padding: 20px;
+    cursor: pointer;
+    animation: fadeIn 1.5s ease-in-out forwards .5s;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.field-name {
+    font-size: 1.2rem;
+    color: white;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.field-description {
+    font-size: .9rem;
+    color: rgba(169, 169, 169, 0.933);
+    background: transparent;
+    margin-top: 5px;
+}
+
+.field-icon {
+    color: white;
+    background: #111;
+    margin-bottom: 5px;
+}
+
+@media (min-width:320px) and (max-width:800px) {
+        .learning-header{
+            margin-top: 50px;
+        }
+}
+
+@media (max-width:500px) {
+    .field-description{
+        line-height: 20px;
+    }
+}
+
+@media (min-width:700px) and (max-width:796px) {
+    .fields-container{
+        width: 100%;
+    }
+    .field-card{
+        max-width: min-content;
+        min-width: 300px;
+    }
+}
+@media (min-width:550px) and (max-width:700px) {
+    .fields-container{
+        width: 80%;
+    }
+    .field-card{
+        max-width: max-content;
+        min-width: 300px;
+    }
+}

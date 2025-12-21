@@ -1,0 +1,166 @@
+[
+  {
+    "field": "Web Development",
+    "fieldSlug": "web-development",
+    "type": "multiple",
+    "stacks": [
+      {
+        "id": 1,
+        "name": "MERN Stack",
+        "slug": "mern-stack",
+        "description": "MongoDB, Express, React and Node.js based full stack development."
+      },
+      {
+        "id": 2,
+        "name": "SERN Stack",
+        "slug": "sern-stack",
+        "description": "SQL, Express, React and Node.js based full stack development."
+      },
+      {
+        "id": 3,
+        "name": "PHP + Laravel",
+        "slug": "php-laravel",
+        "description": "Backend development using PHP with Laravel framework."
+      },
+      {
+        "id": 4,
+        "name": "Django + React",
+        "slug": "django-react",
+        "description": "Full stack development using Django for backend and React for frontend."
+      },
+      {
+        "id": 5,
+        "name": "Next.js Stack",
+        "slug": "nextjs-stack",
+        "description": "Modern React framework with SSR, routing and backend APIs."
+      },
+      {
+        "id": 6,
+        "name": "WordPress Development",
+        "slug": "wordpress",
+        "description": "CMS based web development using WordPress."
+      }
+    ]
+  },
+
+  {
+    "field": "Software Development",
+    "fieldSlug": "software-development",
+    "type": "multiple",
+    "stacks": [
+      {
+        "id": 1,
+        "name": "C Programming",
+        "slug": "c-programming",
+        "description": "Core programming fundamentals using C language."
+      },
+      {
+        "id": 2,
+        "name": "C++ with DSA",
+        "slug": "cpp-dsa",
+        "description": "Data structures and algorithms using C++."
+      },
+      {
+        "id": 3,
+        "name": "Java Development",
+        "slug": "java-development",
+        "description": "Object-oriented programming and backend development using Java."
+      },
+      {
+        "id": 4,
+        "name": "Python Development",
+        "slug": "python-development",
+        "description": "Programming fundamentals and backend development using Python."
+      },
+      {
+        "id": 5,
+        "name": "Java + Spring Boot",
+        "slug": "java-spring-boot",
+        "description": "Enterprise backend development using Spring Boot."
+      },
+      {
+        "id": 6,
+        "name": "C# + .NET",
+        "slug": "csharp-dotnet",
+        "description": "Backend and enterprise software development using .NET."
+      }
+    ]
+  },
+
+  {
+    "field": "Data Analyst",
+    "fieldSlug": "data-analyst",
+    "type": "linear",
+    "note": "This field does not have multiple stacks. It follows a linear learning path.",
+    "stacks": [
+      {
+        "id": 1,
+        "name": "Data Analyst Roadmap",
+        "slug": "data-analyst-roadmap",
+        "description": "Excel, SQL, Python, Data Visualization tools."
+      }
+    ]
+  },
+
+  {
+    "field": "Data Science",
+    "fieldSlug": "data-science",
+    "type": "linear",
+    "note": "Learning follows a progressive roadmap rather than multiple stacks.",
+    "stacks": [
+      {
+        "id": 1,
+        "name": "Data Science Roadmap",
+        "slug": "data-science-roadmap",
+        "description": "Statistics, Python, Machine Learning and Deep Learning."
+      }
+    ]
+  },
+
+  {
+    "field": "Mobile App Development",
+    "fieldSlug": "mobile-development",
+    "type": "multiple",
+    "stacks": [
+      {
+        "id": 1,
+        "name": "Android (Java)",
+        "slug": "android-java",
+        "description": "Native Android development using Java."
+      },
+      {
+        "id": 2,
+        "name": "Android (Kotlin)",
+        "slug": "android-kotlin",
+        "description": "Modern Android development using Kotlin."
+      },
+      {
+        "id": 3,
+        "name": "Flutter Development",
+        "slug": "flutter",
+        "description": "Cross-platform mobile app development using Flutter."
+      },
+      {
+        "id": 4,
+        "name": "React Native",
+        "slug": "react-native",
+        "description": "Cross-platform mobile app development using React Native."
+      }
+    ]
+  },
+
+  {
+    "field": "DevOps & Cloud",
+    "fieldSlug": "devops-cloud",
+    "type": "linear",
+    "note": "DevOps follows a skill-based progression rather than fixed stacks.",
+    "stacks": [
+      {
+        "id": 1,
+        "name": "DevOps Roadmap",
+        "slug": "devops-roadmap",
+        "description": "Linux, Docker, CI/CD, Cloud fundamentals."
+      }
+    ]
+  }
+]

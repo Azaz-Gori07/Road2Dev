@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "name": "Web Development",
+    "slug": "web-development",
+    "description": "Frontend, backend and full-stack development using modern web technologies.",
+    "icon": "code"
+  },
+  {
+    "id": 2,
+    "name": "Software Development",
+    "slug": "software-development",
+    "description": "Core programming, problem solving, OOP, and system fundamentals for software engineers.",
+    "icon": "cpu"
+  },
+  {
+    "id": 3,
+    "name": "Data Analyst",
+    "slug": "data-analyst",
+    "description": "Data analysis, visualization, and reporting using tools and programming languages.",
+    "icon": "bar-chart"
+  },
+  {
+    "id": 4,
+    "name": "Data Science",
+    "slug": "data-science",
+    "description": "Machine learning, statistics, and data-driven problem solving.",
+    "icon": "brain"
+  },
+  {
+    "id": 5,
+    "name": "Mobile App Development",
+    "slug": "mobile-development",
+    "description": "Building Android and cross-platform mobile applications.",
+    "icon": "smartphone"
+  },
+  {
+    "id": 6,
+    "name": "DevOps & Cloud",
+    "slug": "devops-cloud",
+    "description": "Deployment, automation, and cloud infrastructure for modern applications.",
+    "icon": "cloud"
+  }
+]

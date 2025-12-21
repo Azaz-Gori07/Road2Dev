@@ -7,6 +7,7 @@ import InterviewPrep from "./pages/InterviewPrep";
 import MyScore from "./pages/MyScore";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
+import StacksPage from "./pages/StacksPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/score" element={<MyScore />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/about" element={<About />} />
+        <Route path="/learning/:fieldSlug" element={<StacksPage />} />
       </Route>
     </Routes>
   );
