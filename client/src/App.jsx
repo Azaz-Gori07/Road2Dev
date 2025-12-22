@@ -8,7 +8,7 @@ import MyScore from "./pages/MyScore";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
 import StacksPage from "./pages/StacksPage";
-import RoadMap from "./pages/RoadMap";
+import RoadMap from "./pages/Roadmap";
 import ContentPage from "./pages/ContentPage";
 
 function App() {
