@@ -21,7 +21,7 @@ const ContentPage = () => {
 
   return (
     <div className="content-container">
-      <button className="back-button" onClick={handleBack}>
+      <button className="button" onClick={handleBack}>
         ← Back
       </button>
 

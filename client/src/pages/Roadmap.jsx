@@ -9,7 +9,7 @@ const Roadmap = () => {
   const roadmapKey = stackSlug || fieldSlug;
   const roadmap = stackFlow[roadmapKey];
 
-  const completed = []; 
+  const completed = ["web-fundamentals", "html"];
 
   const handleClick = (slug, index) => {
     const isUnlocked = index === 0 || completed.includes(slug);
@@ -120,7 +120,7 @@ const Roadmap = () => {
       </div>
 
       <div className="roadmap-navigation">
-        <button className="nav-button" onClick={handleBack}>
+        <button className="button" onClick={handleBack}>
           ← Go Back
         </button>
       </div>
