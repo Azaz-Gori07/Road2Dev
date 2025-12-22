@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import fundamentals from "../api/fundamentals.json";
 import html from "../api/languages/html5.json";
 import css from "../api/languages/css.json";
+import javascript from '../api/languages/javascript.json'
 import "./ContentPage.css";
 
 const ContentPage = () => {
@@ -14,7 +15,9 @@ const ContentPage = () => {
       ? html
       : techSlug === "css"
       ? css
-      : null;
+      : techSlug === "javascript"
+      ? javascript
+      :null;
 
   const handleBack = () => {
     window.history.back();

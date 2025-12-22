@@ -1,0 +1,3232 @@
+{
+    "technology": "JavaScript",
+    "slug": "javascript-fundamentals",
+    "description": "Core JavaScript concepts including variables, data types, operators, conditionals, loops, and basic functions.",
+    "levels": [
+        {
+            "level": "beginner",
+            "order": 1,
+            "topics": [
+                {
+                    "id": 1,
+                    "title": "Introduction to JavaScript",
+                    "english": "JavaScript is a versatile scripting language that adds interactivity to web pages.",
+                    "hinglish": "JavaScript ek dynamic programming language hai jo websites ko interactive banati hai.",
+                    "examples": [
+                        "console.log('Hello JavaScript!');",
+                        "alert('Welcome to JS!');"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is JavaScript primarily used for?",
+                            "answer": "Adding interactivity to web pages"
+                        },
+                        {
+                            "question": "Which keyword displays a popup message in browser?",
+                            "answer": "alert()"
+                        },
+                        {
+                            "question": "How to display output in browser console?",
+                            "answer": "console.log()"
+                        },
+                        {
+                            "question": "Can JavaScript run outside browser? (Yes/No)",
+                            "answer": "Yes (Node.js)"
+                        },
+                        {
+                            "question": "JavaScript is case-sensitive? (True/False)",
+                            "answer": "True"
+                        },
+                        {
+                            "question": "Which symbol is used for single line comments?",
+                            "answer": "//"
+                        },
+                        {
+                            "question": "What does JS stand for?",
+                            "answer": "JavaScript"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// My first JS code\nconsole.log('Namaste JavaScript!');\nalert('Page loaded successfully!');",
+                        "components": [
+                            {
+                                "name": "Browser Console",
+                                "english": "Developer tool for debugging",
+                                "hinglish": "Code debug karne ka tool",
+                                "importance": "Essential for development",
+                                "tip": "Press F12 to open"
+                            },
+                            {
+                                "name": "alert()",
+                                "english": "Displays popup message",
+                                "hinglish": "Popup message dikhata hai",
+                                "importance": "User notifications",
+                                "tip": "Blocks code execution"
+                            },
+                            {
+                                "name": "Script Tag",
+                                "english": "Includes JS in HTML",
+                                "hinglish": "HTML mein JS add karta hai",
+                                "importance": "Required for browser",
+                                "tip": "Place before </body>"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Feature",
+                                "console.log",
+                                "alert",
+                                "document.write"
+                            ],
+                            "rows": [
+                                [
+                                    "Output Location",
+                                    "Browser Console",
+                                    "Popup",
+                                    "Web Page"
+                                ],
+                                [
+                                    "Usage",
+                                    "Debugging",
+                                    "Alerts",
+                                    "Testing"
+                                ],
+                                [
+                                    "Blocking",
+                                    "No",
+                                    "Yes",
+                                    "No"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use console.log for debugging",
+                                "reason": "Doesn't interrupt user experience",
+                                "hinglish": "User disturb nahi hota"
+                            },
+                            {
+                                "practice": "Remove alert() in production",
+                                "reason": "Annoying for users",
+                                "hinglish": "Users ko pareshan karta hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 2,
+                    "title": "Variables (var, let, const)",
+                    "english": "Variables store data values with different scoping rules.",
+                    "hinglish": "Variables data store karte hain, har type ka scope alag hota hai.",
+                    "examples": [
+                        "var oldWay = 10;",
+                        "let changeable = 20;",
+                        "constant PI = 3.14;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which variable cannot be reassigned?",
+                            "answer": "const"
+                        },
+                        {
+                            "question": "Which has function scope?",
+                            "answer": "var"
+                        },
+                        {
+                            "question": "Which should be used by default?",
+                            "answer": "const"
+                        },
+                        {
+                            "question": "Can let be redeclared in same scope?",
+                            "answer": "No"
+                        },
+                        {
+                            "question": "What is hoisting?",
+                            "answer": "Moving declarations to top"
+                        },
+                        {
+                            "question": "Which shows temporal dead zone error?",
+                            "answer": "let and const"
+                        },
+                        {
+                            "question": "var variables are initialized with ______ before code runs?",
+                            "answer": "undefined"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Variable examples\nvar globalVar = 'I am everywhere';\nlet blockScoped = 'I stay in block';\nconst unchanging = 'I cannot change';",
+                        "components": [
+                            {
+                                "name": "var",
+                                "english": "Function scoped, can be redeclared",
+                                "hinglish": "Poora function mein accessible",
+                                "importance": "Legacy code",
+                                "tip": "Avoid in modern JS"
+                            },
+                            {
+                                "name": "let",
+                                "english": "Block scoped, cannot be redeclared",
+                                "hinglish": "Sirf block ke andar",
+                                "importance": "Modern standard",
+                                "tip": "Use when value changes"
+                            },
+                            {
+                                "name": "const",
+                                "english": "Block scoped, cannot be reassigned",
+                                "hinglish": "Block ke andar, value change nahi hoti",
+                                "importance": "Prevents bugs",
+                                "tip": "Use by default"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Feature",
+                                "var",
+                                "let",
+                                "const"
+                            ],
+                            "rows": [
+                                [
+                                    "Scope",
+                                    "Function",
+                                    "Block",
+                                    "Block"
+                                ],
+                                [
+                                    "Redeclare",
+                                    "Yes",
+                                    "No",
+                                    "No"
+                                ],
+                                [
+                                    "Reassign",
+                                    "Yes",
+                                    "Yes",
+                                    "No"
+                                ],
+                                [
+                                    "Hoisting",
+                                    "Yes (undefined)",
+                                    "Yes (TDZ)",
+                                    "Yes (TDZ)"
+                                ],
+                                [
+                                    "Global Property",
+                                    "Yes",
+                                    "No",
+                                    "No"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Always use const by default",
+                                "reason": "Prevents accidental reassignment",
+                                "hinglish": "Galti se value change nahi hogi"
+                            },
+                            {
+                                "practice": "Use let only when needed",
+                                "reason": "Makes code more predictable",
+                                "hinglish": "Code predictable rahega"
+                            },
+                            {
+                                "practice": "Never use var",
+                                "reason": "Causes scope-related bugs",
+                                "hinglish": "Scope problems create karta hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 3,
+                    "title": "Data Types",
+                    "english": "JavaScript has primitive and reference data types.",
+                    "hinglish": "JavaScript mein primitive aur reference data types hote hain.",
+                    "examples": [
+                        "let name = 'John'; // string",
+                        "let age = 25; // number",
+                        "let isStudent = true; // boolean"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How many primitive data types in JS?",
+                            "answer": "7"
+                        },
+                        {
+                            "question": "Which type represents true/false?",
+                            "answer": "boolean"
+                        },
+                        {
+                            "question": "What is typeof null?",
+                            "answer": "object (bug)"
+                        },
+                        {
+                            "question": "Which type is immutable?",
+                            "answer": "All primitives"
+                        },
+                        {
+                            "question": "What does NaN stand for?",
+                            "answer": "Not a Number"
+                        },
+                        {
+                            "question": "undefined vs null difference?",
+                            "answer": "undefined - not assigned, null - intentional empty"
+                        },
+                        {
+                            "question": "Which type stores key-value pairs?",
+                            "answer": "object"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// All data types\nlet str = 'Hello';\nlet num = 42;\nlet bool = true;\nlet nothing = null;\nlet notDefined = undefined;\nlet sym = Symbol('id');\nlet big = 9007199254740991n;",
+                        "components": [
+                            {
+                                "name": "Primitive Types",
+                                "english": "Stored directly in memory",
+                                "hinglish": "Direct memory mein store",
+                                "importance": "Foundation of JS",
+                                "tip": "Immutable (cannot change)"
+                            },
+                            {
+                                "name": "Reference Types",
+                                "english": "Stored by reference",
+                                "hinglish": "Reference se store hote hain",
+                                "importance": "Complex data structures",
+                                "tip": "Objects, arrays, functions"
+                            },
+                            {
+                                "name": "typeof Operator",
+                                "english": "Returns type of value",
+                                "hinglish": "Value ka type batata hai",
+                                "importance": "Type checking",
+                                "tip": "Returns string"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Type",
+                                "Example",
+                                "typeof",
+                                "Mutable?"
+                            ],
+                            "rows": [
+                                [
+                                    "String",
+                                    "'hello'",
+                                    "string",
+                                    "No"
+                                ],
+                                [
+                                    "Number",
+                                    "42, 3.14",
+                                    "number",
+                                    "No"
+                                ],
+                                [
+                                    "Boolean",
+                                    "true/false",
+                                    "boolean",
+                                    "No"
+                                ],
+                                [
+                                    "Undefined",
+                                    "undefined",
+                                    "undefined",
+                                    "N/A"
+                                ],
+                                [
+                                    "Null",
+                                    "null",
+                                    "object",
+                                    "N/A"
+                                ],
+                                [
+                                    "Symbol",
+                                    "Symbol()",
+                                    "symbol",
+                                    "No"
+                                ],
+                                [
+                                    "BigInt",
+                                    "10n",
+                                    "bigint",
+                                    "No"
+                                ],
+                                [
+                                    "Object",
+                                    "{ }",
+                                    "object",
+                                    "Yes"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use === for type checking",
+                                "reason": "Avoids type coercion issues",
+                                "hinglish": "Type conversion problems nahi hote"
+                            },
+                            {
+                                "practice": "Initialize variables properly",
+                                "reason": "Avoids undefined errors",
+                                "hinglish": "Undefined errors se bachta hai"
+                            },
+                            {
+                                "practice": "Use const for primitives",
+                                "reason": "Prevents accidental changes",
+                                "hinglish": "Accidental changes se protect karta hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 4,
+                    "title": "Operators",
+                    "english": "Operators perform operations on variables and values.",
+                    "hinglish": "Operators variables par operations perform karte hain.",
+                    "examples": [
+                        "let sum = 10 + 5; // 15",
+                        "let isEqual = 5 === '5'; // false",
+                        "let isAdult = age >= 18;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What does == do?",
+                            "answer": "Loose equality (with type conversion)"
+                        },
+                        {
+                            "question": "What does === do?",
+                            "answer": "Strict equality (no type conversion)"
+                        },
+                        {
+                            "question": "What is % operator?",
+                            "answer": "Modulus (remainder)"
+                        },
+                        {
+                            "question": "What does ++ do?",
+                            "answer": "Increment by 1"
+                        },
+                        {
+                            "question": "What is !== ?",
+                            "answer": "Strict not equal"
+                        },
+                        {
+                            "question": "What does && return?",
+                            "answer": "true if both operands true"
+                        },
+                        {
+                            "question": "What is ternary operator syntax?",
+                            "answer": "condition ? expr1 : expr2"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Various operators\nlet a = 10, b = 5;\nlet sum = a + b;\nlet equal = a === 10;\nlet result = a > b ? 'greater' : 'smaller';",
+                        "components": [
+                            {
+                                "name": "Arithmetic",
+                                "english": "Math operations: +, -, *, /, %",
+                                "hinglish": "Math ke operations",
+                                "importance": "Basic calculations",
+                                "tip": "% gives remainder"
+                            },
+                            {
+                                "name": "Comparison",
+                                "english": "Compare values: ==, ===, >, <",
+                                "hinglish": "Values compare karna",
+                                "importance": "Condition checking",
+                                "tip": "Always use === instead of =="
+                            },
+                            {
+                                "name": "Logical",
+                                "english": "Combine conditions: &&, ||, !",
+                                "hinglish": "Conditions combine karna",
+                                "importance": "Complex conditions",
+                                "tip": "Short-circuit evaluation"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Operator Type",
+                                "Symbols",
+                                "Example",
+                                "Result"
+                            ],
+                            "rows": [
+                                [
+                                    "Arithmetic",
+                                    "+ - * / % **",
+                                    "10 + 5",
+                                    "15"
+                                ],
+                                [
+                                    "Assignment",
+                                    "= += -= *= /=",
+                                    "x += 5",
+                                    "x = x + 5"
+                                ],
+                                [
+                                    "Comparison",
+                                    "== === != !== > <",
+                                    "5 === '5'",
+                                    "false"
+                                ],
+                                [
+                                    "Logical",
+                                    "&& || !",
+                                    "true && false",
+                                    "false"
+                                ],
+                                [
+                                    "Ternary",
+                                    "? :",
+                                    "age >= 18 ? 'adult' : 'child'",
+                                    "Conditional"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Always use === instead of ==",
+                                "reason": "Avoids unexpected type coercion",
+                                "hinglish": "Unexpected type conversion se bachata hai"
+                            },
+                            {
+                                "practice": "Use parentheses for clarity",
+                                "reason": "Makes operator precedence clear",
+                                "hinglish": "Code clear rahega"
+                            },
+                            {
+                                "practice": "Use ternary for simple conditions",
+                                "reason": "More concise than if-else",
+                                "hinglish": "if-else se concise hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 5,
+                    "title": "Conditionals (if/else, switch)",
+                    "english": "Conditionals control program flow based on conditions.",
+                    "hinglish": "Conditionals conditions ke hisab se program flow control karte hain.",
+                    "examples": [
+                        "if (age >= 18) { console.log('Adult'); }",
+                        "let day = 'Monday';\nswitch(day) { case 'Monday': console.log('Week start'); }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is the syntax of if statement?",
+                            "answer": "if (condition) { // code }"
+                        },
+                        {
+                            "question": "When does else if get executed?",
+                            "answer": "When previous if condition is false"
+                        },
+                        {
+                            "question": "What is purpose of break in switch?",
+                            "answer": "Stops execution of further cases"
+                        },
+                        {
+                            "question": "What does default do in switch?",
+                            "answer": "Executes when no case matches"
+                        },
+                        {
+                            "question": "Can switch use any data type?",
+                            "answer": "No, only primitive types"
+                        },
+                        {
+                            "question": "What is nested if?",
+                            "answer": "if inside another if"
+                        },
+                        {
+                            "question": "Which is faster: if-else or switch?",
+                            "answer": "Switch (for many conditions)"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// If-else example\nlet age = 20;\nif (age >= 18) {\n  console.log('Vote de sakte ho');\n} else {\n  console.log('Wait karo');\n}\n\n// Switch example\nlet day = 2;\nswitch(day) {\n  case 1: console.log('Monday'); break;\n  case 2: console.log('Tuesday'); break;\n  default: console.log('Other day');\n}",
+                        "components": [
+                            {
+                                "name": "if statement",
+                                "english": "Executes code if condition true",
+                                "hinglish": "Condition true hone par code chalta hai",
+                                "importance": "Basic flow control",
+                                "tip": "Condition must be boolean"
+                            },
+                            {
+                                "name": "else if",
+                                "english": "Additional conditions to check",
+                                "hinglish": "Extra conditions check karta hai",
+                                "importance": "Multiple conditions",
+                                "tip": "Checked in order"
+                            },
+                            {
+                                "name": "switch",
+                                "english": "Matches value against cases",
+                                "hinglish": "Value ko cases se match karta hai",
+                                "importance": "Many conditions",
+                                "tip": "Don't forget break"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Feature",
+                                "if-else",
+                                "switch"
+                            ],
+                            "rows": [
+                                [
+                                    "Best for",
+                                    "Range/complex conditions",
+                                    "Exact value matching"
+                                ],
+                                [
+                                    "Performance",
+                                    "Good for few conditions",
+                                    "Better for many"
+                                ],
+                                [
+                                    "Readability",
+                                    "Better for complex logic",
+                                    "Better for many values"
+                                ],
+                                [
+                                    "Data Types",
+                                    "Any expression",
+                                    "Primitives only"
+                                ],
+                                [
+                                    "Default Case",
+                                    "else block",
+                                    "default case"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use switch for exact value matching",
+                                "reason": "More readable and efficient",
+                                "hinglish": "Padhne mein asaan aur fast hai"
+                            },
+                            {
+                                "practice": "Always add default case in switch",
+                                "reason": "Handles unexpected values",
+                                "hinglish": "Unexpected values handle karta hai"
+                            },
+                            {
+                                "practice": "Avoid deep nesting of if-else",
+                                "reason": "Hard to read and maintain",
+                                "hinglish": "Padhna aur maintain karna mushkil hota hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 6,
+                    "title": "Loops (for, while, do-while)",
+                    "english": "Loops execute code repeatedly until condition is met.",
+                    "hinglish": "Loops code ko baar baar chalate hain jab tak condition true hai.",
+                    "examples": [
+                        "for (let i = 0; i < 5; i++) { console.log(i); }",
+                        "let i = 0;\nwhile (i < 5) { console.log(i); i++; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What are the three parts of for loop?",
+                            "answer": "Initialization, condition, increment"
+                        },
+                        {
+                            "question": "How many times while loop executes if condition false initially?",
+                            "answer": "0 times"
+                        },
+                        {
+                            "question": "How many times do-while executes if condition false initially?",
+                            "answer": "1 time"
+                        },
+                        {
+                            "question": "What does break do in loop?",
+                            "answer": "Exits the loop immediately"
+                        },
+                        {
+                            "question": "What does continue do?",
+                            "answer": "Skips current iteration"
+                        },
+                        {
+                            "question": "What is infinite loop?",
+                            "answer": "Loop that never ends"
+                        },
+                        {
+                            "question": "Which loop is entry-controlled?",
+                            "answer": "for and while"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// For loop\nfor (let i = 1; i <= 5; i++) {\n  console.log('Count: ' + i);\n}\n\n// While loop\nlet count = 1;\nwhile (count <= 5) {\n  console.log('While: ' + count);\n  count++;\n}\n\n// Do-while loop\nlet num = 1;\ndo {\n  console.log('Do-while: ' + num);\n  num++;\n} while (num <= 5);",
+                        "components": [
+                            {
+                                "name": "for loop",
+                                "english": "Known number of iterations",
+                                "hinglish": "Pata hai kitni baar chalana hai",
+                                "importance": "Most common loop",
+                                "tip": "Use for arrays"
+                            },
+                            {
+                                "name": "while loop",
+                                "english": "Unknown iterations, condition first",
+                                "hinglish": "Pata nahi kitni baar, pehle condition check",
+                                "importance": "Condition-based looping",
+                                "tip": "Check condition before execution"
+                            },
+                            {
+                                "name": "do-while",
+                                "english": "Unknown iterations, execute first",
+                                "hinglish": "Pata nahi kitni baar, pehle execution",
+                                "importance": "At least one execution needed",
+                                "tip": "Use when must run at least once"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Loop Type",
+                                "When to Use",
+                                "Entry/Exit",
+                                "Example Use"
+                            ],
+                            "rows": [
+                                [
+                                    "for",
+                                    "Known iterations",
+                                    "Entry-controlled",
+                                    "Array iteration"
+                                ],
+                                [
+                                    "while",
+                                    "Condition-based",
+                                    "Entry-controlled",
+                                    "Reading files"
+                                ],
+                                [
+                                    "do-while",
+                                    "Must run once",
+                                    "Exit-controlled",
+                                    "Menu systems"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use for loop for arrays",
+                                "reason": "Clean syntax for known length",
+                                "hinglish": "Arrays ke liye clean syntax hai"
+                            },
+                            {
+                                "practice": "Avoid infinite loops",
+                                "reason": "Crashes browser/program",
+                                "hinglish": "Browser/program crash ho jata hai"
+                            },
+                            {
+                                "practice": "Use meaningful loop variables",
+                                "reason": "Improves code readability",
+                                "hinglish": "Code padhne mein asaan hota hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 7,
+                    "title": "Basic Functions",
+                    "english": "Functions are reusable blocks of code that perform specific tasks.",
+                    "hinglish": "Functions reusable code blocks hain jo specific kaam karte hain.",
+                    "examples": [
+                        "function greet(name) { return 'Hello ' + name; }",
+                        "let multiply = function(a, b) { return a * b; };"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What keyword defines a function?",
+                            "answer": "function"
+                        },
+                        {
+                            "question": "What is a parameter?",
+                            "answer": "Variable in function definition"
+                        },
+                        {
+                            "question": "What is an argument?",
+                            "answer": "Value passed to function"
+                        },
+                        {
+                            "question": "What does return do?",
+                            "answer": "Returns value from function"
+                        },
+                        {
+                            "question": "What are default parameters?",
+                            "answer": "Parameters with default values"
+                        },
+                        {
+                            "question": "What is function expression?",
+                            "answer": "Function assigned to variable"
+                        },
+                        {
+                            "question": "What is IIFE?",
+                            "answer": "Immediately Invoked Function Expression"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Function declaration\nfunction calculateSum(a, b) {\n  return a + b;\n}\n\n// Function expression\nlet calculateProduct = function(x, y) {\n  return x * y;\n};\n\n// Default parameters\nfunction greet(name = 'Guest') {\n  return 'Hello ' + name;\n}",
+                        "components": [
+                            {
+                                "name": "Function Declaration",
+                                "english": "Hoisted, can be called before definition",
+                                "hinglish": "Hoisted hoti hai, define se pehle call kar sakte hain",
+                                "importance": "Traditional way",
+                                "tip": "Use for main functions"
+                            },
+                            {
+                                "name": "Function Expression",
+                                "english": "Assigned to variable, not hoisted",
+                                "hinglish": "Variable mein assign hoti hai, hoist nahi hoti",
+                                "importance": "Flexible functions",
+                                "tip": "Use for callbacks"
+                            },
+                            {
+                                "name": "Parameters/Arguments",
+                                "english": "Inputs to functions",
+                                "hinglish": "Functions ke inputs",
+                                "importance": "Function flexibility",
+                                "tip": "Use default parameters"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Type",
+                                "Syntax",
+                                "Hoisted?",
+                                "Use Case"
+                            ],
+                            "rows": [
+                                [
+                                    "Declaration",
+                                    "function name() {}",
+                                    "Yes",
+                                    "Main logic"
+                                ],
+                                [
+                                    "Expression",
+                                    "let name = function() {}",
+                                    "No",
+                                    "Callbacks, assignments"
+                                ],
+                                [
+                                    "Arrow",
+                                    "() => {}",
+                                    "No",
+                                    "Short functions, this binding"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use descriptive function names",
+                                "reason": "Makes code self-documenting",
+                                "hinglish": "Code khud hi explain karta hai"
+                            },
+                            {
+                                "practice": "Keep functions small and focused",
+                                "reason": "Easier to test and maintain",
+                                "hinglish": "Test aur maintain karna asaan hota hai"
+                            },
+                            {
+                                "practice": "Use default parameters",
+                                "reason": "Handles missing arguments gracefully",
+                                "hinglish": "Missing arguments ko handle karta hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 8,
+                    "title": "DOM Selectors",
+                    "english": "Selecting and accessing HTML elements using various selector methods.",
+                    "hinglish": "HTML elements ko select aur access karne ke tarike.",
+                    "examples": [
+                        "document.querySelector('.className');",
+                        "document.getElementById('myId');"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which method selects first matching element?",
+                            "answer": "querySelector()"
+                        },
+                        {
+                            "question": "Which method selects all matching elements?",
+                            "answer": "querySelectorAll()"
+                        },
+                        {
+                            "question": "How to select element by ID?",
+                            "answer": "getElementById()"
+                        },
+                        {
+                            "question": "What does getElementsByClassName return?",
+                            "answer": "HTMLCollection of elements"
+                        },
+                        {
+                            "question": "How to select elements by tag name?",
+                            "answer": "getElementsByTagName()"
+                        },
+                        {
+                            "question": "What is difference between querySelectorAll and getElementsByClassName?",
+                            "answer": "querySelectorAll returns NodeList (static), getElementsByClassName returns HTMLCollection (live)"
+                        },
+                        {
+                            "question": "How to select first div inside a container?",
+                            "answer": "document.querySelector('.container div')"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Various selector methods\nconst byId = document.getElementById('header');\nconst byClass = document.querySelector('.item');\nconst allByClass = document.querySelectorAll('.items');\nconst byTag = document.getElementsByTagName('div');\n\n// Complex selectors\nconst firstListItem = document.querySelector('ul li:first-child');\nconst lastInput = document.querySelector('input[type=\"text\"]:last-of-type');",
+                        "components": [
+                            {
+                                "name": "querySelector",
+                                "english": "Selects first matching CSS selector",
+                                "hinglish": "Pehla matching CSS selector select karta hai",
+                                "importance": "Modern, versatile",
+                                "tip": "Returns null if not found"
+                            },
+                            {
+                                "name": "querySelectorAll",
+                                "english": "Selects all matching CSS selectors",
+                                "hinglish": "Saare matching CSS selectors select karta hai",
+                                "importance": "Multiple elements",
+                                "tip": "Returns NodeList (array-like)"
+                            },
+                            {
+                                "name": "getElementById",
+                                "english": "Selects element by ID attribute",
+                                "hinglish": "ID attribute se element select karta hai",
+                                "importance": "Fastest selector",
+                                "tip": "Returns single element"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Method",
+                                "Returns",
+                                "Live/Static",
+                                "CSS Selectors"
+                            ],
+                            "rows": [
+                                [
+                                    "getElementById",
+                                    "Single element",
+                                    "N/A",
+                                    "No"
+                                ],
+                                [
+                                    "querySelector",
+                                    "Single element",
+                                    "Static",
+                                    "Yes"
+                                ],
+                                [
+                                    "querySelectorAll",
+                                    "NodeList",
+                                    "Static",
+                                    "Yes"
+                                ],
+                                [
+                                    "getElementsByClassName",
+                                    "HTMLCollection",
+                                    "Live",
+                                    "No"
+                                ],
+                                [
+                                    "getElementsByTagName",
+                                    "HTMLCollection",
+                                    "Live",
+                                    "No"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use querySelector for complex selections",
+                                "reason": "Supports all CSS selectors",
+                                "hinglish": "Saare CSS selectors support karta hai"
+                            },
+                            {
+                                "practice": "Cache selected elements in variables",
+                                "reason": "Improves performance",
+                                "hinglish": "Performance improve karta hai"
+                            },
+                            {
+                                "practice": "Check if element exists before using",
+                                "reason": "Prevents null reference errors",
+                                "hinglish": "Null reference errors se bachata hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 9,
+                    "title": "DOM Events",
+                    "english": "Handling user interactions with event listeners and event objects.",
+                    "hinglish": "Event listeners aur event objects ke saath user interactions handle karna.",
+                    "examples": [
+                        "button.addEventListener('click', handleClick);",
+                        "element.onclick = function() { console.log('clicked'); };"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to add event listener to element?",
+                            "answer": "addEventListener()"
+                        },
+                        {
+                            "question": "What are three parameters of addEventListener?",
+                            "answer": "event type, callback function, useCapture (optional)"
+                        },
+                        {
+                            "question": "How to remove event listener?",
+                            "answer": "removeEventListener()"
+                        },
+                        {
+                            "question": "What is event bubbling?",
+                            "answer": "Events propagate from child to parent"
+                        },
+                        {
+                            "question": "How to stop event propagation?",
+                            "answer": "event.stopPropagation()"
+                        },
+                        {
+                            "question": "What is event delegation?",
+                            "answer": "Attaching listener to parent instead of children"
+                        },
+                        {
+                            "question": "What does event.preventDefault() do?",
+                            "answer": "Prevents default browser behavior"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Adding event listener\nconst button = document.querySelector('#myButton');\nbutton.addEventListener('click', function(event) {\n  console.log('Button clicked!');\n  console.log('Event type:', event.type);\n});\n\n// Event delegation\nconst list = document.querySelector('#myList');\nlist.addEventListener('click', function(event) {\n  if (event.target.tagName === 'LI') {\n    console.log('List item clicked:', event.target.textContent);\n  }\n});",
+                        "components": [
+                            {
+                                "name": "addEventListener",
+                                "english": "Modern way to attach events",
+                                "hinglish": "Events attach karne ka modern tarika",
+                                "importance": "Multiple listeners possible",
+                                "tip": "Use instead of onclick property"
+                            },
+                            {
+                                "name": "Event Object",
+                                "english": "Contains information about event",
+                                "hinglish": "Event ki information rakhta hai",
+                                "importance": "Access event details",
+                                "tip": "Automatically passed to handler"
+                            },
+                            {
+                                "name": "Event Delegation",
+                                "english": "Single listener for multiple elements",
+                                "hinglish": "Multiple elements ke liye single listener",
+                                "importance": "Performance, dynamic content",
+                                "tip": "Use for dynamically added elements"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Method",
+                                "Multiple Listeners",
+                                "Removal",
+                                "Use Case"
+                            ],
+                            "rows": [
+                                [
+                                    "addEventListener",
+                                    "Yes",
+                                    "removeEventListener",
+                                    "Modern apps"
+                                ],
+                                [
+                                    "onclick property",
+                                    "No",
+                                    "null assignment",
+                                    "Simple cases"
+                                ],
+                                [
+                                    "HTML attribute",
+                                    "No",
+                                    "Remove attribute",
+                                    "Avoid"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use event delegation for dynamic content",
+                                "reason": "Better performance, works with added elements",
+                                "hinglish": "Better performance, added elements ke saath kaam karta hai"
+                            },
+                            {
+                                "practice": "Use named functions for removeEventListener",
+                                "reason": "Anonymous functions can't be removed",
+                                "hinglish": "Anonymous functions remove nahi ho sakte"
+                            },
+                            {
+                                "practice": "Prevent default only when necessary",
+                                "reason": "Breaks expected browser behavior",
+                                "hinglish": "Expected browser behavior break ho jata hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 10,
+                    "title": "Modifying DOM Elements",
+                    "english": "Changing element content, attributes, styles, and classes.",
+                    "hinglish": "Element content, attributes, styles aur classes change karna.",
+                    "examples": [
+                        "element.textContent = 'New text';",
+                        "element.classList.add('active');"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to change element text?",
+                            "answer": "textContent or innerText"
+                        },
+                        {
+                            "question": "How to change element HTML?",
+                            "answer": "innerHTML"
+                        },
+                        {
+                            "question": "How to add CSS class to element?",
+                            "answer": "classList.add()"
+                        },
+                        {
+                            "question": "How to remove CSS class?",
+                            "answer": "classList.remove()"
+                        },
+                        {
+                            "question": "How to toggle CSS class?",
+                            "answer": "classList.toggle()"
+                        },
+                        {
+                            "question": "How to set element attribute?",
+                            "answer": "setAttribute()"
+                        },
+                        {
+                            "question": "How to change element style?",
+                            "answer": "element.style.property = value"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Changing content\nelement.textContent = 'New Text Content'; // Safe\n// element.innerHTML = '<strong>Bold</strong> text'; // Use with caution\n\n// Working with classes\nelement.classList.add('active', 'highlight');\nelement.classList.remove('inactive');\nelement.classList.toggle('visible');\n\n// Changing styles\nelement.style.backgroundColor = 'blue';\nelement.style.fontSize = '16px';\nelement.style.display = 'none'; // Hide element\n\n// Working with attributes\nelement.setAttribute('data-id', '123');\nconst id = element.getAttribute('data-id');\nelement.removeAttribute('disabled');",
+                        "components": [
+                            {
+                                "name": "Content Properties",
+                                "english": "textContent, innerHTML, innerText",
+                                "hinglish": "Element ka content change karna",
+                                "importance": "Dynamic content updates",
+                                "tip": "Use textContent for security, innerHTML for HTML"
+                            },
+                            {
+                                "name": "classList",
+                                "english": "Modern class manipulation",
+                                "hinglish": "Classes manipulate karne ka modern tarika",
+                                "importance": "CSS class management",
+                                "tip": "Prefer over className"
+                            },
+                            {
+                                "name": "style Property",
+                                "english": "Inline style manipulation",
+                                "hinglish": "Inline styles change karna",
+                                "importance": "Dynamic styling",
+                                "tip": "Use CSS classes instead when possible"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Property",
+                                "Returns",
+                                "Security",
+                                "Performance"
+                            ],
+                            "rows": [
+                                [
+                                    "textContent",
+                                    "Text only",
+                                    "Safe (no HTML)",
+                                    "Fast"
+                                ],
+                                [
+                                    "innerHTML",
+                                    "HTML string",
+                                    "Unsafe (XSS risk)",
+                                    "Medium"
+                                ],
+                                [
+                                    "innerText",
+                                    "Visible text",
+                                    "Safe",
+                                    "Slow (layout aware)"
+                                ],
+                                [
+                                    "className",
+                                    "Class string",
+                                    "Safe",
+                                    "Fast"
+                                ],
+                                [
+                                    "classList",
+                                    "DOMTokenList",
+                                    "Safe",
+                                    "Fast"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use textContent instead of innerHTML when possible",
+                                "reason": "Prevents XSS attacks",
+                                "hinglish": "XSS attacks se bachata hai"
+                            },
+                            {
+                                "practice": "Use classList instead of className",
+                                "reason": "Better for multiple classes",
+                                "hinglish": "Multiple classes ke liye better hai"
+                            },
+                            {
+                                "practice": "Avoid inline styles, use CSS classes",
+                                "reason": "Separation of concerns, maintainable",
+                                "hinglish": "Concerns separate rehte hain, maintain karne mein asaan"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 11,
+                    "title": "Form Validation",
+                    "english": "Validating user input in HTML forms using JavaScript.",
+                    "hinglish": "JavaScript use karke HTML forms mein user input validate karna.",
+                    "examples": [
+                        "if (input.value.trim() === '') { showError('Required'); }",
+                        "form.addEventListener('submit', validateForm);"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to get form input value?",
+                            "answer": "input.value"
+                        },
+                        {
+                            "question": "How to check if input is empty?",
+                            "answer": "value.trim().length === 0"
+                        },
+                        {
+                            "question": "How to validate email format?",
+                            "answer": "Use regex or HTML5 type='email'"
+                        },
+                        {
+                            "question": "How to prevent form submission on invalid data?",
+                            "answer": "event.preventDefault() in submit handler"
+                        },
+                        {
+                            "question": "What is HTML5 form validation?",
+                            "answer": "Built-in browser validation using required, pattern, etc."
+                        },
+                        {
+                            "question": "How to show validation error messages?",
+                            "answer": "Create error elements or use setCustomValidity()"
+                        },
+                        {
+                            "question": "How to reset form?",
+                            "answer": "form.reset() method"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Form validation example\nconst form = document.querySelector('#myForm');\nconst emailInput = document.querySelector('#email');\n\nform.addEventListener('submit', function(event) {\n  event.preventDefault(); // Prevent submission\n  \n  let isValid = true;\n  \n  // Validate required fields\n  const name = document.querySelector('#name').value.trim();\n  if (name === '') {\n    showError('name', 'Name is required');\n    isValid = false;\n  }\n  \n  // Validate email\n  const email = emailInput.value.trim();\n  if (!isValidEmail(email)) {\n    showError('email', 'Invalid email address');\n    isValid = false;\n  }\n  \n  if (isValid) {\n    this.submit(); // Submit if valid\n  }\n});\n\nfunction isValidEmail(email) {\n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n  return emailRegex.test(email);\n}",
+                        "components": [
+                            {
+                                "name": "Client-side Validation",
+                                "english": "Validation in browser before sending to server",
+                                "hinglish": "Server pe bhejne se pehle browser mein validation",
+                                "importance": "Better user experience",
+                                "tip": "Always validate on server too"
+                            },
+                            {
+                                "name": "Real-time Validation",
+                                "english": "Validate as user types",
+                                "hinglish": "User type karte waqt validate karna",
+                                "importance": "Immediate feedback",
+                                "tip": "Use input or change events"
+                            },
+                            {
+                                "name": "Error Display",
+                                "english": "Showing validation errors to user",
+                                "hinglish": "User ko validation errors dikhana",
+                                "importance": "User guidance",
+                                "tip": "Clear, specific error messages"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Validation Type",
+                                "Where",
+                                "Advantages",
+                                "Disadvantages"
+                            ],
+                            "rows": [
+                                [
+                                    "Client-side",
+                                    "Browser",
+                                    "Fast feedback, reduces server load",
+                                    "Can be bypassed"
+                                ],
+                                [
+                                    "Server-side",
+                                    "Server",
+                                    "Secure, reliable",
+                                    "Slower, server load"
+                                ],
+                                [
+                                    "HTML5",
+                                    "Browser",
+                                    "Built-in, simple",
+                                    "Limited customization"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Always validate on server-side too",
+                                "reason": "Client-side validation can be bypassed",
+                                "hinglish": "Client-side validation bypass ho sakti hai"
+                            },
+                            {
+                                "practice": "Provide clear, specific error messages",
+                                "reason": "Helps users fix errors",
+                                "hinglish": "Users ko errors fix karne mein madad karta hai"
+                            },
+                            {
+                                "practice": "Use real-time validation for better UX",
+                                "reason": "Immediate feedback improves experience",
+                                "hinglish": "Immediate feedback experience improve karta hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 12,
+                    "title": "Browser Object Model (BOM)",
+                    "english": "Working with browser objects: localStorage, sessionStorage, timers.",
+                    "hinglish": "Browser objects ke saath kaam: localStorage, sessionStorage, timers.",
+                    "examples": [
+                        "localStorage.setItem('key', 'value');",
+                        "setTimeout(() => { console.log('Delayed'); }, 1000);"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to store data in localStorage?",
+                            "answer": "localStorage.setItem('key', 'value')"
+                        },
+                        {
+                            "question": "How to get data from localStorage?",
+                            "answer": "localStorage.getItem('key')"
+                        },
+                        {
+                            "question": "Difference between localStorage and sessionStorage?",
+                            "answer": "localStorage persists, sessionStorage clears on tab close"
+                        },
+                        {
+                            "question": "How to set a timeout?",
+                            "answer": "setTimeout(callback, milliseconds)"
+                        },
+                        {
+                            "question": "How to set an interval?",
+                            "answer": "setInterval(callback, milliseconds)"
+                        },
+                        {
+                            "question": "How to clear timeout/interval?",
+                            "answer": "clearTimeout(id) or clearInterval(id)"
+                        },
+                        {
+                            "question": "What is the storage limit of localStorage?",
+                            "answer": "Typically 5-10MB per domain"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// localStorage examples\nlocalStorage.setItem('username', 'john_doe');\nconst user = localStorage.getItem('username');\nlocalStorage.removeItem('username');\nlocalStorage.clear(); // Remove all\n\n// Session storage (similar syntax)\nsessionStorage.setItem('sessionData', 'temporary');\n\n// Timers\nconst timeoutId = setTimeout(() => {\n  console.log('Executed after 2 seconds');\n}, 2000);\n\nconst intervalId = setInterval(() => {\n  console.log('Executes every second');\n}, 1000);\n\n// Clear timers\nclearTimeout(timeoutId);\nclearInterval(intervalId);",
+                        "components": [
+                            {
+                                "name": "Web Storage API",
+                                "english": "localStorage and sessionStorage",
+                                "hinglish": "Browser mein data store karna",
+                                "importance": "Client-side data persistence",
+                                "tip": "Only stores strings, convert objects with JSON"
+                            },
+                            {
+                                "name": "Timers",
+                                "english": "setTimeout and setInterval",
+                                "hinglish": "Code ko delay ya repeat mein chalana",
+                                "importance": "Scheduling, animations",
+                                "tip": "Always clear intervals when done"
+                            },
+                            {
+                                "name": "window Object",
+                                "english": "Global browser object",
+                                "hinglish": "Global browser object",
+                                "importance": "Browser APIs access",
+                                "tip": "Contains location, history, navigator"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Feature",
+                                "localStorage",
+                                "sessionStorage",
+                                "Cookies"
+                            ],
+                            "rows": [
+                                [
+                                    "Persistence",
+                                    "Forever (until cleared)",
+                                    "Tab session",
+                                    "Expiry date"
+                                ],
+                                [
+                                    "Capacity",
+                                    "5-10MB",
+                                    "5-10MB",
+                                    "4KB"
+                                ],
+                                [
+                                    "Access",
+                                    "Client-side only",
+                                    "Client-side only",
+                                    "Server & client"
+                                ],
+                                [
+                                    "Sent to Server",
+                                    "No",
+                                    "No",
+                                    "Yes"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use JSON.stringify/parse for objects in storage",
+                                "reason": "Storage only accepts strings",
+                                "hinglish": "Storage sirf strings accept karta hai"
+                            },
+                            {
+                                "practice": "Clear intervals when not needed",
+                                "reason": "Prevents memory leaks",
+                                "hinglish": "Memory leaks se bachata hai"
+                            },
+                            {
+                                "practice": "Handle storage quota exceeded errors",
+                                "reason": "Storage has limits",
+                                "hinglish": "Storage ki limits hoti hain"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 13,
+                    "title": "Simple Projects: Calculator & To-Do List",
+                    "english": "Building practical applications using DOM manipulation concepts.",
+                    "hinglish": "DOM manipulation concepts use karke practical applications banana.",
+                    "examples": [
+                        "// Calculator\nbuttons.forEach(btn => btn.addEventListener('click', calculate));",
+                        "// To-Do List\ntodoForm.addEventListener('submit', addTodoItem);"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to get calculator button values?",
+                            "answer": "event.target.textContent or value attribute"
+                        },
+                        {
+                            "question": "How to evaluate math expressions safely?",
+                            "answer": "Use Function constructor or custom parser, not eval()"
+                        },
+                        {
+                            "question": "How to add new todo item to list?",
+                            "answer": "Create element, set content, append to list"
+                        },
+                        {
+                            "question": "How to mark todo as complete?",
+                            "answer": "Add CSS class or toggle checkbox"
+                        },
+                        {
+                            "question": "How to delete todo item?",
+                            "answer": "Remove element from DOM"
+                        },
+                        {
+                            "question": "How to save todos to localStorage?",
+                            "answer": "JSON.stringify array and store"
+                        },
+                        {
+                            "question": "How to load todos from localStorage on page load?",
+                            "answer": "JSON.parse stored data on DOMContentLoaded"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Calculator structure\nclass Calculator {\n  constructor() {\n    this.display = document.querySelector('.display');\n    this.buttons = document.querySelectorAll('.btn');\n    this.currentInput = '';\n    \n    this.buttons.forEach(button => {\n      button.addEventListener('click', (e) => {\n        const value = e.target.textContent;\n        this.handleInput(value);\n      });\n    });\n  }\n  \n  handleInput(value) {\n    if (value === '=') {\n      this.calculate();\n    } else if (value === 'C') {\n      this.clear();\n    } else {\n      this.currentInput += value;\n      this.updateDisplay();\n    }\n  }\n}\n\n// To-Do List structure\nconst todoForm = document.querySelector('#todo-form');\nconst todoInput = document.querySelector('#todo-input');\nconst todoList = document.querySelector('#todo-list');\n\nfunction addTodo(event) {\n  event.preventDefault();\n  const todoText = todoInput.value.trim();\n  \n  if (todoText) {\n    const li = document.createElement('li');\n    li.innerHTML = `\n      <span>${todoText}</span>\n      <button class=\"delete-btn\">Delete</button>\n      <button class=\"complete-btn\">Complete</button>\n    `;\n    \n    todoList.appendChild(li);\n    todoInput.value = '';\n    saveTodos();\n  }\n}",
+                        "components": [
+                            {
+                                "name": "Calculator Logic",
+                                "english": "Mathematical operations and display",
+                                "hinglish": "Mathematical operations aur display",
+                                "importance": "Practical DOM manipulation",
+                                "tip": "Avoid eval(), implement safe calculation"
+                            },
+                            {
+                                "name": "To-Do List CRUD",
+                                "english": "Create, Read, Update, Delete operations",
+                                "hinglish": "Items create, read, update, delete karna",
+                                "importance": "Data management pattern",
+                                "tip": "Use localStorage for persistence"
+                            },
+                            {
+                                "name": "Event Delegation",
+                                "english": "Single listener for dynamic elements",
+                                "hinglish": "Dynamic elements ke liye single listener",
+                                "importance": "Performance, clean code",
+                                "tip": "Essential for to-do delete/complete buttons"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Project",
+                                "Key Concepts",
+                                "Skills Practiced",
+                                "Complexity"
+                            ],
+                            "rows": [
+                                [
+                                    "Calculator",
+                                    "Event handling, state management, math logic",
+                                    "DOM manipulation, event listeners",
+                                    "Beginner"
+                                ],
+                                [
+                                    "To-Do List",
+                                    "CRUD operations, localStorage, dynamic elements",
+                                    "Data persistence, element creation",
+                                    "Beginner-Intermediate"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use event delegation for dynamically added elements",
+                                "reason": "Simplifies code, better performance",
+                                "hinglish": "Code simple rahega, better performance"
+                            },
+                            {
+                                "practice": "Validate and sanitize user input",
+                                "reason": "Prevents errors and security issues",
+                                "hinglish": "Errors aur security issues se bachata hai"
+                            },
+                            {
+                                "practice": "Save state to localStorage",
+                                "reason": "Data persists across page reloads",
+                                "hinglish": "Data page reload pe bhi save rahega"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 14,
+                    "title": "Destructuring",
+                    "english": "Extracting values from arrays or properties from objects into distinct variables.",
+                    "hinglish": "Arrays se values ya objects se properties alag variables mein extract karna.",
+                    "examples": [
+                        "const [first, second] = [10, 20];",
+                        "const {name, age} = person;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to destructure first element from array?",
+                            "answer": "const [first] = array;"
+                        },
+                        {
+                            "question": "How to destructure object properties?",
+                            "answer": "const {prop1, prop2} = object;"
+                        },
+                        {
+                            "question": "How to assign new variable names during destructuring?",
+                            "answer": "const {prop: newName} = object;"
+                        },
+                        {
+                            "question": "What is default value in destructuring?",
+                            "answer": "Fallback value if property doesn't exist"
+                        },
+                        {
+                            "question": "How to destructure nested objects?",
+                            "answer": "const {prop: {nestedProp}} = object;"
+                        },
+                        {
+                            "question": "What is rest operator in destructuring?",
+                            "answer": "...rest collects remaining elements"
+                        },
+                        {
+                            "question": "How to swap variables using destructuring?",
+                            "answer": "[a, b] = [b, a];"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Array destructuring\nconst numbers = [1, 2, 3, 4, 5];\nconst [first, second, ...rest] = numbers;\n// first = 1, second = 2, rest = [3, 4, 5]\n\n// Object destructuring\nconst user = {\n  name: 'Rahul',\n  age: 25,\n  city: 'Delhi',\n  country: 'India'\n};\n\nconst { name, age, ...otherDetails } = user;\n// name = 'Rahul', age = 25, otherDetails = {city: 'Delhi', country: 'India'}\n\n// Default values\nconst { username = 'Guest', status = 'active' } = user;\n\n// Renaming variables\nconst { name: fullName, age: userAge } = user;\n\n// Nested destructuring\nconst company = {\n  name: 'Tech Corp',\n  address: {\n    city: 'Bangalore',\n    zip: '560001'\n  }\n};\n\nconst { address: { city, zip } } = company;",
+                        "components": [
+                            {
+                                "name": "Array Destructuring",
+                                "english": "Extract values from arrays by position",
+                                "hinglish": "Position ke hisab se arrays se values extract karna",
+                                "importance": "Clean array value extraction",
+                                "tip": "Use with rest operator for remaining items"
+                            },
+                            {
+                                "name": "Object Destructuring",
+                                "english": "Extract properties from objects by name",
+                                "hinglish": "Name ke hisab se objects se properties extract karna",
+                                "importance": "Clean object property extraction",
+                                "tip": "Use for function parameters"
+                            },
+                            {
+                                "name": "Default Values",
+                                "english": "Fallback when property is undefined",
+                                "hinglish": "Property undefined hone par fallback value",
+                                "importance": "Handle missing properties gracefully",
+                                "tip": "Prevents undefined errors"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Feature",
+                                "Array Destructuring",
+                                "Object Destructuring"
+                            ],
+                            "rows": [
+                                [
+                                    "Syntax",
+                                    "[a, b] = array",
+                                    "{a, b} = object"
+                                ],
+                                [
+                                    "Based on",
+                                    "Position/index",
+                                    "Property name"
+                                ],
+                                [
+                                    "Default values",
+                                    "[a = 1] = array",
+                                    "{a = 1} = object"
+                                ],
+                                [
+                                    "Renaming",
+                                    "Not possible",
+                                    "{old: new} = object"
+                                ],
+                                [
+                                    "Nested",
+                                    "[[a, b]] = array",
+                                    "{a: {b}} = object"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use destructuring for function parameters",
+                                "reason": "Clearer API, default values",
+                                "hinglish": "Clear API, default values set kar sakte hain"
+                            },
+                            {
+                                "practice": "Use default values for optional properties",
+                                "reason": "Prevents undefined errors",
+                                "hinglish": "Undefined errors se bachata hai"
+                            },
+                            {
+                                "practice": "Use rest operator to collect remaining items",
+                                "reason": "Clean handling of multiple values",
+                                "hinglish": "Multiple values clean tarike se handle hote hain"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 15,
+                    "title": "Spread & Rest Operators",
+                    "english": "Spread expands elements, rest collects elements into arrays.",
+                    "hinglish": "Spread elements ko expand karta hai, rest elements ko arrays mein collect karta hai.",
+                    "examples": [
+                        "const newArray = [...oldArray, newItem];",
+                        "function sum(...numbers) { /* numbers is array */ }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What does spread operator do?",
+                            "answer": "Expands array/object into individual elements"
+                        },
+                        {
+                            "question": "What does rest operator do?",
+                            "answer": "Collects remaining elements into array"
+                        },
+                        {
+                            "question": "How to copy array using spread?",
+                            "answer": "const copy = [...original];"
+                        },
+                        {
+                            "question": "How to merge objects using spread?",
+                            "answer": "const merged = {...obj1, ...obj2};"
+                        },
+                        {
+                            "question": "Where can rest operator be used?",
+                            "answer": "Function parameters and destructuring"
+                        },
+                        {
+                            "question": "How to add elements to array with spread?",
+                            "answer": "const newArr = [...arr, newElement];"
+                        },
+                        {
+                            "question": "What's difference in function parameters?",
+                            "answer": "Spread expands, rest collects"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Spread operator examples\nconst arr1 = [1, 2, 3];\nconst arr2 = [4, 5, 6];\nconst combined = [...arr1, ...arr2]; // [1, 2, 3, 4, 5, 6]\n\nconst obj1 = { a: 1, b: 2 };\nconst obj2 = { c: 3, d: 4 };\nconst merged = { ...obj1, ...obj2 }; // {a: 1, b: 2, c: 3, d: 4}\n\n// Copy arrays and objects (shallow copy)\nconst arrCopy = [...arr1]; // Copy of arr1\nconst objCopy = { ...obj1 }; // Copy of obj1\n\n// Rest operator examples\nfunction sum(...numbers) {\n  return numbers.reduce((total, num) => total + num, 0);\n}\nsum(1, 2, 3, 4); // 10\n\n// In destructuring\nconst [first, ...rest] = [1, 2, 3, 4];\n// first = 1, rest = [2, 3, 4]\n\nconst { a, ...others } = { a: 1, b: 2, c: 3 };\n// a = 1, others = {b: 2, c: 3}",
+                        "components": [
+                            {
+                                "name": "Spread Operator (...)",
+                                "english": "Expands iterables into individual elements",
+                                "hinglish": "Iterables ko individual elements mein expand karta hai",
+                                "importance": "Array/object manipulation",
+                                "tip": "Creates shallow copies"
+                            },
+                            {
+                                "name": "Rest Operator (...)",
+                                "english": "Collects multiple elements into array",
+                                "hinglish": "Multiple elements ko array mein collect karta hai",
+                                "importance": "Variable arguments",
+                                "tip": "Must be last parameter"
+                            },
+                            {
+                                "name": "Shallow Copy",
+                                "english": "Copies first level only",
+                                "hinglish": "Sirf first level copy hota hai",
+                                "importance": "Quick copying",
+                                "tip": "Nested objects still reference original"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Operator",
+                                "Syntax",
+                                "Use Case",
+                                "Position"
+                            ],
+                            "rows": [
+                                [
+                                    "Spread",
+                                    "...iterable",
+                                    "Expanding",
+                                    "Right side of ="
+                                ],
+                                [
+                                    "Rest",
+                                    "...variable",
+                                    "Collecting",
+                                    "Left side of ="
+                                ],
+                                [
+                                    "Both",
+                                    "Same symbol",
+                                    "Context determines",
+                                    "Depends on context"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use spread for array/object copying",
+                                "reason": "Cleaner than slice() or Object.assign()",
+                                "hinglish": "slice() ya Object.assign() se cleaner hai"
+                            },
+                            {
+                                "practice": "Use rest for variable function arguments",
+                                "reason": "Cleaner than arguments object",
+                                "hinglish": "arguments object se cleaner hai"
+                            },
+                            {
+                                "practice": "Remember spread creates shallow copies",
+                                "reason": "Nested objects still reference original",
+                                "hinglish": "Nested objects original ko reference karte rehte hain"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 16,
+                    "title": "ES6 Modules",
+                    "english": "Organizing code into separate files with import/export statements.",
+                    "hinglish": "Code ko alag files mein organize karna import/export statements ke saath.",
+                    "examples": [
+                        "export const PI = 3.14;",
+                        "import { myFunction } from './myModule.js';"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to export a variable?",
+                            "answer": "export const name = value;"
+                        },
+                        {
+                            "question": "How to export a function?",
+                            "answer": "export function myFunc() {}"
+                        },
+                        {
+                            "question": "How to export default?",
+                            "answer": "export default classNameOrFunction;"
+                        },
+                        {
+                            "question": "How to import named exports?",
+                            "answer": "import { export1, export2 } from 'module';"
+                        },
+                        {
+                            "question": "How to import default export?",
+                            "answer": "import anyName from 'module';"
+                        },
+                        {
+                            "question": "How to import everything?",
+                            "answer": "import * as alias from 'module';"
+                        },
+                        {
+                            "question": "What file extension for ES6 modules?",
+                            "answer": ".js or .mjs"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// math.js - Exporting module\nexport const PI = 3.14159;\nexport function add(a, b) {\n  return a + b;\n}\nexport function multiply(a, b) {\n  return a * b;\n}\n\nexport default class Calculator {\n  // default export\n}\n\n// app.js - Importing module\nimport Calculator, { PI, add, multiply } from './math.js';\n// Or import everything\nimport * as math from './math.js';\n\n// Using imports\nconsole.log(PI); // 3.14159\nconst sum = add(5, 3); // 8\nconst calc = new Calculator();\n\n// Dynamic import (lazy loading)\nconst loadModule = async () => {\n  const module = await import('./math.js');\n  console.log(module.PI);\n};",
+                        "components": [
+                            {
+                                "name": "Named Exports",
+                                "english": "Multiple exports per module",
+                                "hinglish": "Ek module se multiple exports",
+                                "importance": "Export multiple values",
+                                "tip": "Use for utility functions"
+                            },
+                            {
+                                "name": "Default Export",
+                                "english": "Single primary export per module",
+                                "hinglish": "Ek module ka single primary export",
+                                "importance": "Main functionality",
+                                "tip": "Use for classes or main functions"
+                            },
+                            {
+                                "name": "Import Statements",
+                                "english": "Bring functionality from other modules",
+                                "hinglish": "Other modules se functionality lana",
+                                "importance": "Code organization",
+                                "tip": "Use relative paths (./) for project files"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Export Type",
+                                "Syntax",
+                                "Import Syntax",
+                                "When to Use"
+                            ],
+                            "rows": [
+                                [
+                                    "Named",
+                                    "export const a = 1;",
+                                    "import { a } from 'module'",
+                                    "Multiple related exports"
+                                ],
+                                [
+                                    "Default",
+                                    "export default class;",
+                                    "import Class from 'module'",
+                                    "Single main export"
+                                ],
+                                [
+                                    "Mixed",
+                                    "export const a; export default b;",
+                                    "import b, { a } from 'module'",
+                                    "Main + utilities"
+                                ],
+                                [
+                                    "Namespace",
+                                    "export { a, b };",
+                                    "import * as ns from 'module'",
+                                    "Group related exports"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use named exports for utilities",
+                                "reason": "Tree-shaking friendly, clear imports",
+                                "hinglish": "Tree-shaking friendly, clear imports"
+                            },
+                            {
+                                "practice": "Use default exports for main component",
+                                "reason": "Clean imports for primary functionality",
+                                "hinglish": "Primary functionality ke liye clean imports"
+                            },
+                            {
+                                "practice": "Organize related functionality in same module",
+                                "reason": "Logical grouping, reduces imports",
+                                "hinglish": "Logical grouping, imports kam hote hain"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 17,
+                    "title": "Promises Basics",
+                    "english": "Handling asynchronous operations with Promises for better code flow.",
+                    "hinglish": "Asynchronous operations ko Promises ke saath handle karna better code flow ke liye.",
+                    "examples": [
+                        "const promise = new Promise((resolve, reject) => { /* async code */ });",
+                        "promise.then(result => console.log(result));"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is a Promise?",
+                            "answer": "Object representing eventual completion/failure of async operation"
+                        },
+                        {
+                            "question": "What are Promise states?",
+                            "answer": "Pending, fulfilled, rejected"
+                        },
+                        {
+                            "question": "How to create a Promise?",
+                            "answer": "new Promise((resolve, reject) => {})"
+                        },
+                        {
+                            "question": "What does .then() do?",
+                            "answer": "Handles fulfilled Promise"
+                        },
+                        {
+                            "question": "What does .catch() do?",
+                            "answer": "Handles rejected Promise"
+                        },
+                        {
+                            "question": "What does .finally() do?",
+                            "answer": "Runs after Promise settles (fulfilled or rejected)"
+                        },
+                        {
+                            "question": "What is Promise chaining?",
+                            "answer": "Multiple .then() calls in sequence"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Creating a Promise\nconst fetchData = new Promise((resolve, reject) => {\n  // Simulating async operation\n  setTimeout(() => {\n    const success = Math.random() > 0.5;\n    \n    if (success) {\n      resolve({ data: 'Operation successful!' });\n    } else {\n      reject(new Error('Operation failed!'));\n    }\n  }, 1000);\n});\n\n// Using the Promise\nfetchData\n  .then(result => {\n    console.log('Success:', result.data);\n    return result.data.toUpperCase(); // Can return value for next .then\n  })\n  .then(processedData => {\n    console.log('Processed:', processedData);\n  })\n  .catch(error => {\n    console.error('Error:', error.message);\n  })\n  .finally(() => {\n    console.log('Operation completed (success or failure)');\n  });\n\n// Promise methods\nPromise.all([promise1, promise2]) // Wait for all\nPromise.race([promise1, promise2]) // First to settle\nPromise.allSettled([promise1, promise2]) // All settle (success/fail)",
+                        "components": [
+                            {
+                                "name": "Promise Constructor",
+                                "english": "Creates new Promise with executor function",
+                                "hinglish": "Executor function ke saath naya Promise create karta hai",
+                                "importance": "Wrap async operations",
+                                "tip": "Call resolve() for success, reject() for failure"
+                            },
+                            {
+                                "name": ".then() method",
+                                "english": "Handles successful Promise resolution",
+                                "hinglish": "Successful Promise resolution handle karta hai",
+                                "importance": "Async result processing",
+                                "tip": "Returns new Promise for chaining"
+                            },
+                            {
+                                "name": ".catch() method",
+                                "english": "Handles Promise rejection/errors",
+                                "hinglish": "Promise rejection/errors handle karta hai",
+                                "importance": "Error handling",
+                                "tip": "Catches errors from previous .then() too"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Promise Method",
+                                "Purpose",
+                                "Returns",
+                                "When Called"
+                            ],
+                            "rows": [
+                                [
+                                    ".then()",
+                                    "Handle success",
+                                    "New Promise",
+                                    "When Promise fulfills"
+                                ],
+                                [
+                                    ".catch()",
+                                    "Handle error",
+                                    "New Promise",
+                                    "When Promise rejects"
+                                ],
+                                [
+                                    ".finally()",
+                                    "Cleanup",
+                                    "New Promise",
+                                    "When Promise settles"
+                                ],
+                                [
+                                    "Promise.all()",
+                                    "Wait for all",
+                                    "Promise",
+                                    "All fulfill or any rejects"
+                                ],
+                                [
+                                    "Promise.race()",
+                                    "First to settle",
+                                    "Promise",
+                                    "First fulfills/rejects"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Always return promises from .then() handlers",
+                                "reason": "Enables proper chaining",
+                                "hinglish": "Proper chaining enable karta hai"
+                            },
+                            {
+                                "practice": "Use .catch() at the end of chain",
+                                "reason": "Catches errors from entire chain",
+                                "hinglish": "Pure chain ke errors catch karta hai"
+                            },
+                            {
+                                "practice": "Avoid nesting promises",
+                                "reason": "Creates callback hell (promise hell)",
+                                "hinglish": "Callback hell (promise hell) create hota hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 18,
+                    "title": "Async/Await",
+                    "english": "Syntactic sugar for Promises, making async code look synchronous.",
+                    "hinglish": "Promises ke liye syntactic sugar, async code ko synchronous dikhane ke liye.",
+                    "examples": [
+                        "async function fetchData() { const data = await apiCall(); }",
+                        "const result = await promise;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What does async keyword do?",
+                            "answer": "Makes function return a Promise"
+                        },
+                        {
+                            "question": "What does await do?",
+                            "answer": "Pauses execution until Promise settles"
+                        },
+                        {
+                            "question": "Can await be used outside async function?",
+                            "answer": "No, only inside async functions"
+                        },
+                        {
+                            "question": "How to handle errors with async/await?",
+                            "answer": "try-catch block"
+                        },
+                        {
+                            "question": "What does async function return by default?",
+                            "answer": "Promise (even without return)"
+                        },
+                        {
+                            "question": "How to await multiple promises in parallel?",
+                            "answer": "Promise.all() with await"
+                        },
+                        {
+                            "question": "What is top-level await?",
+                            "answer": "await outside async function (ES2022, modules only)"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Basic async function\nasync function getUserData(userId) {\n  try {\n    // await pauses until promise resolves\n    const user = await fetch(`/api/users/${userId}`);\n    const posts = await fetch(`/api/users/${userId}/posts`);\n    \n    return {\n      user: await user.json(),\n      posts: await posts.json()\n    };\n  } catch (error) {\n    console.error('Failed to fetch user data:', error);\n    throw error; // Re-throw for caller to handle\n  }\n}\n\n// Using async function\nasync function displayUser() {\n  try {\n    const data = await getUserData(123);\n    console.log('User:', data.user);\n    console.log('Posts:', data.posts);\n  } catch (error) {\n    console.error('Display failed:', error);\n  }\n}\n\n// Parallel execution with Promise.all\nasync function getMultipleUsers(userIds) {\n  const promises = userIds.map(id => fetch(`/api/users/${id}`));\n  const responses = await Promise.all(promises);\n  const users = await Promise.all(responses.map(r => r.json()));\n  return users;\n}\n\n// Async function expressions\nconst fetchData = async () => {\n  const response = await fetch('/api/data');\n  return response.json();\n};",
+                        "components": [
+                            {
+                                "name": "async keyword",
+                                "english": "Marks function as asynchronous",
+                                "hinglish": "Function ko asynchronous mark karta hai",
+                                "importance": "Enables await usage",
+                                "tip": "Always returns Promise"
+                            },
+                            {
+                                "name": "await keyword",
+                                "english": "Pauses execution until Promise settles",
+                                "hinglish": "Promise settle hone tak execution pause karta hai",
+                                "importance": "Synchronous-looking async code",
+                                "tip": "Only works inside async functions"
+                            },
+                            {
+                                "name": "Error Handling",
+                                "english": "try-catch for async errors",
+                                "hinglish": "Async errors ke liye try-catch",
+                                "importance": "Clean error handling",
+                                "tip": "Similar to synchronous try-catch"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Feature",
+                                "Promises",
+                                "Async/Await"
+                            ],
+                            "rows": [
+                                [
+                                    "Syntax",
+                                    ".then().catch()",
+                                    "try-catch blocks"
+                                ],
+                                [
+                                    "Readability",
+                                    "Chains can get long",
+                                    "Linear, like sync code"
+                                ],
+                                [
+                                    "Error Handling",
+                                    ".catch() at end",
+                                    "try-catch anywhere"
+                                ],
+                                [
+                                    "Debugging",
+                                    "Harder",
+                                    "Easier (breakpoints work)"
+                                ],
+                                [
+                                    "Return",
+                                    "Promise",
+                                    "Promise (implicit)"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use try-catch for error handling",
+                                "reason": "Cleaner than .catch() chains",
+                                "hinglish": ".catch() chains se cleaner hai"
+                            },
+                            {
+                                "practice": "Use Promise.all() for parallel operations",
+                                "reason": "Faster than sequential awaits",
+                                "hinglish": "Sequential awaits se faster hai"
+                            },
+                            {
+                                "practice": "Don't forget await keyword",
+                                "reason": "Without await, you get Promise not value",
+                                "hinglish": "Await ke bina, Promise milta hai value nahi"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 19,
+                    "title": "Fetch API for AJAX",
+                    "english": "Modern browser API for making HTTP requests, replacement for XMLHttpRequest.",
+                    "hinglish": "HTTP requests ke liye modern browser API, XMLHttpRequest ka replacement.",
+                    "examples": [
+                        "fetch('https://api.example.com/data').then(r => r.json());",
+                        "const response = await fetch(url, options);"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What does fetch() return?",
+                            "answer": "Promise that resolves to Response object"
+                        },
+                        {
+                            "question": "How to parse JSON response?",
+                            "answer": "response.json()"
+                        },
+                        {
+                            "question": "How to make POST request with fetch?",
+                            "answer": "fetch(url, { method: 'POST', body: data })"
+                        },
+                        {
+                            "question": "How to send JSON data?",
+                            "answer": "headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)"
+                        },
+                        {
+                            "question": "How to handle fetch errors?",
+                            "answer": "check response.ok or response.status"
+                        },
+                        {
+                            "question": "What is difference between fetch and axios?",
+                            "answer": "fetch is native, axios is library with more features"
+                        },
+                        {
+                            "question": "How to cancel fetch request?",
+                            "answer": "AbortController with signal"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// GET request\nasync function getData() {\n  try {\n    const response = await fetch('https://api.example.com/data');\n    \n    if (!response.ok) {\n      throw new Error(`HTTP error! status: ${response.status}`);\n    }\n    \n    const data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error('Fetch error:', error);\n  }\n}\n\n// POST request with JSON\nasync function postData(url, data) {\n  const response = await fetch(url, {\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json',\n      'Authorization': 'Bearer token123'\n    },\n    body: JSON.stringify(data)\n  });\n  \n  return response.json();\n}\n\n// With AbortController (cancel request)\nconst controller = new AbortController();\nconst signal = controller.signal;\n\nsetTimeout(() => controller.abort(), 5000); // Cancel after 5 seconds\n\ntry {\n  const response = await fetch(url, { signal });\n  // ...\n} catch (error) {\n  if (error.name === 'AbortError') {\n    console.log('Request cancelled');\n  }\n}\n\n// Fetch with credentials (cookies)\nfetch(url, {\n  credentials: 'include' // include, same-origin, omit\n});",
+                        "components": [
+                            {
+                                "name": "fetch() function",
+                                "english": "Global function for HTTP requests",
+                                "hinglish": "HTTP requests ke liye global function",
+                                "importance": "Modern AJAX requests",
+                                "tip": "Returns Promise resolving to Response"
+                            },
+                            {
+                                "name": "Response Object",
+                                "english": "Contains response data and metadata",
+                                "hinglish": "Response data aur metadata rakhta hai",
+                                "importance": "Access response details",
+                                "tip": "Check response.ok for success"
+                            },
+                            {
+                                "name": "Request Options",
+                                "english": "Configures request method, headers, body",
+                                "hinglish": "Request method, headers, body configure karta hai",
+                                "importance": "Customize requests",
+                                "tip": "method defaults to 'GET'"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Feature",
+                                "Fetch API",
+                                "XMLHttpRequest"
+                            ],
+                            "rows": [
+                                [
+                                    "Syntax",
+                                    "Promise-based",
+                                    "Event-based"
+                                ],
+                                [
+                                    "Streaming",
+                                    "Yes",
+                                    "Limited"
+                                ],
+                                [
+                                    "CORS",
+                                    "Simple",
+                                    "Complex"
+                                ],
+                                [
+                                    "Cancel",
+                                    "AbortController",
+                                    ".abort() method"
+                                ],
+                                [
+                                    "Progress",
+                                    "Limited",
+                                    "Better"
+                                ],
+                                [
+                                    "Browser Support",
+                                    "Modern browsers",
+                                    "All browsers"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Always check response.ok",
+                                "reason": "fetch doesn't reject on HTTP errors (404, 500)",
+                                "hinglish": "fetch HTTP errors (404, 500) pe reject nahi karta"
+                            },
+                            {
+                                "practice": "Use AbortController for timeouts",
+                                "reason": "Prevents hanging requests",
+                                "hinglish": "Hanging requests se bachata hai"
+                            },
+                            {
+                                "practice": "Set appropriate headers",
+                                "reason": "Ensures server understands request",
+                                "hinglish": "Server request ko samajh pata hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 20,
+                    "title": "Classes & Inheritance",
+                    "english": "Modern class syntax, inheritance, static methods, and prototype chain.",
+                    "hinglish": "Modern class syntax, inheritance, static methods aur prototype chain.",
+                    "examples": [
+                        "class Animal { constructor(name) { this.name = name; } }",
+                        "class Dog extends Animal { bark() { console.log('Woof!'); } }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What keyword defines a class?",
+                            "answer": "class"
+                        },
+                        {
+                            "question": "What is constructor method?",
+                            "answer": "Special method for initializing class instances"
+                        },
+                        {
+                            "question": "How to create class inheritance?",
+                            "answer": "extends keyword"
+                        },
+                        {
+                            "question": "What does super() do?",
+                            "answer": "Calls parent class constructor"
+                        },
+                        {
+                            "question": "What are static methods?",
+                            "answer": "Methods called on class itself, not instances"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "class Animal {\n  constructor(name) {\n    this.name = name;\n  }\n  eat() {\n    console.log(`${this.name} is eating.`);\n  }\n}\n\nclass Dog extends Animal {\n  constructor(name, breed) {\n    super(name);\n    this.breed = breed;\n  }\n  bark() {\n    console.log('Woof!');\n  }\n}\n\nconst myDog = new Dog('Buddy', 'Labrador');\nmyDog.eat();\nmyDog.bark();",
+                        "components": [
+                            {
+                                "name": "Constructor",
+                                "english": "Initialization method",
+                                "hinglish": "Object bante waqt properties set karne wala method",
+                                "importance": "Setting initial state",
+                                "tip": "Only one constructor per class"
+                            },
+                            {
+                                "name": "Super",
+                                "english": "Parent class reference",
+                                "hinglish": "Parent class ke constructor ko call karne ke liye",
+                                "importance": "Inheritance initialization",
+                                "tip": "Must be called before 'this' in child"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Feature",
+                                "Class Syntax",
+                                "Function Syntax"
+                            ],
+                            "rows": [
+                                [
+                                    "Structure",
+                                    "class keyword",
+                                    "function keyword"
+                                ],
+                                [
+                                    "Methods",
+                                    "Inside body",
+                                    "On .prototype"
+                                ],
+                                [
+                                    "Hoisted",
+                                    "No",
+                                    "Yes"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use PascalCase for class names",
+                                "reason": "Standard naming convention",
+                                "hinglish": "Standard naming convention hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 21,
+                    "title": "Prototypes & Prototypal Inheritance",
+                    "english": "Understanding JavaScript's prototype-based inheritance system.",
+                    "hinglish": "JavaScript ke prototype-based inheritance system ko samajhna.",
+                    "examples": [
+                        "function Person(name) { this.name = name; }",
+                        "Person.prototype.greet = function() { console.log('Hi'); };"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is prototype property?",
+                            "answer": "Object that provides shared properties for instances"
+                        },
+                        {
+                            "question": "What is __proto__ property?",
+                            "answer": "Actual link to the object's prototype"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "function User(name) {\n  this.name = name;\n}\n\nUser.prototype.sayHi = function() {\n  return `Hi, I am ${this.name}`;\n};\n\nconst user1 = new User('Amit');\nconsole.log(user1.sayHi());",
+                        "components": [
+                            {
+                                "name": "Prototype Chain",
+                                "english": "Mechanism for property lookup",
+                                "hinglish": "Property dhundne ka silsila",
+                                "importance": "Memory efficiency",
+                                "tip": "Ends at null (Object.prototype.__proto__)"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 22,
+                    "title": "Error Handling (try-catch-finally)",
+                    "english": "Structured error handling with try-catch blocks and custom errors.",
+                    "hinglish": "try-catch blocks aur custom errors ke saath structured error handling.",
+                    "examples": [
+                        "try { riskyOperation(); } catch(error) { console.error(error); }",
+                        "throw new Error('Custom error message');"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is finally block for?",
+                            "answer": "Always executes after try/catch (cleanup)"
+                        },
+                        {
+                            "question": "How to throw custom error?",
+                            "answer": "throw new Error('message')"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "try {\n  let data = JSON.parse('{invalid}');\n} catch (err) {\n  console.log('Error caught:', err.message);\n} finally {\n  console.log('Execution finished');\n}",
+                        "best_practices": [
+                            {
+                                "practice": "Always clean up resources in finally",
+                                "reason": "Prevents memory leaks",
+                                "hinglish": "Memory leaks se bachata hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 23,
+                    "title": "Closures & Recursion",
+                    "english": "Advanced closure patterns, recursion, and functional programming concepts.",
+                    "hinglish": "Advanced closure patterns, recursion aur functional programming concepts.",
+                    "examples": [
+                        "function outer() { let count=0; return function() { return ++count; }; }",
+                        "function factorial(n) { return n <= 1 ? 1 : n * factorial(n-1); }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is a closure?",
+                            "answer": "Function with access to outer function's scope"
+                        },
+                        {
+                            "question": "What is base case in recursion?",
+                            "answer": "Condition that stops recursion"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "function counter() {\n  let count = 0;\n  return () => ++count;\n}\nconst add = counter();\nconsole.log(add()); // 1\nconsole.log(add()); // 2",
+                        "components": [
+                            {
+                                "name": "Lexical Scope",
+                                "english": "Variable access based on location",
+                                "hinglish": "Code ki location ke hisab se variable access",
+                                "importance": "Foundation of closures",
+                                "tip": "Outer variables are 'captured'"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 24,
+                    "title": "Event Loop & Concurrency",
+                    "english": "Understanding JavaScript's single-threaded nature and event-driven architecture.",
+                    "hinglish": "JavaScript ke single-threaded nature aur event-driven architecture ko samajhna.",
+                    "examples": [
+                        "console.log('1'); setTimeout(() => console.log('2'), 0); console.log('3');",
+                        "// Output: 1, 3, 2"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is event loop?",
+                            "answer": "Mechanism that handles async callbacks"
+                        },
+                        {
+                            "question": "What are microtasks?",
+                            "answer": "Promise callbacks (run first)"
+                        },
+                        {
+                            "question": "What are macrotasks?",
+                            "answer": "setTimeout, setInterval (run after microtasks)"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "console.log('Start');\nsetTimeout(() => console.log('Timeout'), 0);\nPromise.resolve().then(() => console.log('Promise'));\nconsole.log('End');\n// Order: Start, End, Promise, Timeout",
+                        "components": [
+                            {
+                                "name": "Call Stack",
+                                "english": "LIFO execution tracker",
+                                "hinglish": "Kaunsa function kab chalega uska hisab",
+                                "importance": "Synchronous flow",
+                                "tip": "Stack overflow happens here"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 25,
+                    "title": "Generators & Advanced Async Patterns",
+                    "english": "Generator functions, iterators, and advanced asynchronous programming patterns.",
+                    "hinglish": "Generator functions, iterators aur advanced asynchronous programming patterns.",
+                    "examples": [
+                        "function* generator() { yield 1; yield 2; }",
+                        "async function* asyncGen() { yield await fetch(url); }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What keyword defines generator?",
+                            "answer": "function*"
+                        },
+                        {
+                            "question": "What does yield do?",
+                            "answer": "Pauses generator and returns value"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "function* idMaker() {\n  let id = 1;\n  while(true) yield id++;\n}\nconst gen = idMaker();\nconsole.log(gen.next().value); // 1\nconsole.log(gen.next().value); // 2",
+                        "components": [
+                            {
+                                "name": "Iterator",
+                                "english": "Object with next() method",
+                                "hinglish": "Object jo sequence par iterate kare",
+                                "importance": "Custom loops",
+                                "tip": "Returns {value, done}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 26,
+                    "title": "Optional Chaining & Nullish Coalescing",
+                    "english": "Safe property access and default values with modern operators.",
+                    "hinglish": "Modern operators ke saath safe property access aur default values.",
+                    "examples": [
+                        "const name = user?.profile?.name;",
+                        "const value = input ?? 'default';"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What does optional chaining (?.) do?",
+                            "answer": "Safely accesses nested properties without throwing error"
+                        },
+                        {
+                            "question": "What is nullish coalescing operator (??)?",
+                            "answer": "Returns right operand when left is null or undefined"
+                        },
+                        {
+                            "question": "Difference between ?? and ||?",
+                            "answer": "?? checks null/undefined only, || checks falsy values"
+                        },
+                        {
+                            "question": "Can ?. be used for function calls?",
+                            "answer": "Yes: obj.method?.()"
+                        },
+                        {
+                            "question": "Can ?. be used for array access?",
+                            "answer": "Yes: arr?.[0]"
+                        },
+                        {
+                            "question": "What does ?. return when property doesn't exist?",
+                            "answer": "undefined"
+                        },
+                        {
+                            "question": "Can ?. and ?? be combined?",
+                            "answer": "Yes: user?.name ?? 'Guest'"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Optional chaining\nconst user = {\n  profile: {\n    name: 'John',\n    address: {\n      city: 'NYC'\n    }\n  }\n};\n\n// Safe access\nconst city = user?.profile?.address?.city; // 'NYC'\nconst country = user?.profile?.address?.country; // undefined (no error)\n\n// Without optional chaining (old way)\nconst oldWayCity = user && user.profile && user.profile.address && user.profile.address.city;\n\n// Function call with optional chaining\nconst api = {\n  fetchData: () => ({ data: 'result' })\n};\nconst result = api.fetchData?.(); // Works\nconst missing = api.getData?.(); // undefined (no error)\n\n// Array access with optional chaining\nconst arr = [1, 2, 3];\nconsole.log(arr?.[5]); // undefined\nconsole.log(nonExistentArray?.[0]); // undefined (no error)\n\n// Nullish coalescing\nconst input = null;\nconst value1 = input ?? 'default'; // 'default'\nconst value2 = input || 'default'; // Also 'default'\n\n// Difference between ?? and ||\nconst count = 0;\nconsole.log(count ?? 10); // 0 (0 is not null/undefined)\nconsole.log(count || 10); // 10 (0 is falsy)\n\nconst name = '';\nconsole.log(name ?? 'Anonymous'); // '' (empty string)\nconsole.log(name || 'Anonymous'); // 'Anonymous' (empty string is falsy)\n\n// Combined usage\nconst displayName = user?.profile?.name ?? 'Guest';\nconst items = data?.items ?? [];\nconst score = game?.player?.score ?? 0;",
+                        "components": [
+                            {
+                                "name": "Optional Chaining (?.)",
+                                "english": "Safe navigation through nested properties",
+                                "hinglish": "Nested properties mein safe navigation",
+                                "importance": "Prevents TypeError on undefined/null",
+                                "tip": "Returns undefined instead of throwing error"
+                            },
+                            {
+                                "name": "Nullish Coalescing (??)",
+                                "english": "Provides default for null/undefined",
+                                "hinglish": "null/undefined ke liye default provide karta hai",
+                                "importance": "Better than || for 0, false, '' defaults",
+                                "tip": "Only defaults for null or undefined"
+                            },
+                            {
+                                "name": "Combined Usage",
+                                "english": "Using ?. and ?? together",
+                                "hinglish": ".? aur ?? ko ek saath use karna",
+                                "importance": "Safe access with sensible defaults",
+                                "tip": "Perfect for API response handling"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Value",
+                                "value ?? 'default'",
+                                "value || 'default'"
+                            ],
+                            "rows": [
+                                [
+                                    "null",
+                                    "'default'",
+                                    "'default'"
+                                ],
+                                [
+                                    "undefined",
+                                    "'default'",
+                                    "'default'"
+                                ],
+                                [
+                                    "0",
+                                    "0",
+                                    "'default'"
+                                ],
+                                [
+                                    "false",
+                                    "false",
+                                    "'default'"
+                                ],
+                                [
+                                    "''",
+                                    "''",
+                                    "'default'"
+                                ],
+                                [
+                                    "'actual'",
+                                    "'actual'",
+                                    "'actual'"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use optional chaining for nested object access",
+                                "reason": "Cleaner than && checks, prevents errors",
+                                "hinglish": "&& checks se cleaner, errors se bachata hai"
+                            },
+                            {
+                                "practice": "Use ?? instead of || for numeric/boolean defaults",
+                                "reason": "Preserves 0, false, '' as valid values",
+                                "hinglish": "0, false, '' ko valid values ke roop mein preserve karta hai"
+                            },
+                            {
+                                "practice": "Combine ?. and ?? for API responses",
+                                "reason": "Handles missing data gracefully",
+                                "hinglish": "Missing data gracefully handle karta hai"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 27,
+                    "title": "Proxies & Reflection",
+                    "english": "Meta-programming with Proxy objects and Reflect API.",
+                    "hinglish": "Proxy objects aur Reflect API ke saath meta-programming.",
+                    "examples": [
+                        "const proxy = new Proxy(target, handler);",
+                        "const value = Reflect.get(target, property);"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is a Proxy?",
+                            "answer": "Object that wraps another object to intercept operations"
+                        },
+                        {
+                            "question": "What is handler object?",
+                            "answer": "Object containing traps (methods) for intercepted operations"
+                        },
+                        {
+                            "question": "What are traps in Proxy?",
+                            "answer": "Methods that intercept operations (get, set, has, etc.)"
+                        },
+                        {
+                            "question": "What is Reflect API?",
+                            "answer": "Built-in object providing methods for interceptable operations"
+                        },
+                        {
+                            "question": "Difference between Proxy and Object.defineProperty?",
+                            "answer": "Proxy intercepts all operations, defineProperty specific properties"
+                        },
+                        {
+                            "question": "Can Proxy intercept function calls?",
+                            "answer": "Yes, with apply trap"
+                        },
+                        {
+                            "question": "What is revocable Proxy?",
+                            "answer": "Proxy that can be disabled later"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Basic Proxy example\nconst target = {\n  name: 'John',\n  age: 30\n};\n\nconst handler = {\n  get: function(obj, prop) {\n    console.log(`Getting property: ${prop}`);\n    return prop in obj ? obj[prop] : 'Property not found';\n  },\n  set: function(obj, prop, value) {\n    console.log(`Setting property: ${prop} = ${value}`);\n    if (prop === 'age' && typeof value !== 'number') {\n      throw new TypeError('Age must be a number');\n    }\n    obj[prop] = value;\n    return true; // Required for set trap\n  },\n  has: function(obj, prop) {\n    console.log(`Checking property: ${prop}`);\n    return prop in obj;\n  }\n};\n\nconst proxy = new Proxy(target, handler);\n\nconsole.log(proxy.name); // Logs: Getting property: name, Returns: John\nconsole.log(proxy.salary); // Logs: Getting property: salary, Returns: Property not found\nproxy.age = 31; // Logs: Setting property: age = 31\nconsole.log('age' in proxy); // Logs: Checking property: age, Returns: true\n\n// Validation Proxy\nconst validator = {\n  set: function(obj, prop, value) {\n    if (prop === 'email' && !value.includes('@')) {\n      throw new Error('Invalid email');\n    }\n    if (prop === 'age' && (value < 0 || value > 150)) {\n      throw new Error('Invalid age');\n    }\n    obj[prop] = value;\n    return true;\n  }\n};\n\nconst user = new Proxy({}, validator);\nuser.age = 25; // OK\n// user.age = 200; // Throws Error: Invalid age\n\n// Function Proxy\nconst functionHandler = {\n  apply: function(target, thisArg, argumentsList) {\n    console.log(`Function called with args: ${argumentsList}`);\n    const result = target.apply(thisArg, argumentsList);\n    console.log(`Function returned: ${result}`);\n    return result;\n  }\n};\n\nfunction multiply(a, b) {\n  return a * b;\n}\n\nconst proxiedMultiply = new Proxy(multiply, functionHandler);\nproxiedMultiply(5, 3); // Logs calls and returns 15\n\n// Reflect API\nconst obj = { x: 1, y: 2 };\n\nconsole.log(Reflect.get(obj, 'x')); // 1\nconsole.log(Reflect.set(obj, 'z', 3)); // true\nconsole.log(Reflect.has(obj, 'y')); // true\nconsole.log(Reflect.ownKeys(obj)); // ['x', 'y', 'z']\n\n// Using Reflect with Proxy\nconst betterHandler = {\n  get: function(target, prop, receiver) {\n    console.log(`Getting ${prop}`);\n    return Reflect.get(...arguments); // Forward to default behavior\n  }\n};",
+                        "components": [
+                            {
+                                "name": "Proxy Object",
+                                "english": "Wrapper that intercepts operations",
+                                "hinglish": "Operations intercept karne wala wrapper",
+                                "importance": "Meta-programming, interception",
+                                "tip": "Can intercept 13 different operations"
+                            },
+                            {
+                                "name": "Handler Traps",
+                                "english": "Methods that intercept specific operations",
+                                "hinglish": "Specific operations intercept karne wale methods",
+                                "importance": "Define interception behavior",
+                                "tip": "Common traps: get, set, has, apply"
+                            },
+                            {
+                                "name": "Reflect API",
+                                "english": "Built-in methods for object operations",
+                                "hinglish": "Object operations ke liye built-in methods",
+                                "importance": "Meta-programming, Proxy companion",
+                                "tip": "Mirrors Proxy trap methods"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Operation",
+                                "Proxy Trap",
+                                "Reflect Method"
+                            ],
+                            "rows": [
+                                [
+                                    "Property get",
+                                    "get",
+                                    "Reflect.get()"
+                                ],
+                                [
+                                    "Property set",
+                                    "set",
+                                    "Reflect.set()"
+                                ],
+                                [
+                                    "Property check",
+                                    "has",
+                                    "Reflect.has()"
+                                ],
+                                [
+                                    "Function call",
+                                    "apply",
+                                    "Reflect.apply()"
+                                ],
+                                [
+                                    "Constructor call",
+                                    "construct",
+                                    "Reflect.construct()"
+                                ],
+                                [
+                                    "Delete property",
+                                    "deleteProperty",
+                                    "Reflect.deleteProperty()"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use Proxy for validation and logging",
+                                "reason": "Clean separation of concerns",
+                                "hinglish": "Concerns ka clean separation"
+                            },
+                            {
+                                "practice": "Use Reflect methods in Proxy traps",
+                                "reason": "Cleaner than direct property access",
+                                "hinglish": "Direct property access se cleaner"
+                            },
+                            {
+                                "practice": "Be cautious with performance overhead",
+                                "reason": "Proxies add overhead to operations",
+                                "hinglish": "Proxies operations mein overhead add karte hain"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 28,
+                    "title": "Web APIs: Geolocation & Web Workers",
+                    "english": "Browser APIs for location services and background thread execution.",
+                    "hinglish": "Location services aur background thread execution ke liye browser APIs.",
+                    "examples": [
+                        "navigator.geolocation.getCurrentPosition(success);",
+                        "const worker = new Worker('worker.js');"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to get user's current location?",
+                            "answer": "navigator.geolocation.getCurrentPosition()"
+                        },
+                        {
+                            "question": "What are Web Workers?",
+                            "answer": "JavaScript running in background thread"
+                        },
+                        {
+                            "question": "How to create a Web Worker?",
+                            "answer": "new Worker('worker.js')"
+                        },
+                        {
+                            "question": "How to send message to worker?",
+                            "answer": "worker.postMessage(data)"
+                        },
+                        {
+                            "question": "How to receive message from worker?",
+                            "answer": "worker.onmessage = function(event) {}"
+                        },
+                        {
+                            "question": "Can workers access DOM?",
+                            "answer": "No, workers run in separate context"
+                        },
+                        {
+                            "question": "What is Service Worker?",
+                            "answer": "Special worker for offline capabilities, push notifications"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Geolocation API\nif ('geolocation' in navigator) {\n  // Get current position\n  navigator.geolocation.getCurrentPosition(\n    (position) => {\n      console.log('Latitude:', position.coords.latitude);\n      console.log('Longitude:', position.coords.longitude);\n      console.log('Accuracy:', position.coords.accuracy, 'meters');\n      \n      // Use in map\n      displayOnMap(position.coords);\n    },\n    (error) => {\n      console.error('Error getting location:', error.message);\n      switch(error.code) {\n        case error.PERMISSION_DENIED:\n          alert('Location permission denied');\n          break;\n        case error.POSITION_UNAVAILABLE:\n          alert('Location unavailable');\n          break;\n        case error.TIMEOUT:\n          alert('Location request timeout');\n          break;\n      }\n    },\n    {\n      enableHighAccuracy: true, // More accurate but slower\n      timeout: 10000, // 10 seconds\n      maximumAge: 0 // Don't use cached position\n    }\n  );\n  \n  // Watch position (continuous updates)\n  const watchId = navigator.geolocation.watchPosition(\n    (position) => {\n      updateLiveLocation(position.coords);\n    }\n  );\n  \n  // Stop watching\n  // navigator.geolocation.clearWatch(watchId);\n} else {\n  console.log('Geolocation not supported');\n}\n\n// Web Workers\n// main.js\nconst worker = new Worker('worker.js');\n\n// Send data to worker\nworker.postMessage({\n  type: 'CALCULATE',\n  data: [1, 2, 3, 4, 5]\n});\n\n// Receive from worker\nworker.onmessage = function(event) {\n  console.log('Result from worker:', event.data);\n};\n\n// Handle errors\nworker.onerror = function(error) {\n  console.error('Worker error:', error);\n};\n\n// Terminate worker when done\n// worker.terminate();\n\n// worker.js\nself.onmessage = function(event) {\n  const { type, data } = event.data;\n  \n  if (type === 'CALCULATE') {\n    // Heavy computation in background\n    const result = data.reduce((sum, num) => sum + num, 0);\n    \n    // Send result back\n    self.postMessage({\n      type: 'RESULT',\n      result: result\n    });\n  }\n};\n\n// Service Worker (progressive web apps)\nif ('serviceWorker' in navigator) {\n  navigator.serviceWorker.register('/sw.js')\n    .then(registration => {\n      console.log('Service Worker registered');\n    })\n    .catch(error => {\n      console.error('Service Worker registration failed:', error);\n    });\n}",
+                        "components": [
+                            {
+                                "name": "Geolocation API",
+                                "english": "Access device location with permission",
+                                "hinglish": "Permission ke saath device location access karna",
+                                "importance": "Location-based services",
+                                "tip": "Requires HTTPS in production"
+                            },
+                            {
+                                "name": "Web Workers",
+                                "english": "Background threads for CPU-intensive tasks",
+                                "hinglish": "CPU-intensive tasks ke liye background threads",
+                                "importance": "Prevent UI blocking",
+                                "tip": "Use for heavy calculations, data processing"
+                            },
+                            {
+                                "name": "Service Workers",
+                                "english": "Network proxy for offline capabilities",
+                                "hinglish": "Offline capabilities ke liye network proxy",
+                                "importance": "Progressive Web Apps",
+                                "tip": "Requires HTTPS, handles fetch events"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Feature",
+                                "Geolocation API",
+                                "Web Workers",
+                                "Service Workers"
+                            ],
+                            "rows": [
+                                [
+                                    "Purpose",
+                                    "Get device location",
+                                    "Background processing",
+                                    "Offline/Push capabilities"
+                                ],
+                                [
+                                    "Thread",
+                                    "Main thread",
+                                    "Background thread",
+                                    "Background thread"
+                                ],
+                                [
+                                    "DOM Access",
+                                    "Yes",
+                                    "No",
+                                    "No"
+                                ],
+                                [
+                                    "Network Access",
+                                    "Yes",
+                                    "Yes (limited)",
+                                    "Yes (intercept requests)"
+                                ],
+                                [
+                                    "Persistence",
+                                    "No",
+                                    "No",
+                                    "Yes (until uninstalled)"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Always request location permission gracefully",
+                                "reason": "User trust, better UX",
+                                "hinglish": "User trust, better UX"
+                            },
+                            {
+                                "practice": "Use Web Workers for heavy computations",
+                                "reason": "Prevents UI freezing",
+                                "hinglish": "UI freezing se bachata hai"
+                            },
+                            {
+                                "practice": "Implement Service Workers for PWA features",
+                                "reason": "Offline support, better performance",
+                                "hinglish": "Offline support, better performance"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 29,
+                    "title": "Performance Optimization",
+                    "english": "Techniques for improving JavaScript performance and reducing bottlenecks.",
+                    "hinglish": "JavaScript performance improve karne aur bottlenecks reduce karne ke techniques.",
+                    "examples": [
+                        "// Debounce search input\nconst debouncedSearch = debounce(search, 300);",
+                        "// Virtualize long lists\nrenderVisibleItemsOnly();"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is debouncing?",
+                            "answer": "Delay function execution until after wait time"
+                        },
+                        {
+                            "question": "What is throttling?",
+                            "answer": "Limit function execution to once per time period"
+                        },
+                        {
+                            "question": "What is virtual scrolling?",
+                            "answer": "Render only visible items in long list"
+                        },
+                        {
+                            "question": "How to reduce reflows/repaints?",
+                            "answer": "Batch DOM changes, use requestAnimationFrame"
+                        },
+                        {
+                            "question": "What is code splitting?",
+                            "answer": "Split code into smaller bundles loaded on demand"
+                        },
+                        {
+                            "question": "What is lazy loading?",
+                            "answer": "Load resources only when needed"
+                        },
+                        {
+                            "question": "How to find performance bottlenecks?",
+                            "answer": "Use browser DevTools Performance tab"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Debouncing (wait for pause)\nfunction debounce(func, delay) {\n  let timeoutId;\n  return function(...args) {\n    clearTimeout(timeoutId);\n    timeoutId = setTimeout(() => {\n      func.apply(this, args);\n    }, delay);\n  };\n}\n\n// Throttling (limit frequency)\nfunction throttle(func, limit) {\n  let inThrottle;\n  return function(...args) {\n    if (!inThrottle) {\n      func.apply(this, args);\n      inThrottle = true;\n      setTimeout(() => inThrottle = false, limit);\n    }\n  };\n}\n\n// Usage\nconst searchInput = document.querySelector('#search');\nconst debouncedSearch = debounce(searchAPI, 300);\nsearchInput.addEventListener('input', debouncedSearch);\n\n// Reduce DOM reflows\nfunction updateElementsBatch() {\n  // Bad: Causes multiple reflows\n  // element1.style.width = '100px';\n  // element2.style.height = '200px';\n  // element3.style.margin = '10px';\n  \n  // Good: Single reflow\n  requestAnimationFrame(() => {\n    element1.style.width = '100px';\n    element2.style.height = '200px';\n    element3.style.margin = '10px';\n  });\n}\n\n// Memory optimization\nfunction processLargeData(data) {\n  // Process in chunks\n  const chunkSize = 1000;\n  let results = [];\n  \n  function processChunk(start) {\n    const chunk = data.slice(start, start + chunkSize);\n    \n    // Process chunk\n    results = results.concat(chunk.map(item => transform(item)));\n    \n    if (start + chunkSize < data.length) {\n      // Schedule next chunk\n      setTimeout(() => processChunk(start + chunkSize), 0);\n    } else {\n      console.log('Processing complete');\n    }\n  }\n  \n  processChunk(0);\n}\n\n// Lazy loading images\nconst lazyImages = document.querySelectorAll('img[data-src]');\n\nconst imageObserver = new IntersectionObserver((entries) => {\n  entries.forEach(entry => {\n    if (entry.isIntersecting) {\n      const img = entry.target;\n      img.src = img.dataset.src;\n      img.removeAttribute('data-src');\n      imageObserver.unobserve(img);\n    }\n  });\n});\n\nlazyImages.forEach(img => imageObserver.observe(img));",
+                        "components": [
+                            {
+                                "name": "Debouncing & Throttling",
+                                "english": "Control frequency of function calls",
+                                "hinglish": "Function calls ki frequency control karna",
+                                "importance": "Performance, API rate limiting",
+                                "tip": "Debounce for search, throttle for scroll/resize"
+                            },
+                            {
+                                "name": "DOM Optimization",
+                                "english": "Minimize browser layout/render work",
+                                "hinglish": "Browser layout/render work minimize karna",
+                                "importance": "Smooth animations, responsive UI",
+                                "tip": "Use requestAnimationFrame for visual updates"
+                            },
+                            {
+                                "name": "Memory Management",
+                                "english": "Efficient data processing and cleanup",
+                                "hinglish": "Efficient data processing aur cleanup",
+                                "importance": "Prevent memory leaks",
+                                "tip": "Clear intervals, remove event listeners"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Technique",
+                                "Problem Solved",
+                                "When to Use"
+                            ],
+                            "rows": [
+                                [
+                                    "Debouncing",
+                                    "Rapid successive calls",
+                                    "Search inputs, resize events"
+                                ],
+                                [
+                                    "Throttling",
+                                    "Too frequent calls",
+                                    "Scroll events, mouse movement"
+                                ],
+                                [
+                                    "Virtualization",
+                                    "Large lists rendering",
+                                    "1000+ item lists"
+                                ],
+                                [
+                                    "Lazy Loading",
+                                    "Initial load time",
+                                    "Images, below-fold content"
+                                ],
+                                [
+                                    "Code Splitting",
+                                    "Large bundle size",
+                                    "Route-based loading"
+                                ],
+                                [
+                                    "Memoization",
+                                    "Expensive calculations",
+                                    "Pure functions with repeated calls"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Use debouncing for search inputs",
+                                "reason": "Reduces API calls, better performance",
+                                "hinglish": "API calls reduce hote hain, better performance"
+                            },
+                            {
+                                "practice": "Virtualize long lists",
+                                "reason": "Dramatically improves rendering performance",
+                                "hinglish": "Rendering performance dramatically improve hoti hai"
+                            },
+                            {
+                                "practice": "Profile before optimizing",
+                                "reason": "Optimize actual bottlenecks, not guesses",
+                                "hinglish": "Actual bottlenecks optimize karo, guesses nahi"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 30,
+                    "title": "Testing with Jest",
+                    "english": "Writing and running tests with Jest testing framework.",
+                    "hinglish": "Jest testing framework ke saath tests likhna aur run karna.",
+                    "examples": [
+                        "test('adds 1 + 2 to equal 3', () => { expect(sum(1,2)).toBe(3); });",
+                        "describe('Calculator', () => { /* test suite */ });"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to install Jest?",
+                            "answer": "npm install --save-dev jest"
+                        },
+                        {
+                            "question": "What is test() function?",
+                            "answer": "Defines individual test case"
+                        },
+                        {
+                            "question": "What is describe() function?",
+                            "answer": "Groups related tests together"
+                        },
+                        {
+                            "question": "What are Jest matchers?",
+                            "answer": "Functions for assertions (toBe, toEqual, etc.)"
+                        },
+                        {
+                            "question": "How to test async code?",
+                            "answer": "Use async/await or return Promise"
+                        },
+                        {
+                            "question": "What are mocking and spies?",
+                            "answer": "Techniques to replace real implementations"
+                        },
+                        {
+                            "question": "How to run specific test?",
+                            "answer": "npm test -- --testNamePattern=\"test name\""
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Basic test example\n// math.js\nexport function add(a, b) {\n  return a + b;\n}\n\nexport function subtract(a, b) {\n  return a - b;\n}\n\n// math.test.js\nimport { add, subtract } from './math';\n\ndescribe('Math functions', () => {\n  // Test suite\n  \n  test('adds two numbers correctly', () => {\n    expect(add(2, 3)).toBe(5);\n    expect(add(-1, 1)).toBe(0);\n    expect(add(0, 0)).toBe(0);\n  });\n  \n  test('subtracts two numbers correctly', () => {\n    expect(subtract(5, 3)).toBe(2);\n    expect(subtract(0, 5)).toBe(-5);\n  });\n  \n  test('handles floating point numbers', () => {\n    expect(add(0.1, 0.2)).toBeCloseTo(0.3); // Not .toBe(0.3)\n  });\n});\n\n// Async testing\ndescribe('Async operations', () => {\n  test('fetches data successfully', async () => {\n    const data = await fetchData();\n    expect(data).toHaveProperty('id');\n    expect(data.name).toBeDefined();\n  });\n  \n  test('handles fetch errors', async () => {\n    await expect(fetchInvalidData()).rejects.toThrow('Network error');\n  });\n});\n\n// Mocking\ndescribe('User service with mocks', () => {\n  // Mock a module\n  jest.mock('./api', () => ({\n    fetchUser: jest.fn(() => Promise.resolve({ id: 1, name: 'John' }))\n  }));\n  \n  // Spy on function\n  test('calls API with correct parameters', () => {\n    const consoleSpy = jest.spyOn(console, 'log');\n    \n    logMessage('test');\n    \n    expect(consoleSpy).toHaveBeenCalledWith('test');\n    consoleSpy.mockRestore(); // Cleanup\n  });\n  \n  // Mock implementation\n  const mockFetch = jest.fn();\n  mockFetch.mockResolvedValue({ data: 'mocked' });\n});\n\n// Setup and teardown\ndescribe('Database operations', () => {\n  let dbConnection;\n  \n  // Runs before each test\n  beforeEach(() => {\n    dbConnection = connectToDatabase();\n  });\n  \n  // Runs after each test\n  afterEach(() => {\n    dbConnection.close();\n  });\n  \n  // Runs once before all tests\n  beforeAll(() => {\n    console.log('Starting database tests');\n  });\n  \n  // Runs once after all tests\n  afterAll(() => {\n    console.log('All database tests completed');\n  });\n  \n  test('inserts record', () => {\n    const result = dbConnection.insert({ name: 'test' });\n    expect(result.id).toBeDefined();\n  });\n});",
+                        "components": [
+                            {
+                                "name": "Test Structure",
+                                "english": "describe blocks for suites, test for cases",
+                                "hinglish": "Suites ke liye describe blocks, cases ke liye test",
+                                "importance": "Test organization",
+                                "tip": "Use nested describe for hierarchy"
+                            },
+                            {
+                                "name": "Assertions/Matchers",
+                                "english": "Functions to verify expected outcomes",
+                                "hinglish": "Expected outcomes verify karne ke liye functions",
+                                "importance": "Test validation",
+                                "tip": "toBe for primitives, toEqual for objects"
+                            },
+                            {
+                                "name": "Mocking",
+                                "english": "Replace real dependencies with controlled versions",
+                                "hinglish": "Real dependencies ko controlled versions se replace karna",
+                                "importance": "Isolated testing",
+                                "tip": "Mock external APIs, databases, timers"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Matcher",
+                                "Purpose",
+                                "Example"
+                            ],
+                            "rows": [
+                                [
+                                    "toBe()",
+                                    "Exact equality (===)",
+                                    "expect(1).toBe(1)"
+                                ],
+                                [
+                                    "toEqual()",
+                                    "Deep equality",
+                                    "expect(obj).toEqual({x:1})"
+                                ],
+                                [
+                                    "toBeTruthy()",
+                                    "Truthy value",
+                                    "expect(1).toBeTruthy()"
+                                ],
+                                [
+                                    "toBeFalsy()",
+                                    "Falsy value",
+                                    "expect(0).toBeFalsy()"
+                                ],
+                                [
+                                    "toContain()",
+                                    "Array/string contains",
+                                    "expect(arr).toContain('item')"
+                                ],
+                                [
+                                    "toThrow()",
+                                    "Function throws error",
+                                    "expect(fn).toThrow()"
+                                ],
+                                [
+                                    "toBeDefined()",
+                                    "Not undefined",
+                                    "expect(var).toBeDefined()"
+                                ],
+                                [
+                                    "toBeNull()",
+                                    "Exactly null",
+                                    "expect(var).toBeNull()"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Write tests before code (TDD)",
+                                "reason": "Better design, ensures testability",
+                                "hinglish": "Better design, testability ensure karta hai"
+                            },
+                            {
+                                "practice": "Test behavior, not implementation",
+                                "reason": "Tests survive refactoring",
+                                "hinglish": "Refactoring ke baad bhi tests survive karte hain"
+                            },
+                            {
+                                "practice": "Keep tests isolated and independent",
+                                "reason": "Reliable, order-independent results",
+                                "hinglish": "Reliable, order-independent results"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 31,
+                    "title": "Node.js Introduction & Capstone Project",
+                    "english": "Introduction to Node.js runtime and building a comprehensive weather app.",
+                    "hinglish": "Node.js runtime ki introduction aur comprehensive weather app banana.",
+                    "examples": [
+                        "const http = require('http'); // CommonJS",
+                        "import express from 'express'; // ES Modules"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is Node.js?",
+                            "answer": "JavaScript runtime built on Chrome's V8 engine"
+                        },
+                        {
+                            "question": "What is npm?",
+                            "answer": "Node Package Manager (largest software registry)"
+                        },
+                        {
+                            "question": "Difference between require and import?",
+                            "answer": "require is CommonJS, import is ES Modules"
+                        },
+                        {
+                            "question": "What is package.json?",
+                            "answer": "Project configuration file with dependencies"
+                        },
+                        {
+                            "question": "How to create HTTP server in Node.js?",
+                            "answer": "http.createServer() or use Express.js"
+                        },
+                        {
+                            "question": "What are environment variables?",
+                            "answer": "Configuration values outside code (API keys, ports)"
+                        },
+                        {
+                            "question": "How to handle files in Node.js?",
+                            "answer": "fs module (fs.readFile, fs.writeFile)"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Basic Node.js server\n// server.js\nconst http = require('http');\nconst fs = require('fs');\nconst path = require('path');\n\nconst server = http.createServer((req, res) => {\n  // Simple routing\n  if (req.url === '/') {\n    fs.readFile(path.join(__dirname, 'index.html'), (err, data) => {\n      if (err) {\n        res.writeHead(500);\n        return res.end('Error loading index.html');\n      }\n      res.writeHead(200, { 'Content-Type': 'text/html' });\n      res.end(data);\n    });\n  } else if (req.url === '/api/data') {\n    res.writeHead(200, { 'Content-Type': 'application/json' });\n    res.end(JSON.stringify({ message: 'Hello from API' }));\n  } else {\n    res.writeHead(404);\n    res.end('Page not found');\n  }\n});\n\nconst PORT = process.env.PORT || 3000;\nserver.listen(PORT, () => {\n  console.log(`Server running on port ${PORT}`);\n});\n\n// Weather App Capstone Project\n// Project Structure:\n// weather-app/\n//   ├── public/\n//   │   ├── index.html\n//   │   ├── style.css\n//   │   └── app.js\n//   ├── server.js\n//   ├── package.json\n//   └── .env\n\n// server.js (Express version)\nconst express = require('express');\nconst axios = require('axios');\nrequire('dotenv').config();\n\nconst app = express();\nconst PORT = process.env.PORT || 3000;\n\n// Middleware\napp.use(express.static('public'));\napp.use(express.json());\n\n// Weather API endpoint\napp.get('/api/weather', async (req, res) => {\n  try {\n    const { city } = req.query;\n    \n    if (!city) {\n      return res.status(400).json({ error: 'City parameter required' });\n    }\n    \n    // Call external weather API\n    const apiKey = process.env.WEATHER_API_KEY;\n    const response = await axios.get(\n      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`\n    );\n    \n    // Transform response\n    const weatherData = {\n      city: response.data.name,\n      country: response.data.sys.country,\n      temperature: response.data.main.temp,\n      feelsLike: response.data.main.feels_like,\n      humidity: response.data.main.humidity,\n      description: response.data.weather[0].description,\n      icon: response.data.weather[0].icon,\n      windSpeed: response.data.wind.speed\n    };\n    \n    res.json(weatherData);\n  } catch (error) {\n    console.error('Weather API error:', error.message);\n    \n    if (error.response?.status === 404) {\n      res.status(404).json({ error: 'City not found' });\n    } else {\n      res.status(500).json({ error: 'Failed to fetch weather data' });\n    }\n  }\n});\n\n// Forecast endpoint (bonus)\napp.get('/api/forecast', async (req, res) => {\n  // Similar implementation for 5-day forecast\n});\n\n// Error handling middleware\napp.use((err, req, res, next) => {\n  console.error(err.stack);\n  res.status(500).json({ error: 'Something went wrong!' });\n});\n\napp.listen(PORT, () => {\n  console.log(`Weather app listening on port ${PORT}`);\n});\n\n// Frontend (public/app.js)\n// Modern JavaScript with async/await, error handling, localStorage\nclass WeatherApp {\n  constructor() {\n    this.apiKey = 'your_api_key'; // In production, use backend proxy\n    this.init();\n  }\n  \n  async init() {\n    this.bindEvents();\n    this.loadRecentSearches();\n  }\n  \n  bindEvents() {\n    document.getElementById('search-btn').addEventListener('click', () => this.searchWeather());\n    document.getElementById('city-input').addEventListener('keypress', (e) => {\n      if (e.key === 'Enter') this.searchWeather();\n    });\n  }\n  \n  async searchWeather() {\n    const city = document.getElementById('city-input').value.trim();\n    if (!city) return;\n    \n    this.showLoading();\n    \n    try {\n      const weatherData = await this.fetchWeather(city);\n      this.displayWeather(weatherData);\n      this.saveToRecent(city);\n    } catch (error) {\n      this.showError(error.message);\n    } finally {\n      this.hideLoading();\n    }\n  }\n  \n  async fetchWeather(city) {\n    const response = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);\n    if (!response.ok) {\n      const error = await response.json();\n      throw new Error(error.error || 'Failed to fetch weather');\n    }\n    return response.json();\n  }\n  \n  displayWeather(data) {\n    // Update DOM with weather information\n    document.getElementById('city-name').textContent = `${data.city}, ${data.country}`;\n    document.getElementById('temperature').textContent = `${Math.round(data.temperature)}°C`;\n    document.getElementById('description').textContent = data.description;\n    document.getElementById('humidity').textContent = `Humidity: ${data.humidity}%`;\n    document.getElementById('wind').textContent = `Wind: ${data.windSpeed} km/h`;\n    \n    // Weather icon\n    const iconUrl = `https://openweathermap.org/img/wn/${data.icon}@2x.png`;\n    document.getElementById('weather-icon').src = iconUrl;\n    \n    // Show weather card\n    document.getElementById('weather-card').classList.remove('hidden');\n  }\n  \n  saveToRecent(city) {\n    // Save to localStorage\n    const recent = JSON.parse(localStorage.getItem('recentSearches') || '[]');\n    \n    // Add to beginning, remove duplicates, limit to 5\n    const updated = [city, ...recent.filter(c => c !== city)].slice(0, 5);\n    localStorage.setItem('recentSearches', JSON.stringify(updated));\n    \n    this.updateRecentList(updated);\n  }\n}",
+                        "components": [
+                            {
+                                "name": "Node.js Runtime",
+                                "english": "Server-side JavaScript execution environment",
+                                "hinglish": "Server-side JavaScript execution environment",
+                                "importance": "Backend development, tools",
+                                "tip": "Same language frontend and backend"
+                            },
+                            {
+                                "name": "Express.js Framework",
+                                "english": "Minimal web framework for Node.js",
+                                "hinglish": "Node.js ke liye minimal web framework",
+                                "importance": "Rapid API development",
+                                "tip": "Middleware architecture"
+                            },
+                            {
+                                "name": "Capstone Project",
+                                "english": "Comprehensive application integrating concepts",
+                                "hinglish": "Concepts integrate karta comprehensive application",
+                                "importance": "Real-world experience",
+                                "tip": "Shows full development lifecycle"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "Technology",
+                                "Purpose",
+                                "Weather App Usage"
+                            ],
+                            "rows": [
+                                [
+                                    "Node.js",
+                                    "Server runtime",
+                                    "Backend API server"
+                                ],
+                                [
+                                    "Express.js",
+                                    "Web framework",
+                                    "Route handling, middleware"
+                                ],
+                                [
+                                    "Axios",
+                                    "HTTP client",
+                                    "Fetch weather from external API"
+                                ],
+                                [
+                                    "dotenv",
+                                    "Environment variables",
+                                    "Store API keys securely"
+                                ],
+                                [
+                                    "localStorage",
+                                    "Client-side storage",
+                                    "Save recent searches"
+                                ],
+                                [
+                                    "Fetch API",
+                                    "Browser HTTP client",
+                                    "Call backend from frontend"
+                                ]
+                            ]
+                        },
+                        "best_practices": [
+                            {
+                                "practice": "Keep API keys in environment variables",
+                                "reason": "Security, different values per environment",
+                                "hinglish": "Security, different environments ke liye different values"
+                            },
+                            {
+                                "practice": "Implement proper error handling",
+                                "reason": "Better user experience, easier debugging",
+                                "hinglish": "Better user experience, debugging asaan"
+                            },
+                            {
+                                "practice": "Add loading states and feedback",
+                                "reason": "Better UX during async operations",
+                                "hinglish": "Async operations ke dauran better UX"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}
