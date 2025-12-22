@@ -2,8 +2,16 @@ import React from 'react';
 import './StacksPage.css';
 import { useParams } from 'react-router-dom';
 import stacksData from '../api/stacks.json';
+import { useNavigate } from 'react-router-dom';
 
 function StacksPage() {
+
+    const navigate = useNavigate();
+
+    const handleGoBack = () => {
+        navigate(-1);
+    }
+
     const { fieldSlug } = useParams();
 
     const fieldData = stacksData.find(
@@ -15,28 +23,35 @@ function StacksPage() {
     }
 
 
-  return (
-    <section className='stacks-container'>
-      <h1 className='field-title'>{fieldData.field}</h1>
+    return (
+        <section className='stacks-container'>
+            <h1 className='heading'>{fieldData.field}</h1>
 
-      {
-        fieldData.type === "linear" ? (
-            <p className='field-title'>{fieldData.note}</p>
-        ) : (
-            <div className='stacks-section'>
-                {
-                    fieldData.stacks.map((stack) => (
-                        <div key={stack.id} className='stack-card'>
-                            <h3 className='stackname'>{stack.name}</h3>
-                            <p className='stack-description'>{stack.description}</p>
+            {
+                fieldData.type === "linear" ? (
+                    <>
+                        <p className='sub-title'>{fieldData.note}</p>
+                        <div className="buttons">
+                            <button className='button'>Start {fieldData.field}</button>
+                            <button className='button' onClick={handleGoBack}>Go back</button>
                         </div>
-                    ))
-                }
-            </div>
-        )
-      }
-    </section>
-  )
+                    </>
+
+                ) : (
+                    <div className='stacks-section'>
+                        {
+                            fieldData.stacks.map((stack) => (
+                                <div key={stack.id} className='stack-card'>
+                                    <h3 className='stackname'>{stack.name}</h3>
+                                    <p className='stack-description'>{stack.description}</p>
+                                </div>
+                            ))
+                        }
+                    </div>
+                )
+            }
+        </section>
+    )
 }
 
 export default StacksPage

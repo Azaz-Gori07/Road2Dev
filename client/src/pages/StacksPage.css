@@ -9,11 +9,17 @@
     flex-direction: column;
 }
 
-.field-title {
-    font-size: 32px;
-    font-weight: bold;
-    /* margin-bottom: 20px; */
-    color: #ddd;
+.stacks-container .heading {
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    letter-spacing: 10px;
+}
+
+.stacks-container .sub-title {
+    font-size: 1.2rem;
+    color: #ccc;
+    text-align: center;
 }
 
 .stacks-section {
@@ -33,14 +39,15 @@
 .stack-card {
     display: flex;
     flex-direction: column;
-    background-color: #252525;
+    background-color: #111;
     border-radius: 8px;
     padding: 20px;
     margin: 10px 0;
     min-width: 200px;
     max-width: 340px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     transition: transform 0.2s;
+    cursor: pointer;
 }
 
 .stackname {
@@ -52,7 +59,67 @@
 }
 
 .stack-description {
-    font-size: 16px;
-    color: #ccc;
+    font-size: 15px;
+    color: rgba(169, 169, 169, 0.933);
     background: none;
+    line-height: 1.40;
+}
+
+.stacks-container .buttons {
+    margin-bottom: 100px;
+    display: flex;
+    gap: 20px;
+}
+
+@media (min-width:500px) and (max-width:1132px) {
+    .stacks-container {
+        padding-top: 50px;
+    }
+
+    .stacks-section {
+        padding: 20px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stack-card {
+        min-width: 150px;
+        max-width: 350px;
+    }
+}
+
+@media (max-width:600px) {
+    .stacks-container {
+        padding-top: 60px;
+    }
+
+    .stacks-container .heading {
+        font-size: 2.4rem;
+        letter-spacing: 4px;
+    }
+}
+
+@media (max-width:350px) {
+    .stacks-container .heading {
+        font-size: 2.2rem;
+        letter-spacing: 3px;
+    }
+}
+
+@media (min-width:320px) and (max-width:499px) {
+    .stacks-section {
+        padding: 10px;
+        display: grid;
+        grid-template-columns: 1fr;
+        row-gap: 20px;
+    }
+
+    .stack-card {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .stacks-container .buttons .button {
+        padding: 14px 18px;
+    }
 }

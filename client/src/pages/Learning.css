@@ -84,7 +84,7 @@
 }
 
 .field-description {
-    font-size: .9rem;
+    font-size: 15px;
     color: rgba(169, 169, 169, 0.933);
     background: transparent;
     margin-top: 5px;
@@ -104,7 +104,7 @@
 
 @media (max-width:500px) {
     .field-description{
-        line-height: 20px;
+        line-height: 1.5;
     }
 }
 

@@ -1,0 +1,216 @@
+{
+  "technology": "Web Fundamentals (Web ke Basic Concepts)",
+  "slug": "web-fundamentals",
+  "description": "Web fundamentals explain how the web works behind the scenes before writing any code. (Web fundamentals batata hai ki website kaise kaam karti hai - aap code likhne se pehle background me kya hota hai)",
+  "order": 1,
+  "levels": [
+    {
+      "level": "core (mool)",
+      "order": 1,
+      "topics": [
+        {
+          "id": 1,
+          "title": "What is the Internet? (Internet Kya Hai?)",
+          "english": "The Internet is a global network of computers that communicate with each other using standard protocols.",
+          "hinglish": "Internet computers ka ek global network hai jo standard rules (protocols) use karke ek dusre se baat karte hain.",
+          "examples": [],
+          "practice": [
+            {
+              "question": "What is the Internet? (Internet Kya Hai?)",
+              "answer": "A global network of interconnected computers (Computers ka ek global network jo ek dusre se connected hai)"
+            },
+            {
+              "question": "Who controls the Internet? (Internet ka control kis ke paas hai?)",
+              "answer": "No single entity - it's decentralized (Kisi ek ke paas nahi - ye decentralized hai)"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "What is a Website? (Website Kya Hota Hai?)",
+          "english": "A website is a collection of web pages hosted on a server and accessed using a browser.",
+          "hinglish": "Website web pages ka collection hota hai jo server par host hota hai aur browser se access kiya jata hai.",
+          "examples": [
+            "https://google.com",
+            "https://github.com"
+          ],
+          "practice": [
+            {
+              "question": "Where is a website stored? (Website kahan store hoti hai?)",
+              "answer": "On a server (Server par)"
+            },
+            {
+              "question": "How do we access a website? (Website kaise access karte hain?)",
+              "answer": "Using a web browser (Web browser ke through)"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Client vs Server (Client aur Server me Antar)",
+          "english": "Client requests data and server responds with data.",
+          "hinglish": "Client data maangta hai aur server data deta hai.",
+          "examples": [
+            "Browser → Server → Response (Browser → Server → Jawaab)"
+          ],
+          "practice": [
+            {
+              "question": "What is a client? (Client kya hota hai?)",
+              "answer": "A device or browser that requests data (Ek device ya browser jo data request karta hai)"
+            },
+            {
+              "question": "What is a server? (Server kya hota hai?)",
+              "answer": "A computer that stores and serves data (Ek computer jo data store karta hai aur serve karta hai)"
+            },
+            {
+              "question": "Give an example of client-server interaction (Client-server interaction ka example dijiye)",
+              "answer": "Loading a webpage - browser requests, server sends HTML/CSS/JS (Webpage load karna - browser request karta hai, server HTML/CSS/JS bhejta hai)"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "title": "What is a Browser? (Browser Kya Hota Hai?)",
+          "english": "A browser is software that displays websites and interprets HTML, CSS, and JavaScript.",
+          "hinglish": "Browser ek software hota hai jo websites dikhata hai aur HTML, CSS, aur JavaScript ko samajhta hai.",
+          "examples": [
+            "Google Chrome",
+            "Firefox",
+            "Edge"
+          ],
+          "practice": [
+            {
+              "question": "Name any two browsers (Koi do browsers ke naam bataiye)",
+              "answer": "Chrome, Firefox (Chrome, Firefox)"
+            },
+            {
+              "question": "What is the main function of a browser? (Browser ka main kaam kya hai?)",
+              "answer": "To display websites and handle user interaction (Website dikhana aur user interaction handle karna)"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "title": "How Browsers Render Websites (Browser Website Kaise Dikhata Hai)",
+          "english": "Browsers parse HTML, apply CSS styles, and execute JavaScript to render a webpage.",
+          "hinglish": "Browser pehle HTML padhta hai, phir CSS styles lagata hai, aur phir JavaScript chalta hai webpage banane ke liye.",
+          "examples": [
+            "HTML → Structure (HTML → Structure)",
+            "CSS → Design (CSS → Design)",
+            "JS → Behavior (JS → Behavior)"
+          ],
+          "practice": [
+            {
+              "question": "Which language controls page structure? (Kaunsi language page ka structure control karti hai?)",
+              "answer": "HTML (HTML)"
+            },
+            {
+              "question": "Which language controls design? (Kaunsi language design control karti hai?)",
+              "answer": "CSS (CSS)"
+            },
+            {
+              "question": "Which language controls behavior? (Kaunsi language behavior control karti hai?)",
+              "answer": "JavaScript (JavaScript)"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "HTTP & HTTPS (HTTP aur HTTPS)",
+          "english": "HTTP is a protocol for communication between client and server. HTTPS is the secure version.",
+          "hinglish": "HTTP client aur server ke beech communication ka rule hai. HTTPS iska secure version hai.",
+          "examples": [
+            "http://example.com",
+            "https://example.com"
+          ],
+          "practice": [
+            {
+              "question": "What does HTTPS provide? (HTTPS kya provide karta hai?)",
+              "answer": "Secure and encrypted communication (Secure aur encrypted communication)"
+            },
+            {
+              "question": "How to identify a secure website? (Secure website kaise pahchane?)",
+              "answer": "Look for https:// in URL and padlock icon (URL me https:// aur padlock icon dekhe)"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "title": "DNS (Domain Name System) (DNS - Domain Name System)",
+          "english": "DNS converts domain names into IP addresses.",
+          "hinglish": "DNS domain name ko IP address me convert karta hai.",
+          "examples": [
+            "google.com → 142.250.190.14"
+          ],
+          "practice": [
+            {
+              "question": "Why do we need DNS? (Humko DNS ki kya zaroorat hai?)",
+              "answer": "Computers understand IP addresses, not domain names (Computers IP addresses samajhte hain, domain names nahi)"
+            },
+            {
+              "question": "What is a DNS resolver? (DNS resolver kya hota hai?)",
+              "answer": "A server that translates domain names to IP addresses (Ek server jo domain name ko IP address me badalta hai)"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "title": "Frontend vs Backend (Frontend aur Backend me Antar)",
+          "english": "Frontend is what users see. Backend handles logic, database, and server operations.",
+          "hinglish": "Frontend wo hota hai jo user dekhta hai, backend logic aur database handle karta hai.",
+          "examples": [
+            "Frontend: HTML, CSS, JS",
+            "Backend: Node, Database"
+          ],
+          "practice": [
+            {
+              "question": "Which side handles database? (Database kaun handle karta hai?)",
+              "answer": "Backend (Backend)"
+            },
+            {
+              "question": "Which side handles user interface? (User interface kaun banata hai?)",
+              "answer": "Frontend (Frontend)"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "title": "What is a Full Stack Developer? (Full Stack Developer Kya Hota Hai?)",
+          "english": "A full stack developer works on both frontend and backend.",
+          "hinglish": "Full stack developer frontend aur backend dono pe kaam karta hai.",
+          "examples": [],
+          "practice": [
+            {
+              "question": "Is MERN a full stack? (Kya MERN full stack hai?)",
+              "answer": "Yes (Haan)"
+            },
+            {
+              "question": "What does a full stack developer do? (Full stack developer kya karta hai?)",
+              "answer": "Works on both frontend and backend of a website (Website ka frontend aur backend dono banata hai)"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "title": "How Websites are Hosted (Website Hosting Kaise Hoti Hai)",
+          "english": "Hosting stores website files on a server so users can access them online.",
+          "hinglish": "Hosting website files ko server par store karta hai taaki users online access kar saken.",
+          "examples": [
+            "Shared Hosting",
+            "Cloud Hosting"
+          ],
+          "practice": [
+            {
+              "question": "Why do websites need hosting? (Website ko hosting ki kya zaroorat hai?)",
+              "answer": "To be accessible on the internet (Internet par accessible hone ke liye)"
+            },
+            {
+              "question": "Where does hosting happen? (Hosting kahan hoti hai?)",
+              "answer": "On a server (Server par)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
