@@ -9,7 +9,7 @@ const Roadmap = () => {
   const roadmapKey = stackSlug || fieldSlug;
   const roadmap = stackFlow[roadmapKey];
 
-  const completed = ["web-fundamentals"];
+  const completed = ["web-fundamentals", "html", "css"];
 
   const handleClick = (slug, index) => {
     const isUnlocked = index === 0 || completed.includes(slug);

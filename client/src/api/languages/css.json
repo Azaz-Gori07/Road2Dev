@@ -1,0 +1,1373 @@
+{
+    "technology": "CSS",
+    "slug": "css",
+    "description": "CSS is used to style and design web pages. It controls layout, colors, fonts and responsiveness.",
+    "levels": [
+        {
+            "level": "beginner",
+            "order": 1,
+            "topics": [
+                {
+                    "id": 1,
+                    "title": "Introduction to CSS",
+                    "english": "CSS stands for Cascading Style Sheets. It is used to style HTML elements and control how they appear on screen.",
+                    "hinglish": "CSS ka full form Cascading Style Sheets hai. Agar HTML structure hai, to CSS uska design aur look decide karta hai.",
+                    "examples": [
+                        "h1 { color: red; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What does CSS stand for?",
+                            "answer": "Cascading Style Sheets"
+                        },
+                        {
+                            "question": "What is the role of CSS?",
+                            "answer": "To style and design HTML elements"
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "title": "Why CSS is Important",
+                    "english": "CSS helps control design, layout and responsiveness of websites from a single place.",
+                    "hinglish": "CSS ki madad se hum ek hi jagah se poori website ka design control kar sakte hain.",
+                    "examples": [],
+                    "practice": [
+                        {
+                            "question": "Why is CSS important?",
+                            "answer": "It improves design, responsiveness and user experience"
+                        }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "title": "CSS Syntax",
+                    "english": "CSS syntax consists of a selector and a declaration block with properties and values.",
+                    "hinglish": "CSS me selector hota hai aur declaration block hota hai jisme property aur value hoti hai.",
+                    "examples": [
+                        "h1 {\n  color: red;\n  font-size: 20px;\n}"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What are the main parts of CSS syntax?",
+                            "answer": "Selector and declaration block"
+                        }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "title": "Ways to Add CSS to HTML",
+                    "english": "CSS can be added to HTML using Inline, Internal or External methods.",
+                    "hinglish": "CSS ko HTML me Inline, Internal aur External 3 tarikon se add kiya ja sakta hai.",
+                    "examples": [
+                        "<h1 style=\"color:red;\">Inline CSS</h1>",
+                        "<style>h1{color:red;}</style>",
+                        "<link rel=\"stylesheet\" href=\"style.css\">"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which CSS method is best practice?",
+                            "answer": "External CSS"
+                        }
+                    ]
+                },
+                {
+                    "id": 5,
+                    "title": "Inline CSS",
+                    "english": "Inline CSS is written directly inside HTML tags using the style attribute.",
+                    "hinglish": "Inline CSS HTML tag ke andar style attribute se likhi jaati hai.",
+                    "examples": [
+                        "<p style=\"color:blue;\">Hello</p>"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Where is inline CSS written?",
+                            "answer": "Inside HTML tag using style attribute"
+                        }
+                    ]
+                },
+                {
+                    "id": 6,
+                    "title": "Internal CSS",
+                    "english": "Internal CSS is written inside the style tag in the head section of HTML.",
+                    "hinglish": "Internal CSS HTML ke head section ke andar style tag me likhi jaati hai.",
+                    "examples": [
+                        "<style>\n  body { background: linen; }\n</style>"
+                    ],
+                    "practice": [
+                        {
+                            "question": "When should internal CSS be used?",
+                            "answer": "When styling a single page"
+                        }
+                    ]
+                },
+                {
+                    "id": 7,
+                    "title": "External CSS",
+                    "english": "External CSS is written in a separate .css file and linked to HTML.",
+                    "hinglish": "External CSS ek alag .css file me likhi jaati hai aur HTML se link hoti hai.",
+                    "examples": [
+                        "<link rel=\"stylesheet\" href=\"style.css\">"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Why is external CSS recommended?",
+                            "answer": "It keeps code clean and reusable"
+                        }
+                    ]
+                },
+                {
+                    "id": 8,
+                    "title": "CSS Selectors - Basic",
+                    "english": "Selectors are used to select HTML elements to apply styles.",
+                    "hinglish": "Selectors HTML elements ko select karte hain styling ke liye.",
+                    "examples": [
+                        "p { color: red; }",
+                        ".box { border: 1px solid; }",
+                        "#header { font-size: 30px; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which selector uses a dot (.)?",
+                            "answer": "Class selector"
+                        },
+                        {
+                            "question": "Which selector uses a hash (#)?",
+                            "answer": "ID selector"
+                        }
+                    ]
+                },
+                {
+                    "id": 9,
+                    "title": "Attribute Selectors",
+                    "english": "Attribute selectors target elements based on attributes.",
+                    "hinglish": "Attribute selectors attributes ke basis par elements ko select karte hain.",
+                    "examples": [
+                        "input[type=\"text\"] { border: 2px solid gray; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What does an attribute selector target?",
+                            "answer": "Elements with specific attributes"
+                        }
+                    ]
+                },
+                {
+                    "id": 10,
+                    "title": "Pseudo-classes",
+                    "english": "Pseudo-classes define special states of elements.",
+                    "hinglish": "Pseudo-classes elements ki special states ko style karte hain.",
+                    "examples": [
+                        "button:hover { background: yellow; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which pseudo-class is used on hover?",
+                            "answer": ":hover"
+                        }
+                    ]
+                },
+                {
+                    "id": 11,
+                    "title": "Pseudo-elements",
+                    "english": "Pseudo-elements style specific parts of elements.",
+                    "hinglish": "Pseudo-elements element ke specific parts ko style karte hain.",
+                    "examples": [
+                        "p::first-letter { font-size: 200%; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which pseudo-element styles the first letter?",
+                            "answer": "::first-letter"
+                        }
+                    ]
+                },
+                {
+                    "id": 12,
+                    "title": "CSS Comments",
+                    "english": "Comments are notes written for developers and ignored by browsers.",
+                    "hinglish": "Comments developer ke notes hote hain jo browser ignore karta hai.",
+                    "examples": [
+                        "/* This is a CSS comment */"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What symbols are used for CSS comments?",
+                            "answer": "/* and */"
+                        }
+                    ]
+                },
+                {
+                    "id": 13,
+                    "title": "CSS Specificity & Priority",
+                    "english": "Specificity decides which CSS rule is applied when multiple rules target the same element.",
+                    "hinglish": "Specificity decide karta hai ki kaunsa CSS rule apply hoga.",
+                    "examples": [
+                        "Inline > ID > Class > Element"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which has highest priority in CSS?",
+                            "answer": "Inline styles"
+                        }
+                    ]
+                },
+                {
+                    "id": 14,
+                    "title": "Colors in CSS",
+                    "english": "CSS allows you to apply colors using color names, hex codes, and RGB/RGBA values.",
+                    "hinglish": "CSS me rang lagane ke liye color names, hex codes aur RGB/RGBA values use hoti hain.",
+                    "examples": [
+                        "color: red;",
+                        "color: #ff0000;",
+                        "color: rgb(255, 0, 0);",
+                        "color: rgba(255, 0, 0, 0.5);"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which color method supports transparency?",
+                            "answer": "RGBA"
+                        }
+                    ]
+                },
+                {
+                    "id": 15,
+                    "title": "Backgrounds in CSS",
+                    "english": "Background properties are used to style the background of elements using colors and images.",
+                    "hinglish": "Background properties elements ke background ko color ya image se style karne ke liye use hoti hain.",
+                    "examples": [
+                        "background-color: lightblue;",
+                        "background-image: url('image.jpg');",
+                        "background-size: cover;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property is used to set a background image?",
+                            "answer": "background-image"
+                        }
+                    ]
+                },
+                {
+                    "id": 16,
+                    "title": "CSS Box Model",
+                    "english": "The CSS box model describes the structure of every HTML element as a rectangular box.",
+                    "hinglish": "CSS box model har HTML element ko ek rectangular box ke roop me dekhta hai.",
+                    "examples": [
+                        "Content → Padding → Border → Margin"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What are the four parts of the CSS box model?",
+                            "answer": "Content, Padding, Border, Margin"
+                        }
+                    ]
+                },
+                {
+                    "id": 17,
+                    "title": "Margins and Padding",
+                    "english": "Margins control space outside the element, while padding controls space inside the element.",
+                    "hinglish": "Margin element ke bahar ka gap hota hai, padding element ke andar ka gap hota hai.",
+                    "examples": [
+                        "margin: 10px 20px 30px 40px;",
+                        "padding: 15px;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property controls space inside an element?",
+                            "answer": "Padding"
+                        }
+                    ]
+                },
+                {
+                    "id": 18,
+                    "title": "Borders in CSS",
+                    "english": "Borders surround elements and can be styled using width, style and color.",
+                    "hinglish": "Border element ke charo taraf hota hai aur width, style aur color se control hota hai.",
+                    "examples": [
+                        "border: 5px solid red;",
+                        "border-style: dashed;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which three things are required to define a border?",
+                            "answer": "Width, style and color"
+                        }
+                    ]
+                },
+                {
+                    "id": 19,
+                    "title": "Height and Width",
+                    "english": "Height and width properties are used to control the size of elements.",
+                    "hinglish": "Height aur width properties element ka size control karti hain.",
+                    "examples": [
+                        "width: 300px;",
+                        "height: 150px;",
+                        "max-width: 100%;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property helps in responsive images?",
+                            "answer": "max-width"
+                        }
+                    ]
+                },
+                {
+                    "id": 20,
+                    "title": "Outline in CSS",
+                    "english": "Outline is similar to border but does not affect the size of the element.",
+                    "hinglish": "Outline border jaisa hota hai lekin element ka size change nahi karta.",
+                    "examples": [
+                        "outline: 2px solid blue;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Does outline affect box size?",
+                            "answer": "No"
+                        }
+                    ]
+                },
+                {
+                    "id": 21,
+                    "title": "Margin vs Padding",
+                    "english": "Padding affects the clickable area and background, margin does not.",
+                    "hinglish": "Padding background aur clickable area ka hissa hota hai, margin nahi hota.",
+                    "examples": [
+                        "padding adds space inside",
+                        "margin adds space outside"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which is part of clickable area?",
+                            "answer": "Padding"
+                        }
+                    ]
+                },
+                {
+                    "id": 22,
+                    "title": "Box Sizing",
+                    "english": "box-sizing controls how total width and height of elements are calculated.",
+                    "hinglish": "box-sizing decide karta hai ki padding aur border width me include honge ya nahi.",
+                    "examples": [
+                        "box-sizing: border-box;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Why is border-box recommended?",
+                            "answer": "It prevents layout breaking by keeping width fixed"
+                        }
+                    ]
+                },
+                {
+                    "id": 23,
+                    "title": "Text Properties in CSS",
+                    "english": "CSS text properties are used to align, decorate, transform and add shadow effects to text.",
+                    "hinglish": "CSS text properties text ko align, decorate, transform aur shadow dene ke kaam aati hain.",
+                    "examples": [
+                        "text-align: center;",
+                        "text-decoration: none;",
+                        "text-transform: uppercase;",
+                        "text-shadow: 2px 2px 5px red;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property is used to align text?",
+                            "answer": "text-align"
+                        },
+                        {
+                            "question": "Which property removes underline from links?",
+                            "answer": "text-decoration: none"
+                        }
+                    ]
+                },
+                {
+                    "id": 24,
+                    "title": "Fonts in CSS",
+                    "english": "Font properties control the appearance of text such as font family, size and weight.",
+                    "hinglish": "Font properties text ke font, size aur weight ko control karti hain.",
+                    "examples": [
+                        "font-family: Arial, sans-serif;",
+                        "font-size: 1.2rem;",
+                        "font-weight: bold;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which unit is best for responsive font sizes?",
+                            "answer": "rem"
+                        }
+                    ]
+                },
+                {
+                    "id": 25,
+                    "title": "Using Google Fonts",
+                    "english": "Google Fonts allows developers to use custom fonts by linking them in HTML.",
+                    "hinglish": "Google Fonts ka use custom fonts ko website me add karne ke liye hota hai.",
+                    "examples": [
+                        "<link href=\"https://fonts.googleapis.com/css2?family=Roboto&display=swap\" rel=\"stylesheet\">",
+                        "font-family: 'Roboto', sans-serif;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Why use Google Fonts?",
+                            "answer": "To use fonts beyond default system fonts"
+                        }
+                    ]
+                },
+                {
+                    "id": 26,
+                    "title": "Icons in CSS",
+                    "english": "Icons can be added using icon fonts like Font Awesome or Google Icons and styled like text.",
+                    "hinglish": "Icons Font Awesome ya Google Icons se add kiye jaate hain aur text ki tarah style hote hain.",
+                    "examples": [
+                        "<i class=\"fa fa-home\"></i>",
+                        "font-size: 24px;",
+                        "color: blue;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Name one popular icon library",
+                            "answer": "Font Awesome"
+                        }
+                    ]
+                },
+                {
+                    "id": 27,
+                    "title": "Styling Links in CSS",
+                    "english": "Links have different states that can be styled using pseudo-classes.",
+                    "hinglish": "Links ki alag-alag states hoti hain jinhe pseudo-classes se style kiya ja sakta hai.",
+                    "examples": [
+                        "a:link { color: blue; }",
+                        "a:hover { color: red; }",
+                        "a:active { color: green; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which pseudo-class styles a hovered link?",
+                            "answer": ":hover"
+                        }
+                    ]
+                },
+                {
+                    "id": 28,
+                    "title": "Styling Lists in CSS",
+                    "english": "CSS list properties control bullet style, position and custom images.",
+                    "hinglish": "CSS list properties bullet ka style, position aur image control karti hain.",
+                    "examples": [
+                        "list-style-type: square;",
+                        "list-style-position: inside;",
+                        "list-style-image: url('bullet.png');"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property changes bullet style?",
+                            "answer": "list-style-type"
+                        }
+                    ]
+                },
+                {
+                    "id": 29,
+                    "title": "Styling Tables in CSS",
+                    "english": "Tables can be styled using borders, padding and row striping for better readability.",
+                    "hinglish": "Tables ko border, padding aur striping se professional banaya jaata hai.",
+                    "examples": [
+                        "border-collapse: collapse;",
+                        "tr:nth-child(even) { background-color: #f2f2f2; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property removes double borders in tables?",
+                            "answer": "border-collapse"
+                        }
+                    ]
+                },
+                {
+                    "id": 30,
+                    "title": "CSS Units & Accessibility Tip",
+                    "english": "Relative units like rem improve responsiveness and accessibility.",
+                    "hinglish": "rem jaise relative units website ko responsive aur accessible banate hain.",
+                    "examples": [
+                        "font-size: 1rem;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Why is rem preferred over px?",
+                            "answer": "It scales better for responsiveness and accessibility"
+                        }
+                    ]
+                },
+                {
+                    "id": 31,
+                    "title": "Display Property in CSS",
+                    "english": "The display property defines how an element behaves in the layout.",
+                    "hinglish": "Display property decide karti hai ki element layout me kaise behave karega.",
+                    "examples": [
+                        "display: block;",
+                        "display: inline;",
+                        "display: inline-block;",
+                        "display: none;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which display value allows width and height but stays inline?",
+                            "answer": "inline-block"
+                        }
+                    ]
+                },
+                {
+                    "id": 32,
+                    "title": "Max-width for Responsive Layouts",
+                    "english": "max-width helps elements resize on smaller screens while keeping a maximum limit.",
+                    "hinglish": "max-width element ko mobile screen par responsive banata hai bina overflow ke.",
+                    "examples": [
+                        "max-width: 500px;",
+                        "width: 100%;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Why is max-width better than fixed width?",
+                            "answer": "It prevents horizontal scrolling on small screens"
+                        }
+                    ]
+                },
+                {
+                    "id": 33,
+                    "title": "CSS Position Property",
+                    "english": "Position controls how elements are placed on the page.",
+                    "hinglish": "Position property element ki jagah control karti hai.",
+                    "examples": [
+                        "position: static;",
+                        "position: relative;",
+                        "position: absolute;",
+                        "position: fixed;",
+                        "position: sticky;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which position sticks an element to the viewport?",
+                            "answer": "fixed"
+                        }
+                    ]
+                },
+                {
+                    "id": 34,
+                    "title": "Z-index",
+                    "english": "z-index controls the vertical stacking order of overlapping elements.",
+                    "hinglish": "z-index batata hai kaunsa element upar dikhega jab overlap hota hai.",
+                    "examples": [
+                        "z-index: 10;",
+                        "z-index: 1;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which element appears on top with higher z-index?",
+                            "answer": "The element with larger z-index value"
+                        }
+                    ]
+                },
+                {
+                    "id": 35,
+                    "title": "Overflow Property",
+                    "english": "Overflow controls what happens when content exceeds the element's box.",
+                    "hinglish": "Overflow decide karta hai ki content box se bahar jaaye to kya hoga.",
+                    "examples": [
+                        "overflow: visible;",
+                        "overflow: hidden;",
+                        "overflow: scroll;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which overflow value hides extra content?",
+                            "answer": "hidden"
+                        }
+                    ]
+                },
+                {
+                    "id": 36,
+                    "title": "Float and Clear (Legacy Layout)",
+                    "english": "Float was used to create layouts before Flexbox and Grid.",
+                    "hinglish": "Pehle layouts banane ke liye float ka use hota tha, ab ye legacy hai.",
+                    "examples": [
+                        "float: left;",
+                        "clear: both;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property fixes float issues?",
+                            "answer": "clear"
+                        }
+                    ]
+                },
+                {
+                    "id": 37,
+                    "title": "Centering & Alignment Techniques",
+                    "english": "CSS provides different ways to align and center elements.",
+                    "hinglish": "CSS me elements ko align aur center karne ke kai tarike hote hain.",
+                    "examples": [
+                        "margin: auto;",
+                        "text-align: center;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which method centers block elements horizontally?",
+                            "answer": "margin: auto"
+                        }
+                    ]
+                },
+                {
+                    "id": 38,
+                    "title": "CSS Combinators",
+                    "english": "Combinators define relationships between selectors.",
+                    "hinglish": "Combinators selectors ke beech ka relationship batate hain.",
+                    "examples": [
+                        "div p",
+                        "div > p",
+                        "div + p",
+                        "div ~ p"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which combinator selects direct children only?",
+                            "answer": "Child selector (>)"
+                        }
+                    ]
+                },
+                {
+                    "id": 39,
+                    "title": "Opacity & Visual Effects",
+                    "english": "Opacity controls the transparency level of elements from fully visible to invisible.",
+                    "hinglish": "Opacity element ki transparency control karta hai, 0 se 1 ke beech.",
+                    "examples": [
+                        "opacity: 0.5;",
+                        "background-color: rgba(255, 0, 0, 0.5);"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is the opacity value for full visibility?",
+                            "answer": "1"
+                        },
+                        {
+                            "question": "What is the difference between opacity and RGBA?",
+                            "answer": "Opacity affects entire element, RGBA affects only background color"
+                        }
+                    ]
+                },
+                {
+                    "id": 40,
+                    "title": "Image Gallery with CSS",
+                    "english": "CSS can be used to create simple image galleries using layout and hover effects.",
+                    "hinglish": "CSS ka use karke simple image gallery banayi ja sakti hai layout aur hover effects ke saath.",
+                    "examples": [
+                        ".gallery { display: flex; gap: 10px; }",
+                        ".gallery img:hover { opacity: 0.7; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which CSS property is commonly used to create modern galleries?",
+                            "answer": "flexbox"
+                        }
+                    ]
+                },
+                {
+                    "id": 41,
+                    "title": "Navigation Bars in CSS",
+                    "english": "Navigation bars are styled lists used to create menus for websites.",
+                    "hinglish": "Navigation bar ek styled list hoti hai jo website ke menu ke liye use hoti hai.",
+                    "examples": [
+                        "list-style-type: none;",
+                        "display: flex;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which element is commonly used to build navbars?",
+                            "answer": "ul (unordered list)"
+                        }
+                    ]
+                },
+                {
+                    "id": 42,
+                    "title": "Dropdown Menus",
+                    "english": "Dropdown menus are created using hover effects and display properties.",
+                    "hinglish": "Dropdown menus hover aur display properties se banaye jaate hain.",
+                    "examples": [
+                        ".dropdown { display: none; }",
+                        ".menu:hover .dropdown { display: block; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which pseudo-class is used for dropdown hover?",
+                            "answer": ":hover"
+                        }
+                    ]
+                },
+                {
+                    "id": 43,
+                    "title": "Styling Forms with CSS",
+                    "english": "Forms can be styled using padding, borders, focus states and button styling.",
+                    "hinglish": "Forms ko padding, border aur focus states se modern banaya jaata hai.",
+                    "examples": [
+                        "input { padding: 10px; }",
+                        "input:focus { border-color: blue; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which pseudo-class styles input on click?",
+                            "answer": ":focus"
+                        }
+                    ]
+                },
+                {
+                    "id": 44,
+                    "title": "CSS Counters",
+                    "english": "CSS counters are used for automatic numbering of elements.",
+                    "hinglish": "CSS counters automatic numbering ke liye use hote hain.",
+                    "examples": [
+                        "counter-reset: section;",
+                        "counter-increment: section;",
+                        "content: counter(section);"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property initializes a CSS counter?",
+                            "answer": "counter-reset"
+                        }
+                    ]
+                },
+                {
+                    "id": 45,
+                    "title": "Website Layout Structure",
+                    "english": "A standard website layout includes header, navigation, content, sidebar and footer.",
+                    "hinglish": "Standard website layout me header, navigation, content, sidebar aur footer hote hain.",
+                    "examples": [
+                        "header, nav, main, aside, footer"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which section holds the main content?",
+                            "answer": "main"
+                        }
+                    ]
+                },
+                {
+                    "id": 46,
+                    "title": "Modern Layout Techniques",
+                    "english": "Modern layouts are built using Flexbox for one-dimensional layouts and Grid for two-dimensional layouts.",
+                    "hinglish": "Modern layouts ke liye Flexbox aur Grid ka use hota hai.",
+                    "examples": [
+                        "display: flex;",
+                        "display: grid;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which layout system is best for rows and columns?",
+                            "answer": "CSS Grid"
+                        }
+                    ]
+                },
+                {
+                    "id": 47,
+                    "title": "CSS Units",
+                    "english": "CSS units define how element sizes are measured using absolute and relative values.",
+                    "hinglish": "CSS units batate hain ki element ka size kaise measure hoga – fixed ya responsive.",
+                    "examples": [
+                        "width: 300px;",
+                        "width: 50%;",
+                        "font-size: 1rem;",
+                        "height: 100vh;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which unit is best for responsive font sizes?",
+                            "answer": "rem"
+                        },
+                        {
+                            "question": "What does vw stand for?",
+                            "answer": "Viewport Width"
+                        }
+                    ]
+                },
+                {
+                    "id": 48,
+                    "title": "CSS Specificity (Priority Rules)",
+                    "english": "Specificity decides which CSS rule is applied when multiple rules target the same element.",
+                    "hinglish": "Specificity decide karti hai ki kaunsa CSS rule apply hoga jab conflict ho.",
+                    "examples": [
+                        "Inline > ID > Class > Element"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which selector has highest priority?",
+                            "answer": "Inline styles"
+                        }
+                    ]
+                },
+                {
+                    "id": 49,
+                    "title": "!important Rule",
+                    "english": "The !important rule overrides all other CSS specificity rules.",
+                    "hinglish": "!important rule saari specificity ko tod kar sabse upar aa jata hai.",
+                    "examples": [
+                        "color: red !important;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "When should !important be used?",
+                            "answer": "Only as a last resort"
+                        }
+                    ]
+                },
+                {
+                    "id": 50,
+                    "title": "Rounded Corners with border-radius",
+                    "english": "border-radius is used to create rounded corners and circular elements.",
+                    "hinglish": "border-radius corners ko gol karne aur circles banane ke liye use hota hai.",
+                    "examples": [
+                        "border-radius: 10px;",
+                        "border-radius: 50%;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What value makes a square element a circle?",
+                            "answer": "50%"
+                        }
+                    ]
+                },
+                {
+                    "id": 51,
+                    "title": "CSS Gradients",
+                    "english": "Gradients create smooth color transitions between multiple colors.",
+                    "hinglish": "Gradients multiple colors ko smoothly mix karte hain.",
+                    "examples": [
+                        "background: linear-gradient(to right, red, yellow);",
+                        "background: radial-gradient(circle, red, yellow);"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which gradient spreads from center outward?",
+                            "answer": "radial-gradient"
+                        }
+                    ]
+                },
+                {
+                    "id": 52,
+                    "title": "Box Shadows",
+                    "english": "box-shadow adds depth and shadow effects behind elements.",
+                    "hinglish": "box-shadow elements ke peeche depth aur shadow effect deta hai.",
+                    "examples": [
+                        "box-shadow: 5px 10px 18px #888888;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property adds shadow to boxes?",
+                            "answer": "box-shadow"
+                        }
+                    ]
+                },
+                {
+                    "id": 53,
+                    "title": "CSS Transforms",
+                    "english": "Transforms move, rotate, scale or skew elements in 2D or 3D space.",
+                    "hinglish": "Transforms elements ko rotate, move aur scale karne ke liye use hote hain.",
+                    "examples": [
+                        "transform: rotate(20deg);",
+                        "transform: scale(1.5);",
+                        "transform: translate(50px, 100px);"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which transform increases size?",
+                            "answer": "scale()"
+                        }
+                    ]
+                },
+                {
+                    "id": 54,
+                    "title": "CSS Transitions",
+                    "english": "Transitions create smooth changes between two states of an element.",
+                    "hinglish": "Transitions changes ko smooth banate hain, jaise hover effects.",
+                    "examples": [
+                        "transition: background-color 0.5s ease;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Do transitions require a trigger?",
+                            "answer": "Yes"
+                        }
+                    ]
+                },
+                {
+                    "id": 55,
+                    "title": "CSS Animations",
+                    "english": "Animations allow elements to move automatically using keyframes.",
+                    "hinglish": "Animations bina hover ke elements ko move ya change kar sakte hain.",
+                    "examples": [
+                        "@keyframes move { from { left: 0; } to { left: 100px; } }",
+                        "animation: move 2s infinite;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which rule defines animation steps?",
+                            "answer": "@keyframes"
+                        }
+                    ]
+                },
+                {
+                    "id": 56,
+                    "title": "Advanced Text Effects",
+                    "english": "Advanced text properties control layout, overflow and writing direction.",
+                    "hinglish": "Advanced text properties text ke overflow aur direction ko control karti hain.",
+                    "examples": [
+                        "white-space: nowrap;",
+                        "text-overflow: ellipsis;",
+                        "writing-mode: vertical-rl;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property adds dots (...) when text overflows?",
+                            "answer": "text-overflow: ellipsis"
+                        }
+                    ]
+                },
+                {
+                    "id": 57,
+                    "title": "Transitions vs Animations",
+                    "english": "Transitions need a trigger, while animations can run automatically with multiple steps.",
+                    "hinglish": "Transitions trigger par chalti hain, animations apne aap aur multiple steps me chal sakti hain.",
+                    "examples": [
+                        "transition: 0.3s ease;",
+                        "animation: bounce 1s infinite;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which one can loop infinitely?",
+                            "answer": "Animations"
+                        }
+                    ]
+                },
+                {
+                    "id": 58,
+                    "title": "Tooltips in CSS",
+                    "english": "Tooltips show small information boxes when hovering over elements.",
+                    "hinglish": "Tooltip ek chhota info box hota hai jo hover karne par dikhta hai.",
+                    "examples": [
+                        ".tooltip { position: relative; }",
+                        ".tooltip-text { visibility: hidden; position: absolute; }",
+                        ".tooltip:hover .tooltip-text { visibility: visible; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which pseudo-class is used to show tooltips?",
+                            "answer": ":hover"
+                        }
+                    ]
+                },
+                {
+                    "id": 59,
+                    "title": "Styling and Centering Images",
+                    "english": "Images can be centered, styled and visually modified using CSS properties.",
+                    "hinglish": "Images ko center, style aur visually modify CSS se kiya ja sakta hai.",
+                    "examples": [
+                        "display: block;",
+                        "margin: auto;",
+                        "filter: grayscale(100%);",
+                        "clip-path: circle();"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How do you center an image horizontally?",
+                            "answer": "display: block with margin: auto"
+                        }
+                    ]
+                },
+                {
+                    "id": 60,
+                    "title": "Object-fit and Object-position",
+                    "english": "Object-fit controls how images fit inside containers without distortion.",
+                    "hinglish": "Object-fit images ko container ke andar bina stretch hue fit karta hai.",
+                    "examples": [
+                        "object-fit: cover;",
+                        "object-fit: contain;",
+                        "object-position: center;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which object-fit value is most commonly used?",
+                            "answer": "cover"
+                        }
+                    ]
+                },
+                {
+                    "id": 61,
+                    "title": "CSS Masking",
+                    "english": "Masking allows images to be displayed through custom shapes.",
+                    "hinglish": "Masking se images ko custom shapes ke andar dikhaya ja sakta hai.",
+                    "examples": [
+                        "mask-image: url(mask.png);"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property is used for masking?",
+                            "answer": "mask-image"
+                        }
+                    ]
+                },
+                {
+                    "id": 62,
+                    "title": "Multiple Columns Layout",
+                    "english": "CSS columns divide long text into multiple vertical columns.",
+                    "hinglish": "CSS columns lambi text ko newspaper-style columns me baant dete hain.",
+                    "examples": [
+                        "column-count: 3;",
+                        "column-gap: 20px;",
+                        "column-rule: 1px solid gray;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property sets number of columns?",
+                            "answer": "column-count"
+                        }
+                    ]
+                },
+                {
+                    "id": 63,
+                    "title": "Modern Buttons Styling",
+                    "english": "Buttons are styled using hover effects, transitions and cursor changes.",
+                    "hinglish": "Buttons ko hover, transition aur cursor se modern banaya jaata hai.",
+                    "examples": [
+                        "cursor: pointer;",
+                        "transition: 0.3s ease;",
+                        "outline: none;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property changes mouse pointer to hand?",
+                            "answer": "cursor: pointer"
+                        }
+                    ]
+                },
+                {
+                    "id": 64,
+                    "title": "Pagination Styling",
+                    "english": "Pagination helps navigate between multiple pages and is styled using inline-block or flexbox.",
+                    "hinglish": "Pagination multiple pages ke beech navigation ke liye hota hai.",
+                    "examples": [
+                        "display: inline-block;",
+                        "display: flex;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which layout system is best for pagination?",
+                            "answer": "flexbox"
+                        }
+                    ]
+                },
+                {
+                    "id": 65,
+                    "title": "UI Control Properties",
+                    "english": "UI control properties manage user interaction with elements.",
+                    "hinglish": "UI control properties user ke interaction ko control karti hain.",
+                    "examples": [
+                        "resize: both;",
+                        "user-select: none;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property prevents text selection?",
+                            "answer": "user-select: none"
+                        }
+                    ]
+                },
+                {
+                    "id": 66,
+                    "title": "Responsive Images Best Practice",
+                    "english": "Responsive images adapt to container size without overflowing.",
+                    "hinglish": "Responsive images container ke bahar nahi jaati aur size adjust karti hain.",
+                    "examples": [
+                        "img { max-width: 100%; height: auto; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property prevents images from overflowing?",
+                            "answer": "max-width: 100%"
+                        }
+                    ]
+                },
+                {
+                    "id": 67,
+                    "title": "CSS Variables (Custom Properties)",
+                    "english": "CSS variables allow you to store values and reuse them throughout the stylesheet.",
+                    "hinglish": "CSS variables ek value ko naam dekar poori CSS file me reuse karne dete hain.",
+                    "examples": [
+                        ":root { --main-color: #ff5733; }",
+                        "button { background-color: var(--main-color); }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which function is used to access CSS variables?",
+                            "answer": "var()"
+                        }
+                    ]
+                },
+                {
+                    "id": 68,
+                    "title": "Modern @property Rule",
+                    "english": "The @property rule defines the type and behavior of CSS variables and allows animation.",
+                    "hinglish": "@property rule CSS variables ko type deta hai aur unhe animate karna possible banata hai.",
+                    "examples": [
+                        "@property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Why is @property useful?",
+                            "answer": "It allows typed and animatable CSS variables"
+                        }
+                    ]
+                },
+                {
+                    "id": 69,
+                    "title": "Box Sizing in CSS",
+                    "english": "box-sizing controls how width and height of elements are calculated.",
+                    "hinglish": "box-sizing decide karta hai ki padding aur border width me include honge ya nahi.",
+                    "examples": [
+                        "box-sizing: border-box;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which box-sizing value is recommended?",
+                            "answer": "border-box"
+                        }
+                    ]
+                },
+                {
+                    "id": 70,
+                    "title": "Viewport Meta Tag",
+                    "english": "The viewport meta tag ensures proper scaling on mobile devices.",
+                    "hinglish": "Viewport meta tag website ko mobile par sahi scale me dikhata hai.",
+                    "examples": [
+                        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Why is viewport meta tag important?",
+                            "answer": "It makes websites responsive on mobile devices"
+                        }
+                    ]
+                },
+                {
+                    "id": 71,
+                    "title": "Responsive Web Design (RWD)",
+                    "english": "Responsive Web Design creates layouts that adapt to different screen sizes.",
+                    "hinglish": "RWD ka matlab website ko har device ke hisaab se adapt karna.",
+                    "examples": [
+                        "Fluid grids using %",
+                        "Flexible images using max-width: 100%"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Name one pillar of Responsive Web Design",
+                            "answer": "Media Queries"
+                        }
+                    ]
+                },
+                {
+                    "id": 72,
+                    "title": "Media Queries",
+                    "english": "Media queries apply CSS rules based on screen size and device characteristics.",
+                    "hinglish": "Media queries screen size check karke CSS apply karti hain.",
+                    "examples": [
+                        "@media (max-width: 600px) { body { background: lightblue; } }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which media query strategy is best practice?",
+                            "answer": "Mobile-first"
+                        }
+                    ]
+                },
+                {
+                    "id": 73,
+                    "title": "Modern UI Control Features",
+                    "english": "UI control properties manage browser behavior and user interactions.",
+                    "hinglish": "UI control properties browser behavior aur user interaction ko control karti hain.",
+                    "examples": [
+                        "appearance: none;",
+                        "pointer-events: none;",
+                        "scroll-behavior: smooth;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property disables click events?",
+                            "answer": "pointer-events: none"
+                        }
+                    ]
+                },
+                {
+                    "id": 74,
+                    "title": "Mobile-First vs Desktop-First Design",
+                    "english": "Mobile-first starts design from small screens, desktop-first starts from large screens.",
+                    "hinglish": "Mobile-first me pehle mobile ke liye design hota hai, desktop-first me pehle desktop ke liye.",
+                    "examples": [
+                        "@media (min-width: 768px) { }",
+                        "@media (max-width: 768px) { }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which approach is considered best practice today?",
+                            "answer": "Mobile-first"
+                        }
+                    ]
+                },
+                {
+                    "id": 75,
+                    "title": "CSS Universal Reset",
+                    "english": "Universal reset removes default browser spacing and ensures consistent layout.",
+                    "hinglish": "Universal reset browser ke default margin aur padding hata deta hai.",
+                    "examples": [
+                        "* { box-sizing: border-box; margin: 0; padding: 0; }"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Why is universal reset used?",
+                            "answer": "To ensure consistent layout across browsers"
+                        }
+                    ]
+                },
+                {
+                    "id": 76,
+                    "title": "CSS Flexbox (1-Dimensional Layout)",
+                    "english": "Flexbox is used to align elements in a single direction: row or column.",
+                    "hinglish": "Flexbox elements ko ek direction (row ya column) me align karne ke liye use hota hai.",
+                    "examples": [
+                        "display: flex;",
+                        "flex-direction: row;",
+                        "justify-content: center;",
+                        "align-items: center;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property starts Flexbox?",
+                            "answer": "display: flex"
+                        },
+                        {
+                            "question": "Which property controls horizontal alignment?",
+                            "answer": "justify-content"
+                        }
+                    ]
+                },
+                {
+                    "id": 77,
+                    "title": "Flex Item Properties",
+                    "english": "Flex item properties control how individual items grow, shrink and align.",
+                    "hinglish": "Flex item properties batati hain ki har item ka size aur alignment kaisa hoga.",
+                    "examples": [
+                        "flex-grow: 1;",
+                        "flex-shrink: 0;",
+                        "align-self: center;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property aligns a single flex item?",
+                            "answer": "align-self"
+                        }
+                    ]
+                },
+                {
+                    "id": 78,
+                    "title": "CSS Grid (2-Dimensional Layout)",
+                    "english": "CSS Grid controls both rows and columns for complex layouts.",
+                    "hinglish": "CSS Grid rows aur columns dono ko ek saath control karta hai.",
+                    "examples": [
+                        "display: grid;",
+                        "grid-template-columns: 1fr 2fr;",
+                        "gap: 20px;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which layout system is best for full page structure?",
+                            "answer": "CSS Grid"
+                        }
+                    ]
+                },
+                {
+                    "id": 79,
+                    "title": "Grid Item Properties",
+                    "english": "Grid item properties control how elements span across rows and columns.",
+                    "hinglish": "Grid item properties elements ko multiple rows ya columns me failane ke kaam aati hain.",
+                    "examples": [
+                        "grid-column: 1 / 3;",
+                        "grid-row: 1 / span 2;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property spans an item across columns?",
+                            "answer": "grid-column"
+                        }
+                    ]
+                },
+                {
+                    "id": 80,
+                    "title": "Responsive Images and Videos",
+                    "english": "Responsive media adapts to different screen sizes without distortion.",
+                    "hinglish": "Responsive media har screen size par sahi shape me adjust hota hai.",
+                    "examples": [
+                        "img { max-width: 100%; height: auto; }",
+                        "aspect-ratio: 16 / 9;"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which property maintains video ratio?",
+                            "answer": "aspect-ratio"
+                        }
+                    ]
+                },
+                {
+                    "id": 81,
+                    "title": "CSS Frameworks",
+                    "english": "CSS frameworks provide pre-written styles to speed up development.",
+                    "hinglish": "CSS frameworks pehle se likha hua CSS code dete hain.",
+                    "examples": [
+                        "Bootstrap",
+                        "Tailwind CSS",
+                        "Bulma"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which framework is utility-first?",
+                            "answer": "Tailwind CSS"
+                        }
+                    ]
+                },
+                {
+                    "id": 82,
+                    "title": "CSS Templates",
+                    "english": "Templates are pre-built website designs used for learning and rapid development.",
+                    "hinglish": "Templates ready-made designs hote hain jinse professional layout seekha ja sakta hai.",
+                    "examples": [
+                        "Admin Dashboard Template",
+                        "Portfolio Template"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Why are templates useful?",
+                            "answer": "They help understand professional design structure"
+                        }
+                    ]
+                },
+                {
+                    "id": 83,
+                    "title": "Flexbox vs CSS Grid",
+                    "english": "Flexbox is best for aligning items, Grid is best for full layout structure.",
+                    "hinglish": "Flexbox items align karne ke liye best hai, Grid poore layout ke liye.",
+                    "examples": [
+                        "Flexbox → Navbar",
+                        "Grid → Page Layout"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Which layout is 2-dimensional?",
+                            "answer": "CSS Grid"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
