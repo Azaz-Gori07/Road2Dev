@@ -8,6 +8,10 @@ function StacksPage() {
 
     const navigate = useNavigate();
 
+    const handleClickStack = (stackSlug) => {
+        navigate(`/learning/${fieldSlug}/${stackSlug}`);
+    }
+
     const handleGoBack = () => {
         navigate(-1);
     }
@@ -41,7 +45,7 @@ function StacksPage() {
                     <div className='stacks-section'>
                         {
                             fieldData.stacks.map((stack) => (
-                                <div key={stack.id} className='stack-card'>
+                                <div key={stack.id} className='stack-card' onClick={() => handleClickStack(stack.slug)}>
                                     <h3 className='stackname'>{stack.name}</h3>
                                     <p className='stack-description'>{stack.description}</p>
                                 </div>

@@ -8,6 +8,8 @@ import MyScore from "./pages/MyScore";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
 import StacksPage from "./pages/StacksPage";
+import RoadMap from "./pages/RoadMap";
+import ContentPage from "./pages/ContentPage";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/about" element={<About />} />
         <Route path="/learning/:fieldSlug" element={<StacksPage />} />
+        <Route path="/learning/:fieldSlug/:stackSlug" element={<RoadMap />} />
+        <Route path="/learning/:fieldSlug/:stackSlug/:techSlug" element={<ContentPage />} />
       </Route>
     </Routes>
   );

@@ -1,0 +1,146 @@
+{
+
+  "mern-stack": [
+    "web-fundamentals",
+    "html",
+    "css",
+    "javascript",
+    "react",
+    "nodejs",
+    "express",
+    "mongodb",
+    "projects"
+  ],
+
+  "sern-stack": [
+    "web-fundamentals",
+    "html",
+    "css",
+    "javascript",
+    "react",
+    "nodejs",
+    "express",
+    "sql",
+    "projects"
+  ],
+
+  "php-laravel": [
+    "web-fundamentals",
+    "html",
+    "css",
+    "javascript",
+    "php",
+    "laravel",
+    "mysql",
+    "projects"
+  ],
+
+  "django-react": [
+    "web-fundamentals",
+    "html",
+    "css",
+    "javascript",
+    "python",
+    "django",
+    "projects"
+  ],
+
+  "nextjs-stack": [
+    "web-fundamentals",
+    "html",
+    "css",
+    "javascript",
+    "react",
+    "nextjs",
+    "projects"
+  ],
+
+  "wordpress": [
+    "web-fundamentals",
+    "html",
+    "css",
+    "javascript",
+    "php",
+    "wordpress",
+    "projects"
+  ],
+
+  "c-programming": [
+    "programming-fundamentals",
+    "c",
+    "dsa",
+    "projects"
+  ],
+
+  "cpp-dsa": [
+    "programming-fundamentals",
+    "cpp",
+    "dsa",
+    "projects"
+  ],
+
+  "java-development": [
+    "programming-fundamentals",
+    "java",
+    "oops",
+    "projects"
+  ],
+
+  "python-development": [
+    "programming-fundamentals",
+    "python",
+    "oops",
+    "projects"
+  ],
+
+  "java-spring-boot": [
+    "programming-fundamentals",
+    "java",
+    "spring-boot",
+    "projects"
+  ],
+
+  "csharp-dotnet": [
+    "programming-fundamentals",
+    "csharp",
+    "dotnet",
+    "projects"
+  ],
+
+
+  "data-analyst": [
+    "data-fundamentals",
+    "excel",
+    "sql",
+    "python",
+    "data-visualization",
+    "projects"
+  ],
+
+  "data-science": [
+    "math-statistics",
+    "python",
+    "machine-learning",
+    "deep-learning",
+    "projects"
+  ],
+
+  "devops-cloud": [
+    "linux",
+    "networking",
+    "git",
+    "docker",
+    "ci-cd",
+    "cloud",
+    "projects"
+  ],
+
+  "mobile-development": [
+    "programming-fundamentals",
+    "android-java",
+    "android-kotlin",
+    "flutter",
+    "react-native",
+    "projects"
+  ]
+}
