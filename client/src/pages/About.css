@@ -1,12 +1,15 @@
 .about-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #fff;
   line-height: 1.6;
   background: #000;
-  min-height: 100vh;
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  scrollbar-color: #111 #222;
 }
 
 .about-header {
@@ -36,24 +39,41 @@
 .about-section {
   margin-bottom: 4rem;
   padding: 2.5rem;
-  background: linear-gradient(145deg, #0a0a0a, #111);
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
-              inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border-left: 4px solid #3498db;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(17, 17, 17, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease;
+  position: relative;
+}
+
+.about-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(74, 158, 255, 0.05), rgba(46, 204, 113, 0.05));
+  z-index: -1;
 }
 
 .about-section:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7),
-              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  border-color: rgba(74, 158, 255, 0.3);
+  background: rgba(17, 17, 17, 0.9);
 }
 
 .mission-section {
-  background: linear-gradient(145deg, #0a0a0a, #111);
-  border-left-color: #2ecc71;
+  background: rgba(17, 17, 17, 0.85);
+  border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.mission-section::before {
+  background: linear-gradient(145deg, rgba(46, 204, 113, 0.05), rgba(39, 174, 96, 0.05));
 }
 
 .section-title {
@@ -65,6 +85,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  background: transparent;
   letter-spacing: 1px;
 }
 
@@ -75,6 +96,7 @@
   height: 24px;
   background: linear-gradient(180deg, #3498db, #2ecc71);
   border-radius: 3px;
+  background: transparent;
 }
 
 .lead-text {
@@ -87,6 +109,8 @@
   background: rgba(255, 255, 255, 0.03);
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  background: transparent;
 }
 
 .hinglish-text {
@@ -94,11 +118,12 @@
   color: #ccc;
   margin-bottom: 1.8rem;
   line-height: 1.8;
+  background: transparent;
   padding: 0.5rem;
 }
 
 .highlight {
-  background: linear-gradient(120deg, rgba(74, 158, 255, 0.2) 0%, rgba(0, 204, 102, 0.2) 100%);
+  background: linear-gradient(120deg, rgba(74, 158, 255, 0.15) 0%, rgba(0, 204, 102, 0.15) 100%);
   padding: 0.3rem 0.8rem;
   border-radius: 6px;
   font-weight: 600;
@@ -107,6 +132,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  backdrop-filter: blur(5px);
 }
 
 .highlight::before {
@@ -115,13 +141,14 @@
 }
 
 .problem-card {
-  background: linear-gradient(145deg, #1a0000, #220000);
+  background: rgba(34, 0, 0, 0.7);
   padding: 1.8rem;
-  border-radius: 10px;
+  border-radius: 12px;
   margin: 2rem 0;
   border: 1px solid rgba(231, 76, 60, 0.3);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(5px);
 }
 
 .problem-card::before {
@@ -138,7 +165,7 @@
   font-size: 2.5rem;
   margin-bottom: 1.2rem;
   color: #e74c3c;
-  background: rgba(231, 76, 60, 0.1);
+  background: rgba(231, 76, 60, 0.15);
   width: 60px;
   height: 60px;
   display: flex;
@@ -146,6 +173,7 @@
   justify-content: center;
   border-radius: 50%;
   border: 2px solid rgba(231, 76, 60, 0.3);
+  backdrop-filter: blur(5px);
 }
 
 .problem-card h3 {
@@ -154,6 +182,7 @@
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: 0.5px;
+  background: transparent;
 }
 
 .impact-list {
@@ -161,6 +190,7 @@
   flex-direction: column;
   gap: 1.2rem;
   margin-top: 2.5rem;
+  background: none;
 }
 
 .impact-item {
@@ -169,9 +199,10 @@
   gap: 1.5rem;
   padding: 1.2rem;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
+  border-radius: 10px;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
 }
 
 .impact-item:hover {
@@ -183,14 +214,14 @@
 .impact-icon {
   font-size: 1.8rem;
   color: #3498db;
-  background: rgba(52, 152, 219, 0.1);
+  background: rgba(52, 152, 219, 0.15);
   width: 50px;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  border: 2px solid rgba(52, 152, 219, 0.2);
+  border: 2px solid rgba(52, 152, 219, 0.3);
 }
 
 .target-audience {
@@ -201,14 +232,15 @@
 }
 
 .audience-card {
-  background: linear-gradient(145deg, #0a0a0a, #111);
+  background: rgba(17, 17, 17, 0.8);
   padding: 2rem;
   border-radius: 12px;
   text-align: center;
-  border: 2px solid rgba(52, 152, 219, 0.3);
+  border: 1px solid rgba(52, 152, 219, 0.3);
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(5px);
 }
 
 .audience-card::before {
@@ -223,8 +255,9 @@
 
 .audience-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(52, 152, 219, 0.2);
+  box-shadow: 0 15px 30px rgba(52, 152, 219, 0.25);
   border-color: #3498db;
+  background: rgba(17, 17, 17, 0.9);
 }
 
 .audience-card h3 {
@@ -239,7 +272,7 @@
   font-size: 3rem;
   margin-bottom: 1.5rem;
   color: #3498db;
-  background: rgba(52, 152, 219, 0.1);
+  background: rgba(52, 152, 219, 0.15);
   width: 80px;
   height: 80px;
   display: flex;
@@ -248,14 +281,16 @@
   border-radius: 50%;
   margin: 0 auto 1.5rem;
   border: 2px solid rgba(52, 152, 219, 0.3);
+  backdrop-filter: blur(5px);
 }
 
 .platform-features {
   margin-top: 2.5rem;
   padding: 2rem;
-  background: linear-gradient(145deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.05));
+  background: rgba(52, 152, 219, 0.08);
   border-radius: 12px;
-  border: 1px solid rgba(52, 152, 219, 0.1);
+  border: 1px solid rgba(52, 152, 219, 0.15);
+  backdrop-filter: blur(5px);
 }
 
 .features-list {
@@ -301,11 +336,12 @@
   color: #95a5a6;
   margin-top: 1.5rem;
   padding: 1.5rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
   border-left: 4px solid #f39c12;
   border-radius: 0 8px 8px 0;
   font-size: 1.1rem;
   line-height: 1.6;
+  backdrop-filter: blur(5px);
 }
 
 .mindset-grid {
@@ -318,14 +354,15 @@
 .mindset-item {
   text-align: center;
   padding: 2rem;
-  background: linear-gradient(145deg, #0a0a0a, #111);
+  background: rgba(17, 17, 17, 0.8);
   border-radius: 12px;
   transition: all 0.4s ease;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
 }
 
 .mindset-item:hover {
-  background: linear-gradient(145deg, rgba(52, 152, 219, 0.1), rgba(46, 204, 113, 0.1));
+  background: rgba(52, 152, 219, 0.15);
   transform: scale(1.05);
   border-color: rgba(52, 152, 219, 0.3);
 }
@@ -334,7 +371,7 @@
   font-size: 3rem;
   margin-bottom: 1.5rem;
   color: #9b59b6;
-  background: rgba(155, 89, 182, 0.1);
+  background: rgba(155, 89, 182, 0.15);
   width: 80px;
   height: 80px;
   display: flex;
@@ -348,9 +385,10 @@
 .failure-message {
   margin-top: 2.5rem;
   padding: 2rem;
-  background: linear-gradient(145deg, #0a0a0a, #111);
+  background: rgba(17, 17, 17, 0.8);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
 }
 
 .comparison {
@@ -365,15 +403,16 @@
   border-radius: 12px;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(5px);
 }
 
 .wrong {
-  background: linear-gradient(145deg, rgba(231, 76, 60, 0.1), rgba(192, 57, 43, 0.05));
+  background: rgba(231, 76, 60, 0.1);
   border: 1px solid rgba(231, 76, 60, 0.2);
 }
 
 .right {
-  background: linear-gradient(145deg, rgba(46, 204, 113, 0.1), rgba(39, 174, 96, 0.05));
+  background: rgba(46, 204, 113, 0.1);
   border: 1px solid rgba(46, 204, 113, 0.2);
 }
 
@@ -414,9 +453,12 @@
 }
 
 .opensource-section {
-  background: linear-gradient(145deg, #0a0a0a, #111);
-  border-left-color: #9b59b6;
-  border-top: 1px solid rgba(155, 89, 182, 0.1);
+  background: rgba(17, 17, 17, 0.85);
+  border: 1px solid rgba(155, 89, 182, 0.2);
+}
+
+.opensource-section::before {
+  background: linear-gradient(145deg, rgba(155, 89, 182, 0.05), rgba(142, 68, 173, 0.05));
 }
 
 .contribute-options {
@@ -435,6 +477,7 @@
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
 }
 
 .option:hover {
@@ -446,7 +489,7 @@
 .option-icon {
   font-size: 2rem;
   color: #9b59b6;
-  background: rgba(155, 89, 182, 0.1);
+  background: rgba(155, 89, 182, 0.15);
   width: 60px;
   height: 60px;
   display: flex;
@@ -465,7 +508,7 @@
 }
 
 .cta-box {
-  background: linear-gradient(145deg, #2c3e50, #34495e);
+  background: rgba(44, 62, 80, 0.8);
   color: #fff;
   padding: 2.5rem;
   border-radius: 12px;
@@ -474,6 +517,7 @@
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 .cta-box::before {
@@ -508,8 +552,11 @@
 
 .connect-section {
   text-align: center;
-  border-left-color: #e74c3c;
-  border-top: 1px solid rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.2);
+}
+
+.connect-section::before {
+  background: linear-gradient(145deg, rgba(231, 76, 60, 0.05), rgba(192, 57, 43, 0.05));
 }
 
 .social-links {
@@ -517,6 +564,7 @@
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
   margin-top: 2.5rem;
+  background: transparent;
 }
 
 .social-link {
@@ -533,7 +581,8 @@
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(145deg, #0a0a0a, #111);
+  background: rgba(17, 17, 17, 0.8);
+  backdrop-filter: blur(5px);
 }
 
 .social-link::before {
@@ -553,12 +602,18 @@
 
 .social-link:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  background: rgba(17, 17, 17, 0.9);
 }
 
 .social-icon {
   font-size: 1.8rem;
   transition: transform 0.3s ease;
+  background: transparent;
+}
+
+.social-name{
+    background: transparent;
 }
 
 .social-link:hover .social-icon {
@@ -575,7 +630,7 @@
 }
 
 .twitter:hover {
-  background: linear-gradient(145deg, rgba(29, 161, 242, 0.1), rgba(29, 161, 242, 0.05));
+  background: rgba(29, 161, 242, 0.1);
   border-color: rgba(29, 161, 242, 0.4);
 }
 
@@ -589,7 +644,7 @@
 }
 
 .github:hover {
-  background: linear-gradient(145deg, rgba(240, 246, 252, 0.1), rgba(240, 246, 252, 0.05));
+  background: rgba(240, 246, 252, 0.1);
   border-color: rgba(240, 246, 252, 0.4);
 }
 
@@ -603,7 +658,7 @@
 }
 
 .instagram:hover {
-  background: linear-gradient(145deg, rgba(225, 48, 108, 0.1), rgba(225, 48, 108, 0.05));
+  background: rgba(225, 48, 108, 0.1);
   border-color: rgba(225, 48, 108, 0.4);
 }
 
@@ -617,7 +672,7 @@
 }
 
 .linkedin:hover {
-  background: linear-gradient(145deg, rgba(0, 119, 181, 0.1), rgba(0, 119, 181, 0.05));
+  background: rgba(0, 119, 181, 0.1);
   border-color: rgba(0, 119, 181, 0.4);
 }
 
@@ -634,6 +689,7 @@
   .about-section {
     padding: 1.8rem;
     margin-bottom: 3rem;
+    backdrop-filter: blur(8px);
   }
   
   .target-audience,
@@ -714,6 +770,25 @@
 /* Smooth scrolling */
 .about-container {
   scroll-behavior: smooth;
+}
+
+/* Scrollbar styling */
+.about-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.about-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.about-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3498db, #2ecc71);
+  border-radius: 4px;
+}
+
+.about-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #2980b9, #27ae60);
 }
 
 /* Selection color */

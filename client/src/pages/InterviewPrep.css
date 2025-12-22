@@ -1,0 +1,23 @@
+.interview-prep-section {
+  display: flex;
+  background-color: black;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+    height: 100vh;
+  text-align: center;
+  color: white;
+}
+
+.interview-prep-section .heading {
+  font-size: 50px;
+  font-weight: 700;
+}
+
+.sub-text {
+  margin-top: 10px;
+  font-weight: 500;
+  color: gray;
+  font-size: 20px;
+}
