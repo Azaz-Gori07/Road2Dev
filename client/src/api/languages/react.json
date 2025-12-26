@@ -1,0 +1,892 @@
+{
+  "technology": "React",
+  "slug": "react",
+  "description": "React is a JavaScript library for building user interfaces, particularly for single-page applications.",
+  "levels": [
+    {
+      "level": "beginner",
+      "order": 1,
+      "topics": [
+        {
+          "id": 1,
+          "title": "JSX Syntax and Basics",
+          "english": "JSX is a syntax extension that allows HTML-like code in JavaScript.",
+          "hinglish": "JSX ek syntax hai jo JavaScript mein HTML jaisa code likhne deta hai.",
+          "examples": [
+            "const element = <h1>Hello, world!</h1>;"
+          ],
+          "practice": [
+            {
+              "question": "What is JSX?",
+              "answer": "Syntax extension for writing HTML in JavaScript"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Functional Components and Props",
+          "english": "Functional components are JavaScript functions that return React elements.",
+          "hinglish": "Functional components JavaScript functions hain jo React elements return karte hain.",
+          "examples": [
+            "function Greeting(props) {\n  return <h1>Hello, {props.name}</h1>;\n}"
+          ],
+          "practice": [
+            {
+              "question": "How do you pass data to components?",
+              "answer": "Using props"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "title": "State with useState Hook",
+          "english": "useState hook allows functional components to have state.",
+          "hinglish": "useState hook functional components ko state rakne ki capability deta hai.",
+          "examples": [
+            "const [count, setCount] = useState(0);"
+          ],
+          "practice": [
+            {
+              "question": "Which hook is used for state in functional components?",
+              "answer": "useState"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Event Handling",
+          "english": "React events are named using camelCase and use JSX syntax.",
+          "hinglish": "React events camelCase mein hote hain aur JSX syntax use karte hain.",
+          "examples": [
+            "<button onClick={handleClick}>Click me</button>"
+          ],
+          "practice": [
+            {
+              "question": "How do you handle events in React?",
+              "answer": "Using camelCase event handlers like onClick, onChange"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Conditional Rendering",
+          "english": "Conditional rendering displays different components based on conditions.",
+          "hinglish": "Conditional rendering conditions ke basis par different components show karta hai.",
+          "examples": [
+            "{isLoggedIn ? <UserDashboard /> : <Login />}"
+          ],
+          "practice": [
+            {
+              "question": "What are common ways for conditional rendering?",
+              "answer": "Ternary operators, && operator, if statements"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Lists and Keys",
+          "english": "Keys help React identify which items have changed, are added, or removed.",
+          "hinglish": "Keys React ko identify karne mein help karte hain ki kaunse items change hue hain.",
+          "examples": [
+            "{items.map(item => <li key={item.id}>{item.name}</li>)}"
+          ],
+          "practice": [
+            {
+              "question": "Why are keys important in lists?",
+              "answer": "They help React efficiently update and reorder list items"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "title": "Forms and Controlled Components",
+          "english": "Controlled components have form data handled by React state.",
+          "hinglish": "Controlled components mein form data React state ke through handle hota hai.",
+          "examples": [
+            "<input value={value} onChange={handleChange} />"
+          ],
+          "practice": [
+            {
+              "question": "What is a controlled component?",
+              "answer": "Component where form data is controlled by React state"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "title": "Form Validation",
+          "english": "Form validation ensures user input meets required criteria.",
+          "hinglish": "Form validation ensure karta hai ki user input sahi format mein hai.",
+          "examples": [
+            "if (!email.includes('@')) {\n  setError('Invalid email');\n}"
+          ],
+          "practice": [
+            {
+              "question": "Where should form validation happen?",
+              "answer": "Both client-side and server-side for security"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "title": "Styling - CSS Modules",
+          "english": "CSS Modules provide locally scoped CSS by default.",
+          "hinglish": "CSS Modules automatically locally scoped CSS provide karte hain.",
+          "examples": [
+            "import styles from './Button.module.css';\n<button className={styles.button}>Click</button>"
+          ],
+          "practice": [
+            {
+              "question": "What's the advantage of CSS Modules?",
+              "answer": "Automatic local scoping prevents CSS conflicts"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "title": "Styling - CSS-in-JS",
+          "english": "CSS-in-JS allows writing CSS directly in JavaScript files.",
+          "hinglish": "CSS-in-JS CSS ko directly JavaScript files mein likhne deta hai.",
+          "examples": [
+            "const Button = styled.button`\n  background: blue;\n  color: white;\n`;"
+          ],
+          "practice": [
+            {
+              "question": "Name a popular CSS-in-JS library",
+              "answer": "Styled-components"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "title": "React Router - Navigation",
+          "english": "React Router enables navigation between different components.",
+          "hinglish": "React Router different components ke beech navigation enable karta hai.",
+          "examples": [
+            "<Route path=\"/about\" element={<About />} />"
+          ],
+          "practice": [
+            {
+              "question": "What does React Router provide?",
+              "answer": "Client-side routing for single-page applications"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "title": "React Router - Routes and Parameters",
+          "english": "Route parameters allow dynamic segments in URLs.",
+          "hinglish": "Route parameters URLs mein dynamic segments allow karte hain.",
+          "examples": [
+            "<Route path=\"/users/:id\" element={<UserProfile />} />"
+          ],
+          "practice": [
+            {
+              "question": "How do you access route parameters?",
+              "answer": "Using useParams hook from React Router"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": "intermediate",
+      "order": 2,
+      "topics": [
+        {
+          "id": 13,
+          "title": "useEffect Hook for Side Effects",
+          "english": "useEffect handles side effects in functional components.",
+          "hinglish": "useEffect functional components mein side effects handle karta hai.",
+          "examples": [
+            "useEffect(() => {\n  fetchData();\n}, [dependency]);"
+          ],
+          "practice": [
+            {
+              "question": "What are common use cases for useEffect?",
+              "answer": "Data fetching, subscriptions, DOM manipulations"
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "title": "useRef for DOM Access",
+          "english": "useRef returns a mutable ref object for accessing DOM elements.",
+          "hinglish": "useRef DOM elements access karne ke liye mutable ref object return karta hai.",
+          "examples": [
+            "const inputRef = useRef();\n<input ref={inputRef} />"
+          ],
+          "practice": [
+            {
+              "question": "What does useRef return?",
+              "answer": "A mutable object with a current property"
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "title": "useContext Hook",
+          "english": "useContext provides a way to pass data through component tree without prop drilling.",
+          "hinglish": "useContext prop drilling ke bina component tree mein data pass karne ka tarika deta hai.",
+          "examples": [
+            "const value = useContext(MyContext);"
+          ],
+          "practice": [
+            {
+              "question": "What problem does useContext solve?",
+              "answer": "Prop drilling - passing props through multiple levels"
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "title": "Context API - Global State",
+          "english": "Context API provides a way to share values between components without explicit prop passing.",
+          "hinglish": "Context API components ke beech values share karne ka tarika deta hai prop passing ke bina.",
+          "examples": [
+            "const ThemeContext = createContext('light');"
+          ],
+          "practice": [
+            {
+              "question": "What is Context API used for?",
+              "answer": "Managing global state like themes, user authentication"
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "title": "Higher-Order Components (HOCs)",
+          "english": "HOCs are functions that take a component and return a new component with enhanced functionality.",
+          "hinglish": "HOCs functions hain jo ek component lete hain aur enhanced functionality ke saath naya component return karte hain.",
+          "examples": [
+            "const EnhancedComponent = higherOrderComponent(WrappedComponent);"
+          ],
+          "practice": [
+            {
+              "question": "What is the purpose of HOCs?",
+              "answer": "Code reuse, logic abstraction, and props manipulation"
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "title": "Render Props Pattern",
+          "english": "Render props is a technique for sharing code between React components using a prop whose value is a function.",
+          "hinglish": "Render props ek technique hai jisme ek prop function hota hai jo code sharing enable karta hai.",
+          "examples": [
+            "<DataProvider render={data => (\n  <h1>Hello {data.target}</h1>\n)}/>"
+          ],
+          "practice": [
+            {
+              "question": "What does render props pattern use?",
+              "answer": "A function as a prop to share functionality"
+            }
+          ]
+        },
+        {
+          "id": 19,
+          "title": "Next.js - Pages and Routing",
+          "english": "Next.js uses file-system based routing where pages are React components.",
+          "hinglish": "Next.js file-system based routing use karta hai jahan pages React components hote hain.",
+          "examples": [
+            "// File: pages/about.js\nexport default function About() {\n  return <div>About page</div>;\n}"
+          ],
+          "practice": [
+            {
+              "question": "How does Next.js handle routing?",
+              "answer": "Automatically based on files in pages directory"
+            }
+          ]
+        },
+        {
+          "id": 20,
+          "title": "Next.js - Dynamic Routing",
+          "english": "Dynamic routing in Next.js uses brackets in filenames to create dynamic routes.",
+          "hinglish": "Next.js mein dynamic routing filenames mein brackets use karke dynamic routes banati hai.",
+          "examples": [
+            "// File: pages/posts/[id].js"
+          ],
+          "practice": [
+            {
+              "question": "How do you create dynamic routes in Next.js?",
+              "answer": "Using square brackets in filenames like [id].js"
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "title": "Next.js - SSG (Static Site Generation)",
+          "english": "SSG generates HTML at build time and reuses it on each request.",
+          "hinglish": "SSG build time par HTML generate karta hai aur har request par reuse karta hai.",
+          "examples": [
+            "export async function getStaticProps() {\n  return { props: { data } };\n}"
+          ],
+          "practice": [
+            {
+              "question": "When to use SSG?",
+              "answer": "When data doesn't change frequently and can be pre-rendered"
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "title": "Next.js - SSR (Server-Side Rendering)",
+          "english": "SSR generates HTML on each request.",
+          "hinglish": "SSR har request par HTML generate karta hai.",
+          "examples": [
+            "export async function getServerSideProps() {\n  return { props: { data } };\n}"
+          ],
+          "practice": [
+            {
+              "question": "When to use SSR?",
+              "answer": "When data changes frequently and needs to be fresh"
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "title": "Next.js - API Routes",
+          "english": "API routes allow creating API endpoints as part of Next.js application.",
+          "hinglish": "API routes Next.js application ke part ke roop mein API endpoints create karne dete hain.",
+          "examples": [
+            "// File: pages/api/users.js\nexport default function handler(req, res) {\n  res.status(200).json({ users: [] });\n}"
+          ],
+          "practice": [
+            {
+              "question": "Where are Next.js API routes located?",
+              "answer": "In pages/api directory"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": "advanced",
+      "order": 3,
+      "topics": [
+        {
+          "id": 24,
+          "title": "Concurrent Mode - Suspense",
+          "english": "Suspense lets components wait for something before rendering.",
+          "hinglish": "Suspense components ko render karne se pehle wait karne deta hai.",
+          "examples": [
+            "<Suspense fallback={<Spinner />}>\n  <LazyComponent />\n</Suspense>"
+          ],
+          "practice": [
+            {
+              "question": "What is Suspense used for?",
+              "answer": "Code splitting and data fetching with fallback UI"
+            }
+          ]
+        },
+        {
+          "id": 25,
+          "title": "Suspense for Data Fetching",
+          "english": "Suspense for data fetching allows declarative data loading.",
+          "hinglish": "Data fetching ke liye Suspense declarative data loading allow karta hai.",
+          "examples": [
+            "const data = fetchData(); // Returns a promise\nconst result = use(data);"
+          ],
+          "practice": [
+            {
+              "question": "How does Suspense improve data fetching?",
+              "answer": "Declarative API with automatic loading states"
+            }
+          ]
+        },
+        {
+          "id": 26,
+          "title": "Server Components",
+          "english": "Server Components run on server and send zero JavaScript to client.",
+          "hinglish": "Server Components server par run hote hain aur client ko zero JavaScript bhejte hain.",
+          "examples": [
+            "'use client';\n// Client Component\n'use server';\n// Server Component"
+          ],
+          "practice": [
+            {
+              "question": "Main benefit of Server Components?",
+              "answer": "Zero bundle size for components that don't need interactivity"
+            }
+          ]
+        },
+        {
+          "id": 27,
+          "title": "Server Components with async/await",
+          "english": "Server Components can use async/await directly for data fetching.",
+          "hinglish": "Server Components directly async/await use kar sakte hain data fetching ke liye.",
+          "examples": [
+            "async function ProductPage({ id }) {\n  const product = await fetchProduct(id);\n  return <ProductDetails product={product} />;\n}"
+          ],
+          "practice": [
+            {
+              "question": "Can Client Components use async/await?",
+              "answer": "No, only Server Components can be async functions"
+            }
+          ]
+        },
+        {
+          "id": 28,
+          "title": "Custom Hooks",
+          "english": "Custom hooks extract component logic into reusable functions.",
+          "hinglish": "Custom hooks component logic ko reusable functions mein extract karte hain.",
+          "examples": [
+            "function useLocalStorage(key) {\n  const [value, setValue] = useState(() => {\n    return localStorage.getItem(key);\n  });\n  // ...\n}"
+          ],
+          "practice": [
+            {
+              "question": "What should custom hooks start with?",
+              "answer": "'use' prefix (useCustomHook)"
+            }
+          ]
+        },
+        {
+          "id": 29,
+          "title": "Compound Components Pattern",
+          "english": "Compound components work together as a group while maintaining individual flexibility.",
+          "hinglish": "Compound components ek group ke roop mein kaam karte hain jabki individual flexibility maintain karte hain.",
+          "examples": [
+            "<Select>\n  <SelectOption value=\"option1\">Option 1</SelectOption>\n  <SelectOption value=\"option2\">Option 2</SelectOption>\n</Select>"
+          ],
+          "practice": [
+            {
+              "question": "What's the advantage of compound components?",
+              "answer": "Flexible API with implicit state sharing"
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "title": "Controlled vs Uncontrolled Components",
+          "english": "Controlled components manage state via React, uncontrolled components manage state via DOM.",
+          "hinglish": "Controlled components state React ke through manage karte hain, uncontrolled components DOM ke through.",
+          "examples": [
+            "// Controlled\n<input value={value} onChange={handleChange} />\n// Uncontrolled\n<input defaultValue=\"initial\" ref={inputRef} />"
+          ],
+          "practice": [
+            {
+              "question": "When to use uncontrolled components?",
+              "answer": "When integrating with non-React code or for simple forms"
+            }
+          ]
+        },
+        {
+          "id": 31,
+          "title": "React.memo for Performance",
+          "english": "React.memo memoizes components to prevent unnecessary re-renders.",
+          "hinglish": "React.memo components ko memoize karta hai unnecessary re-renders rokne ke liye.",
+          "examples": [
+            "const MemoizedComponent = React.memo(MyComponent);"
+          ],
+          "practice": [
+            {
+              "question": "When should you use React.memo?",
+              "answer": "When component renders often with same props"
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "title": "useMemo for Expensive Calculations",
+          "english": "useMemo memoizes expensive calculations to avoid recomputation on every render.",
+          "hinglish": "useMemo expensive calculations ko memoize karta hai har render par recomputation se bachne ke liye.",
+          "examples": [
+            "const expensiveValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);"
+          ],
+          "practice": [
+            {
+              "question": "What triggers useMemo recomputation?",
+              "answer": "When dependencies in the dependency array change"
+            }
+          ]
+        },
+        {
+          "id": 33,
+          "title": "useCallback for Function Stability",
+          "english": "useCallback returns a memoized version of a callback function.",
+          "hinglish": "useCallback ek callback function ka memoized version return karta hai.",
+          "examples": [
+            "const handleClick = useCallback(() => {\n  doSomething(a, b);\n}, [a, b]);"
+          ],
+          "practice": [
+            {
+              "question": "Why use useCallback?",
+              "answer": "To prevent unnecessary re-renders of child components"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": "state and performance",
+      "order": 4,
+      "topics": [
+        {
+          "id": 34,
+          "title": "State Management - Context for Simple Cases",
+          "english": "Context API is suitable for simple global state needs.",
+          "hinglish": "Context API simple global state needs ke liye suitable hai.",
+          "examples": [
+            "const ThemeContext = createContext();\n<ThemeContext.Provider value=\"dark\">\n  <App />\n</ThemeContext.Provider>"
+          ],
+          "practice": [
+            {
+              "question": "When to use Context API?",
+              "answer": "For simple state like theme, auth, user preferences"
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "title": "State Management - Redux Toolkit",
+          "english": "Redux Toolkit is official toolset for efficient Redux development.",
+          "hinglish": "Redux Toolkit efficient Redux development ke liye official toolset hai.",
+          "examples": [
+            "const counterSlice = createSlice({\n  name: 'counter',\n  initialState: { value: 0 },\n  reducers: {\n    increment: state => { state.value += 1; }\n  }\n});"
+          ],
+          "practice": [
+            {
+              "question": "Main advantage of Redux Toolkit?",
+              "answer": "Simplifies Redux setup with less boilerplate"
+            }
+          ]
+        },
+        {
+          "id": 36,
+          "title": "State Management - Zustand",
+          "english": "Zustand is a minimal state management solution.",
+          "hinglish": "Zustand ek minimal state management solution hai.",
+          "examples": [
+            "const useStore = create(set => ({\n  bears: 0,\n  increasePopulation: () => set(state => ({ bears: state.bears + 1 })),\n}));"
+          ],
+          "practice": [
+            {
+              "question": "Zustand vs Redux?",
+              "answer": "Zustand has less boilerplate, Redux has more ecosystem"
+            }
+          ]
+        },
+        {
+          "id": 37,
+          "title": "State Management - Recoil",
+          "english": "Recoil manages state with atoms and selectors for atomic updates.",
+          "hinglish": "Recoil atoms aur selectors ke saath state manage karta hai atomic updates ke liye.",
+          "examples": [
+            "const textState = atom({\n  key: 'textState',\n  default: '',\n});"
+          ],
+          "practice": [
+            {
+              "question": "What are Recoil atoms?",
+              "answer": "Units of state that components can subscribe to"
+            }
+          ]
+        },
+        {
+          "id": 38,
+          "title": "State Management - TanStack Query",
+          "english": "TanStack Query manages server state with caching and synchronization.",
+          "hinglish": "TanStack Query server state ko caching aur synchronization ke saath manage karta hai.",
+          "examples": [
+            "const { data, isLoading } = useQuery({\n  queryKey: ['todos'],\n  queryFn: fetchTodos,\n});"
+          ],
+          "practice": [
+            {
+              "question": "What does TanStack Query handle automatically?",
+              "answer": "Caching, background updates, error handling for server state"
+            }
+          ]
+        },
+        {
+          "id": 39,
+          "title": "Grouping Related State",
+          "english": "Group related state variables together to maintain consistency.",
+          "hinglish": "Related state variables ko ek saath group karein consistency maintain karne ke liye.",
+          "examples": [
+            "// Instead of separate states\nconst [firstName, setFirstName] = useState('');\nconst [lastName, setLastName] = useState('');\n// Group them\nconst [user, setUser] = useState({ firstName: '', lastName: '' });"
+          ],
+          "practice": [
+            {
+              "question": "Why group related state?",
+              "answer": "Prevents inconsistent states and reduces re-renders"
+            }
+          ]
+        },
+        {
+          "id": 40,
+          "title": "Selectors for Derived Data",
+          "english": "Selectors compute derived state from existing state.",
+          "hinglish": "Selectors existing state se derived state compute karte hain.",
+          "examples": [
+            "const fullNameSelector = createSelector(\n  state => state.firstName,\n  state => state.lastName,\n  (firstName, lastName) => `${firstName} ${lastName}`\n);"
+          ],
+          "practice": [
+            {
+              "question": "Benefit of selectors?",
+              "answer": "Memoization prevents recomputation of derived data"
+            }
+          ]
+        },
+        {
+          "id": 41,
+          "title": "Modularization to Reduce Re-renders",
+          "english": "Split components to isolate re-renders and improve performance.",
+          "hinglish": "Components ko split karein re-renders isolate karne aur performance improve karne ke liye.",
+          "examples": [
+            "// Instead of one large component\n// Split into:\n// - UserProfile (with user state)\n// - UserStats (with stats state)\n// - UserActions (with actions)"
+          ],
+          "practice": [
+            {
+              "question": "How much can modularization reduce re-renders?",
+              "answer": "Up to 40% in complex applications"
+            }
+          ]
+        },
+        {
+          "id": 42,
+          "title": "Lazy Loading Components",
+          "english": "Lazy loading loads components only when needed.",
+          "hinglish": "Lazy loading components ko tabhi load karta hai jab zaroorat ho.",
+          "examples": [
+            "const LazyComponent = React.lazy(() => import('./HeavyComponent'));"
+          ],
+          "practice": [
+            {
+              "question": "Performance improvement with lazy loading?",
+              "answer": "Up to 20% faster initial load times"
+            }
+          ]
+        },
+        {
+          "id": 43,
+          "title": "Code Splitting",
+          "english": "Code splitting divides bundle into smaller chunks.",
+          "hinglish": "Code splitting bundle ko smaller chunks mein divide karta hai.",
+          "examples": [
+            "// Dynamic import for code splitting\nimport('./math').then(math => {\n  console.log(math.add(16, 26));\n});"
+          ],
+          "practice": [
+            {
+              "question": "Where to apply code splitting?",
+              "answer": "Route-based and component-based splitting"
+            }
+          ]
+        },
+        {
+          "id": 44,
+          "title": "Benchmarking and Performance Profiling",
+          "english": "Use React DevTools Profiler to identify performance bottlenecks.",
+          "hinglish": "React DevTools Profiler use karein performance bottlenecks identify karne ke liye.",
+          "examples": [
+            "// In React DevTools, use Profiler tab\n// Record interactions and analyze component render times"
+          ],
+          "practice": [
+            {
+              "question": "What improvements can benchmarking achieve?",
+              "answer": "25-50% render performance improvements"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": "testing and deployment",
+      "order": 5,
+      "topics": [
+        {
+          "id": 45,
+          "title": "Testing - Jest and React Testing Library",
+          "english": "Jest is a JavaScript testing framework, React Testing Library tests components from user perspective.",
+          "hinglish": "Jest ek JavaScript testing framework hai, React Testing Library user perspective se components test karta hai.",
+          "examples": [
+            "test('renders login button', () => {\n  render(<Login />);\n  expect(screen.getByText('Login')).toBeInTheDocument();\n});"
+          ],
+          "practice": [
+            {
+              "question": "What does React Testing Library emphasize?",
+              "answer": "Testing user behavior over implementation details"
+            }
+          ]
+        },
+        {
+          "id": 46,
+          "title": "AAA Pattern (Arrange, Act, Assert)",
+          "english": "AAA pattern structures tests into three clear sections.",
+          "hinglish": "AAA pattern tests ko teen clear sections mein structure karta hai.",
+          "examples": [
+            "test('increments counter', () => {\n  // Arrange\n  render(<Counter />);\n  const button = screen.getByText('Increment');\n  // Act\n  fireEvent.click(button);\n  // Assert\n  expect(screen.getByText('1')).toBeInTheDocument();\n});"
+          ],
+          "practice": [
+            {
+              "question": "What are the three A's?",
+              "answer": "Arrange (setup), Act (execute), Assert (verify)"
+            }
+          ]
+        },
+        {
+          "id": 47,
+          "title": "Mocking in Tests",
+          "english": "Mocks replace real implementations with test doubles.",
+          "hinglish": "Mocks real implementations ko test doubles se replace karte hain.",
+          "examples": [
+            "jest.mock('./api', () => ({\n  fetchData: jest.fn(() => Promise.resolve({ data: 'mock' })),\n}));"
+          ],
+          "practice": [
+            {
+              "question": "What should you mock?",
+              "answer": "External dependencies like API calls, timers, browser APIs"
+            }
+          ]
+        },
+        {
+          "id": 48,
+          "title": "Async Testing with waitFor",
+          "english": "waitFor waits for expectations to pass within timeout.",
+          "hinglish": "waitFor expectations ko timeout ke andar pass hone ka wait karta hai.",
+          "examples": [
+            "await waitFor(() => {\n  expect(screen.getByText('Data loaded')).toBeInTheDocument();\n});"
+          ],
+          "practice": [
+            {
+              "question": "When to use waitFor?",
+              "answer": "For testing asynchronous updates and state changes"
+            }
+          ]
+        },
+        {
+          "id": 49,
+          "title": "Screen Queries Best Practices",
+          "english": "Use semantic queries that resemble how users find elements.",
+          "hinglish": "Semantic queries use karein jo batate hain ki users elements kaise find karte hain.",
+          "examples": [
+            "// Prefer these:\ngetByRole('button', { name: /submit/i })\ngetByLabelText('Email')\n// Over these:\ngetByTestId('submit-button')"
+          ],
+          "practice": [
+            {
+              "question": "Order of preference for queries?",
+              "answer": "1. getByRole, 2. getByLabelText, 3. getByText, 4. getByTestId"
+            }
+          ]
+        },
+        {
+          "id": 50,
+          "title": "Real Projects - Material UI Integration",
+          "english": "Material UI provides pre-built React components following Material Design.",
+          "hinglish": "Material UI pre-built React components provide karta hai Material Design follow karte hue.",
+          "examples": [
+            "import { Button, TextField } from '@mui/material';\n<Button variant=\"contained\" color=\"primary\">Click</Button>"
+          ],
+          "practice": [
+            {
+              "question": "Main benefit of Material UI?",
+              "answer": "Consistent, accessible components with theming"
+            }
+          ]
+        },
+        {
+          "id": 51,
+          "title": "Real Projects - Tailwind CSS",
+          "english": "Tailwind CSS is a utility-first CSS framework for rapid UI development.",
+          "hinglish": "Tailwind CSS ek utility-first CSS framework hai rapid UI development ke liye.",
+          "examples": [
+            "<button className=\"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded\">\n  Button\n</button>"
+          ],
+          "practice": [
+            {
+              "question": "Tailwind vs traditional CSS?",
+              "answer": "Tailwind: faster development, consistent; Traditional: more control"
+            }
+          ]
+        },
+        {
+          "id": 52,
+          "title": "Real Projects - Redux Integration",
+          "english": "Integrate Redux for complex state management in real applications.",
+          "hinglish": "Real applications mein complex state management ke liye Redux integrate karein.",
+          "examples": [
+            "// Redux store setup\nconst store = configureStore({\n  reducer: {\n    users: usersReducer,\n    posts: postsReducer,\n  },\n});"
+          ],
+          "practice": [
+            {
+              "question": "When to choose Redux?",
+              "answer": "Large apps with complex state, need time-travel debugging"
+            }
+          ]
+        },
+        {
+          "id": 53,
+          "title": "8-Week Interview Preparation Timeline",
+          "english": "Structured 8-week plan focusing on hooks, patterns, and popular packages.",
+          "hinglish": "Structured 8-week plan jo hooks, patterns, aur popular packages par focus karta hai.",
+          "examples": [
+            "Week 1-2: Core Concepts (Components, JSX, Props, State)\nWeek 3-4: Hooks and Advanced Patterns\nWeek 5-6: State Management and Performance\nWeek 7-8: Testing, Real Projects, Interview Practice"
+          ],
+          "practice": [
+            {
+              "question": "What to focus on in final weeks?",
+              "answer": "Real project building and mock interviews"
+            }
+          ]
+        },
+        {
+          "id": 54,
+          "title": "Deployment - Optimized Builds",
+          "english": "Create production builds with optimizations for performance.",
+          "hinglish": "Production builds create karein performance optimizations ke saath.",
+          "examples": [
+            "npm run build\n// Creates optimized build in build/ folder"
+          ],
+          "practice": [
+            {
+              "question": "What does npm run build do?",
+              "answer": "Creates minified, optimized production bundle"
+            }
+          ]
+        },
+        {
+          "id": 55,
+          "title": "Deployment - Middleware Setup",
+          "english": "Middleware handles requests before they reach application.",
+          "hinglish": "Middleware requests ko handle karta hai application tak pahunchne se pehle.",
+          "examples": [
+            "// Express middleware example\napp.use(compression()); // Gzip compression\napp.use(helmet()); // Security headers"
+          ],
+          "practice": [
+            {
+              "question": "Common middleware for React apps?",
+              "answer": "Compression, security headers, rate limiting, logging"
+            }
+          ]
+        },
+        {
+          "id": 56,
+          "title": "Deployment - Caching Strategies",
+          "english": "Implement caching to improve performance and reduce server load.",
+          "hinglish": "Caching implement karein performance improve karne aur server load kam karne ke liye.",
+          "examples": [
+            "// Cache static assets\nCache-Control: public, max-age=31536000\n// Cache API responses\nCache-Control: public, max-age=3600"
+          ],
+          "practice": [
+            {
+              "question": "What to cache and for how long?",
+              "answer": "Static assets: 1 year, API data: depends on volatility"
+            }
+          ]
+        },
+        {
+          "id": 57,
+          "title": "Deployment - Bundle Analysis",
+          "english": "Analyze bundle size to identify optimization opportunities.",
+          "hinglish": "Bundle size analyze karein optimization opportunities identify karne ke liye.",
+          "examples": [
+            "npm run build -- --stats\n// Then use webpack-bundle-analyzer"
+          ],
+          "practice": [
+            {
+              "question": "What does bundle analysis reveal?",
+              "answer": "Largest dependencies, duplicate code, optimization opportunities"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,455 @@
+{
+  "technology": "Express.js",
+  "slug": "express",
+  "description": "Express.js is a minimal and flexible Node.js web application framework.",
+  "levels": [
+    {
+      "level": "beginner",
+      "order": 1,
+      "topics": [
+        {
+          "id": 1,
+          "title": "Express Setup and Basic Server",
+          "english": "Set up Express server with basic routing and middleware.",
+          "hinglish": "Express server setup karo basic routing aur middleware ke saath.",
+          "examples": [
+            "const express = require('express');\nconst app = express();\nconst port = 3000;\n\napp.get('/', (req, res) => {\n  res.send('Hello World!');\n});\n\napp.listen(port, () => {\n  console.log(`Server running on port ${port}`);\n});"
+          ],
+          "practice": [
+            {
+              "question": "How to create Express server?",
+              "answer": "const app = express(); app.listen(port)"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Basic Express Server\nconst express = require('express');\nconst app = express();\n\n// Route handlers\napp.get('/', (req, res) => {\n  res.send('Home Page');\n});\n\napp.get('/about', (req, res) => {\n  res.send('About Page');\n});\n\n// Start server\nconst PORT = 3000;\napp.listen(PORT, () => {\n  console.log(`Server running on http://localhost:${PORT}`);\n});",
+            "components": [
+              {
+                "name": "Express Import",
+                "english": "Import Express module",
+                "hinglish": "Express module import karo",
+                "importance": "Framework core"
+              },
+              {
+                "name": "App Creation",
+                "english": "Create Express application",
+                "hinglish": "Express application create karo",
+                "importance": "Main app instance"
+              }
+            ]
+          }
+        },
+        {
+          "id": 2,
+          "title": "Routing and HTTP Methods",
+          "english": "Handle different HTTP methods (GET, POST, PUT, DELETE) with routes.",
+          "hinglish": "Different HTTP methods (GET, POST, PUT, DELETE) handle karo routes ke saath.",
+          "examples": [
+            "app.get('/users', getUsers);\napp.post('/users', createUser);\napp.put('/users/:id', updateUser);\napp.delete('/users/:id', deleteUser);"
+          ],
+          "practice": [
+            {
+              "question": "Which method for creating data?",
+              "answer": "POST method"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// HTTP Methods\napp.get('/api/users', (req, res) => {\n  res.json([{ id: 1, name: 'John' }]);\n});\n\napp.post('/api/users', (req, res) => {\n  res.json({ message: 'User created' });\n});\n\napp.put('/api/users/:id', (req, res) => {\n  res.json({ message: `User ${req.params.id} updated` });\n});\n\napp.delete('/api/users/:id', (req, res) => {\n  res.json({ message: `User ${req.params.id} deleted` });\n});",
+            "components": [
+              {
+                "name": "GET",
+                "english": "Retrieve data",
+                "hinglish": "Data retrieve karo"
+              },
+              {
+                "name": "POST",
+                "english": "Create data",
+                "hinglish": "Data create karo"
+              }
+            ]
+          }
+        },
+        {
+          "id": 3,
+          "title": "Middleware Basics",
+          "english": "Use middleware for request processing, logging, authentication.",
+          "hinglish": "Request processing, logging, authentication ke liye middleware use karo.",
+          "examples": [
+            "// Logger middleware\napp.use((req, res, next) => {\n  console.log(`${req.method} ${req.url}`);\n  next();\n});",
+            "// Body parser\napp.use(express.json());"
+          ],
+          "practice": [
+            {
+              "question": "What is middleware?",
+              "answer": "Functions that process requests before reaching routes"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Built-in middleware\napp.use(express.json()); // Parse JSON bodies\napp.use(express.urlencoded({ extended: true })); // Parse form data\n\n// Custom middleware\napp.use((req, res, next) => {\n  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);\n  next(); // Pass to next middleware\n});\n\n// Route-specific middleware\nconst authMiddleware = (req, res, next) => {\n  const token = req.headers.authorization;\n  if (!token) return res.status(401).send('Unauthorized');\n  next();\n};\n\napp.get('/protected', authMiddleware, (req, res) => {\n  res.send('Protected content');\n});",
+            "components": [
+              {
+                "name": "Request Processing",
+                "english": "Modify request/response objects",
+                "hinglish": "Request/response objects modify karo"
+              },
+              {
+                "name": "Next Function",
+                "english": "Pass control to next middleware",
+                "hinglish": "Control next middleware ko pass karo"
+              }
+            ]
+          }
+        },
+        {
+          "id": 4,
+          "title": "Request and Response Objects",
+          "english": "Access request data and send responses with proper status codes.",
+          "hinglish": "Request data access karo aur proper status codes ke saath responses bhejo.",
+          "examples": [
+            "// Request data\nconst id = req.params.id;\nconst query = req.query.search;\nconst body = req.body;",
+            "// Response methods\nres.status(201).json(data);\nres.send('Hello');\nres.redirect('/home');"
+          ],
+          "practice": [
+            {
+              "question": "How to get URL parameters?",
+              "answer": "req.params object"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Request data access\napp.get('/users/:id', (req, res) => {\n  const userId = req.params.id; // URL parameter\n  const page = req.query.page; // Query string ?page=1\n  const authHeader = req.headers.authorization; // Request header\n  \n  res.json({ id: userId, page });\n});\n\n// POST request with body\napp.post('/users', (req, res) => {\n  const userData = req.body; // JSON body\n  // Save to database\n  res.status(201).json({ id: 123, ...userData });\n});\n\n// Response methods\napp.get('/example', (req, res) => {\n  res.send('Plain text'); // Send text\n  res.json({ name: 'John' }); // Send JSON\n  res.status(404).send('Not found'); // Status code\n  res.redirect('/new-path'); // Redirect\n  res.download('file.pdf'); // File download\n});",
+            "components": [
+              {
+                "name": "Request Object",
+                "english": "Contains request data",
+                "hinglish": "Request data contain karta hai"
+              },
+              {
+                "name": "Response Object",
+                "english": "Methods to send response",
+                "hinglish": "Response bhejne ke methods"
+              }
+            ]
+          }
+        },
+        {
+          "id": 5,
+          "title": "Static Files and Templates",
+          "english": "Serve static files (CSS, images) and render dynamic templates.",
+          "hinglish": "Static files (CSS, images) serve karo aur dynamic templates render karo.",
+          "examples": [
+            "// Serve static files\napp.use(express.static('public'));",
+            "// Template engine\napp.set('view engine', 'ejs');\nres.render('index', { title: 'Home' });"
+          ],
+          "practice": [
+            {
+              "question": "How to serve CSS files?",
+              "answer": "app.use(express.static('folder'))"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Serve static files from 'public' folder\napp.use(express.static('public'));\n// Now: localhost:3000/css/style.css works\n\n// Multiple static folders\napp.use(express.static('public'));\napp.use(express.static('uploads'));\n\n// Template engines\napp.set('view engine', 'ejs'); // Set EJS as template engine\napp.set('views', './views'); // Views folder\n\n// Render template with data\napp.get('/', (req, res) => {\n  res.render('index', { \n    title: 'Home Page',\n    users: [{ name: 'John' }, { name: 'Jane' }]\n  });\n});",
+            "components": [
+              {
+                "name": "Static Files",
+                "english": "CSS, JS, images, fonts",
+                "hinglish": "CSS, JS, images, fonts"
+              },
+              {
+                "name": "Template Engines",
+                "english": "EJS, Pug, Handlebars",
+                "hinglish": "EJS, Pug, Handlebars"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "intermediate",
+      "order": 2,
+      "topics": [
+        {
+          "id": 6,
+          "title": "Router and Route Separation",
+          "english": "Organize routes using Express Router for better code structure.",
+          "hinglish": "Better code structure ke liye Express Router use karke routes organize karo.",
+          "examples": [
+            "// users.js\nconst router = express.Router();\nrouter.get('/', getUsers);\nmodule.exports = router;",
+            "// app.js\nconst usersRouter = require('./routes/users');\napp.use('/users', usersRouter);"
+          ],
+          "practice": [
+            {
+              "question": "Why use Express Router?",
+              "answer": "Modular route organization, better maintainability"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// routes/users.js\nconst express = require('express');\nconst router = express.Router();\n\n// Define routes\nrouter.get('/', (req, res) => {\n  res.send('List of users');\n});\n\nrouter.get('/:id', (req, res) => {\n  res.send(`User ${req.params.id}`);\n});\n\nrouter.post('/', (req, res) => {\n  res.send('Create user');\n});\n\nmodule.exports = router;\n\n// app.js\nconst usersRouter = require('./routes/users');\nconst productsRouter = require('./routes/products');\n\n// Use routers\napp.use('/api/users', usersRouter);\napp.use('/api/products', productsRouter);\n\n// All /api/users routes handled by usersRouter",
+            "components": [
+              {
+                "name": "Express Router",
+                "english": "Create modular route handlers",
+                "hinglish": "Modular route handlers create karo"
+              },
+              {
+                "name": "Route Separation",
+                "english": "Separate by feature/module",
+                "hinglish": "Feature/module ke hisaab se separate karo"
+              }
+            ]
+          }
+        },
+        {
+          "id": 7,
+          "title": "Error Handling",
+          "english": "Implement error handling middleware for graceful error responses.",
+          "hinglish": "Graceful error responses ke liye error handling middleware implement karo.",
+          "examples": [
+            "// Error middleware\napp.use((err, req, res, next) => {\n  console.error(err.stack);\n  res.status(500).send('Something broke!');\n});"
+          ],
+          "practice": [
+            {
+              "question": "Where to place error middleware?",
+              "answer": "After all routes and other middleware"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Route with error\napp.get('/error', (req, res, next) => {\n  try {\n    throw new Error('Something went wrong!');\n  } catch (err) {\n    next(err); // Pass to error handler\n  }\n});\n\n// Error handling middleware (place last)\napp.use((err, req, res, next) => {\n  console.error(err.stack);\n  \n  // Send appropriate response\n  res.status(err.status || 500);\n  res.json({\n    error: {\n      message: err.message,\n      status: err.status || 500\n    }\n  });\n});\n\n// 404 handler (catch all)\napp.use((req, res, next) => {\n  res.status(404).json({ error: 'Route not found' });\n});",
+            "components": [
+              {
+                "name": "Error Middleware",
+                "english": "4 parameters (err, req, res, next)",
+                "hinglish": "4 parameters (err, req, res, next)"
+              },
+              {
+                "name": "Error Propagation",
+                "english": "Use next(err) to pass errors",
+                "hinglish": "Errors pass karne ke liye next(err) use karo"
+              }
+            ]
+          }
+        },
+        {
+          "id": 8,
+          "title": "Database Integration",
+          "english": "Connect Express with databases (MongoDB, PostgreSQL) using drivers or ORMs.",
+          "hinglish": "Express ko databases (MongoDB, PostgreSQL) se connect karo drivers ya ORMs use karke.",
+          "examples": [
+            "// MongoDB with Mongoose\nconst mongoose = require('mongoose');\nmongoose.connect('mongodb://localhost/test');",
+            "// PostgreSQL with pg\nconst { Pool } = require('pg');\nconst pool = new Pool();"
+          ],
+          "practice": [
+            {
+              "question": "What is Mongoose?",
+              "answer": "MongoDB object modeling for Node.js"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// MongoDB with Mongoose\nconst mongoose = require('mongoose');\n\n// Connect to database\nmongoose.connect('mongodb://localhost/myapp', {\n  useNewUrlParser: true,\n  useUnifiedTopology: true\n});\n\n// Define schema and model\nconst userSchema = new mongoose.Schema({\n  name: String,\n  email: String,\n  age: Number\n});\nconst User = mongoose.model('User', userSchema);\n\n// Route using database\napp.get('/users', async (req, res) => {\n  try {\n    const users = await User.find();\n    res.json(users);\n  } catch (err) {\n    res.status(500).json({ error: err.message });\n  }\n});\n\n// PostgreSQL with pg\nconst { Pool } = require('pg');\nconst pool = new Pool({\n  host: 'localhost',\n  database: 'myapp',\n  port: 5432\n});\n\napp.get('/products', async (req, res) => {\n  try {\n    const result = await pool.query('SELECT * FROM products');\n    res.json(result.rows);\n  } catch (err) {\n    res.status(500).json({ error: err.message });\n  }\n});",
+            "components": [
+              {
+                "name": "Mongoose",
+                "english": "MongoDB ODM for Node.js",
+                "hinglish": "MongoDB ODM for Node.js"
+              },
+              {
+                "name": "Database Pool",
+                "english": "Connection pool for performance",
+                "hinglish": "Performance ke liye connection pool"
+              }
+            ]
+          }
+        },
+        {
+          "id": 9,
+          "title": "Authentication and Authorization",
+          "english": "Implement user authentication (login/register) and authorization (permissions).",
+          "hinglish": "User authentication (login/register) aur authorization (permissions) implement karo.",
+          "examples": [
+            "// JWT authentication\nconst jwt = require('jsonwebtoken');\nconst token = jwt.sign({ userId: 1 }, 'secret');",
+            "// bcrypt for passwords\nconst bcrypt = require('bcrypt');\nconst hash = await bcrypt.hash(password, 10);"
+          ],
+          "practice": [
+            {
+              "question": "What is JWT?",
+              "answer": "JSON Web Token for stateless authentication"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Authentication middleware\nconst jwt = require('jsonwebtoken');\nconst bcrypt = require('bcrypt');\n\n// Register route\napp.post('/register', async (req, res) => {\n  const { email, password } = req.body;\n  \n  // Hash password\n  const hashedPassword = await bcrypt.hash(password, 10);\n  \n  // Save user to database\n  const user = await User.create({ email, password: hashedPassword });\n  \n  // Generate JWT\n  const token = jwt.sign(\n    { userId: user.id },\n    process.env.JWT_SECRET,\n    { expiresIn: '1h' }\n  );\n  \n  res.json({ token });\n});\n\n// Login route\napp.post('/login', async (req, res) => {\n  const { email, password } = req.body;\n  \n  // Find user\n  const user = await User.findOne({ email });\n  if (!user) return res.status(401).send('Invalid credentials');\n  \n  // Check password\n  const validPassword = await bcrypt.compare(password, user.password);\n  if (!validPassword) return res.status(401).send('Invalid credentials');\n  \n  // Generate token\n  const token = jwt.sign(\n    { userId: user.id },\n    process.env.JWT_SECRET,\n    { expiresIn: '1h' }\n  );\n  \n  res.json({ token });\n});\n\n// Protected route middleware\nconst authMiddleware = (req, res, next) => {\n  const token = req.headers.authorization?.split(' ')[1];\n  if (!token) return res.status(401).send('Access denied');\n  \n  try {\n    const decoded = jwt.verify(token, process.env.JWT_SECRET);\n    req.userId = decoded.userId;\n    next();\n  } catch (err) {\n    res.status(401).send('Invalid token');\n  }\n};\n\napp.get('/profile', authMiddleware, (req, res) => {\n  res.send(`User profile for ${req.userId}`);\n});",
+            "components": [
+              {
+                "name": "JWT",
+                "english": "JSON Web Token for authentication",
+                "hinglish": "Authentication ke liye JSON Web Token"
+              },
+              {
+                "name": "Password Hashing",
+                "english": "bcrypt for secure password storage",
+                "hinglish": "Secure password storage ke liye bcrypt"
+              }
+            ]
+          }
+        },
+        {
+          "id": 10,
+          "title": "File Uploads",
+          "english": "Handle file uploads with Multer middleware.",
+          "hinglish": "Multer middleware ke saath file uploads handle karo.",
+          "examples": [
+            "const multer = require('multer');\nconst upload = multer({ dest: 'uploads/' });\napp.post('/upload', upload.single('file'), (req, res) => {\n  res.json({ filename: req.file.filename });\n});"
+          ],
+          "practice": [
+            {
+              "question": "Which Multer method for single file?",
+              "answer": "upload.single('fieldname')"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "const multer = require('multer');\nconst path = require('path');\n\n// Configure storage\nconst storage = multer.diskStorage({\n  destination: 'uploads/',\n  filename: (req, file, cb) => {\n    const uniqueName = Date.now() + path.extname(file.originalname);\n    cb(null, uniqueName);\n  }\n});\n\n// File filter\nconst fileFilter = (req, file, cb) => {\n  const allowedTypes = /jpeg|jpg|png|gif/;\n  const isValid = allowedTypes.test(file.mimetype);\n  cb(null, isValid);\n};\n\nconst upload = multer({ \n  storage,\n  fileFilter,\n  limits: { fileSize: 5 * 1024 * 1024 } // 5MB\n});\n\n// Single file upload\napp.post('/upload', upload.single('avatar'), (req, res) => {\n  res.json({\n    message: 'File uploaded',\n    filename: req.file.filename,\n    path: `/uploads/${req.file.filename}`\n  });\n});\n\n// Multiple files\napp.post('/gallery', upload.array('photos', 10), (req, res) => {\n  const files = req.files.map(file => file.filename);\n  res.json({ uploaded: files });\n});\n\n// Serve uploaded files\napp.use('/uploads', express.static('uploads'));",
+            "components": [
+              {
+                "name": "Multer",
+                "english": "Middleware for handling multipart/form-data",
+                "hinglish": "Multipart/form-data handle karne ke liye middleware"
+              },
+              {
+                "name": "File Storage",
+                "english": "Disk storage or memory storage",
+                "hinglish": "Disk storage ya memory storage"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "advanced",
+      "order": 3,
+      "topics": [
+        {
+          "id": 11,
+          "title": "API Development Best Practices",
+          "english": "Build RESTful APIs with proper status codes, versioning, documentation, and security.",
+          "hinglish": "Proper status codes, versioning, documentation aur security ke saath RESTful APIs banao.",
+          "examples": [
+            "// API versioning\napp.use('/api/v1/users', usersRouter);\napp.use('/api/v2/users', usersRouterV2);",
+            "// CORS setup\nconst cors = require('cors');\napp.use(cors());"
+          ],
+          "practice": [
+            {
+              "question": "What is CORS?",
+              "answer": "Cross-Origin Resource Sharing, allows different domain requests"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// CORS middleware\nconst cors = require('cors');\napp.use(cors({\n  origin: 'http://localhost:3000',\n  methods: ['GET', 'POST', 'PUT', 'DELETE']\n}));\n\n// API versioning\napp.use('/api/v1', v1Router);\napp.use('/api/v2', v2Router);\n\n// Rate limiting\nconst rateLimit = require('express-rate-limit');\nconst limiter = rateLimit({\n  windowMs: 15 * 60 * 1000, // 15 minutes\n  max: 100 // limit each IP to 100 requests\n});\napp.use('/api/', limiter);\n\n// Security headers with Helmet\nconst helmet = require('helmet');\napp.use(helmet());\n\n// Request validation\nconst { body, validationResult } = require('express-validator');\napp.post('/users', \n  body('email').isEmail(),\n  body('password').isLength({ min: 6 }),\n  (req, res) => {\n    const errors = validationResult(req);\n    if (!errors.isEmpty()) {\n      return res.status(400).json({ errors: errors.array() });\n    }\n    // Process request\n  }\n);\n\n// API documentation with Swagger\nconst swaggerJsDoc = require('swagger-jsdoc');\nconst swaggerUi = require('swagger-ui-express');\n\nconst swaggerOptions = {\n  definition: {\n    openapi: '3.0.0',\n    info: { title: 'API Docs', version: '1.0.0' }\n  },\n  apis: ['./routes/*.js']\n};\n\nconst swaggerSpec = swaggerJsDoc(swaggerOptions);\napp.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));",
+            "components": [
+              {
+                "name": "RESTful Principles",
+                "english": "Stateless, cacheable, uniform interface",
+                "hinglish": "Stateless, cacheable, uniform interface"
+              },
+              {
+                "name": "API Security",
+                "english": "Authentication, rate limiting, CORS",
+                "hinglish": "Authentication, rate limiting, CORS"
+              }
+            ]
+          }
+        },
+        {
+          "id": 12,
+          "title": "WebSockets with Socket.io",
+          "english": "Implement real-time communication using Socket.io with Express.",
+          "hinglish": "Express ke saath Socket.io use karke real-time communication implement karo.",
+          "examples": [
+            "const socketIo = require('socket.io');\nconst io = socketIo(server);\nio.on('connection', (socket) => {\n  console.log('New client connected');\n});"
+          ],
+          "practice": [
+            {
+              "question": "When to use WebSockets?",
+              "answer": "Real-time apps: chat, notifications, live updates"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "const express = require('express');\nconst http = require('http');\nconst socketIo = require('socket.io');\n\nconst app = express();\nconst server = http.createServer(app);\nconst io = socketIo(server);\n\n// Socket.io setup\nio.on('connection', (socket) => {\n  console.log('New client connected:', socket.id);\n  \n  // Join room\n  socket.on('join-room', (roomId) => {\n    socket.join(roomId);\n    socket.to(roomId).emit('user-joined', socket.id);\n  });\n  \n  // Send message\n  socket.on('send-message', ({ roomId, message }) => {\n    socket.to(roomId).emit('receive-message', {\n      sender: socket.id,\n      message\n    });\n  });\n  \n  // Disconnect\n  socket.on('disconnect', () => {\n    console.log('Client disconnected:', socket.id);\n  });\n});\n\n// Express routes\napp.get('/', (req, res) => {\n  res.sendFile(__dirname + '/index.html');\n});\n\nserver.listen(3000, () => {\n  console.log('Server with WebSockets running on port 3000');\n});",
+            "components": [
+              {
+                "name": "Socket.io",
+                "english": "Real-time bidirectional communication",
+                "hinglish": "Real-time bidirectional communication"
+              },
+              {
+                "name": "Rooms",
+                "english": "Group sockets for targeted messaging",
+                "hinglish": "Targeted messaging ke liye sockets group karo"
+              }
+            ]
+          }
+        },
+        {
+          "id": 13,
+          "title": "Deployment and Production",
+          "english": "Deploy Express apps to production with PM2, Nginx, environment variables.",
+          "hinglish": "Express apps ko PM2, Nginx, environment variables ke saath production mein deploy karo.",
+          "examples": [
+            "// PM2 process manager\npm2 start app.js",
+            "// Environment variables\nrequire('dotenv').config();\nconst port = process.env.PORT || 3000;"
+          ],
+          "practice": [
+            {
+              "question": "What is PM2?",
+              "answer": "Production process manager for Node.js"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Environment configuration\nrequire('dotenv').config();\n\nconst express = require('express');\nconst app = express();\n\n// Use environment variables\nconst PORT = process.env.PORT || 3000;\nconst NODE_ENV = process.env.NODE_ENV || 'development';\n\n// Production middleware\nif (NODE_ENV === 'production') {\n  app.use(compression());\n  app.use(helmet());\n}\n\n// Error handling for production\napp.use((err, req, res, next) => {\n  if (NODE_ENV === 'development') {\n    res.status(500).json({\n      error: err.message,\n      stack: err.stack\n    });\n  } else {\n    res.status(500).json({ error: 'Something went wrong!' });\n  }\n});\n\napp.listen(PORT, () => {\n  console.log(`Server running in ${NODE_ENV} mode on port ${PORT}`);\n});\n\n// PM2 ecosystem file (ecosystem.config.js)\nmodule.exports = {\n  apps: [{\n    name: 'myapp',\n    script: './app.js',\n    instances: 'max',\n    exec_mode: 'cluster',\n    env: {\n      NODE_ENV: 'production',\n      PORT: 3000\n    }\n  }]\n};\n\n// Nginx configuration\n/*\nserver {\n    listen 80;\n    server_name example.com;\n    \n    location / {\n        proxy_pass http://localhost:3000;\n        proxy_http_version 1.1;\n        proxy_set_header Upgrade $http_upgrade;\n        proxy_set_header Connection 'upgrade';\n        proxy_set_header Host $host;\n        proxy_cache_bypass $http_upgrade;\n    }\n}\n*/",
+            "components": [
+              {
+                "name": "PM2",
+                "english": "Process manager with clustering",
+                "hinglish": "Clustering ke saath process manager"
+              },
+              {
+                "name": "Environment Variables",
+                "english": "Configuration management",
+                "hinglish": "Configuration management"
+              }
+            ]
+          }
+        },
+        {
+          "id": 14,
+          "title": "Testing Express Apps",
+          "english": "Write tests for Express routes and middleware using Jest and Supertest.",
+          "hinglish": "Jest aur Supertest use karke Express routes aur middleware ke liye tests likho.",
+          "examples": [
+            "// Test with Supertest\nconst request = require('supertest');\ndescribe('GET /users', () => {\n  it('returns list of users', async () => {\n    const res = await request(app).get('/users');\n    expect(res.statusCode).toEqual(200);\n  });\n});"
+          ],
+          "practice": [
+            {
+              "question": "What is Supertest?",
+              "answer": "Library for testing HTTP assertions"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "const request = require('supertest');\nconst app = require('../app'); // Express app\n\n// Route tests\ndescribe('User Routes', () => {\n  // GET /users\n  test('GET /users returns 200', async () => {\n    const response = await request(app).get('/users');\n    expect(response.statusCode).toBe(200);\n    expect(response.body).toBeInstanceOf(Array);\n  });\n  \n  // POST /users\n  test('POST /users creates new user', async () => {\n    const newUser = { name: 'John', email: 'john@example.com' };\n    const response = await request(app)\n      .post('/users')\n      .send(newUser);\n    \n    expect(response.statusCode).toBe(201);\n    expect(response.body).toHaveProperty('id');\n    expect(response.body.name).toBe('John');\n  });\n  \n  // GET /users/:id\n  test('GET /users/:id returns user', async () => {\n    const response = await request(app).get('/users/1');\n    expect(response.statusCode).toBe(200);\n    expect(response.body).toHaveProperty('name');\n  });\n  \n  // Error case\n  test('GET /users/:id with invalid id returns 404', async () => {\n    const response = await request(app).get('/users/999');\n    expect(response.statusCode).toBe(404);\n  });\n});\n\n// Database mocking\njest.mock('../models/User', () => ({\n  find: jest.fn(() => Promise.resolve([{ id: 1, name: 'John' }])),\n  findById: jest.fn((id) => {\n    if (id === '1') {\n      return Promise.resolve({ id: 1, name: 'John' });\n    }\n    return Promise.resolve(null);\n  })\n}));\n\n// Cleanup after tests\nafterEach(() => {\n  jest.clearAllMocks();\n});",
+            "components": [
+              {
+                "name": "Supertest",
+                "english": "HTTP assertions for Express",
+                "hinglish": "Express ke liye HTTP assertions"
+              },
+              {
+                "name": "Mocking",
+                "english": "Mock database and external services",
+                "hinglish": "Database aur external services mock karo"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

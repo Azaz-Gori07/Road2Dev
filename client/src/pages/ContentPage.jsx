@@ -3,6 +3,9 @@ import fundamentals from "../api/fundamentals.json";
 import html from "../api/languages/html5.json";
 import css from "../api/languages/css.json";
 import javascript from '../api/languages/javascript.json'
+import react from '../api/languages/reactDuplicate.json';
+import nodejs from '../api/languages/nodejs.json';
+import expressjs from '../api/languages/express.json';
 import "./ContentPage.css";
 
 const ContentPage = () => {
@@ -17,6 +20,12 @@ const ContentPage = () => {
       ? css
       : techSlug === "javascript"
       ? javascript
+      : techSlug === "react"
+      ? react
+      : techSlug === "nodejs"
+      ? nodejs
+      : techSlug === "express"
+      ? expressjs
       :null;
 
   const handleBack = () => {
