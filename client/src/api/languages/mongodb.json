@@ -1,0 +1,2291 @@
+{
+    "technology": "MongoDB",
+    "slug": "mongodb",
+    "description": "MongoDB ek popular NoSQL database hai jo flexible documents me data store karta hai, scalability aur fast performance ke saath.",
+    "levels": [
+        {
+            "level": "beginner",
+            "order": 1,
+            "topics": [
+                {
+                    "id": 1,
+                    "title": "NoSQL Basics & MongoDB Introduction",
+                    "english": "Understanding NoSQL databases and how MongoDB differs from traditional SQL databases.",
+                    "hinglish": "NoSQL databases samajhna aur MongoDB SQL databases se kaise different hai.",
+                    "examples": [
+                        "SQL: SELECT * FROM users WHERE age > 25",
+                        "MongoDB: db.users.find({ age: { $gt: 25 } })"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is the main advantage of NoSQL over SQL?",
+                            "answer": "Flexible schema, horizontal scalability, and better performance for unstructured data"
+                        },
+                        {
+                            "question": "MongoDB me data kaise store hota hai?",
+                            "answer": "Documents me (JSON-like format), tables me nahi"
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "title": "MongoDB Installation & Setup",
+                    "english": "Installing MongoDB locally and setting up the environment.",
+                    "hinglish": "MongoDB ko apne computer pe install karna aur environment setup karna.",
+                    "examples": [
+                        "# Ubuntu: sudo apt-get install mongodb",
+                        "# Windows: Download from mongodb.com",
+                        "# Start MongoDB: mongod --dbpath /data/db"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to check if MongoDB is running?",
+                            "answer": "Run 'mongod' command or check service status"
+                        },
+                        {
+                            "question": "MongoDB start karne ke liye konsa command use karte hain?",
+                            "answer": "mongod --dbpath [your-data-path]"
+                        }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "title": "MongoDB Atlas & Cloud Setup",
+                    "english": "Setting up MongoDB in the cloud using MongoDB Atlas.",
+                    "hinglish": "Cloud me MongoDB setup karna MongoDB Atlas use karke.",
+                    "examples": [
+                        "1. Create account on mongodb.com/cloud",
+                        "2. Create new cluster",
+                        "3. Whitelist IP addresses",
+                        "4. Get connection string"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is MongoDB Atlas?",
+                            "answer": "Fully managed MongoDB cloud service by MongoDB Inc."
+                        },
+                        {
+                            "question": "Atlas ka main advantage kya hai?",
+                            "answer": "No installation required, automatic backups, scaling easy hai"
+                        }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "title": "MongoDB Compass GUI",
+                    "english": "Using MongoDB Compass graphical interface to interact with databases.",
+                    "hinglish": "MongoDB Compass GUI use karna databases ke saath interact karne ke liye.",
+                    "examples": [
+                        "Connect to: mongodb://localhost:27017",
+                        "Browse collections visually",
+                        "Create/drop collections with clicks",
+                        "Run queries through GUI"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What can you do with MongoDB Compass?",
+                            "answer": "Visually explore data, run queries, optimize performance, and manage indexes"
+                        },
+                        {
+                            "question": "Compass me query kaise run karte hain?",
+                            "answer": "Filter box me query likhkar Enter press karte hain"
+                        }
+                    ]
+                },
+                {
+                    "id": 5,
+                    "title": "Databases, Collections & Documents",
+                    "english": "Understanding MongoDB's hierarchy: Database → Collections → Documents.",
+                    "hinglish": "MongoDB ka structure samajhna: Database → Collections → Documents.",
+                    "examples": [
+                        "// Create/use database",
+                        "use mydatabase",
+                        "",
+                        "// Create collection (implicitly)",
+                        "db.users.insertOne({ name: 'John' })",
+                        "",
+                        "// Show collections",
+                        "show collections"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to switch to a database in MongoDB?",
+                            "answer": "use database_name"
+                        },
+                        {
+                            "question": "Collection automatically kaise create hoti hai?",
+                            "answer": "Jab pehli baar usme document insert karte hain"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "use ecommerce\ndb.products.insertOne({ name: 'Laptop', price: 999, category: 'Electronics' })",
+                        "components": [
+                            {
+                                "name": "Database",
+                                "english": "Container for collections",
+                                "hinglish": "Collections ka container",
+                                "importance": "Top-level organization",
+                                "tip": "Database physically exists when first collection is created"
+                            },
+                            {
+                                "name": "Collection",
+                                "english": "Group of related documents",
+                                "hinglish": "Related documents ka group",
+                                "importance": "Similar to SQL tables",
+                                "tip": "No fixed schema - different documents can have different fields"
+                            },
+                            {
+                                "name": "Document",
+                                "english": "Single record in BSON format",
+                                "hinglish": "BSON format me single record",
+                                "importance": "Basic unit of data",
+                                "tip": "Similar to JSON but supports more data types"
+                            }
+                        ],
+                        "comparison_table": {
+                            "headers": [
+                                "SQL",
+                                "MongoDB",
+                                "Hindi Equivalent"
+                            ],
+                            "rows": [
+                                [
+                                    "Database",
+                                    "Database",
+                                    "Database"
+                                ],
+                                [
+                                    "Table",
+                                    "Collection",
+                                    "Collection"
+                                ],
+                                [
+                                    "Row",
+                                    "Document",
+                                    "Document"
+                                ],
+                                [
+                                    "Column",
+                                    "Field",
+                                    "Field"
+                                ],
+                                [
+                                    "Schema",
+                                    "Flexible Schema",
+                                    "Flexible Structure"
+                                ]
+                            ]
+                        }
+                    }
+                },
+                {
+                    "id": 6,
+                    "title": "BSON Data Types",
+                    "english": "Understanding BSON (Binary JSON) data types used by MongoDB.",
+                    "hinglish": "MongoDB jo BSON data types use karta hai unhe samajhna.",
+                    "examples": [
+                        "{",
+                        "  name: 'String',",
+                        "  age: 25, // Number",
+                        "  active: true, // Boolean",
+                        "  birthdate: new Date(), // Date",
+                        "  tags: ['mongodb', 'nosql'], // Array",
+                        "  address: { city: 'Mumbai', zip: '400001' } // Embedded Document",
+                        "}"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is BSON?",
+                            "answer": "Binary JSON - extends JSON with additional data types like Date, Binary, ObjectId"
+                        },
+                        {
+                            "question": "MongoDB internally konsa format use karta hai?",
+                            "answer": "BSON (Binary JSON), JSON nahi"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "{\n  _id: ObjectId('507f1f77bcf86cd799439011'),\n  price: NumberDecimal('99.99'),\n  timestamp: ISODate('2024-01-01T10:30:00Z'),\n  binaryData: BinData(0, 'base64data')\n}",
+                        "components": [
+                            {
+                                "name": "ObjectId",
+                                "english": "12-byte unique identifier",
+                                "hinglish": "12-byte unique ID",
+                                "importance": "Default _id field for documents",
+                                "tip": "Contains timestamp, machine ID, process ID, and counter"
+                            },
+                            {
+                                "name": "Date",
+                                "english": "Stores date and time",
+                                "hinglish": "Date aur time store karta hai",
+                                "importance": "For temporal data",
+                                "tip": "Always store dates as ISODate, not strings"
+                            },
+                            {
+                                "name": "Number Types",
+                                "english": "Int32, Int64, Double, Decimal",
+                                "hinglish": "Different number types",
+                                "importance": "Precision and range matters",
+                                "tip": "Use Decimal for financial data to avoid floating-point errors"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 7,
+                    "title": "CRUD Operations - Create",
+                    "english": "Creating documents using insert operations.",
+                    "hinglish": "Insert operations use karke documents create karna.",
+                    "examples": [
+                        "// Insert single document",
+                        "db.users.insertOne({",
+                        "  name: 'Rahul',",
+                        "  email: 'rahul@example.com',",
+                        "  age: 25",
+                        "})",
+                        "",
+                        "// Insert multiple documents",
+                        "db.users.insertMany([",
+                        "  { name: 'Priya', age: 22 },",
+                        "  { name: 'Amit', age: 30 },",
+                        "  { name: 'Sneha', age: 28 }",
+                        "])"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Difference between insertOne and insertMany?",
+                            "answer": "insertOne inserts single document, insertMany inserts multiple documents in one operation"
+                        },
+                        {
+                            "question": "insertMany me error aaye toh kya hota hai?",
+                            "answer": "ordered: true (default) - stop at first error; ordered: false - continue inserting others"
+                        }
+                    ]
+                },
+                {
+                    "id": 8,
+                    "title": "CRUD Operations - Read (Find)",
+                    "english": "Reading documents using find operations with queries.",
+                    "hinglish": "Find operations aur queries use karke documents read karna.",
+                    "examples": [
+                        "// Find all documents",
+                        "db.users.find()",
+                        "",
+                        "// Find with condition",
+                        "db.users.find({ age: 25 })",
+                        "",
+                        "// Pretty print results",
+                        "db.users.find().pretty()",
+                        "",
+                        "// Find one document",
+                        "db.users.findOne({ name: 'Rahul' })"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to format output for better readability?",
+                            "answer": "Use .pretty() method: db.collection.find().pretty()"
+                        },
+                        {
+                            "question": "find() aur findOne() me difference?",
+                            "answer": "find() returns cursor (multiple docs), findOne() returns single document object"
+                        }
+                    ]
+                },
+                {
+                    "id": 9,
+                    "title": "CRUD Operations - Update",
+                    "english": "Updating documents using update operations.",
+                    "hinglish": "Update operations use karke documents modify karna.",
+                    "examples": [
+                        "// Update single document",
+                        "db.users.updateOne(",
+                        "  { name: 'Rahul' }, // Filter",
+                        "  { $set: { age: 26 } } // Update",
+                        ")",
+                        "",
+                        "// Update multiple documents",
+                        "db.users.updateMany(",
+                        "  { age: { $lt: 25 } }, // All users under 25",
+                        "  { $set: { category: 'young' } }",
+                        ")",
+                        "",
+                        "// Replace entire document",
+                        "db.users.replaceOne(",
+                        "  { name: 'Rahul' },",
+                        "  { name: 'Rahul', age: 26, city: 'Delhi' }",
+                        ")"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What's the difference between updateOne and replaceOne?",
+                            "answer": "updateOne modifies specific fields, replaceOne replaces the entire document"
+                        },
+                        {
+                            "question": "$set operator kya karta hai?",
+                            "answer": "Specific fields update karta hai, baaki fields ko chhod deta hai"
+                        }
+                    ]
+                },
+                {
+                    "id": 10,
+                    "title": "CRUD Operations - Delete",
+                    "english": "Deleting documents using delete operations.",
+                    "hinglish": "Delete operations use karke documents remove karna.",
+                    "examples": [
+                        "// Delete single document",
+                        "db.users.deleteOne({ name: 'Rahul' })",
+                        "",
+                        "// Delete multiple documents",
+                        "db.users.deleteMany({ age: { $lt: 18 } })",
+                        "",
+                        "// Delete all documents (empty collection)",
+                        "db.users.deleteMany({})"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to delete all documents from a collection?",
+                            "answer": "db.collection.deleteMany({}) - empty filter matches all documents"
+                        },
+                        {
+                            "question": "Collection delete karne ke liye kya command hai?",
+                            "answer": "db.collection.drop() - puri collection delete ho jati hai"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "level": "intermediate",
+            "order": 2,
+            "topics": [
+                {
+                    "id": 11,
+                    "title": "Query Operators",
+                    "english": "Using comparison and logical operators for advanced queries.",
+                    "hinglish": "Advanced queries ke liye comparison aur logical operators use karna.",
+                    "examples": [
+                        "// Comparison operators",
+                        "db.users.find({ age: { $eq: 25 } }) // Equal to",
+                        "db.users.find({ age: { $gt: 25 } }) // Greater than",
+                        "db.users.find({ age: { $gte: 25 } }) // Greater than or equal",
+                        "db.users.find({ age: { $lt: 25 } }) // Less than",
+                        "db.users.find({ age: { $lte: 25 } }) // Less than or equal",
+                        "db.users.find({ age: { $ne: 25 } }) // Not equal",
+                        "db.users.find({ age: { $in: [25, 30, 35] } }) // In array",
+                        "db.users.find({ age: { $nin: [25, 30] } }) // Not in array",
+                        "",
+                        "// Logical operators",
+                        "db.users.find({ $and: [{ age: { $gt: 25 } }, { city: 'Mumbai' }] })",
+                        "db.users.find({ $or: [{ age: { $lt: 18 } }, { age: { $gt: 60 } }] })",
+                        "db.users.find({ $not: { age: { $lt: 18 } } })",
+                        "db.users.find({ $nor: [{ age: { $lt: 18 } }, { active: false }] })"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to find users aged 25 or older?",
+                            "answer": "db.users.find({ age: { $gte: 25 } })"
+                        },
+                        {
+                            "question": "$in operator kab use karte hain?",
+                            "answer": "Jab multiple values me se kisi ek se match karna ho"
+                        }
+                    ]
+                },
+                {
+                    "id": 12,
+                    "title": "Projections & Field Selection",
+                    "english": "Selecting specific fields to return in query results.",
+                    "hinglish": "Query results me specific fields select karna return karne ke liye.",
+                    "examples": [
+                        "// Include specific fields",
+                        "db.users.find({}, { name: 1, email: 1 })",
+                        "",
+                        "// Exclude specific fields",
+                        "db.users.find({}, { password: 0, ssn: 0 })",
+                        "",
+                        "// Include with condition",
+                        "db.users.find({ age: { $gt: 25 } }, { name: 1, age: 1 })",
+                        "",
+                        "// _id is included by default, exclude it",
+                        "db.users.find({}, { name: 1, email: 1, _id: 0 })"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to exclude _id field from results?",
+                            "answer": "db.collection.find({}, { _id: 0, field1: 1 })"
+                        },
+                        {
+                            "question": "0 aur 1 projection me kya matlab hai?",
+                            "answer": "1: field include karo, 0: field exclude karo"
+                        }
+                    ]
+                },
+                {
+                    "id": 13,
+                    "title": "Sorting & Pagination",
+                    "english": "Sorting results and implementing pagination with limit and skip.",
+                    "hinglish": "Results ko sort karna aur limit/skip use karke pagination implement karna.",
+                    "examples": [
+                        "// Sort ascending",
+                        "db.users.find().sort({ age: 1 }) // 1 = ascending",
+                        "",
+                        "// Sort descending",
+                        "db.users.find().sort({ age: -1 }) // -1 = descending",
+                        "",
+                        "// Sort by multiple fields",
+                        "db.users.find().sort({ city: 1, age: -1 })",
+                        "",
+                        "// Pagination: Page 1 (first 10 results)",
+                        "db.users.find().limit(10).skip(0)",
+                        "",
+                        "// Pagination: Page 2 (next 10 results)",
+                        "db.users.find().limit(10).skip(10)",
+                        "",
+                        "// Combined: Sorted pagination",
+                        "db.users.find()",
+                        "  .sort({ created_at: -1 })",
+                        "  .limit(10)",
+                        "  .skip(20)"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to get the newest documents first?",
+                            "answer": "db.collection.find().sort({ created_at: -1 })"
+                        },
+                        {
+                            "question": "Pagination me skip() ka kya drawback hai?",
+                            "answer": "Large skips slow hote hain kyunki server sab documents count karta hai"
+                        }
+                    ]
+                },
+                {
+                    "id": 14,
+                    "title": "Cursors & Iteration",
+                    "english": "Understanding and working with MongoDB cursors.",
+                    "hinglish": "MongoDB cursors ko samajhna aur unke saath kaam karna.",
+                    "examples": [
+                        "// Get cursor",
+                        "const cursor = db.users.find({ age: { $gt: 25 } })",
+                        "",
+                        "// Iterate cursor",
+                        "while (cursor.hasNext()) {",
+                        "  printjson(cursor.next());",
+                        "}",
+                        "",
+                        "// Convert cursor to array",
+                        "const allUsers = db.users.find().toArray();",
+                        "",
+                        "// Count documents",
+                        "const count = db.users.find({ age: { $gt: 25 } }).count();",
+                        "",
+                        "// Explain query execution",
+                        "db.users.find({ age: { $gt: 25 } }).explain('executionStats')"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is a cursor in MongoDB?",
+                            "answer": "A pointer to the result set of a query, allows iteration over results"
+                        },
+                        {
+                            "question": "Cursor directly print kyu nahi karte?",
+                            "answer": "Cursor lazy evaluation use karta hai, data fetch-on-demand hota hai"
+                        }
+                    ]
+                },
+                {
+                    "id": 15,
+                    "title": "Data Modeling - Embedding vs Referencing",
+                    "english": "Choosing between embedded documents and document references for data modeling.",
+                    "hinglish": "Data modeling ke liye embedded documents aur document references me se choose karna.",
+                    "examples": [
+                        "// EMBEDDING: User with embedded addresses",
+                        "{",
+                        "  _id: 1,",
+                        "  name: 'Rahul',",
+                        "  addresses: [",
+                        "    { type: 'home', street: '123 Main St', city: 'Mumbai' },",
+                        "    { type: 'work', street: '456 Office Rd', city: 'Pune' }",
+                        "  ]",
+                        "}",
+                        "",
+                        "// REFERENCING: Separate collections with references",
+                        "// users collection",
+                        "{ _id: 1, name: 'Rahul' }",
+                        "{ _id: 2, name: 'Priya' }",
+                        "",
+                        "// orders collection",
+                        "{",
+                        "  _id: 101,",
+                        "  user_id: 1, // Reference to users collection",
+                        "  total: 999,",
+                        "  items: ['laptop', 'mouse']",
+                        "}",
+                        "{",
+                        "  _id: 102,",
+                        "  user_id: 2,",
+                        "  total: 499,",
+                        "  items: ['keyboard']",
+                        "}"
+                    ],
+                    "practice": [
+                        {
+                            "question": "When to use embedding?",
+                            "answer": "When data has one-to-few relationship, needs to be read together frequently"
+                        },
+                        {
+                            "question": "Referencing kab better hai?",
+                            "answer": "Jab data frequently update hota hai, ya one-to-many/many-to-many relationship ho"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Embedded approach for blog posts with comments\n{\n  _id: 1,\n  title: 'MongoDB Guide',\n  author: 'Rahul',\n  comments: [\n    { user: 'Priya', text: 'Great post!', date: ISODate(...) },\n    { user: 'Amit', text: 'Very helpful', date: ISODate(...) }\n  ]\n}",
+                        "components": [
+                            {
+                                "name": "Embedding",
+                                "english": "Nesting related data in single document",
+                                "hinglish": "Related data ko single document me nest karna",
+                                "pros": "Single read/write, data consistency, fast queries",
+                                "cons": "Document size limit (16MB), redundant data"
+                            },
+                            {
+                                "name": "Referencing",
+                                "english": "Storing references (IDs) to related documents",
+                                "hinglish": "Related documents ke references store karna",
+                                "pros": "Flexible, no size limits, normalized data",
+                                "cons": "Multiple queries needed, joins required"
+                            }
+                        ],
+                        "decision_table": {
+                            "headers": [
+                                "Use Case",
+                                "Recommended Approach"
+                            ],
+                            "rows": [
+                                [
+                                    "One-to-few relationship",
+                                    "Embedding"
+                                ],
+                                [
+                                    "Frequent reads together",
+                                    "Embedding"
+                                ],
+                                [
+                                    "Frequent updates",
+                                    "Referencing"
+                                ],
+                                [
+                                    "Large arrays",
+                                    "Referencing"
+                                ],
+                                [
+                                    "Many-to-many",
+                                    "Referencing"
+                                ]
+                            ]
+                        }
+                    }
+                },
+                {
+                    "id": 16,
+                    "title": "Schema Validation",
+                    "english": "Enforcing data structure and validation rules on collections.",
+                    "hinglish": "Collections pe data structure aur validation rules enforce karna.",
+                    "examples": [
+                        "// Create collection with validation",
+                        "db.createCollection('users', {",
+                        "  validator: {",
+                        "    $jsonSchema: {",
+                        "      bsonType: 'object',",
+                        "      required: ['name', 'email', 'age'],",
+                        "      properties: {",
+                        "        name: { bsonType: 'string', description: 'must be string' },",
+                        "        email: { bsonType: 'string', pattern: '^.+@.+\\\\..+$' },",
+                        "        age: { bsonType: 'int', minimum: 18, maximum: 100 },",
+                        "        status: { enum: ['active', 'inactive', 'pending'] }",
+                        "      }",
+                        "    }",
+                        "  },",
+                        "  validationLevel: 'strict',",
+                        "  validationAction: 'error'",
+                        "})",
+                        "",
+                        "// Add validation to existing collection",
+                        "db.runCommand({",
+                        "  collMod: 'users',",
+                        "  validator: { $jsonSchema: { ... } }",
+                        "})"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What does validationLevel: 'moderate' mean?",
+                            "answer": "Applies validation to new updates and inserts, but not to existing invalid documents"
+                        },
+                        {
+                            "question": "validationAction 'warn' aur 'error' me difference?",
+                            "answer": "'warn': log warning but allow operation; 'error': reject invalid operation"
+                        }
+                    ]
+                },
+                {
+                    "id": 17,
+                    "title": "Indexes - Single Field",
+                    "english": "Creating and using single-field indexes for query optimization.",
+                    "hinglish": "Query optimization ke liye single-field indexes create aur use karna.",
+                    "examples": [
+                        "// Create ascending index",
+                        "db.users.createIndex({ email: 1 })",
+                        "",
+                        "// Create descending index",
+                        "db.users.createIndex({ created_at: -1 })",
+                        "",
+                        "// Check existing indexes",
+                        "db.users.getIndexes()",
+                        "",
+                        "// Drop an index",
+                        "db.users.dropIndex('email_1')",
+                        "",
+                        "// Index with unique constraint",
+                        "db.users.createIndex({ email: 1 }, { unique: true })",
+                        "",
+                        "// Sparse index (only indexes documents with the field)",
+                        "db.users.createIndex({ middle_name: 1 }, { sparse: true })"
+                    ],
+                    "practice": [
+                        {
+                            "question": "When is a sparse index useful?",
+                            "answer": "When many documents don't have the indexed field, saves storage space"
+                        },
+                        {
+                            "question": "Unique index duplicate values ko kya karta hai?",
+                            "answer": "Reject karta hai, error throw karta hai"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "example_code": "// Before index\n// Query: db.orders.find({ customer_id: 123 }) - COLLSCAN (slow)\n\n// After creating index\ndb.orders.createIndex({ customer_id: 1 })\n// Query: db.orders.find({ customer_id: 123 }) - IXSCAN (fast)",
+                        "components": [
+                            {
+                                "name": "Index Creation",
+                                "english": "Creating B-tree structure for fast lookups",
+                                "hinglish": "Fast lookups ke liye B-tree structure banana",
+                                "importance": "Dramatically improves query performance",
+                                "tip": "Indexes trade write speed for read speed"
+                            },
+                            {
+                                "name": "Index Types",
+                                "english": "1 for ascending, -1 for descending",
+                                "hinglish": "1 ascending ke liye, -1 descending ke liye",
+                                "importance": "Affects sort performance",
+                                "tip": "For equality queries, order doesn't matter"
+                            }
+                        ],
+                        "index_use_cases": [
+                            {
+                                "query_pattern": "Equality queries",
+                                "example": "db.users.find({ email: 'test@example.com' })",
+                                "index_recommendation": "Single field index on email"
+                            },
+                            {
+                                "query_pattern": "Range queries",
+                                "example": "db.users.find({ age: { $gt: 25 } })",
+                                "index_recommendation": "Single field index on age"
+                            },
+                            {
+                                "query_pattern": "Sort operations",
+                                "example": "db.users.find().sort({ created_at: -1 })",
+                                "index_recommendation": "Single field index on created_at"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 18,
+                    "title": "Indexes - Compound",
+                    "english": "Creating multi-field indexes for complex query patterns.",
+                    "hinglish": "Complex query patterns ke liye multi-field indexes create karna.",
+                    "examples": [
+                        "// Compound index on multiple fields",
+                        "db.users.createIndex({ city: 1, age: -1 })",
+                        "",
+                        "// Query that uses compound index efficiently",
+                        "db.users.find({ city: 'Mumbai' }).sort({ age: -1 })",
+                        "",
+                        "// Another compound index",
+                        "db.orders.createIndex({ customer_id: 1, status: 1, created_at: -1 })",
+                        "",
+                        "// Prefix principle - this index supports:",
+                        "// 1. customer_id queries",
+                        "// 2. customer_id + status queries",
+                        "// 3. customer_id + status + created_at queries"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is the index prefix principle?",
+                            "answer": "Compound index supports queries on any prefix of its fields"
+                        },
+                        {
+                            "question": "Compound index {a:1, b:1, c:1} konsi queries support karega?",
+                            "answer": "a; a,b; a,b,c - but NOT b,c alone"
+                        }
+                    ]
+                },
+                {
+                    "id": 19,
+                    "title": "Indexes - Text Search",
+                    "english": "Creating text indexes for full-text search capabilities.",
+                    "hinglish": "Full-text search ke liye text indexes create karna.",
+                    "examples": [
+                        "// Create text index",
+                        "db.articles.createIndex({ title: 'text', content: 'text' })",
+                        "",
+                        "// Text search query",
+                        "db.articles.find({ $text: { $search: 'mongodb tutorial' } })",
+                        "",
+                        "// Text search with language",
+                        "db.articles.createIndex(",
+                        "  { content: 'text' },",
+                        "  { default_language: 'english' }",
+                        ")",
+                        "",
+                        "// Weighted text index",
+                        "db.articles.createIndex(",
+                        "  { title: 'text', content: 'text' },",
+                        "  { weights: { title: 10, content: 5 } }",
+                        ")",
+                        "",
+                        "// Text search with projection and sort by score",
+                        "db.articles.find(",
+                        "  { $text: { $search: 'database' } },",
+                        "  { score: { $meta: 'textScore' } }",
+                        ").sort({ score: { $meta: 'textScore' } })"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What types of fields can be included in a text index?",
+                            "answer": "String or array of string fields only"
+                        },
+                        {
+                            "question": "Text index me weights ka kya kaam hai?",
+                            "answer": "Different fields ko different importance deta hai scoring me"
+                        }
+                    ]
+                },
+                {
+                    "id": 20,
+                    "title": "Indexes - Geospatial",
+                    "english": "Creating geospatial indexes for location-based queries.",
+                    "hinglish": "Location-based queries ke liye geospatial indexes create karna.",
+                    "examples": [
+                        "// 2dsphere index for spherical geometry",
+                        "db.places.createIndex({ location: '2dsphere' })",
+                        "",
+                        "// GeoJSON point",
+                        "db.places.insertOne({",
+                        "  name: 'Taj Mahal',",
+                        "  location: {",
+                        "    type: 'Point',",
+                        "    coordinates: [78.0421, 27.1751] // [longitude, latitude]",
+                        "  }",
+                        "})",
+                        "",
+                        "// Find places near a location",
+                        "db.places.find({",
+                        "  location: {",
+                        "    $near: {",
+                        "      $geometry: {",
+                        "        type: 'Point',",
+                        "        coordinates: [78.0, 27.0]",
+                        "      },",
+                        "      $maxDistance: 5000 // 5km",
+                        "    }",
+                        "  }",
+                        "})",
+                        "",
+                        "// Find places within a polygon",
+                        "db.places.find({",
+                        "  location: {",
+                        "    $geoWithin: {",
+                        "      $geometry: {",
+                        "        type: 'Polygon',",
+                        "        coordinates: [[/* array of coordinates */]]",
+                        "      }",
+                        "    }",
+                        "  }",
+                        "})"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What's the correct order for coordinates in GeoJSON?",
+                            "answer": "[longitude, latitude] - NOT [latitude, longitude]"
+                        },
+                        {
+                            "question": "2dsphere aur 2d index me difference?",
+                            "answer": "2dsphere spherical calculations ke liye, 2d flat surface ke liye"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "level": "beginner",
+            "order": 1,
+            "topics": [
+            ]
+        },
+        {
+            "level": "intermediate",
+            "order": 2,
+            "topics": [
+            ]
+        },
+        {
+            "level": "advanced",
+            "order": 3,
+            "topics": [
+                {
+                    "id": 21,
+                    "title": "Aggregation Pipeline - $match & $group",
+                    "english": "Using $match to filter documents and $group to group documents for aggregation.",
+                    "hinglish": "$match use karke documents filter karna aur $group se documents ko group karna aggregation ke liye.",
+                    "examples": [
+                        "// Basic aggregation pipeline",
+                        "db.orders.aggregate([",
+                        "  { $match: { status: 'completed', year: 2024 } }, // Filter",
+                        "  { $group: {",
+                        "    _id: '$customer_id', // Group by customer",
+                        "    totalSpent: { $sum: '$amount' }, // Sum amounts",
+                        "    averageOrder: { $avg: '$amount' }, // Average order",
+                        "    orderCount: { $sum: 1 } // Count orders",
+                        "  }},",
+                        "  { $sort: { totalSpent: -1 } } // Sort by highest spent",
+                        "])",
+                        "",
+                        "// Group by month",
+                        "db.sales.aggregate([",
+                        "  { $group: {",
+                        "    _id: {",
+                        "      year: { $year: '$date' },",
+                        "      month: { $month: '$date' }",
+                        "    },",
+                        "    totalRevenue: { $sum: '$revenue' },",
+                        "    uniqueCustomers: { $addToSet: '$customer_id' }",
+                        "  }}",
+                        "])"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What's the difference between $match and find()?",
+                            "answer": "$match is used within aggregation pipeline, find() is a standalone query method"
+                        },
+                        {
+                            "question": "$group me _id field ka kya significance hai?",
+                            "answer": "_id determines grouping key - yahi field ke basis par documents group hote hain"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "aggregation_operators": [
+                            {
+                                "operator": "$sum",
+                                "english": "Calculate sum of values",
+                                "hinglish": "Values ka sum calculate karna",
+                                "example": "{ $sum: '$price' }"
+                            },
+                            {
+                                "operator": "$avg",
+                                "english": "Calculate average value",
+                                "hinglish": "Average value calculate karna",
+                                "example": "{ $avg: '$rating' }"
+                            },
+                            {
+                                "operator": "$min / $max",
+                                "english": "Find minimum/maximum value",
+                                "hinglish": "Minimum/maximum value find karna",
+                                "example": "{ $max: '$score' }"
+                            },
+                            {
+                                "operator": "$push",
+                                "english": "Create array of values",
+                                "hinglish": "Values ka array create karna",
+                                "example": "{ $push: '$product_name' }"
+                            },
+                            {
+                                "operator": "$addToSet",
+                                "english": "Create array of unique values",
+                                "hinglish": "Unique values ka array create karna",
+                                "example": "{ $addToSet: '$category' }"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 22,
+                    "title": "Aggregation Pipeline - $sort & $lookup",
+                    "english": "Sorting results in pipeline and performing joins between collections using $lookup.",
+                    "hinglish": "Pipeline me results sort karna aur $lookup use karke collections ke beech joins perform karna.",
+                    "examples": [
+                        "// Sorting in aggregation",
+                        "db.products.aggregate([",
+                        "  { $match: { category: 'Electronics' } },",
+                        "  { $sort: { price: -1, rating: -1 } }, // Sort by price then rating",
+                        "  { $limit: 10 }",
+                        "])",
+                        "",
+                        "// $lookup for joining collections (similar to SQL JOIN)",
+                        "db.orders.aggregate([",
+                        "  { $match: { status: 'pending' } },",
+                        "  { $lookup: {",
+                        "    from: 'customers', // Collection to join",
+                        "    localField: 'customer_id', // Field from orders",
+                        "    foreignField: '_id', // Field from customers",
+                        "    as: 'customer_info' // Output array field name",
+                        "  }},",
+                        "  { $unwind: '$customer_info' } // Convert array to object",
+                        "])",
+                        "",
+                        "// Multiple $lookup stages",
+                        "db.orders.aggregate([",
+                        "  { $lookup: {",
+                        "    from: 'customers',",
+                        "    localField: 'customer_id',",
+                        "    foreignField: '_id',",
+                        "    as: 'customer'",
+                        "  }},",
+                        "  { $lookup: {",
+                        "    from: 'products',",
+                        "    localField: 'product_id',",
+                        "    foreignField: '_id',",
+                        "    as: 'product'",
+                        "  }},",
+                        "  { $project: {",
+                        "    order_id: 1,",
+                        "    customer_name: '$customer.name',",
+                        "    product_name: '$product.name',",
+                        "    amount: 1,",
+                        "    date: 1",
+                        "  }}",
+                        "])"
+                    ],
+                    "practice": [
+                        {
+                            "question": "When to use $unwind with $lookup?",
+                            "answer": "When you want to work with the joined document as an object instead of array"
+                        },
+                        {
+                            "question": "$lookup performance considerations?",
+                            "answer": "$lookup can be expensive; ensure foreignField is indexed"
+                        }
+                    ]
+                },
+                {
+                    "id": 23,
+                    "title": "Transactions & ACID Compliance",
+                    "english": "Using multi-document transactions for atomic operations across collections.",
+                    "hinglish": "Multiple collections ke across atomic operations ke liye multi-document transactions use karna.",
+                    "examples": [
+                        "// Transaction example",
+                        "const session = db.getMongo().startSession();",
+                        "",
+                        "try {",
+                        "  session.startTransaction({",
+                        "    readConcern: { level: 'snapshot' },",
+                        "    writeConcern: { w: 'majority' }",
+                        "  });",
+                        "",
+                        "  // Operations in transaction",
+                        "  db.accounts.updateOne(",
+                        "    { _id: 'account1', balance: { $gte: 100 } },",
+                        "    { $inc: { balance: -100 } },",
+                        "    { session }",
+                        "  );",
+                        "",
+                        "  db.accounts.updateOne(",
+                        "    { _id: 'account2' },",
+                        "    { $inc: { balance: 100 } },",
+                        "    { session }",
+                        "  );",
+                        "",
+                        "  // Commit if all successful",
+                        "  session.commitTransaction();",
+                        "} catch (error) {",
+                        "  // Abort on any error",
+                        "  session.abortTransaction();",
+                        "  throw error;",
+                        "} finally {",
+                        "  session.endSession();",
+                        "}",
+                        "",
+                        "// Transaction with timeout",
+                        "session.startTransaction({",
+                        "  maxTimeMS: 5000 // 5 second timeout",
+                        "});"
+                    ],
+                    "practice": [
+                        {
+                            "question": "When should you use transactions in MongoDB?",
+                            "answer": "When you need atomic operations across multiple documents or collections"
+                        },
+                        {
+                            "question": "Transactions performance impact?",
+                            "answer": "Transactions add overhead; use only when necessary for data consistency"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "acid_properties": [
+                            {
+                                "property": "Atomicity",
+                                "english": "All operations succeed or all fail",
+                                "hinglish": "Sab operations succeed ya sab fail",
+                                "example": "Bank transfer - debit and credit must both complete"
+                            },
+                            {
+                                "property": "Consistency",
+                                "english": "Data remains valid after transaction",
+                                "hinglish": "Transaction ke baad data valid rahe",
+                                "example": "Account balance never negative"
+                            },
+                            {
+                                "property": "Isolation",
+                                "english": "Transactions don't interfere",
+                                "hinglish": "Transactions interfere nahi karte",
+                                "example": "Read uncommitted vs snapshot isolation"
+                            },
+                            {
+                                "property": "Durability",
+                                "english": "Committed transactions persist",
+                                "hinglish": "Committed transactions permanently save",
+                                "example": "Write to disk, replication"
+                            }
+                        ],
+                        "transaction_limits": [
+                            "Maximum 60 second duration",
+                            "All collections must be in same replica set or shard",
+                            "Operations must be on existing collections"
+                        ]
+                    }
+                },
+                {
+                    "id": 24,
+                    "title": "Change Streams & Real-time Data",
+                    "english": "Monitoring real-time changes to collections using change streams.",
+                    "hinglish": "Change streams use karke collections me real-time changes monitor karna.",
+                    "examples": [
+                        "// Open change stream on a collection",
+                        "const changeStream = db.orders.watch();",
+                        "",
+                        "// Listen for changes",
+                        "changeStream.on('change', (change) => {",
+                        "  console.log('Change detected:', change);",
+                        "  // Process: send notification, update cache, etc.",
+                        "});",
+                        "",
+                        "// Filter specific changes",
+                        "const changeStream = db.orders.watch([",
+                        "  { $match: { 'operationType': 'insert' } },",
+                        "  { $match: { 'fullDocument.status': 'pending' } }",
+                        "]);",
+                        "",
+                        "// Watch specific document fields",
+                        "const changeStream = db.orders.watch([",
+                        "  { $match: { 'updateDescription.updatedFields.status': { $exists: true } } }",
+                        "]);",
+                        "",
+                        "// Resume from specific point (after restart)",
+                        "const resumeToken = '82634B1F...'; // Saved from previous",
+                        "const changeStream = db.orders.watch([], { resumeAfter: resumeToken });",
+                        "",
+                        "// Using change streams in application",
+                        "async function monitorOrders() {",
+                        "  const pipeline = [",
+                        "    { $match: { 'operationType': { $in: ['insert', 'update'] } } }",
+                        "  ];",
+                        "  ",
+                        "  const options = { fullDocument: 'updateLookup' };",
+                        "  const changeStream = db.orders.watch(pipeline, options);",
+                        "  ",
+                        "  for await (const change of changeStream) {",
+                        "    switch (change.operationType) {",
+                        "      case 'insert':",
+                        "        notifyNewOrder(change.fullDocument);",
+                        "        break;",
+                        "      case 'update':",
+                        "        handleOrderUpdate(change.documentKey, change.updateDescription);",
+                        "        break;",
+                        "    }",
+                        "  }",
+                        "}"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What are typical use cases for change streams?",
+                            "answer": "Real-time notifications, cache invalidation, data synchronization, audit logging"
+                        },
+                        {
+                            "question": "Change streams replica set requirement?",
+                            "answer": "Replica set ya sharded cluster required, standalone MongoDB me nahi chalta"
+                        }
+                    ]
+                },
+                {
+                    "id": 25,
+                    "title": "Database Triggers",
+                    "english": "Creating serverless functions triggered by database events.",
+                    "hinglish": "Database events se trigger hone wale serverless functions create karna.",
+                    "examples": [
+                        "// MongoDB Atlas Trigger example",
+                        "exports = async function(changeEvent) {",
+                        "  // Get the changed document",
+                        "  const doc = changeEvent.fullDocument;",
+                        "  ",
+                        "  // Example: Send welcome email for new user",
+                        "  if (changeEvent.operationType === 'insert' &&",
+                        "      changeEvent.ns.coll === 'users') {",
+                        "    ",
+                        "    const { email, name } = doc;",
+                        "    ",
+                        "    // Call email service",
+                        "    await context.services.get('EmailService').send({",
+                        "      to: email,",
+                        "      subject: 'Welcome!',",
+                        "      body: `Hello ${name}, welcome to our platform!`",
+                        "    });",
+                        "    ",
+                        "    console.log(`Welcome email sent to ${email}`);",
+                        "  }",
+                        "  ",
+                        "  // Example: Update denormalized data",
+                        "  if (changeEvent.operationType === 'update' &&",
+                        "      changeEvent.ns.coll === 'orders') {",
+                        "    ",
+                        "    const orderId = changeEvent.documentKey._id;",
+                        "    const updatedFields = changeEvent.updateDescription.updatedFields;",
+                        "    ",
+                        "    // If status updated to 'shipped', update user's order count",
+                        "    if (updatedFields.status === 'shipped') {",
+                        "      const order = await context.services.get('mongodb-atlas')",
+                        "        .db('ecommerce')",
+                        "        .collection('orders')",
+                        "        .findOne({ _id: orderId });",
+                        "      ",
+                        "      await context.services.get('mongodb-atlas')",
+                        "        .db('ecommerce')",
+                        "        .collection('users')",
+                        "        .updateOne(",
+                        "          { _id: order.user_id },",
+                        "          { $inc: { shipped_orders: 1 } }",
+                        "        );",
+                        "    }",
+                        "  }",
+                        "};",
+                        "",
+                        "// Scheduled trigger (run every hour)",
+                        "exports = function() {",
+                        "  // Clean up old data",
+                        "  const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);",
+                        "  ",
+                        "  return context.services.get('mongodb-atlas')",
+                        "    .db('logs')",
+                        "    .collection('access_logs')",
+                        "    .deleteMany({ timestamp: { $lt: oneWeekAgo } });",
+                        "};"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What's the difference between change streams and triggers?",
+                            "answer": "Change streams are low-level API, triggers are managed functions in Atlas"
+                        },
+                        {
+                            "question": "Atlas triggers billing consideration?",
+                            "answer": "Triggers consume compute time; monitor usage for cost control"
+                        }
+                    ]
+                },
+                {
+                    "id": 26,
+                    "title": "Database Administration - Backups",
+                    "english": "Implementing backup strategies and disaster recovery plans.",
+                    "hinglish": "Backup strategies aur disaster recovery plans implement karna.",
+                    "examples": [
+                        "// MongoDB dump (backup) command",
+                        "mongodump --uri \"mongodb://localhost:27017\" --out /backup/path",
+                        "",
+                        "// Backup specific database",
+                        "mongodump --db mydatabase --out /backup/",
+                        "",
+                        "// Backup with authentication",
+                        "mongodump \\",
+                        "  --uri \"mongodb://admin:password@localhost:27017\" \\",
+                        "  --out /backup/$(date +%Y%m%d)",
+                        "",
+                        "// MongoDB restore command",
+                        "mongorestore --uri \"mongodb://localhost:27017\" /backup/path",
+                        "",
+                        "// Point-in-time recovery (oplog)",
+                        "mongodump --oplog --out /backup/",
+                        "mongorestore --oplogReplay /backup/",
+                        "",
+                        "// Atlas automated backups",
+                        "// 1. Go to Atlas dashboard",
+                        "// 2. Select cluster → Backup → Snapshot Schedule",
+                        "// 3. Configure: Daily, Weekly, Monthly snapshots",
+                        "// 4. Set retention policy (e.g., 30 days)",
+                        "",
+                        "// Backup verification script",
+                        "#!/bin/bash",
+                        "BACKUP_DIR=\"/backup/$(date +%Y%m%d)\"",
+                        "mongodump --uri=\"$MONGO_URI\" --out=\"$BACKUP_DIR\"",
+                        "",
+                        "# Verify backup",
+                        "if [ -f \"$BACKUP_DIR/mydatabase/users.metadata.json\" ]; then",
+                        "  echo \"Backup successful\"",
+                        "  # Upload to cloud storage",
+                        "  aws s3 sync \"$BACKUP_DIR\" \"s3://my-backup-bucket/\"",
+                        "else",
+                        "  echo \"Backup failed\"",
+                        "  exit 1",
+                        "fi"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What's the 3-2-1 backup rule?",
+                            "answer": "3 copies of data, 2 different media types, 1 copy offsite"
+                        },
+                        {
+                            "question": "mongodump vs filesystem snapshot?",
+                            "answer": "mongodump logical backup, filesystem snapshot physical backup (faster for large DB)"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "backup_types": [
+                            {
+                                "type": "Logical Backup",
+                                "tool": "mongodump/mongorestore",
+                                "pros": "Database-level, selective restore",
+                                "cons": "Slower for large databases"
+                            },
+                            {
+                                "type": "Physical Backup",
+                                "tool": "Filesystem snapshots",
+                                "pros": "Fast, consistent",
+                                "cons": "Requires storage-level access"
+                            },
+                            {
+                                "type": "Cloud Managed",
+                                "tool": "Atlas Backups",
+                                "pros": "Automatic, point-in-time",
+                                "cons": "Vendor lock-in"
+                            }
+                        ],
+                        "recovery_strategies": [
+                            "Full backup daily + incremental hourly",
+                            "Test restore procedure quarterly",
+                            "Document recovery steps clearly"
+                        ]
+                    }
+                },
+                {
+                    "id": 27,
+                    "title": "Performance Tuning - Explain & Profiling",
+                    "english": "Analyzing query performance using explain() and database profiler.",
+                    "hinglish": "explain() aur database profiler use karke query performance analyze karna.",
+                    "examples": [
+                        "// Basic explain()",
+                        "db.users.find({ age: { $gt: 25 } }).explain()",
+                        "",
+                        "// Explain with verbosity",
+                        "db.users.find({ email: 'test@example.com' }).explain('executionStats')",
+                        "",
+                        "// Explain aggregation pipeline",
+                        "db.orders.aggregate([",
+                        "  { $match: { status: 'completed' } },",
+                        "  { $group: { _id: '$customer_id', total: { $sum: '$amount' } } }",
+                        "]).explain()",
+                        "",
+                        "// Enable database profiler",
+                        "db.setProfilingLevel(1, 50) // Log queries slower than 50ms",
+                        "",
+                        "// Check profiler level",
+                        "db.getProfilingLevel()",
+                        "",
+                        "// View profiler data",
+                        "db.system.profile.find().sort({ ts: -1 }).limit(5)",
+                        "",
+                        "// Analyze slow queries",
+                        "db.system.profile.find({",
+                        "  millis: { $gt: 100 }, // Queries taking >100ms",
+                        "  op: { $in: ['query', 'update', 'remove'] }",
+                        "}).sort({ millis: -1 })",
+                        "",
+                        "// Common performance patterns to check:",
+                        "// 1. COLLSCAN (collection scan) - needs index",
+                        "// 2. Large nReturned vs totalKeysExamined",
+                        "// 3. SORT stage without index",
+                        "// 4. Large docs returned (consider projection)"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What does 'IXSCAN' in explain output mean?",
+                            "answer": "Index scan - query is using an index (good)"
+                        },
+                        {
+                            "question": "Profiler level 0, 1, 2 difference?",
+                            "answer": "0=off, 1=log slow ops, 2=log all ops"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "explain_output_sections": [
+                            {
+                                "section": "queryPlanner",
+                                "purpose": "Shows winning plan and rejected plans",
+                                "key_metrics": "stage (IXSCAN/COLLSCAN), indexName"
+                            },
+                            {
+                                "section": "executionStats",
+                                "purpose": "Actual execution statistics",
+                                "key_metrics": "nReturned, executionTimeMillis, totalKeysExamined"
+                            },
+                            {
+                                "section": "serverInfo",
+                                "purpose": "Server configuration",
+                                "key_metrics": "host, version, port"
+                            }
+                        ],
+                        "performance_indicators": [
+                            "nReturned ≈ totalKeysExamined (good index usage)",
+                            "executionTimeMillis < 100ms (acceptable)",
+                            "COLLSCAN with large collections (needs index)"
+                        ]
+                    }
+                },
+                {
+                    "id": 28,
+                    "title": "Sharding & Horizontal Scaling",
+                    "english": "Distributing data across multiple servers using sharding.",
+                    "hinglish": "Sharding use karke data ko multiple servers par distribute karna.",
+                    "examples": [
+                        "// Enable sharding on database",
+                        "sh.enableSharding('ecommerce')",
+                        "",
+                        "// Create shard key on collection",
+                        "sh.shardCollection('ecommerce.orders', { customer_id: 1 })",
+                        "",
+                        "// Shard with hashed key (for even distribution)",
+                        "sh.shardCollection('ecommerce.logs', { _id: 'hashed' })",
+                        "",
+                        "// Compound shard key",
+                        "sh.shardCollection('ecommerce.products', { category: 1, _id: 1 })",
+                        "",
+                        "// Check sharding status",
+                        "sh.status()",
+                        "",
+                        "// Add new shard to cluster",
+                        "sh.addShard('shard2/localhost:27018')",
+                        "",
+                        "// Remove shard (draining data first)",
+                        "sh.removeShard('shard1/localhost:27017')",
+                        "",
+                        "// Shard key considerations:",
+                        "// 1. High cardinality (many unique values)",
+                        "// 2. Write distribution (avoid hot spots)",
+                        "// 3. Query patterns (support common queries)",
+                        "",
+                        "// Monitoring shard distribution",
+                        "db.orders.getShardDistribution()"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is a good shard key?",
+                            "answer": "High cardinality, supports query patterns, distributes writes evenly"
+                        },
+                        {
+                            "question": "Shard key change possible?",
+                            "answer": "No, shard key cannot be changed after sharding - choose carefully!"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "sharding_components": [
+                            {
+                                "component": "Shard",
+                                "role": "Stores subset of data",
+                                "hinglish": "Data ka subset store karta hai",
+                                "tip": "Each shard is a replica set"
+                            },
+                            {
+                                "component": "Config Server",
+                                "role": "Metadata storage",
+                                "hinglish": "Metadata store karta hai",
+                                "tip": "Stores chunk mappings and shard info"
+                            },
+                            {
+                                "component": "Mongos",
+                                "role": "Query router",
+                                "hinglish": "Query router ka kaam karta hai",
+                                "tip": "Clients connect to mongos, not directly to shards"
+                            }
+                        ],
+                        "shard_key_strategies": [
+                            {
+                                "strategy": "Hashed Sharding",
+                                "use_case": "Even data distribution",
+                                "pros": "Balances writes",
+                                "cons": "Range queries inefficient"
+                            },
+                            {
+                                "strategy": "Ranged Sharding",
+                                "use_case": "Location-based data",
+                                "pros": "Efficient range queries",
+                                "cons": "Potential hotspot"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": 29,
+                    "title": "Replica Sets & High Availability",
+                    "english": "Creating replica sets for data redundancy and high availability.",
+                    "hinglish": "Data redundancy aur high availability ke liye replica sets create karna.",
+                    "examples": [
+                        "// Initialize replica set",
+                        "rs.initiate({",
+                        "  _id: 'rs0',",
+                        "  members: [",
+                        "    { _id: 0, host: 'mongo1:27017' }, // Primary",
+                        "    { _id: 1, host: 'mongo2:27017' }, // Secondary",
+                        "    { _id: 2, host: 'mongo3:27017', arbiterOnly: true } // Arbiter",
+                        "  ]",
+                        "})",
+                        "",
+                        "// Check replica set status",
+                        "rs.status()",
+                        "",
+                        "// Add secondary member",
+                        "rs.add('mongo4:27017')",
+                        "",
+                        "// Remove member",
+                        "rs.remove('mongo3:27017')",
+                        "",
+                        "// Step down primary (for maintenance)",
+                        "rs.stepDown(300) // Step down for 300 seconds",
+                        "",
+                        "// Replica set configuration",
+                        "cfg = rs.conf()",
+                        "cfg.members[0].priority = 2 // Make this member more likely to become primary",
+                        "cfg.members[1].hidden = true // Hide from clients (for reporting)",
+                        "cfg.members[1].priority = 0 // Cannot become primary",
+                        "rs.reconfig(cfg)",
+                        "",
+                        "// Read from secondary",
+                        "db.getMongo().setReadPref('secondary')",
+                        "",
+                        "// Write concern examples",
+                        "db.orders.insertOne({ item: 'laptop' }, {",
+                        "  writeConcern: { w: 'majority', wtimeout: 5000 }",
+                        "})"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Minimum members for replica set?",
+                            "answer": "3 members recommended (or 2 members + 1 arbiter)"
+                        },
+                        {
+                            "question": "Arbiter ka role?",
+                            "answer": "Voting ke liye (no data storage), tie break situations me help karta hai"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "replica_set_roles": [
+                            {
+                                "role": "Primary",
+                                "responsibility": "Handles all writes",
+                                "hinglish": "Sab writes handle karta hai",
+                                "tip": "Only one primary at a time"
+                            },
+                            {
+                                "role": "Secondary",
+                                "responsibility": "Replicates data, can handle reads",
+                                "hinglish": "Data replicate karta hai, reads handle kar sakta hai",
+                                "tip": "Can be configured for specific purposes (hidden, delayed)"
+                            },
+                            {
+                                "role": "Arbiter",
+                                "responsibility": "Votes in elections only",
+                                "hinglish": "Sirf elections me vote deta hai",
+                                "tip": "No data storage, minimal resource usage"
+                            }
+                        ],
+                        "failover_scenarios": [
+                            "Primary fails → automatic election → new primary",
+                            "Network partition → majority elects new primary",
+                            "Data consistency maintained through oplog"
+                        ]
+                    }
+                },
+                {
+                    "id": 30,
+                    "title": "Security - Authentication & Encryption",
+                    "english": "Implementing authentication, authorization, and data encryption.",
+                    "hinglish": "Authentication, authorization aur data encryption implement karna.",
+                    "examples": [
+                        "// Enable authentication (mongod.conf)",
+                        "security:",
+                        "  authorization: enabled",
+                        "",
+                        "// Create admin user",
+                        "use admin",
+                        "db.createUser({",
+                        "  user: 'admin',",
+                        "  pwd: 'StrongPassword123!',",
+                        "  roles: ['root']",
+                        "})",
+                        "",
+                        "// Create application user with specific privileges",
+                        "use myapp",
+                        "db.createUser({",
+                        "  user: 'appuser',",
+                        "  pwd: 'AppPassword456!',",
+                        "  roles: [",
+                        "    { role: 'readWrite', db: 'myapp' },",
+                        "    { role: 'read', db: 'reports' }",
+                        "  ]",
+                        "})",
+                        "",
+                        "// Built-in roles:",
+                        "// read, readWrite, dbAdmin, userAdmin, clusterAdmin, backup, restore",
+                        "",
+                        "// Create custom role",
+                        "db.createRole({",
+                        "  role: 'dataAnalyst',",
+                        "  privileges: [",
+                        "    {",
+                        "      resource: { db: 'sales', collection: '' },",
+                        "      actions: ['find', 'aggregate']",
+                        "    }",
+                        "  ],",
+                        "  roles: []",
+                        "})",
+                        "",
+                        "// Enable TLS/SSL encryption",
+                        "net:",
+                        "  ssl:",
+                        "    mode: requireSSL",
+                        "    PEMKeyFile: /path/to/server.pem",
+                        "    CAFile: /path/to/ca.pem",
+                        "",
+                        "// Field-level encryption (Client-Side)",
+                        "const clientEncryption = new ClientEncryption(client, {",
+                        "  keyVaultNamespace: 'encryption.__keyVault',",
+                        "  kmsProviders: {",
+                        "    local: { key: base64EncodedKey }",
+                        "  }",
+                        "});",
+                        "",
+                        "// Encrypt sensitive field",
+                        "const encryptedSSN = await clientEncryption.encrypt(",
+                        "  '123-45-6789',",
+                        "  {",
+                        "    algorithm: 'AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic',",
+                        "    keyId: keyId",
+                        "  }",
+                        ");",
+                        "",
+                        "// Network security (bind IP)",
+                        "net:",
+                        "  bindIp: 127.0.0.1,192.168.1.100 // Only specific IPs"
+                    ],
+                    "practice": [
+                        {
+                            "question": "Difference between authentication and authorization?",
+                            "answer": "Authentication verifies identity, authorization checks permissions"
+                        },
+                        {
+                            "question": "TLS at-rest encryption vs in-transit?",
+                            "answer": "At-rest: data on disk encrypted; In-transit: network traffic encrypted"
+                        }
+                    ],
+                    "detailed_explanation": {
+                        "security_layers": [
+                            {
+                                "layer": "Network Security",
+                                "measures": "Firewall, VPN, IP whitelisting",
+                                "hinglish": "Network access control"
+                            },
+                            {
+                                "layer": "Transport Security",
+                                "measures": "TLS/SSL encryption",
+                                "hinglish": "Data transfer encryption"
+                            },
+                            {
+                                "layer": "Authentication",
+                                "measures": "Username/password, LDAP, Kerberos",
+                                "hinglish": "User identity verify"
+                            },
+                            {
+                                "layer": "Authorization",
+                                "measures": "Role-based access control",
+                                "hinglish": "Permission management"
+                            },
+                            {
+                                "layer": "Data Security",
+                                "measures": "Encryption at-rest, field-level encryption",
+                                "hinglish": "Data encryption"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "level": "integration",
+            "order": 4,
+            "topics": [
+                {
+                    "id": 31,
+                    "title": "Node.js Integration with Mongoose",
+                    "english": "Connecting Node.js applications to MongoDB using Mongoose ODM.",
+                    "hinglish": "Mongoose ODM use karke Node.js applications ko MongoDB se connect karna.",
+                    "examples": [
+                        "// Installation",
+                        "npm install mongoose",
+                        "",
+                        "// Basic connection",
+                        "const mongoose = require('mongoose');",
+                        "",
+                        "mongoose.connect('mongodb://localhost:27017/mydatabase', {",
+                        "  useNewUrlParser: true,",
+                        "  useUnifiedTopology: true",
+                        "});",
+                        "",
+                        "// Define schema",
+                        "const userSchema = new mongoose.Schema({",
+                        "  name: { type: String, required: true },",
+                        "  email: {",
+                        "    type: String,",
+                        "    required: true,",
+                        "    unique: true,",
+                        "    match: /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/",
+                        "  },",
+                        "  age: { type: Number, min: 18, max: 100 },",
+                        "  createdAt: { type: Date, default: Date.now }",
+                        "});",
+                        "",
+                        "// Create model",
+                        "const User = mongoose.model('User', userSchema);",
+                        "",
+                        "// CRUD operations",
+                        "// Create",
+                        "const newUser = await User.create({",
+                        "  name: 'Rahul',",
+                        "  email: 'rahul@example.com',",
+                        "  age: 25",
+                        "});",
+                        "",
+                        "// Read",
+                        "const users = await User.find({ age: { $gt: 20 } });",
+                        "const user = await User.findOne({ email: 'rahul@example.com' });",
+                        "",
+                        "// Update",
+                        "await User.updateOne(",
+                        "  { _id: userId },",
+                        "  { $set: { age: 26 } }",
+                        ");",
+                        "",
+                        "// Delete",
+                        "await User.deleteOne({ _id: userId });",
+                        "",
+                        "// Middleware (hooks)",
+                        "userSchema.pre('save', function(next) {",
+                        "  console.log('Saving user:', this.name);",
+                        "  next();",
+                        "});",
+                        "",
+                        "userSchema.post('save', function(doc) {",
+                        "  console.log('User saved:', doc.name);",
+                        "});",
+                        "",
+                        "// Virtual fields",
+                        "userSchema.virtual('fullName').get(function() {",
+                        "  return `${this.firstName} ${this.lastName}`;",
+                        "});",
+                        "",
+                        "// Instance methods",
+                        "userSchema.methods.isAdult = function() {",
+                        "  return this.age >= 18;",
+                        "};",
+                        "",
+                        "// Static methods",
+                        "userSchema.statics.findByEmail = function(email) {",
+                        "  return this.find({ email: new RegExp(email, 'i') });",
+                        "};"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What is Mongoose ODM?",
+                            "answer": "Object Data Modeling library for MongoDB and Node.js, provides schema validation"
+                        },
+                        {
+                            "question": "Mongoose schema vs MongoDB schema?",
+                            "answer": "Mongoose enforces schema at application level, MongoDB is schema-less"
+                        }
+                    ]
+                },
+                {
+                    "id": 32,
+                    "title": "Python Integration with PyMongo",
+                    "english": "Connecting Python applications to MongoDB using PyMongo driver.",
+                    "hinglish": "PyMongo driver use karke Python applications ko MongoDB se connect karna.",
+                    "examples": [
+                        "// Installation",
+                        "pip install pymongo",
+                        "",
+                        "// Basic connection",
+                        "from pymongo import MongoClient",
+                        "",
+                        "client = MongoClient('mongodb://localhost:27017/')",
+                        "db = client['mydatabase']",
+                        "collection = db['users']",
+                        "",
+                        "// CRUD operations",
+                        "# Create",
+                        "user_data = {",
+                        "    'name': 'Rahul',",
+                        "    'email': 'rahul@example.com',",
+                        "    'age': 25",
+                        "}",
+                        "result = collection.insert_one(user_data)",
+                        "print(f'Inserted ID: {result.inserted_id}')",
+                        "",
+                        "# Insert multiple",
+                        "users_list = [",
+                        "    {'name': 'Priya', 'age': 22},",
+                        "    {'name': 'Amit', 'age': 30}",
+                        "]",
+                        "result = collection.insert_many(users_list)",
+                        "",
+                        "# Read",
+                        "# Find all",
+                        "for user in collection.find():",
+                        "    print(user)",
+                        "",
+                        "# Find with filter",
+                        "users = collection.find({'age': {'$gt': 20}})",
+                        "for user in users:",
+                        "    print(user['name'])",
+                        "",
+                        "# Find one",
+                        "user = collection.find_one({'email': 'rahul@example.com'})",
+                        "",
+                        "# Update",
+                        "collection.update_one(",
+                        "    {'email': 'rahul@example.com'},",
+                        "    {'$set': {'age': 26}}",
+                        ")",
+                        "",
+                        "# Update multiple",
+                        "collection.update_many(",
+                        "    {'age': {'$lt': 18}},",
+                        "    {'$set': {'category': 'minor'}}",
+                        ")",
+                        "",
+                        "# Delete",
+                        "collection.delete_one({'email': 'rahul@example.com'})",
+                        "collection.delete_many({'age': {'$gt': 100}})",
+                        "",
+                        "# Aggregation",
+                        "pipeline = [",
+                        "    {'$match': {'status': 'completed'}},",
+                        "    {'$group': {",
+                        "        '_id': '$customer_id',",
+                        "        'total_spent': {'$sum': '$amount'}",
+                        "    }},",
+                        "    {'$sort': {'total_spent': -1}}",
+                        "]",
+                        "",
+                        "results = collection.aggregate(pipeline)",
+                        "for result in results:",
+                        "    print(result)",
+                        "",
+                        "# Connection pooling",
+                        "client = MongoClient(",
+                        "    'mongodb://localhost:27017/',",
+                        "    maxPoolSize=50,  # Maximum connections",
+                        "    minPoolSize=10,  # Minimum connections",
+                        "    connectTimeoutMS=30000,  # 30 seconds",
+                        "    socketTimeoutMS=30000",
+                        ")"
+                    ],
+                    "practice": [
+                        {
+                            "question": "PyMongo vs MongoEngine?",
+                            "answer": "PyMongo is low-level driver, MongoEngine is ODM (like Mongoose for Python)"
+                        },
+                        {
+                            "question": "How to handle connection errors in PyMongo?",
+                            "answer": "Use try-except blocks, implement retry logic with exponential backoff"
+                        }
+                    ]
+                },
+                {
+                    "id": 33,
+                    "title": "MERN Stack Integration",
+                    "english": "Building full-stack applications with MongoDB, Express, React, and Node.js.",
+                    "hinglish": "MongoDB, Express, React, aur Node.js ke saath full-stack applications build karna.",
+                    "examples": [
+                        "// Backend (Node.js + Express + Mongoose)",
+                        "// server.js",
+                        "const express = require('express');",
+                        "const mongoose = require('mongoose');",
+                        "const cors = require('cors');",
+                        "",
+                        "const app = express();",
+                        "",
+                        "// Middleware",
+                        "app.use(cors());",
+                        "app.use(express.json());",
+                        "",
+                        "// MongoDB connection",
+                        "mongoose.connect(process.env.MONGODB_URI, {",
+                        "  useNewUrlParser: true,",
+                        "  useUnifiedTopology: true",
+                        "});",
+                        "",
+                        "// User model",
+                        "const UserSchema = new mongoose.Schema({",
+                        "  name: String,",
+                        "  email: { type: String, unique: true },",
+                        "  password: String,",
+                        "}, { timestamps: true });",
+                        "",
+                        "const User = mongoose.model('User', UserSchema);",
+                        "",
+                        "// Routes",
+                        "app.post('/api/register', async (req, res) => {",
+                        "  try {",
+                        "    const { name, email, password } = req.body;",
+                        "    const user = await User.create({ name, email, password });",
+                        "    res.status(201).json(user);",
+                        "  } catch (error) {",
+                        "    res.status(400).json({ error: error.message });",
+                        "  }",
+                        "});",
+                        "",
+                        "app.get('/api/users', async (req, res) => {",
+                        "  try {",
+                        "    const users = await User.find();",
+                        "    res.json(users);",
+                        "  } catch (error) {",
+                        "    res.status(500).json({ error: error.message });",
+                        "  }",
+                        "});",
+                        "",
+                        "// Frontend (React)",
+                        "// App.js",
+                        "import React, { useState, useEffect } from 'react';",
+                        "import axios from 'axios';",
+                        "",
+                        "function App() {",
+                        "  const [users, setUsers] = useState([]);",
+                        "  const [formData, setFormData] = useState({",
+                        "    name: '',",
+                        "    email: '',",
+                        "    password: ''",
+                        "  });",
+                        "",
+                        "  // Fetch users on component mount",
+                        "  useEffect(() => {",
+                        "    fetchUsers();",
+                        "  }, []);",
+                        "",
+                        "  const fetchUsers = async () => {",
+                        "    try {",
+                        "      const response = await axios.get('http://localhost:5000/api/users');",
+                        "      setUsers(response.data);",
+                        "    } catch (error) {",
+                        "      console.error('Error fetching users:', error);",
+                        "    }",
+                        "  };",
+                        "",
+                        "  const handleSubmit = async (e) => {",
+                        "    e.preventDefault();",
+                        "    try {",
+                        "      await axios.post('http://localhost:5000/api/register', formData);",
+                        "      fetchUsers(); // Refresh list",
+                        "      setFormData({ name: '', email: '', password: '' }); // Reset form",
+                        "    } catch (error) {",
+                        "      console.error('Registration error:', error);",
+                        "    }",
+                        "  };",
+                        "",
+                        "  return (",
+                        "    <div className=\"App\">",
+                        "      <h1>User Registration</h1>",
+                        "      <form onSubmit={handleSubmit}>",
+                        "        <input",
+                        "          type=\"text\"",
+                        "          placeholder=\"Name\"",
+                        "          value={formData.name}",
+                        "          onChange={(e) => setFormData({...formData, name: e.target.value})}",
+                        "        />",
+                        "        {/* Similar for email and password */}",
+                        "        <button type=\"submit\">Register</button>",
+                        "      </form>",
+                        "      ",
+                        "      <h2>Registered Users</h2>",
+                        "      <ul>",
+                        "        {users.map(user => (",
+                        "          <li key={user._id}>{user.name} - {user.email}</li>",
+                        "        ))}",
+                        "      </ul>",
+                        "    </div>",
+                        "  );",
+                        "}",
+                        "",
+                        "// Environment variables (.env)",
+                        "MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/mydatabase",
+                        "PORT=5000",
+                        "",
+                        "// Deployment to Heroku/Atlas",
+                        "// 1. Push code to GitHub",
+                        "// 2. Connect Heroku to GitHub",
+                        "// 3. Add MongoDB Atlas connection string to Heroku config vars",
+                        "// 4. Deploy"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What are the key components of MERN stack?",
+                            "answer": "MongoDB (database), Express (backend framework), React (frontend library), Node.js (runtime)"
+                        },
+                        {
+                            "question": "How to handle CORS in MERN stack?",
+                            "answer": "Use cors middleware in Express: app.use(cors())"
+                        }
+                    ]
+                },
+                {
+                    "id": 34,
+                    "title": "Project: E-commerce Backend",
+                    "english": "Building a complete e-commerce backend with MongoDB.",
+                    "hinglish": "MongoDB ke saath complete e-commerce backend build karna.",
+                    "examples": [
+                        "// Database Schema Design",
+                        "// products collection",
+                        "{",
+                        "  _id: ObjectId,",
+                        "  name: 'iPhone 15',",
+                        "  description: 'Latest iPhone model',",
+                        "  price: 999.99,",
+                        "  category: 'Electronics',",
+                        "  stock: 100,",
+                        "  images: ['iphone1.jpg', 'iphone2.jpg'],",
+                        "  attributes: {",
+                        "    color: 'Black',",
+                        "    storage: '256GB',",
+                        "    brand: 'Apple'",
+                        "  },",
+                        "  ratings: [",
+                        "    { user_id: ObjectId, rating: 5, comment: 'Great phone!' }",
+                        "  ],",
+                        "  created_at: ISODate",
+                        "}",
+                        "",
+                        "// users collection",
+                        "{",
+                        "  _id: ObjectId,",
+                        "  name: 'Rahul Sharma',",
+                        "  email: 'rahul@example.com',",
+                        "  password: 'hashed_password',",
+                        "  address: {",
+                        "    street: '123 Main St',",
+                        "    city: 'Mumbai',",
+                        "    country: 'India',",
+                        "    zip: '400001'",
+                        "  },",
+                        "  cart: [",
+                        "    {",
+                        "      product_id: ObjectId,",
+                        "      quantity: 2,",
+                        "      added_at: ISODate",
+                        "    }",
+                        "  ],",
+                        "  wishlist: [ObjectId], // Array of product IDs",
+                        "  orders: [ObjectId] // Array of order IDs",
+                        "}",
+                        "",
+                        "// orders collection",
+                        "{",
+                        "  _id: ObjectId,",
+                        "  user_id: ObjectId,",
+                        "  items: [",
+                        "    {",
+                        "      product_id: ObjectId,",
+                        "      name: 'iPhone 15',",
+                        "      quantity: 1,",
+                        "      price_at_purchase: 999.99",
+                        "    }",
+                        "  ],",
+                        "  total_amount: 999.99,",
+                        "  shipping_address: { /* address object */ },",
+                        "  payment_status: 'paid', // paid, pending, failed",
+                        "  order_status: 'processing', // processing, shipped, delivered",
+                        "  created_at: ISODate",
+                        "}",
+                        "",
+                        "// Key API Endpoints",
+                        "// Product Management",
+                        "GET    /api/products          # List products with filters",
+                        "GET    /api/products/:id      # Get product details",
+                        "POST   /api/products          # Create product (admin)",
+                        "PUT    /api/products/:id      # Update product (admin)",
+                        "DELETE /api/products/:id      # Delete product (admin)",
+                        "",
+                        "// User Management",
+                        "POST   /api/auth/register     # User registration",
+                        "POST   /api/auth/login        # User login",
+                        "GET    /api/users/profile     # Get user profile",
+                        "PUT    /api/users/profile     # Update profile",
+                        "",
+                        "// Cart Management",
+                        "GET    /api/cart              # Get cart items",
+                        "POST   /api/cart              # Add to cart",
+                        "PUT    /api/cart/:itemId      # Update cart quantity",
+                        "DELETE /api/cart/:itemId      # Remove from cart",
+                        "",
+                        "// Order Management",
+                        "POST   /api/orders            # Create order",
+                        "GET    /api/orders            # List user orders",
+                        "GET    /api/orders/:id        # Get order details",
+                        "PUT    /api/orders/:id/status # Update order status (admin)",
+                        "",
+                        "// Search and Filter Implementation",
+                        "// products.js controller",
+                        "const searchProducts = async (req, res) => {",
+                        "  const {",
+                        "    q, // search query",
+                        "    category,",
+                        "    minPrice,",
+                        "    maxPrice,",
+                        "    sortBy = 'created_at',",
+                        "    sortOrder = 'desc',",
+                        "    page = 1,",
+                        "    limit = 20",
+                        "  } = req.query;",
+                        "",
+                        "  const filter = {};",
+                        "",
+                        "  // Text search",
+                        "  if (q) {",
+                        "    filter.$text = { $search: q };",
+                        "  }",
+                        "",
+                        "  // Category filter",
+                        "  if (category) {",
+                        "    filter.category = category;",
+                        "  }",
+                        "",
+                        "  // Price range filter",
+                        "  if (minPrice || maxPrice) {",
+                        "    filter.price = {};",
+                        "    if (minPrice) filter.price.$gte = Number(minPrice);",
+                        "    if (maxPrice) filter.price.$lte = Number(maxPrice);",
+                        "  }",
+                        "",
+                        "  const sort = {};",
+                        "  sort[sortBy] = sortOrder === 'desc' ? -1 : 1;",
+                        "",
+                        "  const skip = (page - 1) * limit;",
+                        "",
+                        "  const products = await Product.find(filter)",
+                        "    .sort(sort)",
+                        "    .skip(skip)",
+                        "    .limit(Number(limit));",
+                        "",
+                        "  const total = await Product.countDocuments(filter);",
+                        "",
+                        "  res.json({",
+                        "    products,",
+                        "    pagination: {",
+                        "      page: Number(page),",
+                        "      limit: Number(limit),",
+                        "      total,",
+                        "      pages: Math.ceil(total / limit)",
+                        "    }",
+                        "  });",
+                        "};",
+                        "",
+                        "// Inventory Management",
+                        "// Update stock when order is placed",
+                        "const updateProductStock = async (orderItems) => {",
+                        "  const bulkOps = orderItems.map(item => ({",
+                        "    updateOne: {",
+                        "      filter: { _id: item.product_id, stock: { $gte: item.quantity } },",
+                        "      update: { $inc: { stock: -item.quantity } },",
+                        "    }",
+                        "  }));",
+                        "",
+                        "  await Product.bulkWrite(bulkOps);",
+                        "};",
+                        "",
+                        "// Analytics Queries",
+                        "// Get sales by category",
+                        "const salesByCategory = await Order.aggregate([",
+                        "  { $unwind: '$items' },",
+                        "  {",
+                        "    $lookup: {",
+                        "      from: 'products',",
+                        "      localField: 'items.product_id',",
+                        "      foreignField: '_id',",
+                        "      as: 'product'",
+                        "    }",
+                        "  },",
+                        "  { $unwind: '$product' },",
+                        "  {",
+                        "    $group: {",
+                        "      _id: '$product.category',",
+                        "      totalSales: { $sum: '$items.price_at_purchase' },",
+                        "      totalUnits: { $sum: '$items.quantity' }",
+                        "    }",
+                        "  },",
+                        "  { $sort: { totalSales: -1 } }",
+                        "]);"
+                    ],
+                    "practice": [
+                        {
+                            "question": "How to handle concurrent inventory updates?",
+                            "answer": "Use transactions or optimistic concurrency control with version numbers"
+                        },
+                        {
+                            "question": "E-commerce me indexing strategy?",
+                            "answer": "Index on: product category, price, created_at; text index on name and description"
+                        }
+                    ]
+                },
+                {
+                    "id": 35,
+                    "title": "Deployment on MongoDB Atlas",
+                    "english": "Deploying MongoDB applications to production using MongoDB Atlas.",
+                    "hinglish": "MongoDB Atlas use karke MongoDB applications ko production me deploy karna.",
+                    "examples": [
+                        "// Step-by-Step Atlas Deployment",
+                        "// 1. Create Atlas Account",
+                        "//    Go to https://www.mongodb.com/cloud/atlas",
+                        "//    Sign up for free tier (512MB storage)",
+                        "",
+                        "// 2. Create Cluster",
+                        "//    - Click 'Build a Cluster'",
+                        "//    - Choose cloud provider (AWS, GCP, Azure)",
+                        "//    - Select region closest to users",
+                        "//    - Choose M0 Sandbox (Free tier) for development",
+                        "//    - Click 'Create Cluster' (takes 1-3 minutes)",
+                        "",
+                        "// 3. Set Up Security",
+                        "//    - Go to Security → Database Access",
+                        "//    - Add new database user",
+                        "//    - Username: appuser",
+                        "//    - Password: StrongPassword123!",
+                        "//    - Privileges: Read and write to any database",
+                        "",
+                        "//    - Go to Security → Network Access",
+                        "//    - Add IP Address",
+                        "//    - For development: Add current IP",
+                        "//    - For production: Add 0.0.0.0/0 (all IPs) OR specific server IPs",
+                        "",
+                        "// 4. Get Connection String",
+                        "//    - Go to Clusters → Connect",
+                        "//    - Choose 'Connect your application'",
+                        "//    - Select driver (Node.js, Python, etc.)",
+                        "//    - Copy connection string:",
+                        "mongodb+srv://appuser:<password>@cluster.mongodb.net/mydatabase",
+                        "",
+                        "// 5. Connect Application",
+                        "// Node.js example",
+                        "mongoose.connect(",
+                        "  'mongodb+srv://appuser:password@cluster.mongodb.net/mydatabase',",
+                        "  {",
+                        "    useNewUrlParser: true,",
+                        "    useUnifiedTopology: true,",
+                        "    retryWrites: true,",
+                        "    w: 'majority'",
+                        "  }",
+                        ");",
+                        "",
+                        "// 6. Monitor Performance",
+                        "//    - Atlas provides built-in monitoring",
+                        "//    - Check Metrics tab for:",
+                        "//      * CPU/Memory usage",
+                        "//      * Read/Write operations",
+                        "//      * Connection count",
+                        "//      * Storage size",
+                        "",
+                        "// 7. Set Up Backups (Production)",
+                        "//    - Go to Backup → Snapshot Schedule",
+                        "//    - Configure:",
+                        "//      * Daily snapshots (keep 7 days)",
+                        "//      * Weekly snapshots (keep 4 weeks)",
+                        "//      * Monthly snapshots (keep 12 months)",
+                        "//    - Enable Point-in-Time Recovery",
+                        "",
+                        "// 8. Set Up Alerts",
+                        "//    - Go to Alerts → Alert Settings",
+                        "//    - Configure alerts for:",
+                        "//      * CPU > 80%",
+                        "//      * Memory > 90%",
+                        "//      * Storage > 85%",
+                        "//      * Replication lag > 10 seconds",
+                        "",
+                        "// 9. Scale Cluster (When needed)",
+                        "//    - Go to Clusters → ... → Modify",
+                        "//    - Increase tier: M10, M20, etc.",
+                        "//    - Add shards for horizontal scaling",
+                        "//    - Enable auto-scaling",
+                        "",
+                        "// 10. Database Migration (Local to Atlas)",
+                        "//     # Dump local database",
+                        "//     mongodump --uri=\"mongodb://localhost:27017/mydatabase\"",
+                        "//     ",
+                        "//     # Restore to Atlas",
+                        "//     mongorestore --uri=\"mongodb+srv://user:pass@cluster.mongodb.net\" dump/",
+                        "",
+                        "// Environment Configuration",
+                        "// .env file",
+                        "MONGODB_URI=mongodb+srv://appuser:password@cluster.mongodb.net/mydatabase",
+                        "NODE_ENV=production",
+                        "",
+                        "// Production connection with retry logic",
+                        "const connectWithRetry = () => {",
+                        "  mongoose.connect(process.env.MONGODB_URI, {",
+                        "    useNewUrlParser: true,",
+                        "    useUnifiedTopology: true,",
+                        "    serverSelectionTimeoutMS: 5000,",
+                        "    socketTimeoutMS: 45000,",
+                        "  })",
+                        "  .then(() => console.log('MongoDB connected'))",
+                        "  .catch(err => {",
+                        "    console.error('MongoDB connection error:', err);",
+                        "    console.log('Retrying in 5 seconds...');",
+                        "    setTimeout(connectWithRetry, 5000);",
+                        "  });",
+                        "};",
+                        "",
+                        "connectWithRetry();",
+                        "",
+                        "// Best Practices for Production",
+                        "// 1. Use connection pooling",
+                        "// 2. Implement proper indexing",
+                        "// 3. Monitor query performance",
+                        "// 4. Set up slow query logging",
+                        "// 5. Regular backup testing",
+                        "// 6. Keep drivers updated",
+                        "// 7. Use read preferences for reporting",
+                        "// 8. Implement proper error handling"
+                    ],
+                    "practice": [
+                        {
+                            "question": "What's the difference between M0, M10, M20 tiers?",
+                            "answer": "M0: Free sandbox; M10: Shared RAM, dedicated CPU; M20: Dedicated RAM/CPU, replica set"
+                        },
+                        {
+                            "question": "How to reduce Atlas costs?",
+                            "answer": "Use appropriate tier, enable auto-pause, clean up old data, optimize queries"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

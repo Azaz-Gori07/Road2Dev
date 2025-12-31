@@ -6,6 +6,7 @@ import javascript from '../api/languages/javascript.json'
 import react from '../api/languages/reactDuplicate.json';
 import nodejs from '../api/languages/nodejs.json';
 import expressjs from '../api/languages/express.json';
+import mongodb from '../api/languages/mongodb.json'
 import "./ContentPage.css";
 
 const ContentPage = () => {
@@ -26,6 +27,8 @@ const ContentPage = () => {
       ? nodejs
       : techSlug === "express"
       ? expressjs
+      : techSlug === "mongodb"
+      ? mongodb
       :null;
 
   const handleBack = () => {
