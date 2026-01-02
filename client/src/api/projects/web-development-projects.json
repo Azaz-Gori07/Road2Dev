@@ -1,0 +1,228 @@
+{
+  "technology": "Web Development Projects",
+  "description": "Real-world web development projects mapped across different stacks for portfolio and interview preparation.",
+  "slug": "web-development-projects",
+  "levels": [
+    {
+      "level": "beginner",
+      "description": "Start with these foundational projects",
+      "topics": [
+        {
+          "id": 1,
+          "title": "Todo Application",
+          "english": "Build a task management system where users can manage daily tasks.",
+          "hinglish": "Ek task management system jisme user apne daily tasks manage kar sake.",
+          "detailed_explanation": {
+            "difficulty": "Beginner",
+            "duration": "1-2 weeks",
+            "project_type": "CRUD Application",
+            "stacks": [
+              {
+                "name": "MERN Stack",
+                "frontend": "React",
+                "backend": "Node.js + Express",
+                "database": "MongoDB"
+              },
+              {
+                "name": "SERN Stack",
+                "frontend": "React",
+                "backend": "Node.js + Express",
+                "database": "PostgreSQL"
+              }
+            ],
+            "core_features": [
+              "Create / Update / Delete tasks",
+              "Mark task as complete",
+              "User authentication",
+              "Protected routes"
+            ],
+            "learning_outcomes": [
+              "CRUD operations",
+              "Authentication flow",
+              "Backend API design"
+            ],
+            "api_endpoints": [
+              "POST /api/tasks - Create task",
+              "GET /api/tasks - Get all tasks",
+              "PUT /api/tasks/:id - Update task",
+              "DELETE /api/tasks/:id - Delete task"
+            ]
+          },
+          "examples": [
+            "// Task Model\nconst Task = mongoose.model('Task', {\n  title: String,\n  completed: Boolean,\n  userId: ObjectId\n});"
+          ],
+          "practice": [
+            {
+              "question": "Kaise design karenge Todo app ka database?",
+              "answer": "Do collections: users aur tasks. Tasks collection me userId field hogi."
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Notes Application",
+          "english": "Create a notes app where users can store and organize notes.",
+          "hinglish": "Notes app jisme users apne notes store aur organize kar sake.",
+          "detailed_explanation": {
+            "difficulty": "Beginner",
+            "duration": "1-2 weeks",
+            "core_features": [
+              "Create / Edit / Delete notes",
+              "Search notes",
+              "Tags system",
+              "User login"
+            ],
+            "learning_outcomes": [
+              "Text-based data handling",
+              "Search queries",
+              "Schema design"
+            ]
+          },
+          "examples": [
+            "// Note with tags\n{\n  \"title\": \"Shopping List\",\n  \"content\": \"Milk, Eggs, Bread\",\n  \"tags\": [\"shopping\", \"personal\"]\n}"
+          ],
+          "practice": [
+            {
+              "question": "Notes me search feature kaise implement karenge?",
+              "answer": "MongoDB me $text search ya SQL me LIKE query use karenge."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": "intermediate",
+      "description": "Build more complex applications",
+      "topics": [
+        {
+          "id": 3,
+          "title": "Blog Platform",
+          "english": "Build a blogging platform with public and private posts.",
+          "hinglish": "Blogging platform jisme public aur private posts ho.",
+          "detailed_explanation": {
+            "difficulty": "Intermediate",
+            "duration": "2-4 weeks",
+            "core_features": [
+              "User roles (Author / Reader)",
+              "Create & publish blogs",
+              "Likes & comments",
+              "Draft system"
+            ],
+            "learning_outcomes": [
+              "Role-based access",
+              "Relational data handling",
+              "Content management"
+            ]
+          },
+          "examples": [
+            "// Blog Post Schema\n{\n  \"title\": \"My First Blog\",\n  \"content\": \"Hello World!\",\n  \"author\": \"user123\",\n  \"published\": true,\n  \"likes\": 45\n}"
+          ],
+          "practice": [
+            {
+              "question": "Admin aur author ke permissions kaise manage karenge?",
+              "answer": "Role-based access control (RBAC) implement karenge."
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Learning Platform",
+          "english": "Create an online learning platform with courses and progress tracking.",
+          "hinglish": "Online learning platform jisme courses aur progress tracking ho.",
+          "detailed_explanation": {
+            "difficulty": "Intermediate",
+            "duration": "3-5 weeks",
+            "core_features": [
+              "Courses & roadmaps",
+              "Topic unlock system",
+              "Progress tracking",
+              "Interview preparation"
+            ],
+            "learning_outcomes": [
+              "System design thinking",
+              "Large-scale architecture",
+              "User progress logic"
+            ]
+          },
+          "examples": [
+            "// Course Progress\n{\n  \"userId\": \"123\",\n  \"courseId\": \"web-dev\",\n  \"completedLessons\": [\"html\", \"css\"],\n  \"progress\": 40\n}"
+          ],
+          "practice": [
+            {
+              "question": "User ka progress kaise track karenge?",
+              "answer": "Database me progress table banayenge jisme completed lessons store karenge."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": "advanced",
+      "description": "Master complex systems",
+      "topics": [
+        {
+          "id": 5,
+          "title": "E-commerce Platform",
+          "english": "Build a full-featured e-commerce platform.",
+          "hinglish": "Ek complete e-commerce platform banana.",
+          "detailed_explanation": {
+            "difficulty": "Advanced",
+            "duration": "4-8 weeks",
+            "core_features": [
+              "Product listing",
+              "Cart & checkout",
+              "Orders management",
+              "Admin dashboard"
+            ],
+            "learning_outcomes": [
+              "Payment integration",
+              "Complex schemas",
+              "Production-ready systems"
+            ],
+            "payment_gateways": ["Stripe", "Razorpay", "PayPal"]
+          },
+          "examples": [
+            "// Order Schema\n{\n  \"orderId\": \"ORD123\",\n  \"items\": [{\"product\": \"laptop\", \"qty\": 1}],\n  \"total\": 50000,\n  \"paymentStatus\": \"completed\"\n}"
+          ],
+          "practice": [
+            {
+              "question": "Payment gateway kaise integrate karenge?",
+              "answer": "Stripe ya Razorpay ka SDK use karenge aur webhooks handle karenge."
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "Real-time Chat Application",
+          "english": "Create a real-time chat system with live messaging.",
+          "hinglish": "Real-time chat system jisme live messages ho.",
+          "detailed_explanation": {
+            "difficulty": "Advanced",
+            "duration": "3-6 weeks",
+            "core_features": [
+              "One-to-one chat",
+              "Online status",
+              "Typing indicator",
+              "Message history"
+            ],
+            "learning_outcomes": [
+              "WebSockets",
+              "Real-time systems",
+              "Advanced backend logic"
+            ],
+            "technologies": ["Socket.io", "WebSockets", "Redis"]
+          },
+          "examples": [
+            "// Socket.io message\nsocket.emit('message', {\n  text: 'Hello!',\n  from: 'user1',\n  to: 'user2'\n});"
+          ],
+          "practice": [
+            {
+              "question": "Real-time messaging kaise implement karenge?",
+              "answer": "Socket.io ya WebSockets use karenge aur messages real-time send/receive karenge."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

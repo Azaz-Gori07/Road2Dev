@@ -2,11 +2,12 @@ import { useParams } from "react-router-dom";
 import fundamentals from "../api/fundamentals.json";
 import html from "../api/languages/html5.json";
 import css from "../api/languages/css.json";
-import javascript from '../api/languages/javascript.json'
+import javascript from '../api/languages/javascript.json';
 import react from '../api/languages/reactDuplicate.json';
 import nodejs from '../api/languages/nodejs.json';
 import expressjs from '../api/languages/express.json';
-import mongodb from '../api/languages/mongodb.json'
+import mongodb from '../api/languages/mongodb.json';
+import webProjects from '../api/projects/web-development-projects.json';
 import "./ContentPage.css";
 
 const ContentPage = () => {
@@ -29,7 +30,9 @@ const ContentPage = () => {
       ? expressjs
       : techSlug === "mongodb"
       ? mongodb
-      :null;
+      : techSlug === "projects"
+      ? webProjects
+      : null;
 
   const handleBack = () => {
     window.history.back();
@@ -39,6 +42,75 @@ const ContentPage = () => {
     return (
       <div className="code-block">
         <pre>{code}</pre>
+      </div>
+    );
+  };
+
+  const renderProjectStacks = (stacks) => {
+    if (!stacks || !Array.isArray(stacks)) return null;
+
+    return (
+      <div className="detailed-section">
+        <h5>Tech Stacks:</h5>
+        <div className="stacks-container">
+          {stacks.map((stack, idx) => (
+            <div className="stack-card" key={idx}>
+              <strong>{stack.name}</strong>
+              <div className="stack-details">
+                <p><span>Frontend:</span> {stack.frontend}</p>
+                <p><span>Backend:</span> {stack.backend}</p>
+                <p><span>Database:</span> {stack.database}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const renderApiEndpoints = (endpoints) => {
+    if (!endpoints || !Array.isArray(endpoints)) return null;
+
+    return (
+      <div className="detailed-section">
+        <h5>API Endpoints:</h5>
+        <div className="api-endpoints">
+          {endpoints.map((endpoint, idx) => (
+            <div className="endpoint-item" key={idx}>
+              <code>{endpoint}</code>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const renderCoreFeatures = (features) => {
+    if (!features || !Array.isArray(features)) return null;
+
+    return (
+      <div className="detailed-section">
+        <h5>Core Features:</h5>
+        <ul className="features-list">
+          {features.map((feature, idx) => (
+            <li key={idx}>{feature}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
+  const renderLearningOutcomes = (outcomes) => {
+    if (!outcomes || !Array.isArray(outcomes)) return null;
+
+    return (
+      <div className="detailed-section">
+        <h5>Learning Outcomes:</h5>
+        <ul className="outcomes-list">
+          {outcomes.map((outcome, idx) => (
+            <li key={idx}>{outcome}</li>
+          ))}
+        </ul>
       </div>
     );
   };
@@ -164,6 +236,54 @@ const ContentPage = () => {
           </div>
         )}
 
+        {detailed_explanation.stacks && renderProjectStacks(detailed_explanation.stacks)}
+        
+        {detailed_explanation.api_endpoints && renderApiEndpoints(detailed_explanation.api_endpoints)}
+        
+        {detailed_explanation.core_features && renderCoreFeatures(detailed_explanation.core_features)}
+        
+        {detailed_explanation.learning_outcomes && renderLearningOutcomes(detailed_explanation.learning_outcomes)}
+        
+        {detailed_explanation.payment_gateways && (
+          <div className="detailed-section">
+            <h5>Payment Gateways:</h5>
+            <div className="payment-gateways">
+              {detailed_explanation.payment_gateways.map((gateway, idx) => (
+                <span className="gateway-tag" key={idx}>{gateway}</span>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {detailed_explanation.technologies && (
+          <div className="detailed-section">
+            <h5>Technologies Used:</h5>
+            <div className="technologies-list">
+              {detailed_explanation.technologies.map((tech, idx) => (
+                <span className="tech-tag" key={idx}>{tech}</span>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {detailed_explanation.difficulty && (
+          <div className="detailed-section">
+            <h5>Project Difficulty: <span className={`difficulty-${detailed_explanation.difficulty.toLowerCase()}`}>{detailed_explanation.difficulty}</span></h5>
+          </div>
+        )}
+        
+        {detailed_explanation.duration && (
+          <div className="detailed-section">
+            <h5>Estimated Duration: <span className="duration">{detailed_explanation.duration}</span></h5>
+          </div>
+        )}
+        
+        {detailed_explanation.project_type && (
+          <div className="detailed-section">
+            <h5>Project Type: <span className="project-type">{detailed_explanation.project_type}</span></h5>
+          </div>
+        )}
+
         {Object.entries(detailed_explanation).map(([key, value], idx) => {
           const alreadyRendered = [
             'example_code', 
@@ -181,7 +301,16 @@ const ContentPage = () => {
             'characteristics',
             'uses',
             'seo_tip',
-            'seo_tip_hinglish'
+            'seo_tip_hinglish',
+            'stacks',
+            'api_endpoints',
+            'core_features',
+            'learning_outcomes',
+            'payment_gateways',
+            'technologies',
+            'difficulty',
+            'duration',
+            'project_type'
           ];
           
           if (alreadyRendered.includes(key) || typeof value !== 'object' || value === null) {
@@ -259,6 +388,8 @@ const ContentPage = () => {
 
   if (!data) return <h2>Content not found</h2>;
 
+  const isProjectsPage = techSlug === "web-development-projects";
+
   return (
     <div className="content-container">
       <button className="button" onClick={handleBack}>
@@ -270,61 +401,135 @@ const ContentPage = () => {
         <p className="content-description">{data.description}</p>
       </div>
 
-      <div className="levels-container">
-        {data.levels.map((level) => (
-          <div className="level-section" key={level.level}>
-            <h3 className="level-title">{level.level.toUpperCase()}</h3>
+      {isProjectsPage ? (
+        <div className="projects-layout">
+          <div className="level-cards">
+            {data.levels.map((level) => (
+              <div className="level-card" key={level.level}>
+                <h3>{level.level.toUpperCase()}</h3>
+                <p>{level.description}</p>
+              </div>
+            ))}
+          </div>
 
-            {level.topics.map((topic) => (
-              <div className="topic-card" key={topic.id}>
-                <h4 className="topic-title">{topic.title}</h4>
+          <div className="levels-container">
+            {data.levels.map((level) => (
+              <div className="level-section" key={level.level}>
+                <h3 className="level-title">{level.level.toUpperCase()}</h3>
 
-                <div className="language-section">
-                  <div className="language-label">English</div>
-                  <div className="language-content">{topic.english}</div>
-                </div>
-
-                <div className="language-section">
-                  <div className="language-label">Hinglish</div>
-                  <div className="language-content">{topic.hinglish}</div>
-                </div>
-
-                {topic.detailed_explanation && (
-                  <div className="detailed-container">
-                    {renderDetailedExplanation(topic.detailed_explanation)}
-                  </div>
-                )}
-
-                {topic.examples?.length > 0 && (
-                  <div className="examples-container">
-                    <h5>Basic Examples:</h5>
-                    {topic.examples.map((ex, i) => (
-                      <div key={i}>
-                        {formatCode(ex)}
+                <div className="project-preview">
+                  {level.topics.map((project) => (
+                    <div className="project-item" key={project.id}>
+                      <div className="project-header">
+                        <h4 className="project-title">{project.title}</h4>
+                        <span className="project-id">ID: {project.id}</span>
                       </div>
-                    ))}
-                  </div>
-                )}
+                      
+                      <div className="language-section">
+                        <div className="language-label">English</div>
+                        <div className="language-content">{project.english}</div>
+                      </div>
 
-                <div className="tip-box">
-                  🧠 Pehle khud koshish kare – make your mind strong
-                </div>
+                      <div className="language-section">
+                        <div className="language-label">Hinglish</div>
+                        <div className="language-content">{project.hinglish}</div>
+                      </div>
 
-                <div className="practice-container">
-                  {topic.practice.map((q, i) => (
-                    <div className="practice-question" key={i}>
-                      <details>
-                        <summary>{q.question}</summary>
-                        <div className="practice-answer">{q.answer}</div>
-                      </details>
+                      {project.detailed_explanation && (
+                        <div className="detailed-container">
+                          {renderDetailedExplanation(project.detailed_explanation)}
+                        </div>
+                      )}
+
+                      {project.examples?.length > 0 && (
+                        <div className="examples-container">
+                          <h5>Basic Examples:</h5>
+                          {project.examples.map((ex, i) => (
+                            <div key={i}>
+                              {formatCode(ex)}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      <div className="tip-box">
+                        🧠 Pehle khud koshish kare – make your mind strong
+                      </div>
+
+                      <div className="practice-container">
+                        {project.practice.map((q, i) => (
+                          <div className="practice-question" key={i}>
+                            <details>
+                              <summary>{q.question}</summary>
+                              <div className="practice-answer">{q.answer}</div>
+                            </details>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ) : (
+        <div className="levels-container">
+          {data.levels.map((level) => (
+            <div className="level-section" key={level.level}>
+              <h3 className="level-title">{level.level.toUpperCase()}</h3>
+
+              {level.topics.map((topic) => (
+                <div className="topic-card" key={topic.id}>
+                  <h4 className="topic-title">{topic.title}</h4>
+
+                  <div className="language-section">
+                    <div className="language-label">English</div>
+                    <div className="language-content">{topic.english}</div>
+                  </div>
+
+                  <div className="language-section">
+                    <div className="language-label">Hinglish</div>
+                    <div className="language-content">{topic.hinglish}</div>
+                  </div>
+
+                  {topic.detailed_explanation && (
+                    <div className="detailed-container">
+                      {renderDetailedExplanation(topic.detailed_explanation)}
+                    </div>
+                  )}
+
+                  {topic.examples?.length > 0 && (
+                    <div className="examples-container">
+                      <h5>Basic Examples:</h5>
+                      {topic.examples.map((ex, i) => (
+                        <div key={i}>
+                          {formatCode(ex)}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="tip-box">
+                    🧠 Pehle khud koshish kare – make your mind strong
+                  </div>
+
+                  <div className="practice-container">
+                    {topic.practice.map((q, i) => (
+                      <div className="practice-question" key={i}>
+                        <details>
+                          <summary>{q.question}</summary>
+                          <div className="practice-answer">{q.answer}</div>
+                        </details>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
