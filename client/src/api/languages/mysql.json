@@ -1,0 +1,3351 @@
+{
+  "technology": "MySQL",
+  "slug": "mysql",
+  "description": "MySQL ek popular open-source relational database management system hai jo structured data store, retrieve aur manage karne ke liye use hota hai. Ye web applications, data analysis aur enterprise systems me widely use hota hai.",
+  "levels": [
+    {
+      "level": "absolute-beginner",
+      "order": 0,
+      "description": "Database basics aur MySQL ki basic concepts",
+      "topics": [
+        {
+          "id": 1,
+          "title": "What is Database?",
+          "english": "A database is an organized collection of structured data stored electronically.",
+          "hinglish": "Database ek organized collection hai structured data ka jo electronically store hota hai.",
+          "examples": [
+            "Examples of databases:",
+            "1. School student records",
+            "2. Hospital patient database",
+            "3. E-commerce product catalog",
+            "4. Bank account information"
+          ],
+          "practice": [
+            {
+              "question": "Database kya hota hai?",
+              "answer": "Organized collection of structured data jo electronically store hota hai"
+            },
+            {
+              "question": "Real-life me database ke 3 examples dijiye",
+              "answer": "School student records, hospital patient database, bank account information"
+            },
+            {
+              "question": "Database ka main purpose kya hai?",
+              "answer": "Data ko systematically store, organize, retrieve aur manage karna"
+            },
+            {
+              "question": "Database digital hone ke kya advantages hain?",
+              "answer": "Fast retrieval, easy updates, data security, backup facility, multiple users access"
+            }
+          ],
+          "detailed_explanation": {
+            "types_of_databases": [
+              {
+                "type": "Relational Databases",
+                "examples": "MySQL, PostgreSQL, Oracle",
+                "characteristics": "Tables, rows, columns, relationships"
+              },
+              {
+                "type": "NoSQL Databases",
+                "examples": "MongoDB, Cassandra, Redis",
+                "characteristics": "Documents, key-value pairs, graphs"
+              },
+              {
+                "type": "In-memory Databases",
+                "examples": "Redis, Memcached",
+                "characteristics": "RAM me store, ultra-fast"
+              }
+            ]
+          }
+        },
+        {
+          "id": 2,
+          "title": "SQL vs NoSQL",
+          "english": "Understanding the difference between SQL (relational) and NoSQL (non-relational) databases.",
+          "hinglish": "SQL (relational) aur NoSQL (non-relational) databases ke beech ka difference samajhna.",
+          "examples": [
+            "SQL Database (MySQL):",
+            "CREATE TABLE users (id INT, name VARCHAR(100));",
+            "",
+            "NoSQL Database (MongoDB):",
+            "db.users.insertOne({id: 1, name: 'John'});"
+          ],
+          "practice": [
+            {
+              "question": "SQL database ki main characteristics kya hain?",
+              "answer": "Structured data, tables with rows/columns, ACID compliance, fixed schema"
+            },
+            {
+              "question": "NoSQL database ki main characteristics kya hain?",
+              "answer": "Unstructured/semi-structured data, flexible schema, horizontal scaling, various data models"
+            },
+            {
+              "question": "Kab SQL database use karna chahiye?",
+              "answer": "Jab data structured ho, relationships important hon, ACID transactions required hon"
+            },
+            {
+              "question": "Kab NoSQL database use karna chahiye?",
+              "answer": "Jab data unstructured ho, massive scalability chahiye ho, flexible schema chahiye ho"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "title": "MySQL Introduction & History",
+          "english": "MySQL is an open-source relational database management system developed by MySQL AB (now owned by Oracle).",
+          "hinglish": "MySQL ek open-source relational database management system hai jo MySQL AB ne develop kiya (ab Oracle ke paas hai).",
+          "examples": [
+            "MySQL timeline:",
+            "1995: First version released",
+            "2000: Version 3.23 with MyISAM",
+            "2003: Version 4.0 with UNION",
+            "2005: Version 5.0 with stored procedures",
+            "2008: Sun Microsystems acquisition",
+            "2010: Oracle acquisition",
+            "2013: Version 5.6",
+            "2015: Version 5.7",
+            "2018: Version 8.0"
+          ],
+          "practice": [
+            {
+              "question": "MySQL kis company ne develop kiya?",
+              "answer": "MySQL AB (Swedish company), ab Oracle ke paas hai"
+            },
+            {
+              "question": "MySQL open-source hai ya proprietary?",
+              "answer": "Open-source (GPL license), enterprise version bhi available hai"
+            },
+            {
+              "question": "MySQL ka latest stable version kaun sa hai?",
+              "answer": "MySQL 8.0 (as of 2024)"
+            },
+            {
+              "question": "MySQL ke alternatives kya hain?",
+              "answer": "PostgreSQL, MariaDB, Oracle Database, Microsoft SQL Server, SQLite"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "title": "MySQL Installation - Windows",
+          "english": "Step-by-step guide to install MySQL on Windows operating system.",
+          "hinglish": "Windows operating system par MySQL install karne ka step-by-step guide.",
+          "examples": [
+            "Steps:",
+            "1. Download MySQL Installer from mysql.com",
+            "2. Run installer as Administrator",
+            "3. Choose 'Developer Default'",
+            "4. Check prerequisites",
+            "5. Install MySQL Server, Workbench, Shell",
+            "6. Configure root password",
+            "7. Complete installation"
+          ],
+          "practice": [
+            {
+              "question": "MySQL Windows pe install karne ka official source kya hai?",
+              "answer": "mysql.com website se MySQL Installer download karna"
+            },
+            {
+              "question": "Installation type 'Developer Default' kya hota hai?",
+              "answer": "Development ke liye required sab components automatically install hote hain"
+            },
+            {
+              "question": "Root password configure karte waqt kya dhyan rakhna chahiye?",
+              "answer": "Strong password use karna, password ko safely store karna"
+            },
+            {
+              "question": "MySQL Service Windows pe kaise check karte hain?",
+              "answer": "Services.msc open karke 'MySQL80' service check karna"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "title": "MySQL Installation - Mac/Linux",
+          "english": "Installing MySQL on macOS and Linux systems using package managers.",
+          "hinglish": "macOS aur Linux systems par package managers use karke MySQL install karna.",
+          "examples": [
+            "# Ubuntu/Debian",
+            "sudo apt update",
+            "sudo apt install mysql-server",
+            "sudo systemctl start mysql",
+            "",
+            "# macOS (Homebrew)",
+            "brew install mysql",
+            "brew services start mysql",
+            "",
+            "# CentOS/RHEL",
+            "sudo yum install mysql-server",
+            "sudo systemctl start mysqld"
+          ],
+          "practice": [
+            {
+              "question": "Ubuntu pe MySQL install karne ka command kya hai?",
+              "answer": "sudo apt install mysql-server"
+            },
+            {
+              "question": "Mac pe Homebrew se MySQL install karne ka command?",
+              "answer": "brew install mysql"
+            },
+            {
+              "question": "Installation ke baad MySQL service kaise start karte hain?",
+              "answer": "Ubuntu: sudo systemctl start mysql, Mac: brew services start mysql"
+            },
+            {
+              "question": "Installation verify kaise karte hain?",
+              "answer": "mysql --version command run karke"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "MySQL Workbench Introduction",
+          "english": "MySQL Workbench is the official GUI tool for MySQL database management.",
+          "hinglish": "MySQL Workbench official GUI tool hai MySQL database manage karne ke liye.",
+          "examples": [
+            "MySQL Workbench features:",
+            "1. Visual database design",
+            "2. SQL development and editing",
+            "3. Database administration",
+            "4. Data migration",
+            "5. Server configuration",
+            "6. Backup and recovery"
+          ],
+          "practice": [
+            {
+              "question": "MySQL Workbench kya hai?",
+              "answer": "Official GUI tool MySQL databases ke liye, visual interface provide karta hai"
+            },
+            {
+              "question": "MySQL Workbench ke main features kya hain?",
+              "answer": "SQL Editor, Database Design, Administration, Migration, Backup"
+            },
+            {
+              "question": "MySQL Workbench me new connection kaise create karte hain?",
+              "answer": "+ icon click karke, connection details fill karke, Test Connection click karke"
+            },
+            {
+              "question": "Command Line vs Workbench me kya difference hai?",
+              "answer": "Command Line: text-based, powerful; Workbench: GUI-based, user-friendly"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "title": "Basic MySQL Commands",
+          "english": "Essential MySQL commands to get started with database operations.",
+          "hinglish": "Database operations start karne ke liye essential MySQL commands.",
+          "examples": [
+            "# Connect to MySQL",
+            "mysql -u root -p",
+            "",
+            "# Show databases",
+            "SHOW DATABASES;",
+            "",
+            "# Use a database",
+            "USE database_name;",
+            "",
+            "# Show tables",
+            "SHOW TABLES;",
+            "",
+            "# Exit MySQL",
+            "EXIT; or \\q"
+          ],
+          "practice": [
+            {
+              "question": "MySQL me login kaise karte hain?",
+              "answer": "mysql -u username -p command use karke"
+            },
+            {
+              "question": "Available databases kaise dekhte hain?",
+              "answer": "SHOW DATABASES; command se"
+            },
+            {
+              "question": "Specific database select kaise karte hain?",
+              "answer": "USE database_name; command se"
+            },
+            {
+              "question": "MySQL se exit kaise karte hain?",
+              "answer": "EXIT; ya \\q command se"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": "beginner",
+      "order": 1,
+      "description": "Basic SQL operations, data types, and simple queries",
+      "topics": [
+        {
+          "id": 8,
+          "title": "Creating Databases",
+          "english": "Creating new databases using CREATE DATABASE statement.",
+          "hinglish": "CREATE DATABASE statement use karke naye databases create karna.",
+          "examples": [
+            "# Create database",
+            "CREATE DATABASE school;",
+            "",
+            "# Create database with character set",
+            "CREATE DATABASE company CHARACTER SET utf8mb4;",
+            "",
+            "# Create database if not exists",
+            "CREATE DATABASE IF NOT EXISTS ecommerce;",
+            "",
+            "# Show created databases",
+            "SHOW DATABASES;"
+          ],
+          "practice": [
+            {
+              "question": "New database create karne ka SQL statement kya hai?",
+              "answer": "CREATE DATABASE database_name;"
+            },
+            {
+              "question": "Database already exists to error avoid kaise kare?",
+              "answer": "CREATE DATABASE IF NOT EXISTS database_name; use kare"
+            },
+            {
+              "question": "Specific character set ke sath database kaise create kare?",
+              "answer": "CREATE DATABASE db_name CHARACTER SET utf8mb4;"
+            },
+            {
+              "question": "Database delete karne ka command kya hai?",
+              "answer": "DROP DATABASE database_name;"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "title": "Data Types - Numeric",
+          "english": "Numeric data types in MySQL for storing numbers.",
+          "hinglish": "Numbers store karne ke liye MySQL me numeric data types.",
+          "examples": [
+            "# Integer types",
+            "TINYINT    - 1 byte   (-128 to 127)",
+            "SMALLINT   - 2 bytes  (-32768 to 32767)",
+            "INT/INTEGER - 4 bytes (-2.14B to 2.14B)",
+            "BIGINT     - 8 bytes  (large range)",
+            "",
+            "# Decimal types",
+            "DECIMAL(10,2) - Exact decimal (price: 999.99)",
+            "FLOAT(7,4)    - Approximate (coordinates)",
+            "DOUBLE(15,8)  - More precision"
+          ],
+          "practice": [
+            {
+              "question": "Age store karne ke liye konsa data type best hai?",
+              "answer": "TINYINT UNSIGNED (0-255 range)"
+            },
+            {
+              "question": "Price (999.99) store karne ke liye konsa data type use kare?",
+              "answer": "DECIMAL(10,2) exact decimal ke liye"
+            },
+            {
+              "question": "INT aur BIGINT me kya difference hai?",
+              "answer": "INT 4 bytes (2.14B), BIGINT 8 bytes (bahut bada range)"
+            },
+            {
+              "question": "FLOAT aur DECIMAL me kya difference hai?",
+              "answer": "FLOAT approximate, DECIMAL exact (financial data ke liye)"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "title": "Data Types - String & Text",
+          "english": "String and text data types for storing character data.",
+          "hinglish": "Character data store karne ke liye string aur text data types.",
+          "examples": [
+            "# Fixed length",
+            "CHAR(10) - Always 10 characters",
+            "",
+            "# Variable length",
+            "VARCHAR(255) - Max 255 characters",
+            "",
+            "# Text types",
+            "TINYTEXT   - 255 characters",
+            "TEXT       - 65,535 characters",
+            "MEDIUMTEXT - 16.7M characters",
+            "LONGTEXT   - 4.3B characters",
+            "",
+            "# Special types",
+            "ENUM('Yes', 'No') - Predefined values",
+            "SET('Red', 'Green', 'Blue') - Multiple values"
+          ],
+          "practice": [
+            {
+              "question": "CHAR aur VARCHAR me kya difference hai?",
+              "answer": "CHAR fixed length, VARCHAR variable length (storage efficient)"
+            },
+            {
+              "question": "Email address store karne ke liye konsa data type best hai?",
+              "answer": "VARCHAR(255) - variable length, reasonable max limit"
+            },
+            {
+              "question": "Long articles store karne ke liye konsa data type use kare?",
+              "answer": "TEXT ya LONGTEXT content length ke according"
+            },
+            {
+              "question": "ENUM data type kab use karna chahiye?",
+              "answer": "Jab fixed set of values ho (e.g., status: 'active', 'inactive')"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "title": "Data Types - Date & Time",
+          "english": "Date and time data types for storing temporal data.",
+          "hinglish": "Temporal data store karne ke liye date aur time data types.",
+          "examples": [
+            "# Date and Time",
+            "DATE        - '2024-01-15'",
+            "TIME        - '14:30:45'",
+            "DATETIME    - '2024-01-15 14:30:45'",
+            "TIMESTAMP   - '2024-01-15 14:30:45' (UTC)",
+            "",
+            "# Year",
+            "YEAR(4)     - '2024'",
+            "",
+            "# Current timestamp",
+            "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
+            "updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+          ],
+          "practice": [
+            {
+              "question": "DATETIME aur TIMESTAMP me kya difference hai?",
+              "answer": "DATETIME manual set, TIMESTAMP auto-converts to UTC, range different"
+            },
+            {
+              "question": "Birthdate store karne ke liye konsa data type best hai?",
+              "answer": "DATE (only date chahiye, time nahi)"
+            },
+            {
+              "question": "Auto-updating timestamp kaise create kare?",
+              "answer": "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+            },
+            {
+              "question": "Time zone support konsa data type deta hai?",
+              "answer": "TIMESTAMP automatically UTC me convert hota hai"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "title": "Creating Tables",
+          "english": "Creating tables with columns, data types, and constraints.",
+          "hinglish": "Columns, data types, aur constraints ke sath tables create karna.",
+          "examples": [
+            "# Basic table creation",
+            "CREATE TABLE students (",
+            "  id INT PRIMARY KEY,",
+            "  name VARCHAR(100),",
+            "  age INT,",
+            "  email VARCHAR(255)",
+            ");",
+            "",
+            "# Table with multiple constraints",
+            "CREATE TABLE orders (",
+            "  order_id INT AUTO_INCREMENT PRIMARY KEY,",
+            "  customer_id INT NOT NULL,",
+            "  amount DECIMAL(10,2) CHECK (amount > 0),",
+            "  order_date DATE DEFAULT (CURRENT_DATE),",
+            "  status ENUM('pending', 'completed', 'cancelled') DEFAULT 'pending'",
+            ");"
+          ],
+          "practice": [
+            {
+              "question": "Table create karne ka basic syntax kya hai?",
+              "answer": "CREATE TABLE table_name (column1 datatype, column2 datatype, ...);"
+            },
+            {
+              "question": "Auto-increment primary key kaise define kare?",
+              "answer": "column_name INT AUTO_INCREMENT PRIMARY KEY"
+            },
+            {
+              "question": "Column me NOT NULL constraint ka kya kaam hai?",
+              "answer": "NULL values allow nahi karta, mandatory field banata hai"
+            },
+            {
+              "question": "Table structure kaise check karte hain?",
+              "answer": "DESCRIBE table_name; ya SHOW CREATE TABLE table_name;"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "title": "ALTER TABLE Operations",
+          "english": "Modifying existing table structure using ALTER TABLE.",
+          "hinglish": "ALTER TABLE use karke existing table structure modify karna.",
+          "examples": [
+            "# Add new column",
+            "ALTER TABLE students ADD COLUMN phone VARCHAR(15);",
+            "",
+            "# Modify column",
+            "ALTER TABLE students MODIFY COLUMN name VARCHAR(150);",
+            "",
+            "# Rename column",
+            "ALTER TABLE students CHANGE COLUMN phone mobile VARCHAR(15);",
+            "",
+            "# Drop column",
+            "ALTER TABLE students DROP COLUMN mobile;",
+            "",
+            "# Add constraint",
+            "ALTER TABLE students ADD CONSTRAINT unique_email UNIQUE (email);",
+            "",
+            "# Rename table",
+            "ALTER TABLE students RENAME TO learners;"
+          ],
+          "practice": [
+            {
+              "question": "Existing table me new column add kaise kare?",
+              "answer": "ALTER TABLE table_name ADD COLUMN column_name datatype;"
+            },
+            {
+              "question": "Column ka data type change kaise kare?",
+              "answer": "ALTER TABLE table_name MODIFY COLUMN column_name new_datatype;"
+            },
+            {
+              "question": "Column ka name change kaise kare?",
+              "answer": "ALTER TABLE table_name CHANGE COLUMN old_name new_name datatype;"
+            },
+            {
+              "question": "Column delete kaise kare?",
+              "answer": "ALTER TABLE table_name DROP COLUMN column_name;"
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "title": "DROP & TRUNCATE",
+          "english": "Removing databases, tables, and data using DROP and TRUNCATE.",
+          "hinglish": "DROP aur TRUNCATE use karke databases, tables, aur data remove karna.",
+          "examples": [
+            "# Drop table (delete table structure and data)",
+            "DROP TABLE students;",
+            "",
+            "# Drop if exists",
+            "DROP TABLE IF EXISTS students;",
+            "",
+            "# Truncate table (delete only data, keep structure)",
+            "TRUNCATE TABLE students;",
+            "",
+            "# Drop database",
+            "DROP DATABASE school;",
+            "DROP DATABASE IF EXISTS school;"
+          ],
+          "practice": [
+            {
+              "question": "DROP TABLE aur TRUNCATE TABLE me kya difference hai?",
+              "answer": "DROP: structure aur data dono delete; TRUNCATE: sirf data delete, structure rahe"
+            },
+            {
+              "question": "Table delete karte waqt error avoid kaise kare?",
+              "answer": "DROP TABLE IF EXISTS table_name; use kare"
+            },
+            {
+              "question": "TRUNCATE ka advantage DELETE se kya hai?",
+              "answer": "TRUNCATE faster hai, auto-increment reset karta hai"
+            },
+            {
+              "question": "Database aur uska sab data delete kaise kare?",
+              "answer": "DROP DATABASE database_name;"
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "title": "INSERT Data",
+          "english": "Inserting data into tables using INSERT statement.",
+          "hinglish": "INSERT statement use karke tables me data insert karna.",
+          "examples": [
+            "# Insert single row",
+            "INSERT INTO students (id, name, age) VALUES (1, 'Rahul', 20);",
+            "",
+            "# Insert with auto-increment",
+            "INSERT INTO students (name, age) VALUES ('Priya', 22);",
+            "",
+            "# Insert multiple rows",
+            "INSERT INTO students (name, age) VALUES",
+            "('Amit', 25),",
+            "('Sneha', 23),",
+            "('Raj', 21);",
+            "",
+            "# Insert with NULL",
+            "INSERT INTO students (id, name, age, email) VALUES (5, 'John', 30, NULL);",
+            "",
+            "# Insert from another table",
+            "INSERT INTO student_archive SELECT * FROM students WHERE age > 25;"
+          ],
+          "practice": [
+            {
+              "question": "Single row insert karne ka syntax kya hai?",
+              "answer": "INSERT INTO table (col1, col2) VALUES (val1, val2);"
+            },
+            {
+              "question": "Multiple rows ek sath insert kaise kare?",
+              "answer": "INSERT INTO table VALUES (val1), (val2), (val3);"
+            },
+            {
+              "question": "Auto-increment column me insert karte waqt kya karna chahiye?",
+              "answer": "Column name list se omit karna ya NULL specify karna"
+            },
+            {
+              "question": "Another table se data copy kaise kare?",
+              "answer": "INSERT INTO table1 SELECT * FROM table2 WHERE condition;"
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "title": "SELECT Queries",
+          "english": "Retrieving data from tables using SELECT statement.",
+          "hinglish": "SELECT statement use karke tables se data retrieve karna.",
+          "examples": [
+            "# Select all columns",
+            "SELECT * FROM students;",
+            "",
+            "# Select specific columns",
+            "SELECT name, age FROM students;",
+            "",
+            "# Select with column alias",
+            "SELECT name AS student_name, age AS student_age FROM students;",
+            "",
+            "# Select distinct values",
+            "SELECT DISTINCT city FROM students;",
+            "",
+            "# Select with expressions",
+            "SELECT name, age, YEAR(CURRENT_DATE) - age AS birth_year FROM students;"
+          ],
+          "practice": [
+            {
+              "question": "Table ke sab columns kaise select kare?",
+              "answer": "SELECT * FROM table_name;"
+            },
+            {
+              "question": "Specific columns kaise select kare?",
+              "answer": "SELECT column1, column2 FROM table_name;"
+            },
+            {
+              "question": "Column ka alias name kaise de?",
+              "answer": "SELECT column_name AS alias_name FROM table;"
+            },
+            {
+              "question": "Duplicate values hatane ke liye kya use kare?",
+              "answer": "SELECT DISTINCT column_name FROM table;"
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "title": "WHERE Clause",
+          "english": "Filtering rows based on conditions using WHERE clause.",
+          "hinglish": "WHERE clause use karke conditions ke basis par rows filter karna.",
+          "examples": [
+            "# Equality check",
+            "SELECT * FROM students WHERE age = 20;",
+            "",
+            "# Greater than",
+            "SELECT * FROM students WHERE age > 20;",
+            "",
+            "# Multiple conditions",
+            "SELECT * FROM students WHERE age > 20 AND city = 'Mumbai';",
+            "",
+            "# IN operator",
+            "SELECT * FROM students WHERE age IN (20, 21, 22);",
+            "",
+            "# BETWEEN operator",
+            "SELECT * FROM students WHERE age BETWEEN 18 AND 25;",
+            "",
+            "# LIKE operator",
+            "SELECT * FROM students WHERE name LIKE 'A%';",
+            "SELECT * FROM students WHERE email LIKE '%@gmail.com';",
+            "",
+            "# NULL check",
+            "SELECT * FROM students WHERE email IS NULL;",
+            "SELECT * FROM students WHERE email IS NOT NULL;"
+          ],
+          "practice": [
+            {
+              "question": "WHERE clause ka purpose kya hai?",
+              "answer": "Specific conditions ke according rows filter karna"
+            },
+            {
+              "question": "Multiple conditions kaise combine kare?",
+              "answer": "AND (both true), OR (either true), NOT (reverse condition)"
+            },
+            {
+              "question": "Pattern matching ke liye konsa operator use kare?",
+              "answer": "LIKE operator with % (any characters) and _ (single character)"
+            },
+            {
+              "question": "NULL values check kaise kare?",
+              "answer": "IS NULL ya IS NOT NULL use kare (= NULL work nahi karta)"
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "title": "UPDATE Data",
+          "english": "Modifying existing data in tables using UPDATE statement.",
+          "hinglish": "UPDATE statement use karke tables me existing data modify karna.",
+          "examples": [
+            "# Update single row",
+            "UPDATE students SET age = 21 WHERE id = 1;",
+            "",
+            "# Update multiple columns",
+            "UPDATE students SET age = 22, city = 'Delhi' WHERE id = 2;",
+            "",
+            "# Update with calculation",
+            "UPDATE products SET price = price * 0.9 WHERE category = 'Electronics';",
+            "",
+            "# Update all rows (careful!)",
+            "UPDATE students SET status = 'active';",
+            "",
+            "# Update with subquery",
+            "UPDATE orders SET status = 'completed' WHERE order_id IN (",
+            "  SELECT order_id FROM payments WHERE status = 'paid'",
+            ");"
+          ],
+          "practice": [
+            {
+              "question": "Data update karne ka basic syntax kya hai?",
+              "answer": "UPDATE table_name SET column = value WHERE condition;"
+            },
+            {
+              "question": "WHERE clause na use kare to kya hoga?",
+              "answer": "Sab rows update ho jayengi - dangerous!"
+            },
+            {
+              "question": "Multiple columns ek sath update kaise kare?",
+              "answer": "UPDATE table SET col1=val1, col2=val2 WHERE condition;"
+            },
+            {
+              "question": "Calculation ke sath update kaise kare?",
+              "answer": "UPDATE table SET price = price * 1.1; (10% increase)"
+            }
+          ]
+        },
+        {
+          "id": 19,
+          "title": "DELETE Data",
+          "english": "Removing rows from tables using DELETE statement.",
+          "hinglish": "DELETE statement use karke tables se rows remove karna.",
+          "examples": [
+            "# Delete specific rows",
+            "DELETE FROM students WHERE id = 1;",
+            "",
+            "# Delete with condition",
+            "DELETE FROM students WHERE age < 18;",
+            "",
+            "# Delete all rows (dangerous!)",
+            "DELETE FROM students;",
+            "",
+            "# Delete with LIMIT",
+            "DELETE FROM logs ORDER BY created_at LIMIT 1000;",
+            "",
+            "# Delete using subquery",
+            "DELETE FROM products WHERE product_id NOT IN (",
+            "  SELECT product_id FROM orders",
+            ");"
+          ],
+          "practice": [
+            {
+              "question": "Specific rows delete karne ka syntax kya hai?",
+              "answer": "DELETE FROM table_name WHERE condition;"
+            },
+            {
+              "question": "DELETE aur TRUNCATE me kya difference hai?",
+              "answer": "DELETE: row-by-row delete, can be rolled back; TRUNCATE: faster, resets auto-increment"
+            },
+            {
+              "question": "WHERE clause na use kare to kya hoga?",
+              "answer": "Table ke sab rows delete ho jayenge - very dangerous!"
+            },
+            {
+              "question": "LIMIT ke sath delete kaise kare?",
+              "answer": "DELETE FROM table ORDER BY column LIMIT number;"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": "intermediate",
+      "order": 2,
+      "description": "Advanced queries, joins, functions, and constraints",
+      "topics": [
+        {
+          "id": 20,
+          "title": "ORDER BY",
+          "english": "Sorting query results in ascending or descending order.",
+          "hinglish": "Query results ko ascending ya descending order me sort karna.",
+          "examples": [
+            "# Sort ascending (default)",
+            "SELECT * FROM students ORDER BY age;",
+            "SELECT * FROM students ORDER BY age ASC;",
+            "",
+            "# Sort descending",
+            "SELECT * FROM students ORDER BY age DESC;",
+            "",
+            "# Sort by multiple columns",
+            "SELECT * FROM students ORDER BY city ASC, age DESC;",
+            "",
+            "# Sort by column position",
+            "SELECT name, age FROM students ORDER BY 2 DESC; -- Sort by age",
+            "",
+            "# Sort with NULLs",
+            "SELECT * FROM products ORDER BY price IS NULL, price;"
+          ],
+          "practice": [
+            {
+              "question": "Results ascending order me sort kaise kare?",
+              "answer": "ORDER BY column_name ASC (ASC optional, default hai)"
+            },
+            {
+              "question": "Results descending order me sort kaise kare?",
+              "answer": "ORDER BY column_name DESC"
+            },
+            {
+              "question": "Multiple columns ke basis par sort kaise kare?",
+              "answer": "ORDER BY col1 ASC, col2 DESC; (pehle col1, phir col2)"
+            },
+            {
+              "question": "NULL values sort order me kahan aate hain?",
+              "answer": "ASC me last me, DESC me first me (MySQL me)"
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "title": "LIMIT & OFFSET",
+          "english": "Limiting number of rows returned and implementing pagination.",
+          "hinglish": "Returned rows ki number limit karna aur pagination implement karna.",
+          "examples": [
+            "# Limit rows",
+            "SELECT * FROM students LIMIT 10;",
+            "",
+            "# Limit with offset (pagination)",
+            "SELECT * FROM students LIMIT 10 OFFSET 20; -- Rows 21-30",
+            "SELECT * FROM students LIMIT 20, 10; -- Same as above",
+            "",
+            "# Top N records",
+            "SELECT * FROM products ORDER BY price DESC LIMIT 5;",
+            "",
+            "# Random sampling",
+            "SELECT * FROM students ORDER BY RAND() LIMIT 5;",
+            "",
+            "# Pagination formula",
+            "-- Page 1: LIMIT 10 OFFSET 0",
+            "-- Page 2: LIMIT 10 OFFSET 10",
+            "-- Page 3: LIMIT 10 OFFSET 20",
+            "-- Page N: LIMIT 10 OFFSET (N-1)*10"
+          ],
+          "practice": [
+            {
+              "question": "First 10 rows kaise select kare?",
+              "answer": "SELECT * FROM table LIMIT 10;"
+            },
+            {
+              "question": "Pagination ke liye LIMIT aur OFFSET kaise use kare?",
+              "answer": "SELECT * FROM table LIMIT page_size OFFSET (page-1)*page_size;"
+            },
+            {
+              "question": "Most expensive 5 products kaise select kare?",
+              "answer": "SELECT * FROM products ORDER BY price DESC LIMIT 5;"
+            },
+            {
+              "question": "Random 3 records kaise select kare?",
+              "answer": "SELECT * FROM table ORDER BY RAND() LIMIT 3;"
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "title": "Aggregate Functions",
+          "english": "Performing calculations on multiple rows using aggregate functions.",
+          "hinglish": "Aggregate functions use karke multiple rows par calculations perform karna.",
+          "examples": [
+            "# Count rows",
+            "SELECT COUNT(*) FROM students;",
+            "SELECT COUNT(email) FROM students; -- Non-NULL emails",
+            "",
+            "# Sum of values",
+            "SELECT SUM(amount) FROM orders;",
+            "",
+            "# Average value",
+            "SELECT AVG(age) FROM students;",
+            "",
+            "# Minimum and maximum",
+            "SELECT MIN(price), MAX(price) FROM products;",
+            "",
+            "# Group concatenation",
+            "SELECT GROUP_CONCAT(name) FROM students WHERE city = 'Mumbai';",
+            "",
+            "# Multiple aggregates",
+            "SELECT COUNT(*), AVG(age), MAX(age), MIN(age) FROM students;"
+          ],
+          "practice": [
+            {
+              "question": "Table me total rows count kaise kare?",
+              "answer": "SELECT COUNT(*) FROM table;"
+            },
+            {
+              "question": "Column ke values ka sum kaise calculate kare?",
+              "answer": "SELECT SUM(column_name) FROM table;"
+            },
+            {
+              "question": "Average value kaise calculate kare?",
+              "answer": "SELECT AVG(column_name) FROM table;"
+            },
+            {
+              "question": "COUNT(*) aur COUNT(column) me kya difference hai?",
+              "answer": "COUNT(*) sab rows count karta hai, COUNT(column) sirf non-NULL values"
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "title": "GROUP BY",
+          "english": "Grouping rows that have same values for aggregate calculations.",
+          "hinglish": "Same values wale rows ko group karna aggregate calculations ke liye.",
+          "examples": [
+            "# Group by single column",
+            "SELECT city, COUNT(*) FROM students GROUP BY city;",
+            "",
+            "# Group by multiple columns",
+            "SELECT city, gender, COUNT(*) FROM students GROUP BY city, gender;",
+            "",
+            "# Group with aggregates",
+            "SELECT department, AVG(salary), MAX(salary), MIN(salary) FROM employees GROUP BY department;",
+            "",
+            "# Group with filtering before grouping",
+            "SELECT city, COUNT(*) FROM students WHERE age > 20 GROUP BY city;",
+            "",
+            "# Group with expressions",
+            "SELECT YEAR(created_at), COUNT(*) FROM orders GROUP BY YEAR(created_at);",
+            "",
+            "# Group with HAVING",
+            "SELECT city, COUNT(*) FROM students GROUP BY city HAVING COUNT(*) > 10;"
+          ],
+          "practice": [
+            {
+              "question": "GROUP BY ka purpose kya hai?",
+              "answer": "Same values wale rows ko group karna aggregate functions ke liye"
+            },
+            {
+              "question": "SELECT list me GROUP BY ke saath kya include kar sakte hain?",
+              "answer": "Grouped columns aur aggregate functions"
+            },
+            {
+              "question": "Multiple columns ke basis par group kaise kare?",
+              "answer": "GROUP BY column1, column2, column3;"
+            },
+            {
+              "question": "WHERE aur HAVING me kya difference hai?",
+              "answer": "WHERE rows filter karta hai grouping se pehle, HAVING groups filter karta hai"
+            }
+          ]
+        },
+        {
+          "id": 24,
+          "title": "HAVING Clause",
+          "english": "Filtering groups after GROUP BY using HAVING clause.",
+          "hinglish": "GROUP BY ke baad groups ko filter karna HAVING clause use karke.",
+          "examples": [
+            "# Filter groups by count",
+            "SELECT city, COUNT(*) FROM students GROUP BY city HAVING COUNT(*) > 5;",
+            "",
+            "# Filter groups by aggregate value",
+            "SELECT department, AVG(salary) FROM employees GROUP BY department HAVING AVG(salary) > 50000;",
+            "",
+            "# Multiple conditions in HAVING",
+            "SELECT category, COUNT(*), AVG(price) FROM products GROUP BY category HAVING COUNT(*) > 10 AND AVG(price) < 1000;",
+            "",
+            "# HAVING with WHERE",
+            "SELECT city, COUNT(*) FROM students WHERE age > 18 GROUP BY city HAVING COUNT(*) > 3;",
+            "",
+            "# HAVING with different aggregates",
+            "SELECT customer_id, COUNT(*), SUM(amount) FROM orders GROUP BY customer_id HAVING COUNT(*) > 5 AND SUM(amount) > 1000;"
+          ],
+          "practice": [
+            {
+              "question": "HAVING clause ka use kab karte hain?",
+              "answer": "GROUP BY ke baad groups ko filter karne ke liye"
+            },
+            {
+              "question": "HAVING me aggregate functions use kar sakte hain?",
+              "answer": "Haan, jaise HAVING AVG(salary) > 50000"
+            },
+            {
+              "question": "WHERE aur HAVING ek sath use kar sakte hain?",
+              "answer": "Haan, pehle WHERE rows filter karega, phir GROUP BY, phir HAVING groups filter karega"
+            },
+            {
+              "question": "City with more than 100 students kaise find kare?",
+              "answer": "SELECT city, COUNT(*) FROM students GROUP BY city HAVING COUNT(*) > 100;"
+            }
+          ]
+        },
+        {
+          "id": 25,
+          "title": "String Functions",
+          "english": "Manipulating string data using built-in string functions.",
+          "hinglish": "Built-in string functions use karke string data manipulate karna.",
+          "examples": [
+            "# Concatenation",
+            "SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM employees;",
+            "SELECT CONCAT_WS(' ', first_name, last_name) FROM employees;",
+            "",
+            "# Case conversion",
+            "SELECT UPPER(name), LOWER(email) FROM students;",
+            "",
+            "# Trimming",
+            "SELECT TRIM('  Hello  '), LTRIM('  Hello'), RTRIM('Hello  ');",
+            "",
+            "# Substring",
+            "SELECT SUBSTRING(email, 1, 5), LEFT(email, 10), RIGHT(email, 3) FROM users;",
+            "",
+            "# Length",
+            "SELECT LENGTH(name), CHAR_LENGTH(name) FROM students;",
+            "",
+            "# Replace",
+            "SELECT REPLACE(description, 'old', 'new') FROM products;",
+            "",
+            "# String position",
+            "SELECT LOCATE('@', email), POSITION('@' IN email) FROM users;"
+          ],
+          "practice": [
+            {
+              "question": "Two strings concatenate kaise kare?",
+              "answer": "CONCAT(str1, str2) ya str1 || str2 (MySQL 8.0+)"
+            },
+            {
+              "question": "String ka case kaise change kare?",
+              "answer": "UPPER() uppercase me, LOWER() lowercase me"
+            },
+            {
+              "question": "String ke starting/ending spaces kaise remove kare?",
+              "answer": "TRIM() dono sides se, LTRIM() left se, RTRIM() right se"
+            },
+            {
+              "question": "String ki length kaise find kare?",
+              "answer": "LENGTH() bytes me, CHAR_LENGTH() characters me"
+            }
+          ]
+        },
+        {
+          "id": 26,
+          "title": "Numeric Functions",
+          "english": "Performing mathematical operations using numeric functions.",
+          "hinglish": "Numeric functions use karke mathematical operations perform karna.",
+          "examples": [
+            "# Basic arithmetic",
+            "SELECT price, price * 1.1 AS price_with_tax FROM products;",
+            "",
+            "# Rounding",
+            "SELECT ROUND(price, 2), CEIL(price), FLOOR(price) FROM products;",
+            "",
+            "# Absolute value",
+            "SELECT ABS(-10), ABS(10);",
+            "",
+            "# Power and roots",
+            "SELECT POWER(2, 3), SQRT(16), EXP(1);",
+            "",
+            "# Logarithm",
+            "SELECT LOG(10), LN(2.718), LOG10(100);",
+            "",
+            "# Trigonometric",
+            "SELECT SIN(RADIANS(30)), COS(RADIANS(60)), TAN(RADIANS(45));",
+            "",
+            "# Random numbers",
+            "SELECT RAND(), FLOOR(RAND() * 100) + 1 AS random_1_to_100;",
+            "",
+            "# Modulo",
+            "SELECT MOD(10, 3), 10 % 3;"
+          ],
+          "practice": [
+            {
+              "question": "Number round kaise kare?",
+              "answer": "ROUND(number, decimals) - ROUND(123.456, 2) = 123.46"
+            },
+            {
+              "question": "Ceil aur Floor me kya difference hai?",
+              "answer": "CEIL upar wala integer, FLOOR neeche wala integer"
+            },
+            {
+              "question": "Random number between 1 and 100 kaise generate kare?",
+              "answer": "FLOOR(RAND() * 100) + 1"
+            },
+            {
+              "question": "Modulo (remainder) kaise calculate kare?",
+              "answer": "MOD(dividend, divisor) ya dividend % divisor"
+            }
+          ]
+        },
+        {
+          "id": 27,
+          "title": "Date & Time Functions",
+          "english": "Working with date and time values using date functions.",
+          "hinglish": "Date functions use karke date aur time values ke saath kaam karna.",
+          "examples": [
+            "# Current date/time",
+            "SELECT NOW(), CURDATE(), CURTIME();",
+            "SELECT CURRENT_DATE, CURRENT_TIME, CURRENT_TIMESTAMP;",
+            "",
+            "# Extract date parts",
+            "SELECT YEAR(order_date), MONTH(order_date), DAY(order_date) FROM orders;",
+            "SELECT HOUR(created_at), MINUTE(created_at), SECOND(created_at) FROM logs;",
+            "",
+            "# Date arithmetic",
+            "SELECT DATE_ADD(NOW(), INTERVAL 7 DAY);",
+            "SELECT DATE_SUB(NOW(), INTERVAL 1 MONTH);",
+            "",
+            "# Date difference",
+            "SELECT DATEDIFF('2024-12-31', '2024-01-01');",
+            "SELECT TIMEDIFF('14:30:00', '10:00:00');",
+            "",
+            "# Format dates",
+            "SELECT DATE_FORMAT(NOW(), '%D %M %Y'), -- 15th January 2024",
+            "       DATE_FORMAT(NOW(), '%d/%m/%Y'), -- 15/01/2024",
+            "       DATE_FORMAT(NOW(), '%H:%i:%s'); -- 14:30:45",
+            "",
+            "# Date parsing",
+            "SELECT STR_TO_DATE('15-01-2024', '%d-%m-%Y');"
+          ],
+          "practice": [
+            {
+              "question": "Current date aur time kaise get kare?",
+              "answer": "NOW() date aur time, CURDATE() sirf date, CURTIME() sirf time"
+            },
+            {
+              "question": "Date me se year, month, day kaise extract kare?",
+              "answer": "YEAR(date), MONTH(date), DAY(date)"
+            },
+            {
+              "question": "7 days add kaise kare current date me?",
+              "answer": "DATE_ADD(NOW(), INTERVAL 7 DAY)"
+            },
+            {
+              "question": "Date ko different format me kaise display kare?",
+              "answer": "DATE_FORMAT(date, '%d/%m/%Y')"
+            }
+          ]
+        },
+        {
+          "id": 28,
+          "title": "NULL Functions",
+          "english": "Handling NULL values using functions like COALESCE, IFNULL, NULLIF.",
+          "hinglish": "COALESCE, IFNULL, NULLIF jaise functions use karke NULL values handle karna.",
+          "examples": [
+            "# COALESCE - first non-NULL value",
+            "SELECT COALESCE(middle_name, '') FROM students;",
+            "SELECT COALESCE(email, phone, 'No contact') FROM users;",
+            "",
+            "# IFNULL - if NULL then value",
+            "SELECT IFNULL(salary, 0) FROM employees;",
+            "",
+            "# NULLIF - if equal then NULL",
+            "SELECT NULLIF(salary, 0) FROM employees; -- Returns NULL if salary=0",
+            "",
+            "# ISNULL - check if NULL",
+            "SELECT ISNULL(email) FROM users;",
+            "",
+            "# CASE with NULL",
+            "SELECT CASE WHEN email IS NULL THEN 'No email' ELSE email END FROM users;",
+            "",
+            "# NULL in calculations",
+            "SELECT 10 + NULL, 10 * NULL, CONCAT('Hello', NULL); -- All return NULL"
+          ],
+          "practice": [
+            {
+              "question": "COALESCE function kya karta hai?",
+              "answer": "First non-NULL value return karta hai list me se"
+            },
+            {
+              "question": "IFNULL aur COALESCE me kya difference hai?",
+              "answer": "IFNULL sirf 2 parameters leta hai, COALESCE multiple parameters le sakta hai"
+            },
+            {
+              "question": "NULLIF function kya karta hai?",
+              "answer": "Don't parameters equal hain to NULL return karta hai"
+            },
+            {
+              "question": "NULL value ko default value se replace kaise kare?",
+              "answer": "COALESCE(column, default_value) ya IFNULL(column, default_value)"
+            }
+          ]
+        },
+        {
+          "id": 29,
+          "title": "CASE Statement",
+          "english": "Conditional logic in SQL queries using CASE statement.",
+          "hinglish": "CASE statement use karke SQL queries me conditional logic implement karna.",
+          "examples": [
+            "# Simple CASE",
+            "SELECT name, age,",
+            "  CASE",
+            "    WHEN age < 18 THEN 'Minor'",
+            "    WHEN age BETWEEN 18 AND 60 THEN 'Adult'",
+            "    ELSE 'Senior'",
+            "  END AS age_group",
+            "FROM students;",
+            "",
+            "# CASE in ORDER BY",
+            "SELECT * FROM products",
+            "ORDER BY",
+            "  CASE category",
+            "    WHEN 'Electronics' THEN 1",
+            "    WHEN 'Clothing' THEN 2",
+            "    ELSE 3",
+            "  END;",
+            "",
+            "# CASE in UPDATE",
+            "UPDATE products",
+            "SET discount =",
+            "  CASE",
+            "    WHEN price > 1000 THEN 0.2",
+            "    WHEN price > 500 THEN 0.1",
+            "    ELSE 0",
+            "  END;",
+            "",
+            "# CASE with aggregation",
+            "SELECT",
+            "  COUNT(CASE WHEN status = 'active' THEN 1 END) AS active_count,",
+            "  COUNT(CASE WHEN status = 'inactive' THEN 1 END) AS inactive_count",
+            "FROM users;"
+          ],
+          "practice": [
+            {
+              "question": "CASE statement ka syntax kya hai?",
+              "answer": "CASE WHEN condition1 THEN result1 WHEN condition2 THEN result2 ELSE default END"
+            },
+            {
+              "question": "CASE statement SELECT me kaise use kare?",
+              "answer": "SELECT CASE WHEN age>18 THEN 'Adult' ELSE 'Minor' END FROM students;"
+            },
+            {
+              "question": "CASE statement UPDATE me kaise use kare?",
+              "answer": "UPDATE table SET column=CASE WHEN cond THEN val1 ELSE val2 END;"
+            },
+            {
+              "question": "Conditional count kaise calculate kare?",
+              "answer": "COUNT(CASE WHEN condition THEN 1 END)"
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "title": "Joins - INNER JOIN",
+          "english": "Combining rows from two or more tables based on related columns.",
+          "hinglish": "Related columns ke basis par do ya zyada tables ki rows combine karna.",
+          "examples": [
+            "# Basic INNER JOIN",
+            "SELECT orders.order_id, customers.name",
+            "FROM orders",
+            "INNER JOIN customers ON orders.customer_id = customers.customer_id;",
+            "",
+            "# JOIN with aliases",
+            "SELECT o.order_id, c.name, o.amount",
+            "FROM orders o",
+            "INNER JOIN customers c ON o.customer_id = c.customer_id;",
+            "",
+            "# Multiple JOINs",
+            "SELECT o.order_id, c.name, p.product_name",
+            "FROM orders o",
+            "INNER JOIN customers c ON o.customer_id = c.customer_id",
+            "INNER JOIN products p ON o.product_id = p.product_id;",
+            "",
+            "# JOIN with WHERE",
+            "SELECT o.order_id, c.name",
+            "FROM orders o",
+            "INNER JOIN customers c ON o.customer_id = c.customer_id",
+            "WHERE o.amount > 1000;",
+            "",
+            "# Self JOIN",
+            "SELECT e1.name AS employee, e2.name AS manager",
+            "FROM employees e1",
+            "INNER JOIN employees e2 ON e1.manager_id = e2.employee_id;"
+          ],
+          "practice": [
+            {
+              "question": "INNER JOIN kya return karta hai?",
+              "answer": "Sirf matching rows dono tables se"
+            },
+            {
+              "question": "INNER JOIN ka basic syntax kya hai?",
+              "answer": "SELECT columns FROM table1 INNER JOIN table2 ON table1.column = table2.column"
+            },
+            {
+              "question": "Table aliases ka use kyu karte hain?",
+              "answer": "Code readable banane ke liye aur ambiguous columns avoid karne ke liye"
+            },
+            {
+              "question": "Three tables kaise join kare?",
+              "answer": "table1 JOIN table2 ON condition JOIN table3 ON condition"
+            }
+          ]
+        },
+        {
+          "id": 31,
+          "title": "Joins - LEFT JOIN",
+          "english": "Returning all rows from left table and matching rows from right table.",
+          "hinglish": "Left table ki sab rows aur right table ki matching rows return karna.",
+          "examples": [
+            "# Basic LEFT JOIN",
+            "SELECT customers.name, orders.order_id",
+            "FROM customers",
+            "LEFT JOIN orders ON customers.customer_id = orders.customer_id;",
+            "",
+            "# LEFT JOIN with NULL check",
+            "SELECT customers.name",
+            "FROM customers",
+            "LEFT JOIN orders ON customers.customer_id = orders.customer_id",
+            "WHERE orders.order_id IS NULL; -- Customers with no orders",
+            "",
+            "# Multiple LEFT JOINS",
+            "SELECT c.name, o.order_id, p.product_name",
+            "FROM customers c",
+            "LEFT JOIN orders o ON c.customer_id = o.customer_id",
+            "LEFT JOIN products p ON o.product_id = p.product_id;",
+            "",
+            "# LEFT JOIN with conditions",
+            "SELECT c.name, COALESCE(SUM(o.amount), 0) AS total_spent",
+            "FROM customers c",
+            "LEFT JOIN orders o ON c.customer_id = o.customer_id",
+            "GROUP BY c.customer_id;"
+          ],
+          "practice": [
+            {
+              "question": "LEFT JOIN kya return karta hai?",
+              "answer": "Left table ki sab rows aur right table ki matching rows (missing = NULL)"
+            },
+            {
+              "question": "Customers with no orders kaise find kare?",
+              "answer": "LEFT JOIN orders WHERE orders.order_id IS NULL"
+            },
+            {
+              "question": "LEFT JOIN me NULL values kaise handle kare?",
+              "answer": "COALESCE ya IFNULL use kare"
+            },
+            {
+              "question": "LEFT JOIN vs INNER JOIN me kya difference hai?",
+              "answer": "LEFT JOIN: all left rows; INNER JOIN: only matching rows"
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "title": "Joins - RIGHT JOIN & FULL JOIN",
+          "english": "RIGHT JOIN returns all rows from right table. FULL JOIN returns all rows when there's a match in either table.",
+          "hinglish": "RIGHT JOIN right table ki sab rows return karta hai. FULL JOIN dono tables ki sab rows return karta hai.",
+          "examples": [
+            "# RIGHT JOIN",
+            "SELECT orders.order_id, customers.name",
+            "FROM orders",
+            "RIGHT JOIN customers ON orders.customer_id = customers.customer_id;",
+            "",
+            "# RIGHT JOIN equivalent to LEFT JOIN",
+            "-- This:",
+            "SELECT * FROM table1 RIGHT JOIN table2 ON condition;",
+            "-- Is same as:",
+            "SELECT * FROM table2 LEFT JOIN table1 ON condition;",
+            "",
+            "# FULL OUTER JOIN (MySQL doesn't have direct FULL JOIN)",
+            "SELECT * FROM customers",
+            "LEFT JOIN orders ON customers.customer_id = orders.customer_id",
+            "UNION",
+            "SELECT * FROM customers",
+            "RIGHT JOIN orders ON customers.customer_id = orders.customer_id",
+            "WHERE customers.customer_id IS NULL;",
+            "",
+            "# CROSS JOIN (Cartesian product)",
+            "SELECT * FROM table1 CROSS JOIN table2;",
+            "SELECT * FROM table1, table2; -- Implicit CROSS JOIN"
+          ],
+          "practice": [
+            {
+              "question": "RIGHT JOIN kya return karta hai?",
+              "answer": "Right table ki sab rows aur left table ki matching rows"
+            },
+            {
+              "question": "MySQL me FULL OUTER JOIN kaise implement kare?",
+              "answer": "LEFT JOIN UNION RIGHT JOIN with NULL check"
+            },
+            {
+              "question": "CROSS JOIN kya hota hai?",
+              "answer": "Cartesian product - har row table1 ki har row table2 ke saath combine hoti hai"
+            },
+            {
+              "question": "RIGHT JOIN kab use karna chahiye?",
+              "answer": "Jab right table primary ho aur uska sab data chahiye ho"
+            }
+          ]
+        },
+        {
+          "id": 33,
+          "title": "UNION & UNION ALL",
+          "english": "Combining results from multiple SELECT statements.",
+          "hinglish": "Multiple SELECT statements ke results combine karna.",
+          "examples": [
+            "# UNION (removes duplicates)",
+            "SELECT customer_id FROM current_customers",
+            "UNION",
+            "SELECT customer_id FROM old_customers;",
+            "",
+            "# UNION ALL (keeps duplicates)",
+            "SELECT product_id FROM orders_2023",
+            "UNION ALL",
+            "SELECT product_id FROM orders_2024;",
+            "",
+            "# UNION with different columns",
+            "SELECT name, 'Employee' AS type FROM employees",
+            "UNION",
+            "SELECT name, 'Customer' AS type FROM customers",
+            "ORDER BY name;",
+            "",
+            "# Multiple UNIONs",
+            "SELECT city FROM suppliers",
+            "UNION",
+            "SELECT city FROM customers",
+            "UNION",
+            "SELECT city FROM employees;",
+            "",
+            "# UNION in subquery",
+            "SELECT * FROM products WHERE category IN (",
+            "  SELECT category FROM electronic_categories",
+            "  UNION",
+            "  SELECT category FROM furniture_categories",
+            ");"
+          ],
+          "practice": [
+            {
+              "question": "UNION aur UNION ALL me kya difference hai?",
+              "answer": "UNION duplicate rows remove karta hai, UNION ALL sab rows keep karta hai"
+            },
+            {
+              "question": "UNION ke liye SELECT statements ki requirements kya hain?",
+              "answer": "Same number of columns, compatible data types, same order"
+            },
+            {
+              "question": "UNION results sort kaise kare?",
+              "answer": "Last SELECT ke baad ORDER BY use kare"
+            },
+            {
+              "question": "UNION vs JOIN me kya difference hai?",
+              "answer": "UNION rows vertically combine karta hai, JOIN horizontally combine karta hai"
+            }
+          ]
+        },
+        {
+          "id": 34,
+          "title": "Subqueries - Basic",
+          "english": "Using queries inside other queries (nested queries).",
+          "hinglish": "Queries ke andar queries use karna (nested queries).",
+          "examples": [
+            "# Subquery in WHERE",
+            "SELECT * FROM products",
+            "WHERE price > (SELECT AVG(price) FROM products);",
+            "",
+            "# Subquery with IN",
+            "SELECT * FROM customers",
+            "WHERE customer_id IN (SELECT customer_id FROM orders WHERE amount > 1000);",
+            "",
+            "# Subquery with NOT IN",
+            "SELECT * FROM products",
+            "WHERE product_id NOT IN (SELECT product_id FROM order_items);",
+            "",
+            "# Subquery in SELECT",
+            "SELECT name,",
+            "       (SELECT COUNT(*) FROM orders WHERE customer_id = c.customer_id) AS order_count",
+            "FROM customers c;",
+            "",
+            "# Subquery in FROM (derived table)",
+            "SELECT AVG(order_count) FROM (",
+            "  SELECT customer_id, COUNT(*) AS order_count",
+            "  FROM orders",
+            "  GROUP BY customer_id",
+            ") AS customer_orders;"
+          ],
+          "practice": [
+            {
+              "question": "Subquery kya hota hai?",
+              "answer": "Query ke andar query (nested query)"
+            },
+            {
+              "question": "Subquery WHERE clause me kaise use kare?",
+              "answer": "SELECT * FROM table WHERE column > (SELECT AVG(column) FROM table)"
+            },
+            {
+              "question": "IN operator ke sath subquery kaise use kare?",
+              "answer": "WHERE column IN (SELECT column FROM table WHERE condition)"
+            },
+            {
+              "question": "FROM clause me subquery kaise use kare?",
+              "answer": "SELECT * FROM (SELECT ...) AS alias_name"
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "title": "Subqueries - Correlated",
+          "english": "Correlated subqueries reference columns from outer query.",
+          "hinglish": "Correlated subqueries outer query ke columns ko reference karte hain.",
+          "examples": [
+            "# Correlated subquery",
+            "SELECT name, salary",
+            "FROM employees e1",
+            "WHERE salary > (",
+            "  SELECT AVG(salary)",
+            "  FROM employees e2",
+            "  WHERE e1.department = e2.department",
+            ");",
+            "",
+            "# EXISTS with correlated subquery",
+            "SELECT * FROM customers c",
+            "WHERE EXISTS (",
+            "  SELECT 1 FROM orders o",
+            "  WHERE o.customer_id = c.customer_id",
+            "  AND o.amount > 1000",
+            ");",
+            "",
+            "# NOT EXISTS",
+            "SELECT * FROM products p",
+            "WHERE NOT EXISTS (",
+            "  SELECT 1 FROM order_items oi",
+            "  WHERE oi.product_id = p.product_id",
+            ");",
+            "",
+            "# Correlated subquery in SELECT",
+            "SELECT product_name,",
+            "       price,",
+            "       (SELECT AVG(price) FROM products p2 WHERE p1.category = p2.category) AS avg_category_price",
+            "FROM products p1;"
+          ],
+          "practice": [
+            {
+              "question": "Correlated subquery kya hota hai?",
+              "answer": "Subquery jo outer query ke columns ko reference karta hai"
+            },
+            {
+              "question": "EXISTS operator kya karta hai?",
+              "answer": "TRUE return karta hai agar subquery koi row return kare"
+            },
+            {
+              "question": "Correlated subquery performance ke liye kaisa hai?",
+              "answer": "Slow ho sakta hai kyunki har outer row ke liye execute hota hai"
+            },
+            {
+              "question": "NOT EXISTS ka common use case kya hai?",
+              "answer": "Find rows with no related rows in another table"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": "advanced",
+      "order": 3,
+      "description": "Advanced features, optimization, administration",
+      "topics": [
+        {
+          "id": 36,
+          "title": "Views",
+          "english": "Creating virtual tables based on SQL query results.",
+          "hinglish": "SQL query results par based virtual tables create karna.",
+          "examples": [
+            "# Create view",
+            "CREATE VIEW customer_orders AS",
+            "SELECT c.name, o.order_id, o.order_date, o.amount",
+            "FROM customers c",
+            "JOIN orders o ON c.customer_id = o.customer_id;",
+            "",
+            "# Use view",
+            "SELECT * FROM customer_orders WHERE amount > 1000;",
+            "",
+            "# Update view",
+            "CREATE OR REPLACE VIEW high_value_customers AS",
+            "SELECT * FROM customers WHERE total_spent > 10000;",
+            "",
+            "# View with check option",
+            "CREATE VIEW active_users AS",
+            "SELECT * FROM users WHERE status = 'active'",
+            "WITH CHECK OPTION;",
+            "",
+            "# Show views",
+            "SHOW FULL TABLES WHERE Table_type = 'VIEW';",
+            "",
+            "# Drop view",
+            "DROP VIEW IF EXISTS customer_orders;"
+          ],
+          "practice": [
+            {
+              "question": "View kya hota hai?",
+              "answer": "Virtual table based on SQL query result"
+            },
+            {
+              "question": "View create karne ka syntax kya hai?",
+              "answer": "CREATE VIEW view_name AS SELECT ..."
+            },
+            {
+              "question": "WITH CHECK OPTION kya karta hai?",
+              "answer": "Ensures INSERT/UPDATE through view satisfy view's WHERE condition"
+            },
+            {
+              "question": "Views ke advantages kya hain?",
+              "answer": "Security, simplicity, consistency, logical abstraction"
+            }
+          ]
+        },
+        {
+          "id": 37,
+          "title": "Indexes - Single Column",
+          "english": "Creating indexes to improve query performance.",
+          "hinglish": "Query performance improve karne ke liye indexes create karna.",
+          "examples": [
+            "# Create index",
+            "CREATE INDEX idx_email ON users(email);",
+            "",
+            "# Unique index",
+            "CREATE UNIQUE INDEX idx_unique_email ON users(email);",
+            "",
+            "# Index on multiple columns",
+            "CREATE INDEX idx_name_city ON customers(name, city);",
+            "",
+            "# Show indexes",
+            "SHOW INDEX FROM users;",
+            "",
+            "# Drop index",
+            "DROP INDEX idx_email ON users;",
+            "",
+            "# Full-text index",
+            "CREATE FULLTEXT INDEX idx_content ON articles(content);",
+            "",
+            "# Spatial index",
+            "CREATE SPATIAL INDEX idx_location ON places(location);"
+          ],
+          "practice": [
+            {
+              "question": "Index kya hota hai?",
+              "answer": "Data structure jo data retrieval speed badhata hai"
+            },
+            {
+              "question": "Kab index create karna chahiye?",
+              "answer": "Frequently searched columns, foreign keys, WHERE/ORDER BY/JOIN me use hone wale columns"
+            },
+            {
+              "question": "Unique index kya hai?",
+              "answer": "Index jo duplicate values allow nahi karta"
+            },
+            {
+              "question": "Index ke disadvantages kya hain?",
+              "answer": "Extra storage, slower INSERT/UPDATE/DELETE"
+            }
+          ]
+        },
+        {
+          "id": 38,
+          "title": "Indexes - Composite & Covering",
+          "english": "Creating multi-column indexes and covering indexes.",
+          "hinglish": "Multi-column indexes aur covering indexes create karna.",
+          "examples": [
+            "# Composite index",
+            "CREATE INDEX idx_last_first ON employees(last_name, first_name);",
+            "",
+            "# Covering index",
+            "CREATE INDEX idx_covering ON orders(customer_id, order_date, amount);",
+            "-- Query: SELECT customer_id, order_date, amount FROM orders WHERE customer_id = 123",
+            "",
+            "# Prefix index",
+            "CREATE INDEX idx_name_prefix ON products(name(20));",
+            "",
+            "# Descending index",
+            "CREATE INDEX idx_date_desc ON logs(created_at DESC);",
+            "",
+            "# Invisible index",
+            "CREATE INDEX idx_test ON users(email) INVISIBLE;",
+            "ALTER INDEX idx_test ON users VISIBLE;",
+            "",
+            "# Index on expressions",
+            "CREATE INDEX idx_lower_name ON users((LOWER(name)));"
+          ],
+          "practice": [
+            {
+              "question": "Composite index kya hota hai?",
+              "answer": "Index multiple columns par"
+            },
+            {
+              "question": "Covering index kya hota hai?",
+              "answer": "Index jo query ke sab required columns cover karta hai"
+            },
+            {
+              "question": "Index column order matter karta hai?",
+              "answer": "Haan, equality checks pehle, range queries baad me"
+            },
+            {
+              "question": "Prefix index kab use kare?",
+              "answer": "Long text columns me storage save karne ke liye"
+            }
+          ]
+        },
+        {
+          "id": 39,
+          "title": "EXPLAIN Query Analysis",
+          "english": "Analyzing query execution plans using EXPLAIN.",
+          "hinglish": "EXPLAIN use karke query execution plans analyze karna.",
+          "examples": [
+            "# Basic EXPLAIN",
+            "EXPLAIN SELECT * FROM users WHERE email = 'test@example.com';",
+            "",
+            "# EXPLAIN with FORMAT",
+            "EXPLAIN FORMAT=JSON SELECT * FROM orders WHERE amount > 1000;",
+            "",
+            "# EXPLAIN ANALYZE (MySQL 8.0.18+)",
+            "EXPLAIN ANALYZE SELECT * FROM products ORDER BY price DESC;",
+            "",
+            "# Analyzing index usage",
+            "EXPLAIN SELECT * FROM users USE INDEX (idx_email) WHERE email LIKE 'a%';",
+            "",
+            "# Common EXPLAIN output fields:",
+            "-- id: Select identifier",
+            "-- select_type: Type of SELECT",
+            "-- table: Table name",
+            "-- partitions: Partitions used",
+            "-- type: Join type (ALL, index, range, ref, eq_ref, const)",
+            "-- possible_keys: Possible indexes",
+            "-- key: Actual index used",
+            "-- key_len: Length of key used",
+            "-- ref: Columns compared to index",
+            "-- rows: Estimated rows examined",
+            "-- filtered: Percentage of rows filtered",
+            "-- Extra: Additional information"
+          ],
+          "practice": [
+            {
+              "question": "EXPLAIN kya karta hai?",
+              "answer": "Query ka execution plan show karta hai"
+            },
+            {
+              "question": "EXPLAIN output me 'type' field ka kya matlab hai?",
+              "answer": "Join type: ALL=full scan (bad), const=exact match (good)"
+            },
+            {
+              "question": "EXPLAIN ANALYZE kya extra information deta hai?",
+              "answer": "Actual execution time aur statistics"
+            },
+            {
+              "question": "Query optimization ke liye EXPLAIN kaise use kare?",
+              "answer": "Check for full table scans, missing indexes, poor join types"
+            }
+          ]
+        },
+        {
+          "id": 40,
+          "title": "Stored Procedures",
+          "english": "Creating stored procedures for reusable SQL code.",
+          "hinglish": "Reusable SQL code ke liye stored procedures create karna.",
+          "examples": [
+            "# Basic stored procedure",
+            "DELIMITER //",
+            "CREATE PROCEDURE GetCustomerOrders(IN customerId INT)",
+            "BEGIN",
+            "  SELECT * FROM orders WHERE customer_id = customerId;",
+            "END //",
+            "DELIMITER ;",
+            "",
+            "# Call procedure",
+            "CALL GetCustomerOrders(123);",
+            "",
+            "# Procedure with OUT parameter",
+            "CREATE PROCEDURE GetOrderCount(",
+            "  IN customerId INT,",
+            "  OUT orderCount INT",
+            ")",
+            "BEGIN",
+            "  SELECT COUNT(*) INTO orderCount",
+            "  FROM orders WHERE customer_id = customerId;",
+            "END //",
+            "",
+            "# Call with OUT parameter",
+            "CALL GetOrderCount(123, @count);",
+            "SELECT @count;",
+            "",
+            "# Procedure with INOUT parameter",
+            "CREATE PROCEDURE IncreasePrice(",
+            "  INOUT price DECIMAL(10,2),",
+            "  IN percentage DECIMAL(5,2)",
+            ")",
+            "BEGIN",
+            "  SET price = price * (1 + percentage/100);",
+            "END //",
+            "",
+            "# Show procedures",
+            "SHOW PROCEDURE STATUS;",
+            "SHOW CREATE PROCEDURE GetCustomerOrders;"
+          ],
+          "practice": [
+            {
+              "question": "Stored procedure kya hota hai?",
+              "answer": "Precompiled SQL code database me store hota hai"
+            },
+            {
+              "question": "IN, OUT, INOUT parameters me kya difference hai?",
+              "answer": "IN: input only, OUT: output only, INOUT: both input and output"
+            },
+            {
+              "question": "Stored procedure call kaise kare?",
+              "answer": "CALL procedure_name(parameters);"
+            },
+            {
+              "question": "Stored procedures ke advantages kya hain?",
+              "answer": "Performance, security, code reuse, reduced network traffic"
+            }
+          ]
+        },
+        {
+          "id": 41,
+          "title": "Functions",
+          "english": "Creating user-defined functions in MySQL.",
+          "hinglish": "MySQL me user-defined functions create karna.",
+          "examples": [
+            "# Scalar function",
+            "DELIMITER //",
+            "CREATE FUNCTION CalculateDiscount(",
+            "  price DECIMAL(10,2),",
+            "  discount DECIMAL(5,2)",
+            ") RETURNS DECIMAL(10,2)",
+            "DETERMINISTIC",
+            "BEGIN",
+            "  DECLARE final_price DECIMAL(10,2);",
+            "  SET final_price = price * (1 - discount/100);",
+            "  RETURN final_price;",
+            "END //",
+            "DELIMITER ;",
+            "",
+            "# Use function",
+            "SELECT product_name, price, CalculateDiscount(price, 10) AS discounted_price",
+            "FROM products;",
+            "",
+            "# Function with condition",
+            "CREATE FUNCTION GetCustomerStatus(",
+            "  total_orders INT",
+            ") RETURNS VARCHAR(20)",
+            "DETERMINISTIC",
+            "BEGIN",
+            "  IF total_orders > 50 THEN RETURN 'Gold';",
+            "  ELSEIF total_orders > 20 THEN RETURN 'Silver';",
+            "  ELSE RETURN 'Bronze';",
+            "  END IF;",
+            "END //",
+            "",
+            "# Show functions",
+            "SHOW FUNCTION STATUS;",
+            "SHOW CREATE FUNCTION CalculateDiscount;",
+            "",
+            "# Drop function",
+            "DROP FUNCTION IF EXISTS CalculateDiscount;"
+          ],
+          "practice": [
+            {
+              "question": "Stored function aur stored procedure me kya difference hai?",
+              "answer": "Function return value karti hai, procedure nahi; Function SELECT me use ho sakti hai"
+            },
+            {
+              "question": "DETERMINISTIC keyword kya hai?",
+              "answer": "Function same input ke liye hamesha same output deti hai"
+            },
+            {
+              "question": "Function me variables kaise declare kare?",
+              "answer": "DECLARE variable_name datatype DEFAULT value;"
+            },
+            {
+              "question": "Function call kaise kare?",
+              "answer": "SELECT function_name(parameters);"
+            }
+          ]
+        },
+        {
+          "id": 42,
+          "title": "Triggers",
+          "english": "Creating triggers for automatic actions on table events.",
+          "hinglish": "Table events par automatic actions ke liye triggers create karna.",
+          "examples": [
+            "# BEFORE INSERT trigger",
+            "DELIMITER //",
+            "CREATE TRIGGER before_user_insert",
+            "BEFORE INSERT ON users",
+            "FOR EACH ROW",
+            "BEGIN",
+            "  SET NEW.created_at = NOW();",
+            "  SET NEW.updated_at = NOW();",
+            "END //",
+            "DELIMITER ;",
+            "",
+            "# AFTER UPDATE trigger",
+            "CREATE TRIGGER after_order_update",
+            "AFTER UPDATE ON orders",
+            "FOR EACH ROW",
+            "BEGIN",
+            "  IF NEW.status = 'shipped' AND OLD.status != 'shipped' THEN",
+            "    INSERT INTO notifications (user_id, message)",
+            "    VALUES (NEW.customer_id, 'Your order has been shipped!');",
+            "  END IF;",
+            "END //",
+            "",
+            "# BEFORE DELETE trigger",
+            "CREATE TRIGGER before_product_delete",
+            "BEFORE DELETE ON products",
+            "FOR EACH ROW",
+            "BEGIN",
+            "  INSERT INTO deleted_products",
+            "  VALUES (OLD.product_id, OLD.name, OLD.price, NOW());",
+            "END //",
+            "",
+            "# Show triggers",
+            "SHOW TRIGGERS;",
+            "SHOW CREATE TRIGGER before_user_insert;",
+            "",
+            "# Drop trigger",
+            "DROP TRIGGER IF EXISTS before_user_insert;"
+          ],
+          "practice": [
+            {
+              "question": "Trigger kya hota hai?",
+              "answer": "Automatic action jo table event (INSERT/UPDATE/DELETE) par execute hota hai"
+            },
+            {
+              "question": "BEFORE aur AFTER trigger me kya difference hai?",
+              "answer": "BEFORE: action se pehle, AFTER: action ke baad"
+            },
+            {
+              "question": "NEW aur OLD keywords kya hain?",
+              "answer": "NEW: new row values, OLD: old row values (UPDATE/DELETE me)"
+            },
+            {
+              "question": "Triggers ke common use cases kya hain?",
+              "answer": "Audit logging, data validation, auto-timestamps, denormalization"
+            }
+          ]
+        },
+        {
+          "id": 43,
+          "title": "Events (Scheduler)",
+          "english": "Creating scheduled tasks using MySQL Event Scheduler.",
+          "hinglish": "MySQL Event Scheduler use karke scheduled tasks create karna.",
+          "examples": [
+            "# Enable event scheduler",
+            "SET GLOBAL event_scheduler = ON;",
+            "",
+            "# Create event",
+            "DELIMITER //",
+            "CREATE EVENT cleanup_old_logs",
+            "ON SCHEDULE EVERY 1 DAY",
+            "STARTS '2024-01-01 02:00:00'",
+            "DO",
+            "BEGIN",
+            "  DELETE FROM access_logs WHERE created_at < DATE_SUB(NOW(), INTERVAL 30 DAY);",
+            "  DELETE FROM error_logs WHERE created_at < DATE_SUB(NOW(), INTERVAL 90 DAY);",
+            "END //",
+            "DELIMITER ;",
+            "",
+            "# One-time event",
+            "CREATE EVENT one_time_backup",
+            "ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 HOUR",
+            "DO",
+            "  CALL CreateDatabaseBackup();",
+            "",
+            "# Event with completion preservation",
+            "CREATE EVENT daily_report",
+            "ON SCHEDULE EVERY 1 DAY",
+            "ON COMPLETION PRESERVE",
+            "DO",
+            "  CALL GenerateDailyReport();",
+            "",
+            "# Show events",
+            "SHOW EVENTS;",
+            "SHOW CREATE EVENT cleanup_old_logs;",
+            "",
+            "# Alter event",
+            "ALTER EVENT cleanup_old_logs",
+            "ON SCHEDULE EVERY 2 DAY",
+            "STARTS '2024-01-01 03:00:00';",
+            "",
+            "# Drop event",
+            "DROP EVENT IF EXISTS cleanup_old_logs;"
+          ],
+          "practice": [
+            {
+              "question": "MySQL Event kya hota hai?",
+              "answer": "Scheduled task jo automatically execute hota hai"
+            },
+            {
+              "question": "Event scheduler kaise enable kare?",
+              "answer": "SET GLOBAL event_scheduler = ON;"
+            },
+            {
+              "question": "Daily event kaise create kare?",
+              "answer": "ON SCHEDULE EVERY 1 DAY"
+            },
+            {
+              "question": "Events ke common use cases kya hain?",
+              "answer": "Data cleanup, regular reports, database maintenance, backups"
+            }
+          ]
+        },
+        {
+          "id": 44,
+          "title": "Transactions & ACID",
+          "english": "Using transactions to ensure data integrity with ACID properties.",
+          "hinglish": "ACID properties ke sath data integrity ensure karne ke liye transactions use karna.",
+          "examples": [
+            "# Basic transaction",
+            "START TRANSACTION;",
+            "",
+            "UPDATE accounts SET balance = balance - 100 WHERE account_id = 1;",
+            "UPDATE accounts SET balance = balance + 100 WHERE account_id = 2;",
+            "",
+            "-- Check for errors",
+            "IF @@ERROR_COUNT > 0 THEN",
+            "  ROLLBACK;",
+            "ELSE",
+            "  COMMIT;",
+            "END IF;",
+            "",
+            "# Transaction with savepoints",
+            "START TRANSACTION;",
+            "",
+            "INSERT INTO orders (customer_id, amount) VALUES (1, 100);",
+            "SAVEPOINT order_created;",
+            "",
+            "UPDATE inventory SET stock = stock - 1 WHERE product_id = 123;",
+            "-- If this fails, rollback to savepoint",
+            "ROLLBACK TO SAVEPOINT order_created;",
+            "",
+            "COMMIT;",
+            "",
+            "# Transaction isolation levels",
+            "SET TRANSACTION ISOLATION LEVEL READ COMMITTED;",
+            "START TRANSACTION;",
+            "...",
+            "COMMIT;",
+            "",
+            "# ACID properties:",
+            "-- Atomicity: All or nothing",
+            "-- Consistency: Valid state before and after",
+            "-- Isolation: Concurrent transactions don't interfere",
+            "-- Durability: Committed changes persist"
+          ],
+          "practice": [
+            {
+              "question": "Transaction kya hota hai?",
+              "answer": "Group of operations executed as single unit"
+            },
+            {
+              "question": "ACID kya hai?",
+              "answer": "Atomicity, Consistency, Isolation, Durability - transaction properties"
+            },
+            {
+              "question": "ROLLBACK aur COMMIT me kya difference hai?",
+              "answer": "COMMIT: save changes, ROLLBACK: undo changes"
+            },
+            {
+              "question": "Savepoint kya hota hai?",
+              "answer": "Transaction me specific point jahan tak rollback kar sakte hain"
+            }
+          ]
+        },
+        {
+          "id": 45,
+          "title": "Locking & Concurrency",
+          "english": "Understanding and managing locks for concurrent access.",
+          "hinglish": "Concurrent access ke liye locks ko samajhna aur manage karna.",
+          "examples": [
+            "# Explicit locking",
+            "LOCK TABLES orders WRITE, customers READ;",
+            "-- Perform operations",
+            "UNLOCK TABLES;",
+            "",
+            "# Row-level locking (InnoDB)",
+            "START TRANSACTION;",
+            "SELECT * FROM accounts WHERE account_id = 1 FOR UPDATE;",
+            "-- Other transactions wait for this lock",
+            "UPDATE accounts SET balance = balance - 100 WHERE account_id = 1;",
+            "COMMIT;",
+            "",
+            "# Shared lock",
+            "SELECT * FROM products WHERE category = 'Electronics' LOCK IN SHARE MODE;",
+            "",
+            "# Check locks",
+            "SHOW ENGINE INNODB STATUS\\G",
+            "SELECT * FROM information_schema.INNODB_LOCKS;",
+            "SELECT * FROM information_schema.INNODB_LOCK_WAITS;",
+            "",
+            "# Deadlock handling",
+            "-- MySQL automatically detects and rolls back one transaction",
+            "",
+            "# Lock wait timeout",
+            "SET innodb_lock_wait_timeout = 50; -- 50 seconds",
+            "",
+            "# Transaction isolation levels effect on locking:",
+            "-- READ UNCOMMITTED: No locks",
+            "-- READ COMMITTED: Locks on writing",
+            "-- REPEATABLE READ: Locks on reading and writing",
+            "-- SERIALIZABLE: Strictest locks"
+          ],
+          "practice": [
+            {
+              "question": "Database locking kyu zaroori hai?",
+              "answer": "Concurrent access me data consistency maintain karne ke liye"
+            },
+            {
+              "question": "FOR UPDATE clause kya karta hai?",
+              "answer": "Exclusive lock lagata hai selected rows par"
+            },
+            {
+              "question": "Deadlock kya hota hai?",
+              "answer": "Do transactions ek dusre ke locks ka wait karte hain"
+            },
+            {
+              "question": "LOCK IN SHARE MODE kya hai?",
+              "answer": "Shared lock - others can read but not modify"
+            }
+          ]
+        },
+        {
+          "id": 46,
+          "title": "JSON Data Type",
+          "english": "Working with JSON data type in MySQL.",
+          "hinglish": "MySQL me JSON data type ke sath kaam karna.",
+          "examples": [
+            "# Create table with JSON column",
+            "CREATE TABLE products (",
+            "  id INT PRIMARY KEY,",
+            "  name VARCHAR(100),",
+            "  details JSON",
+            ");",
+            "",
+            "# Insert JSON data",
+            "INSERT INTO products VALUES (",
+            "  1,",
+            "  'Laptop',",
+            "  '{\"brand\": \"Dell\", \"ram\": 16, \"storage\": \"512GB SSD\", \"ports\": [\"USB\", \"HDMI\"]}'",
+            ");",
+            "",
+            "# Query JSON data",
+            "SELECT name, details->'$.brand' AS brand FROM products;",
+            "SELECT name, JSON_EXTRACT(details, '$.ram') AS ram FROM products;",
+            "",
+            "# Update JSON",
+            "UPDATE products",
+            "SET details = JSON_SET(details, '$.ram', 32)",
+            "WHERE id = 1;",
+            "",
+            "# JSON functions",
+            "SELECT",
+            "  JSON_KEYS(details),",
+            "  JSON_LENGTH(details),",
+            "  JSON_TYPE(details->'$.ram'),",
+            "  JSON_VALID(details)",
+            "FROM products;",
+            "",
+            "# Search in JSON",
+            "SELECT * FROM products",
+            "WHERE JSON_CONTAINS(details->'$.ports', '\"HDMI\"');",
+            "",
+            "# Index on JSON column",
+            "CREATE INDEX idx_json_brand ON products((details->'$.brand'));"
+          ],
+          "practice": [
+            {
+              "question": "JSON data type MySQL me kab introduce hua?",
+              "answer": "MySQL 5.7.8 me"
+            },
+            {
+              "question": "JSON data extract kaise kare?",
+              "answer": "column->'$.key' ya JSON_EXTRACT(column, '$.key')"
+            },
+            {
+              "question": "JSON data modify kaise kare?",
+              "answer": "JSON_SET(), JSON_INSERT(), JSON_REPLACE(), JSON_REMOVE()"
+            },
+            {
+              "question": "JSON column par index kaise create kare?",
+              "answer": "CREATE INDEX idx_name ON table((json_column->'$.key'));"
+            }
+          ]
+        },
+        {
+          "id": 47,
+          "title": "Full-Text Search",
+          "english": "Implementing full-text search capabilities in MySQL.",
+          "hinglish": "MySQL me full-text search capabilities implement karna.",
+          "examples": [
+            "# Create full-text index",
+            "CREATE TABLE articles (",
+            "  id INT PRIMARY KEY,",
+            "  title VARCHAR(200),",
+            "  content TEXT,",
+            "  FULLTEXT(title, content)",
+            ");",
+            "",
+            "# Full-text search",
+            "SELECT * FROM articles",
+            "WHERE MATCH(title, content) AGAINST('database tutorial');",
+            "",
+            "# Boolean mode search",
+            "SELECT * FROM articles",
+            "WHERE MATCH(title, content) AGAINST('+MySQL -Oracle' IN BOOLEAN MODE);",
+            "",
+            "# Query expansion",
+            "SELECT * FROM articles",
+            "WHERE MATCH(title, content) AGAINST('database' WITH QUERY EXPANSION);",
+            "",
+            "# Relevance score",
+            "SELECT title,",
+            "       MATCH(title, content) AGAINST('MySQL performance') AS relevance",
+            "FROM articles",
+            "ORDER BY relevance DESC;",
+            "",
+            "# Minimum word length",
+            "SHOW VARIABLES LIKE 'innodb_ft_min_token_size'; -- Default: 3",
+            "",
+            "# Stopwords",
+            "SHOW VARIABLES LIKE 'innodb_ft_enable_stopword';"
+          ],
+          "practice": [
+            {
+              "question": "Full-text search kya hai?",
+              "answer": "Text columns me natural language search"
+            },
+            {
+              "question": "Full-text index kaise create kare?",
+              "answer": "CREATE FULLTEXT INDEX idx_name ON table(columns);"
+            },
+            {
+              "question": "Boolean mode me search operators kya hain?",
+              "answer": "+ must have, - must not have, > increase relevance, < decrease relevance"
+            },
+            {
+              "question": "Minimum word length for full-text search kya hai?",
+              "answer": "Default 3 characters (configurable)"
+            }
+          ]
+        },
+        {
+          "id": 48,
+          "title": "Geospatial Data",
+          "english": "Working with spatial data types and functions in MySQL.",
+          "hinglish": "MySQL me spatial data types aur functions ke sath kaam karna.",
+          "examples": [
+            "# Spatial data types",
+            "CREATE TABLE locations (",
+            "  id INT PRIMARY KEY,",
+            "  name VARCHAR(100),",
+            "  point POINT SRID 4326,",
+            "  polygon POLYGON SRID 4326,",
+            "  SPATIAL INDEX(point)",
+            ");",
+            "",
+            "# Insert spatial data",
+            "INSERT INTO locations (name, point) VALUES (",
+            "  'Taj Mahal',",
+            "  ST_GeomFromText('POINT(78.0421 27.1751)', 4326)",
+            ");",
+            "",
+            "# Spatial queries",
+            "SELECT name,",
+            "       ST_AsText(point) AS coordinates,",
+            "       ST_X(point) AS longitude,",
+            "       ST_Y(point) AS latitude",
+            "FROM locations;",
+            "",
+            "# Distance calculation",
+            "SELECT name,",
+            "       ST_Distance_Sphere(",
+            "         point,",
+            "         ST_GeomFromText('POINT(78.0 27.0)', 4326)",
+            "       ) AS distance_meters",
+            "FROM locations;",
+            "",
+            "# Find points within radius",
+            "SELECT name FROM locations",
+            "WHERE ST_Distance_Sphere(",
+            "  point,",
+            "  ST_GeomFromText('POINT(78.0 27.0)', 4326)",
+            ") < 5000; -- Within 5km",
+            "",
+            "# Spatial functions",
+            "SELECT",
+            "  ST_Area(polygon) AS area,",
+            "  ST_Length(polygon) AS perimeter,",
+            "  ST_Contains(polygon, point) AS contains_point",
+            "FROM locations;"
+          ],
+          "practice": [
+            {
+              "question": "Common spatial data types kya hain?",
+              "answer": "POINT, LINESTRING, POLYGON, GEOMETRYCOLLECTION"
+            },
+            {
+              "question": "SRID kya hota hai?",
+              "answer": "Spatial Reference System Identifier (e.g., 4326 for GPS coordinates)"
+            },
+            {
+              "question": "Distance between two points kaise calculate kare?",
+              "answer": "ST_Distance_Sphere(point1, point2)"
+            },
+            {
+              "question": "Spatial index kaise create kare?",
+              "answer": "CREATE SPATIAL INDEX idx_name ON table(column);"
+            }
+          ]
+        },
+        {
+          "id": 49,
+          "title": "Partitioning",
+          "english": "Dividing tables into smaller, manageable parts.",
+          "hinglish": "Tables ko chhote, manageable parts me divide karna.",
+          "examples": [
+            "# Range partitioning",
+            "CREATE TABLE sales (",
+            "  sale_id INT,",
+            "  sale_date DATE,",
+            "  amount DECIMAL(10,2)",
+            ") PARTITION BY RANGE (YEAR(sale_date)) (",
+            "  PARTITION p2020 VALUES LESS THAN (2021),",
+            "  PARTITION p2021 VALUES LESS THAN (2022),",
+            "  PARTITION p2022 VALUES LESS THAN (2023),",
+            "  PARTITION p2023 VALUES LESS THAN (2024),",
+            "  PARTITION p2024 VALUES LESS THAN (2025),",
+            "  PARTITION p_future VALUES LESS THAN MAXVALUE",
+            ");",
+            "",
+            "# List partitioning",
+            "CREATE TABLE customers (",
+            "  customer_id INT,",
+            "  name VARCHAR(100),",
+            "  region VARCHAR(20)",
+            ") PARTITION BY LIST COLUMNS(region) (",
+            "  PARTITION p_north VALUES IN ('Delhi', 'Punjab', 'Haryana'),",
+            "  PARTITION p_south VALUES IN ('Karnataka', 'Tamil Nadu', 'Kerala'),",
+            "  PARTITION p_west VALUES IN ('Maharashtra', 'Gujarat'),",
+            "  PARTITION p_east VALUES IN ('West Bengal', 'Odisha')",
+            ");",
+            "",
+            "# Hash partitioning",
+            "CREATE TABLE logs (",
+            "  log_id INT,",
+            "  message TEXT,",
+            "  created_at TIMESTAMP",
+            ") PARTITION BY HASH(log_id) PARTITIONS 4;",
+            "",
+            "# Composite partitioning",
+            "CREATE TABLE orders (",
+            "  order_id INT,",
+            "  order_date DATE,",
+            "  customer_id INT",
+            ") PARTITION BY RANGE (YEAR(order_date))",
+            "SUBPARTITION BY HASH(customer_id) SUBPARTITIONS 4 (",
+            "  PARTITION p2023 VALUES LESS THAN (2024),",
+            "  PARTITION p2024 VALUES LESS THAN (2025)",
+            ");",
+            "",
+            "# Maintenance operations",
+            "ALTER TABLE sales ADD PARTITION (",
+            "  PARTITION p2025 VALUES LESS THAN (2026)",
+            ");",
+            "",
+            "ALTER TABLE sales DROP PARTITION p2020;",
+            "",
+            "ALTER TABLE sales REORGANIZE PARTITION p_future INTO (",
+            "  PARTITION p2025 VALUES LESS THAN (2026),",
+            "  PARTITION p_future VALUES LESS THAN MAXVALUE",
+            ");"
+          ],
+          "practice": [
+            {
+              "question": "Partitioning kya hota hai?",
+              "answer": "Table ko smaller, manageable parts me divide karna"
+            },
+            {
+              "question": "Range vs List vs Hash partitioning me kya difference hai?",
+              "answer": "Range: value ranges, List: specific values, Hash: hash function based"
+            },
+            {
+              "question": "Partitioning ke advantages kya hain?",
+              "answer": "Performance, manageability, maintenance, archival"
+            },
+            {
+              "question": "Partition drop karne se data kya hota hai?",
+              "answer": "Partition ka data permanently delete ho jata hai"
+            }
+          ]
+        },
+        {
+          "id": 50,
+          "title": "Replication",
+          "english": "Setting up database replication for high availability.",
+          "hinglish": "High availability ke liye database replication setup karna.",
+          "examples": [
+            "# Master configuration (my.cnf)",
+            "[mysqld]",
+            "server-id = 1",
+            "log_bin = /var/log/mysql/mysql-bin.log",
+            "binlog_do_db = mydatabase",
+            "",
+            "# Slave configuration",
+            "[mysqld]",
+            "server-id = 2",
+            "relay_log = /var/log/mysql/mysql-relay-bin.log",
+            "read_only = 1",
+            "",
+            "# Master setup",
+            "CREATE USER 'replica'@'%' IDENTIFIED BY 'password';",
+            "GRANT REPLICATION SLAVE ON *.* TO 'replica'@'%';",
+            "FLUSH PRIVILEGES;",
+            "",
+            "SHOW MASTER STATUS; -- Note File and Position",
+            "",
+            "# Slave setup",
+            "CHANGE MASTER TO",
+            "  MASTER_HOST='master_ip',",
+            "  MASTER_USER='replica',",
+            "  MASTER_PASSWORD='password',",
+            "  MASTER_LOG_FILE='mysql-bin.000001',",
+            "  MASTER_LOG_POS=107;",
+            "",
+            "START SLAVE;",
+            "SHOW SLAVE STATUS\\G",
+            "",
+            "# Replication monitoring",
+            "SHOW PROCESSLIST;",
+            "SHOW SLAVE HOSTS;",
+            "",
+            "# Stop replication",
+            "STOP SLAVE;",
+            "",
+            "# Skip replication error",
+            "STOP SLAVE;",
+            "SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1;",
+            "START SLAVE;",
+            "",
+            "# Change master",
+            "STOP SLAVE;",
+            "CHANGE MASTER TO MASTER_HOST='new_master';",
+            "START SLAVE;"
+          ],
+          "practice": [
+            {
+              "question": "Database replication kya hota hai?",
+              "answer": "Data ek server se dusre server copy hota hai"
+            },
+            {
+              "question": "Master-Slave replication me kya hota hai?",
+              "answer": "Master: writes, Slave: reads (replicates from Master)"
+            },
+            {
+              "question": "Binary log kya hota hai?",
+              "answer": "Master ke changes record hote hain replication ke liye"
+            },
+            {
+              "question": "Replication ke advantages kya hain?",
+              "answer": "High availability, load balancing, backups, analytics"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": "expert",
+      "order": 4,
+      "description": "Performance tuning, security, administration",
+      "topics": [
+        {
+          "id": 51,
+          "title": "Query Optimization",
+          "english": "Advanced techniques for optimizing SQL queries.",
+          "hinglish": "SQL queries optimize karne ke advanced techniques.",
+          "examples": [
+            "# Use indexes effectively",
+            "-- Good: Uses index",
+            "SELECT * FROM users WHERE email = 'test@example.com';",
+            "",
+            "-- Bad: Cannot use index",
+            "SELECT * FROM users WHERE UPPER(email) = 'TEST@EXAMPLE.COM';",
+            "",
+            "# Avoid SELECT *",
+            "-- Bad",
+            "SELECT * FROM orders;",
+            "",
+            "-- Good",
+            "SELECT order_id, customer_id, amount FROM orders;",
+            "",
+            "# Use EXISTS instead of IN for large datasets",
+            "-- Less efficient for large subquery",
+            "SELECT * FROM customers WHERE customer_id IN (SELECT customer_id FROM orders);",
+            "",
+            "-- More efficient",
+            "SELECT * FROM customers c WHERE EXISTS (",
+            "  SELECT 1 FROM orders o WHERE o.customer_id = c.customer_id",
+            ");",
+            "",
+            "# Limit results early",
+            "SELECT * FROM (",
+            "  SELECT * FROM logs ORDER BY created_at DESC LIMIT 1000",
+            ") AS recent_logs WHERE message LIKE '%error%';",
+            "",
+            "# Avoid functions on indexed columns",
+            "-- Bad: Index cannot be used",
+            "SELECT * FROM users WHERE DATE(created_at) = '2024-01-01';",
+            "",
+            "-- Good: Index can be used",
+            "SELECT * FROM users WHERE created_at >= '2024-01-01' AND created_at < '2024-01-02';",
+            "",
+            "# Use UNION ALL instead of UNION when possible",
+            "-- If duplicates don't matter or aren't possible",
+            "SELECT id FROM table1",
+            "UNION ALL",
+            "SELECT id FROM table2;",
+            "",
+            "# Analyze query performance",
+            "SET profiling = 1;",
+            "SELECT * FROM large_table WHERE condition;",
+            "SHOW PROFILES;",
+            "SHOW PROFILE FOR QUERY 1;"
+          ],
+          "practice": [
+            {
+              "question": "SELECT * kyu avoid karna chahiye?",
+              "answer": "Extra data transfer, prevents covering index use, schema changes affect results"
+            },
+            {
+              "question": "Indexed column par function use kyu avoid karna chahiye?",
+              "answer": "Index use nahi ho pata, full scan required hota hai"
+            },
+            {
+              "question": "IN vs EXISTS me kya choose kare?",
+              "answer": "EXISTS usually better for large subqueries, IN better for small lists"
+            },
+            {
+              "question": "Query profiling kaise enable kare?",
+              "answer": "SET profiling = 1; queries run kare, SHOW PROFILES;"
+            }
+          ]
+        },
+        {
+          "id": 52,
+          "title": "Performance Schema",
+          "english": "Monitoring database performance using Performance Schema.",
+          "hinglish": "Performance Schema use karke database performance monitor karna.",
+          "examples": [
+            "# Enable performance schema",
+            "-- Check if enabled",
+            "SHOW VARIABLES LIKE 'performance_schema';",
+            "",
+            "# Common performance schema tables",
+            "SELECT * FROM performance_schema.setup_consumers;",
+            "SELECT * FROM performance_schema.setup_instruments;",
+            "",
+            "# Monitor queries",
+            "SELECT * FROM performance_schema.events_statements_summary_by_digest",
+            "ORDER BY SUM_TIMER_WAIT DESC",
+            "LIMIT 10;",
+            "",
+            "# Find slow queries",
+            "SELECT DIGEST_TEXT, COUNT_STAR, AVG_TIMER_WAIT",
+            "FROM performance_schema.events_statements_summary_by_digest",
+            "WHERE COUNT_STAR > 100",
+            "ORDER BY AVG_TIMER_WAIT DESC",
+            "LIMIT 10;",
+            "",
+            "# Monitor table I/O",
+            "SELECT OBJECT_NAME, COUNT_READ, COUNT_WRITE",
+            "FROM performance_schema.table_io_waits_summary_by_table",
+            "ORDER BY COUNT_READ + COUNT_WRITE DESC",
+            "LIMIT 10;",
+            "",
+            "# Monitor index usage",
+            "SELECT OBJECT_NAME, INDEX_NAME, COUNT_FETCH, COUNT_INSERT",
+            "FROM performance_schema.table_io_waits_summary_by_index_usage",
+            "WHERE INDEX_NAME IS NOT NULL",
+            "ORDER BY COUNT_FETCH DESC;",
+            "",
+            "# Monitor locks",
+            "SELECT * FROM performance_schema.data_locks;",
+            "SELECT * FROM performance_schema.data_lock_waits;",
+            "",
+            "# Monitor connections",
+            "SELECT USER, HOST, COUNT_STAR",
+            "FROM performance_schema.events_statements_summary_by_user_by_event_name",
+            "ORDER BY COUNT_STAR DESC;"
+          ],
+          "practice": [
+            {
+              "question": "Performance Schema kya hota hai?",
+              "answer": "MySQL performance monitoring system"
+            },
+            {
+              "question": "Performance Schema enable kaise kare?",
+              "answer": "performance_schema=ON in my.cnf, restart MySQL"
+            },
+            {
+              "question": "Slow queries kaise identify kare Performance Schema se?",
+              "answer": "events_statements_summary_by_digest table query kare"
+            },
+            {
+              "question": "Unused indexes kaise find kare?",
+              "answer": "table_io_waits_summary_by_index_usage me low COUNT_FETCH wale indexes"
+            }
+          ]
+        },
+        {
+          "id": 53,
+          "title": "MySQL Configuration Tuning",
+          "english": "Optimizing MySQL server configuration for performance.",
+          "hinglish": "Performance ke liye MySQL server configuration optimize karna.",
+          "examples": [
+            "# Key configuration parameters (my.cnf)",
+            "[mysqld]",
+            "",
+            "# Memory settings",
+            "innodb_buffer_pool_size = 4G  # 70-80% of RAM for dedicated DB",
+            "innodb_log_file_size = 1G",
+            "key_buffer_size = 256M",
+            "query_cache_size = 0  # Disabled in MySQL 8.0",
+            "",
+            "# Connection settings",
+            "max_connections = 200",
+            "thread_cache_size = 8",
+            "table_open_cache = 2000",
+            "",
+            "# InnoDB settings",
+            "innodb_flush_log_at_trx_commit = 1  # ACID compliance",
+            "innodb_flush_log_at_trx_commit = 2  # Better performance",
+            "innodb_file_per_table = ON",
+            "innodb_flush_method = O_DIRECT",
+            "",
+            "# Query settings",
+            "sort_buffer_size = 2M",
+            "join_buffer_size = 2M",
+            "read_buffer_size = 1M",
+            "read_rnd_buffer_size = 4M",
+            "",
+            "# Logging",
+            "slow_query_log = 1",
+            "slow_query_log_file = /var/log/mysql/slow.log",
+            "long_query_time = 2  # seconds",
+            "log_queries_not_using_indexes = 1",
+            "",
+            "# Check current settings",
+            "SHOW VARIABLES LIKE 'innodb_buffer_pool_size';",
+            "SHOW VARIABLES LIKE 'max_connections';",
+            "",
+            "# Change dynamically",
+            "SET GLOBAL max_connections = 300;",
+            "SET GLOBAL innodb_buffer_pool_size = 4294967296;  # 4GB",
+            "",
+            "# Monitor usage",
+            "SHOW STATUS LIKE 'Threads_connected';",
+            "SHOW STATUS LIKE 'Innodb_buffer_pool_read%';",
+            "",
+            "# Calculate buffer pool hit rate",
+            "SELECT",
+            "  (1 - ((Variable_value / (Variable_value + ",
+            "    (SELECT Variable_value FROM global_status WHERE Variable_name = 'Innodb_buffer_pool_reads')",
+            "  )))) * 100 AS hit_rate",
+            "FROM global_status",
+            "WHERE Variable_name = 'Innodb_buffer_pool_read_requests';"
+          ],
+          "practice": [
+            {
+              "question": "innodb_buffer_pool_size kya hota hai?",
+              "answer": "InnoDB data aur indexes ke liye memory buffer, important performance parameter"
+            },
+            {
+              "question": "max_connections kya set karna chahiye?",
+              "answer": "Application needs ke according, typical: 100-500"
+            },
+            {
+              "question": "innodb_flush_log_at_trx_commit ke values ka kya effect hai?",
+              "answer": "1: safest (ACID), 2: faster, 0: fastest (risky)"
+            },
+            {
+              "question": "Buffer pool hit rate kya indicate karta hai?",
+              "answer": "Cache efficiency - >99% good, <95% needs more buffer pool size"
+            }
+          ]
+        },
+        {
+          "id": 54,
+          "title": "Backup Strategies",
+          "english": "Implementing comprehensive backup and recovery strategies.",
+          "hinglish": "Comprehensive backup aur recovery strategies implement karna.",
+          "examples": [
+            "# Logical backup with mysqldump",
+            "# Full backup",
+            "mysqldump -u root -p --all-databases --single-transaction --routines --triggers --events > full_backup.sql",
+            "",
+            "# Backup single database",
+            "mysqldump -u root -p mydatabase > mydatabase_backup.sql",
+            "",
+            "# Backup with compression",
+            "mysqldump -u root -p mydatabase | gzip > mydatabase_backup.sql.gz",
+            "",
+            "# Backup structure only",
+            "mysqldump -u root -p --no-data mydatabase > mydatabase_structure.sql",
+            "",
+            "# Backup data only",
+            "mysqldump -u root -p --no-create-info mydatabase > mydatabase_data.sql",
+            "",
+            "# Physical backup",
+            "# Using Percona XtraBackup (hot backup)",
+            "xtrabackup --backup --target-dir=/backup/mysql/",
+            "xtrabackup --prepare --target-dir=/backup/mysql/",
+            "",
+            "# Binary log backup (point-in-time recovery)",
+            "# Enable binary logging",
+            "log_bin = /var/log/mysql/mysql-bin.log",
+            "expire_logs_days = 7",
+            "",
+            "# Backup binary logs",
+            "mysqlbinlog mysql-bin.000001 mysql-bin.000002 > binlog_backup.sql",
+            "",
+            "# Restore from backup",
+            "mysql -u root -p < full_backup.sql",
+            "",
+            "# Restore single database",
+            "mysql -u root -p mydatabase < mydatabase_backup.sql",
+            "",
+            "# Point-in-time recovery",
+            "mysqlbinlog --start-datetime='2024-01-01 00:00:00' mysql-bin.000003 | mysql -u root -p",
+            "",
+            "# Automated backup script",
+            "#!/bin/bash",
+            "BACKUP_DIR=/backup/mysql",
+            "DATE=$(date +%Y%m%d_%H%M%S)",
+            "mysqldump -u root -pPASSWORD --all-databases --single-transaction > $BACKUP_DIR/full_$DATE.sql",
+            "find $BACKUP_DIR -name \"*.sql\" -mtime +7 -delete"
+          ],
+          "practice": [
+            {
+              "question": "Logical vs Physical backup me kya difference hai?",
+              "answer": "Logical: SQL statements, portable; Physical: raw files, faster for large DB"
+            },
+            {
+              "question": "--single-transaction option kya karta hai?",
+              "answer": "Consistent backup without locking tables (InnoDB only)"
+            },
+            {
+              "question": "Point-in-time recovery ke liye kya required hai?",
+              "answer": "Full backup + binary logs"
+            },
+            {
+              "question": "3-2-1 backup rule kya hai?",
+              "answer": "3 copies, 2 different media, 1 offsite"
+            }
+          ]
+        },
+        {
+          "id": 55,
+          "title": "Security Best Practices",
+          "english": "Implementing security measures for MySQL databases.",
+          "hinglish": "MySQL databases ke liye security measures implement karna.",
+          "examples": [
+            "# User management",
+            "# Create user with limited privileges",
+            "CREATE USER 'appuser'@'localhost' IDENTIFIED BY 'StrongPassword123!';",
+            "GRANT SELECT, INSERT, UPDATE, DELETE ON mydatabase.* TO 'appuser'@'localhost';",
+            "",
+            "# Remove anonymous users",
+            "DELETE FROM mysql.user WHERE User = '';",
+            "FLUSH PRIVILEGES;",
+            "",
+            "# Remove test database",
+            "DROP DATABASE test;",
+            "",
+            "# Change root password",
+            "ALTER USER 'root'@'localhost' IDENTIFIED BY 'NewStrongPassword456!';",
+            "",
+            "# Network security",
+            "# Bind to specific IP",
+            "bind-address = 127.0.0.1  # Local only",
+            "# OR",
+            "bind-address = 192.168.1.100  # Specific IP",
+            "",
+            "# Firewall rules",
+            "sudo ufw allow from 192.168.1.0/24 to any port 3306",
+            "",
+            "# SSL/TLS encryption",
+            "# Enable in my.cnf",
+            "[mysqld]",
+            "ssl-ca=/etc/mysql/ca.pem",
+            "ssl-cert=/etc/mysql/server-cert.pem",
+            "ssl-key=/etc/mysql/server-key.pem",
+            "",
+            "# Check SSL status",
+            "SHOW VARIABLES LIKE '%ssl%';",
+            "STATUS;  # Check SSL cipher",
+            "",
+            "# Require SSL for user",
+            "ALTER USER 'appuser'@'%' REQUIRE SSL;",
+            "",
+            "# Audit logging",
+            "# Install MySQL Enterprise Audit or use open-source alternatives",
+            "# Or implement trigger-based auditing",
+            "",
+            "# Password policy",
+            "SET GLOBAL validate_password.policy = 2;  # Strong",
+            "SET GLOBAL validate_password.length = 12;",
+            "SET GLOBAL validate_password.mixed_case_count = 1;",
+            "SET GLOBAL validate_password.number_count = 1;",
+            "SET GLOBAL validate_password.special_char_count = 1;",
+            "",
+            "# Regular security checks",
+            "# Check for users without passwords",
+            "SELECT User, Host FROM mysql.user WHERE authentication_string = '';",
+            "",
+            "# Check for wildcard hosts",
+            "SELECT User, Host FROM mysql.user WHERE Host = '%';",
+            "",
+            "# Check privileges",
+            "SHOW GRANTS FOR 'appuser'@'localhost';"
+          ],
+          "practice": [
+            {
+              "question": "Default MySQL installation ke security risks kya hain?",
+              "answer": "Anonymous users, test database, weak passwords, network exposure"
+            },
+            {
+              "question": "Least privilege principle kya hai?",
+              "answer": "Users ko minimum required permissions dena"
+            },
+            {
+              "question": "MySQL SSL/TLS enable kaise kare?",
+              "answer": "SSL certificates configure kare my.cnf me"
+            },
+            {
+              "question": "Password policy kaise implement kare?",
+              "answer": "validate_password plugin use kare"
+            }
+          ]
+        },
+        {
+          "id": 56,
+          "title": "High Availability & Clustering",
+          "english": "Setting up high availability solutions with MySQL.",
+          "hinglish": "MySQL ke sath high availability solutions setup karna.",
+          "examples": [
+            "# MySQL InnoDB Cluster (Group Replication)",
+            "# Prerequisites",
+            "SET GLOBAL group_replication_bootstrap_group=ON;",
+            "START GROUP_REPLICATION;",
+            "SET GLOBAL group_replication_bootstrap_group=OFF;",
+            "",
+            "# Check cluster status",
+            "SELECT * FROM performance_schema.replication_group_members;",
+            "",
+            "# MySQL Router (for load balancing)",
+            "# Install and configure router",
+            "[routing:read_write]",
+            "bind_address = 0.0.0.0",
+            "bind_port = 6446",
+            "destinations = metadata-cache://mycluster/default",
+            "routing_strategy = round-robin",
+            "",
+            "# ProxySQL for advanced load balancing",
+            "# Configure backend servers",
+            "INSERT INTO mysql_servers(hostgroup_id, hostname, port) VALUES",
+            "(1, 'mysql1', 3306),",
+            "(1, 'mysql2', 3306),",
+            "(1, 'mysql3', 3306);",
+            "",
+            "# Configure query rules",
+            "INSERT INTO mysql_query_rules (rule_id, active, match_pattern, destination_hostgroup)",
+            "VALUES (1, 1, '^SELECT.*FOR UPDATE', 1),",
+            "       (2, 1, '^SELECT', 2);  # Read queries to hostgroup 2",
+            "",
+            "# Galera Cluster (wsrep)",
+            "# Configuration",
+            "[mysqld]",
+            "wsrep_on = ON",
+            "wsrep_provider = /usr/lib/galera/libgalera_smm.so",
+            "wsrep_cluster_name = 'my_cluster'",
+            "wsrep_cluster_address = 'gcomm://node1,node2,node3'",
+            "wsrep_sst_method = rsync",
+            "",
+            "# Check Galera status",
+            "SHOW STATUS LIKE 'wsrep%';",
+            "",
+            "# Failover strategies",
+            "# Application-level: Connection retry with different host",
+            "# Proxy-level: Automatic failover detection",
+            "# DNS-level: DNS failover to backup server",
+            "",
+            "# Monitoring high availability",
+            "# Custom monitoring script",
+            "#!/bin/bash",
+            "if ! mysqladmin ping -h primary_host > /dev/null 2>&1; then",
+            "  # Promote secondary",
+            "  mysql -e \"STOP SLAVE; RESET SLAVE ALL;\"",
+            "  # Update application configuration",
+            "  sed -i 's/primary_host/secondary_host/g' /etc/app/config.conf",
+            "  # Send alert",
+            "  echo \"Failover executed at $(date)\" | mail -s \"MySQL Failover\" admin@example.com",
+            "fi",
+            "",
+            "# Backup and restore in HA environment",
+            "# Take backup from replica to avoid master load",
+            "mysqldump -h replica_host -u root -p --single-transaction mydb > backup.sql"
+          ],
+          "practice": [
+            {
+              "question": "High availability kya hota hai?",
+              "answer": "System ki continuous operation guarantee, minimal downtime"
+            },
+            {
+              "question": "MySQL InnoDB Cluster ke components kya hain?",
+              "answer": "MySQL Group Replication, MySQL Router, MySQL Shell"
+            },
+            {
+              "question": "Active-Passive vs Active-Active setup me kya difference hai?",
+              "answer": "Active-Passive: ek active, baaki standby; Active-Active: sab active"
+            },
+            {
+              "question": "Failover automation kaise implement kare?",
+              "answer": "Health checks, automatic promotion, configuration updates"
+            }
+          ]
+        },
+        {
+          "id": 57,
+          "title": "Migration & Upgrades",
+          "english": "Migrating data and upgrading MySQL versions safely.",
+          "hinglish": "Data migrate karna aur MySQL versions safely upgrade karna.",
+          "examples": [
+            "# Version upgrade planning",
+            "# Check current version",
+            "SELECT VERSION();",
+            "",
+            "# Check upgrade prerequisites",
+            "mysqlcheck -u root -p --all-databases --check-upgrade",
+            "",
+            "# Backup before upgrade",
+            "mysqldump -u root -p --all-databases --single-transaction --routines --triggers --events > pre_upgrade_backup.sql",
+            "",
+            "# MySQL upgrade methods:",
+            "# 1. In-place upgrade (same server)",
+            "# 2. Logical upgrade (dump/restore)",
+            "# 3. Replication upgrade (setup replica with new version)",
+            "",
+            "# In-place upgrade steps",
+            "1. Stop MySQL: sudo systemctl stop mysql",
+            "2. Install new version packages",
+            "3. Run mysql_upgrade",
+            "4. Start MySQL: sudo systemctl start mysql",
+            "5. Verify: mysql -e \"SELECT VERSION();\"",
+            "",
+            "# Logical upgrade (dump/restore)",
+            "# On old server:",
+            "mysqldump -u root -p --all-databases --single-transaction --routines --triggers --events > backup.sql",
+            "",
+            "# On new server:",
+            "mysql -u root -p < backup.sql",
+            "mysql_upgrade -u root -p",
+            "",
+            "# Replication-based upgrade",
+            "1. Setup new server with new MySQL version",
+            "2. Configure as replica of old server",
+            "3. Let replication catch up",
+            "4. Switch application to new server",
+            "5. Promote new server to master",
+            "",
+            "# Database migration between different DBMS",
+            "# MySQL to PostgreSQL using pgloader",
+            "pgloader mysql://user:pass@old_host/dbname postgresql://user:pass@new_host/dbname",
+            "",
+            "# Schema migration tools",
+            "# Use tools like Flyway, Liquibase, or custom scripts",
+            "",
+            "# Data validation after migration",
+            "# Row count comparison",
+            "SELECT 'source', COUNT(*) FROM source_db.table",
+            "UNION ALL",
+            "SELECT 'target', COUNT(*) FROM target_db.table;",
+            "",
+            "# Checksum comparison",
+            "CHECKSUM TABLE source_db.table, target_db.table;",
+            "",
+            "# Sample data comparison",
+            "SELECT * FROM source_db.table LIMIT 100",
+            "EXCEPT",
+            "SELECT * FROM target_db.table LIMIT 100;",
+            "",
+            "# Downgrade planning",
+            "# Always have rollback plan",
+            "# Test downgrade procedure in staging",
+            "# Keep old binaries for emergency rollback"
+          ],
+          "practice": [
+            {
+              "question": "MySQL major version upgrade (e.g., 5.7 to 8.0) me kya dhyan rakhna chahiye?",
+              "answer": "Compatibility issues, deprecated features, configuration changes, application testing"
+            },
+            {
+              "question": "mysql_upgrade command kya karta hai?",
+              "answer": "System tables upgrade karta hai new version ke liye"
+            },
+            {
+              "question": "Replication-based upgrade ke advantages kya hain?",
+              "answer": "Minimal downtime, easy rollback, testing possible"
+            },
+            {
+              "question": "Migration ke baad data integrity kaise verify kare?",
+              "answer": "Row counts, checksums, sample data comparison, application testing"
+            }
+          ]
+        },
+        {
+          "id": 58,
+          "title": "Monitoring & Alerting",
+          "english": "Setting up comprehensive monitoring and alerting for MySQL.",
+          "hinglish": "MySQL ke liye comprehensive monitoring aur alerting setup karna.",
+          "examples": [
+            "# Built-in monitoring",
+            "# Show status",
+            "SHOW GLOBAL STATUS;",
+            "SHOW ENGINE INNODB STATUS\\G",
+            "",
+            "# Key metrics to monitor:",
+            "# Connections",
+            "SHOW STATUS LIKE 'Threads_connected';",
+            "SHOW VARIABLES LIKE 'max_connections';",
+            "",
+            "# Query performance",
+            "SHOW STATUS LIKE 'Slow_queries';",
+            "SHOW STATUS LIKE 'Questions';",
+            "",
+            "# InnoDB metrics",
+            "SHOW STATUS LIKE 'Innodb_buffer_pool%';",
+            "SHOW STATUS LIKE 'Innodb_row_lock%';",
+            "",
+            "# Replication status",
+            "SHOW SLAVE STATUS\\G",
+            "",
+            "# Disk usage",
+            "SELECT",
+            "  table_schema AS Database,",
+            "  SUM(data_length + index_length) / 1024 / 1024 AS Size_MB",
+            "FROM information_schema.tables",
+            "GROUP BY table_schema;",
+            "",
+            "# External monitoring tools",
+            "# Prometheus + mysqld_exporter",
+            "# Installation:",
+            "wget https://github.com/prometheus/mysqld_exporter/releases/download/v0.14.0/mysqld_exporter-0.14.0.linux-amd64.tar.gz",
+            "tar xvfz mysqld_exporter-0.14.0.linux-amd64.tar.gz",
+            "",
+            "# Create MySQL user for exporter",
+            "CREATE USER 'exporter'@'localhost' IDENTIFIED BY 'password' WITH MAX_USER_CONNECTIONS 3;",
+            "GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO 'exporter'@'localhost';",
+            "",
+            "# Run exporter",
+            "./mysqld_exporter --config.my-cnf=/path/to/.my.cnf",
+            "",
+            "# Grafana dashboards for MySQL",
+            "# Import dashboard ID: 7362 (MySQL Overview)",
+            "",
+            "# Alerting rules (Prometheus)",
+            "# High connections",
+            "- alert: MySQLHighConnections",
+            "  expr: mysql_global_status_threads_connected / mysql_global_variables_max_connections > 0.8",
+            "  for: 5m",
+            "  labels:",
+            "    severity: warning",
+            "  annotations:",
+            "    summary: \"High MySQL connections ({{ $value }}%)\"",
+            "",
+            "# Slow queries",
+            "- alert: MySQLSlowQueries",
+            "  expr: rate(mysql_global_status_slow_queries[5m]) > 0.1",
+            "  for: 5m",
+            "  labels:",
+            "    severity: warning",
+            "",
+            "# Replication lag",
+            "- alert: MySQLReplicationLag",
+            "  expr: mysql_slave_status_seconds_behind_master > 30",
+            "  for: 2m",
+            "  labels:",
+            "    severity: critical",
+            "",
+            "# Custom monitoring scripts",
+            "#!/bin/bash",
+            "# Check replication",
+            "lag=$(mysql -e \"SHOW SLAVE STATUS\\G\" | grep Seconds_Behind_Master | awk '{print $2}')",
+            "if [[ $lag -gt 60 ]]; then",
+            "  echo \"Replication lag: $lag seconds\" | mail -s \"MySQL Replication Alert\" admin@example.com",
+            "fi",
+            "",
+            "# Check disk space",
+            "usage=$(df -h /var/lib/mysql | awk 'NR==2 {print $5}' | sed 's/%//')",
+            "if [[ $usage -gt 90 ]]; then",
+            "  echo \"MySQL disk usage: $usage%\" | mail -s \"MySQL Disk Alert\" admin@example.com",
+            "fi"
+          ],
+          "practice": [
+            {
+              "question": "MySQL monitoring ke key metrics kya hain?",
+              "answer": "Connections, query performance, replication status, disk usage, buffer pool efficiency"
+            },
+            {
+              "question": "Prometheus mysqld_exporter kya karta hai?",
+              "answer": "MySQL metrics collect karta hai Prometheus ke liye"
+            },
+            {
+              "question": "Replication lag alert kaise set kare?",
+              "answer": "Seconds_Behind_Master > threshold (e.g., 30 seconds)"
+            },
+            {
+              "question": "MySQL disk full hone se pehle kaise alert kare?",
+              "answer": "Disk usage > 85% pe alert, > 90% pe critical alert"
+            }
+          ]
+        },
+        {
+          "id": 59,
+          "title": "Disaster Recovery",
+          "english": "Planning and implementing disaster recovery strategies.",
+          "hinglish": "Disaster recovery strategies plan aur implement karna.",
+          "examples": [
+            "# Disaster Recovery Planning",
+            "# 1. Risk Assessment",
+            "#    - Identify potential disasters",
+            "#    - Calculate Recovery Time Objective (RTO)",
+            "#    - Calculate Recovery Point Objective (RPO)",
+            "",
+            "# 2. Backup Strategy",
+            "#    - Full backups daily",
+            "#    - Incremental backups hourly",
+            "#    - Offsite backups",
+            "#    - Backup encryption",
+            "",
+            "# 3. Recovery Procedures",
+            "#    - Documented step-by-step",
+            "#    - Regular testing",
+            "#    - Team training",
+            "",
+            "# Recovery scenarios",
+            "",
+            "# Scenario 1: Single server failure",
+            "# Steps:",
+            "1. Identify failure",
+            "2. Switch to standby server",
+            "3. Update DNS/load balancer",
+            "4. Restore from backup if needed",
+            "5. Monitor new server",
+            "",
+            "# Scenario 2: Data corruption",
+            "# Steps:",
+            "1. Stop writes to affected tables",
+            "2. Identify corruption extent",
+            "3. Restore from backup",
+            "4. Apply binary logs for point-in-time recovery",
+            "5. Verify data integrity",
+            "",
+            "# Scenario 3: Complete data center failure",
+            "# Steps:",
+            "1. Activate DR site",
+            "2. Restore latest backup",
+            "3. Start applications",
+            "4. Update DNS",
+            "5. Failback when primary site restored",
+            "",
+            "# Automated recovery scripts",
+            "#!/bin/bash",
+            "# failover.sh",
+            "PRIMARY_HOST=\"mysql-primary\"",
+            "STANDBY_HOST=\"mysql-standby\"",
+            "",
+            "# Check primary",
+            "if ! mysqladmin ping -h $PRIMARY_HOST --silent; then",
+            "  echo \"$(date): Primary down, failing over to standby\"",
+            "  ",
+            "  # Promote standby",
+            "  ssh $STANDBY_HOST \"mysql -e 'STOP SLAVE; RESET SLAVE ALL;'\"",
+            "  ",
+            "  # Update configuration",
+            "  sed -i \"s/$PRIMARY_HOST/$STANDBY_HOST/g\" /etc/app/config.conf",
+            "  ",
+            "  # Restart application",
+            "  systemctl restart app-service",
+            "  ",
+            "  # Send notification",
+            "  echo \"Failover completed at $(date)\" | mail -s \"MySQL Failover\" admin@example.com",
+            "fi",
+            "",
+            "# Regular recovery testing",
+            "# Test plan:",
+            "1. Schedule maintenance window",
+            "2. Take backup of production",
+            "3. Restore to test environment",
+            "4. Verify data integrity",
+            "5. Document results",
+            "6. Update procedures if needed",
+            "",
+            "# Cloud-based disaster recovery",
+            "# AWS RDS Multi-AZ deployment",
+            "# Automatic failover to standby in different AZ",
+            "",
+            "# Azure Database for MySQL",
+            "# Geo-redundant backups",
+            "# Read replicas in different regions",
+            "",
+            "# Documentation",
+            "# Maintain updated runbooks including:",
+            "# - Contact information",
+            "# - Step-by-step recovery procedures",
+            "# - Backup locations and passwords",
+            "# - Vendor contacts",
+            "# - Post-recovery validation steps"
+          ],
+          "practice": [
+            {
+              "question": "RTO aur RPO me kya difference hai?",
+              "answer": "RTO: Recovery Time Objective (max downtime), RPO: Recovery Point Objective (max data loss)"
+            },
+            {
+              "question": "Disaster recovery plan test kyu zaroori hai?",
+              "answer": "Ensure procedures work, identify gaps, train team, reduce actual recovery time"
+            },
+            {
+              "question": "Cloud-based disaster recovery ke advantages kya hain?",
+              "answer": "Geographic redundancy, automated failover, pay-as-you-go, managed services"
+            },
+            {
+              "question": "Hot, Warm, Cold disaster recovery sites me kya difference hai?",
+              "answer": "Hot: ready immediately, Warm: some setup needed, Cold: infrastructure only"
+            }
+          ]
+        },
+        {
+          "id": 60,
+          "title": "Cloud MySQL Services",
+          "english": "Using managed MySQL services in cloud platforms.",
+          "hinglish": "Cloud platforms me managed MySQL services use karna.",
+          "examples": [
+            "# AWS RDS MySQL",
+            "# Features:",
+            "# - Managed backups",
+            "# - Automatic failover (Multi-AZ)",
+            "# - Read replicas",
+            "# - Monitoring with CloudWatch",
+            "# - Encryption at rest and in transit",
+            "",
+            "# Create RDS instance (AWS CLI)",
+            "aws rds create-db-instance \\",
+            "  --db-instance-identifier mydb \\",
+            "  --db-instance-class db.t3.micro \\",
+            "  --engine mysql \\",
+            "  --master-username admin \\",
+            "  --master-user-password password123 \\",
+            "  --allocated-storage 20 \\",
+            "  --multi-az \\",
+            "  --backup-retention-period 7",
+            "",
+            "# Create read replica",
+            "aws rds create-db-instance-read-replica \\",
+            "  --db-instance-identifier mydb-replica \\",
+            "  --source-db-instance-identifier mydb",
+            "",
+            "# Azure Database for MySQL",
+            "# Features:",
+            "# - Flexible Server or Single Server",
+            "# - High availability",
+            "# - Automatic backups",
+            "# - Advanced threat protection",
+            "",
+            "# Create with Azure CLI",
+            "az mysql server create \\",
+            "  --resource-group myResourceGroup \\",
+            "  --name myserver \\",
+            "  --location eastus \\",
+            "  --admin-user myadmin \\",
+            "  --admin-password password123 \\",
+            "  --sku-name GP_Gen5_2 \\",
+            "  --storage-size 5120 \\",
+            "  --backup-retention 7",
+            "",
+            "# Google Cloud SQL MySQL",
+            "# Features:",
+            "# - Automatic failover",
+            "# - Read replicas",
+            "# - Automated backups",
+            "# - Integrated monitoring",
+            "",
+            "# Create with gcloud",
+            "gcloud sql instances create myinstance \\",
+            "  --database-version=MYSQL_8_0 \\",
+            "  --cpu=2 \\",
+            "  --memory=4GB \\",
+            "  --region=us-central1 \\",
+            "  --root-password=password123",
+            "",
+            "# Migration to Cloud",
+            "# Steps:",
+            "1. Assess current database",
+            "2. Choose cloud provider and service tier",
+            "3. Create cloud database instance",
+            "4. Migrate data using:",
+            "   - mysqldump/restore",
+            "   - Database Migration Service (AWS DMS)",
+            "   - Replication",
+            "5. Test application connectivity",
+            "6. Switch DNS/cutover",
+            "",
+            "# Cost optimization",
+            "# - Right-size instances",
+            "# - Use reserved instances for predictable workloads",
+            "# - Implement auto-scaling",
+            "# - Clean up unused resources",
+            "# - Monitor usage with cloud cost tools",
+            "",
+            "# Security in cloud",
+            "# - Use VPC/private networking",
+            "# - Enable encryption at rest",
+            "# - Use IAM roles for access control",
+            "# - Enable audit logging",
+            "# - Regular security assessments",
+            "",
+            "# Monitoring cloud MySQL",
+            "# AWS: CloudWatch metrics and alarms",
+            "# Azure: Metrics and Diagnostic settings",
+            "# GCP: Cloud Monitoring and Logging",
+            "",
+            "# Backup in cloud",
+            "# - Automated snapshots",
+            "# - Cross-region replication",
+            "# - Point-in-time recovery",
+            "# - Long-term archival to cold storage"
+          ],
+          "practice": [
+            {
+              "question": "Managed MySQL services ke advantages kya hain?",
+              "answer": "No server management, automated backups, high availability, security patches, scaling"
+            },
+            {
+              "question": "AWS RDS Multi-AZ deployment kya hai?",
+              "answer": "Automatic synchronous replication to standby in different Availability Zone"
+            },
+            {
+              "question": "On-premise to cloud migration ke challenges kya hain?",
+              "answer": "Network latency, data transfer costs, security compliance, application compatibility"
+            },
+            {
+              "question": "Cloud MySQL cost optimize kaise kare?",
+              "answer": "Right-sizing, reserved instances, auto-scaling, storage optimization, monitoring"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

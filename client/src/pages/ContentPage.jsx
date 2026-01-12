@@ -8,6 +8,7 @@ import nodejs from '../api/languages/nodejs.json';
 import expressjs from '../api/languages/express.json';
 import mongodb from '../api/languages/mongodb.json';
 import ProjectsContent from '../pages/projects.jsx'
+import mysql from '../api/languages/mysql.json'
 import "./ContentPage.css";
 
 const ContentPage = () => {
@@ -30,6 +31,8 @@ const ContentPage = () => {
       ? expressjs
       : techSlug === "mongodb"
       ? mongodb
+      : techSlug === "sql"
+      ? mysql
       : null;
 
   const handleBack = () => {
