@@ -1,228 +1,807 @@
 {
-  "technology": "Web Development Projects",
-  "description": "Real-world web development projects mapped across different stacks for portfolio and interview preparation.",
-  "slug": "web-development-projects",
-  "levels": [
+  "category": {
+    "name": "Web Development",
+    "slug": "webdev",
+    "description": "Complete web development projects across multiple technology stacks with beginner to advanced progression."
+  },
+
+  "stacks": [
     {
-      "level": "beginner",
-      "description": "Start with these foundational projects",
-      "topics": [
-        {
-          "id": 1,
-          "title": "Todo Application",
-          "english": "Build a task management system where users can manage daily tasks.",
-          "hinglish": "Ek task management system jisme user apne daily tasks manage kar sake.",
-          "detailed_explanation": {
-            "difficulty": "Beginner",
-            "duration": "1-2 weeks",
+      "stackMeta": {
+        "name": "MERN Stack",
+        "slug": "mernstack",
+        "description": "MongoDB, Express, React, Node.js"
+      },
+
+      "default_stack": {
+        "frontend": "React",
+        "backend": "Node.js + Express",
+        "database": "MongoDB"
+      },
+
+      "levels": {
+        "beginner": [
+          {
+            "id": "mern-beg-001",
+            "slug": "todo-application",
+            "title": "Todo Application",
+            "summary": {
+              "english": "Build a task management system where users can manage daily tasks.",
+              "hinglish": "Ek task management system jisme user apne daily tasks manage kar sake."
+            },
+            "duration": "1–2 weeks",
             "project_type": "CRUD Application",
-            "stacks": [
-              {
-                "name": "MERN Stack",
-                "frontend": "React",
-                "backend": "Node.js + Express",
-                "database": "MongoDB"
-              },
-              {
-                "name": "SERN Stack",
-                "frontend": "React",
-                "backend": "Node.js + Express",
-                "database": "PostgreSQL"
-              }
-            ],
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["web-fundamentals", "html", "css", "javascript"]
+            },
             "core_features": [
               "Create / Update / Delete tasks",
               "Mark task as complete",
               "User authentication",
               "Protected routes"
             ],
+            "api_endpoints": [
+              "POST /api/tasks",
+              "GET /api/tasks",
+              "PUT /api/tasks/:id",
+              "DELETE /api/tasks/:id"
+            ],
             "learning_outcomes": [
               "CRUD operations",
-              "Authentication flow",
-              "Backend API design"
+              "REST API design",
+              "JWT authentication"
+            ],
+            "interview_topics": [
+              "REST APIs",
+              "JWT vs Sessions",
+              "MongoDB schema design"
+            ],
+            "deployment": {
+              "frontend": "Vercel / Netlify",
+              "backend": "Render / Railway",
+              "database": "MongoDB Atlas"
+            }
+          }
+        ],
+        "intermediate": [
+          {
+            "id": "mern-int-001",
+            "slug": "ecommerce-backend-api",
+            "title": "E-commerce Backend API",
+            "summary": {
+              "english": "Build a scalable backend for an e-commerce platform.",
+              "hinglish": "E-commerce ke liye scalable backend banana."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["mern-beg-001", "mern-beg-002"]
+            },
+            "core_features": [
+              "Product CRUD",
+              "Cart & orders",
+              "Payment integration",
+              "Admin roles"
+            ],
+            "learning_outcomes": [
+              "Payment gateway integration",
+              "Role-based access control",
+              "Advanced MongoDB queries"
+            ],
+            "interview_topics": [
+              "MongoDB transactions",
+              "JWT refresh tokens",
+              "REST API security"
+            ]
+          }
+        ],
+        "advanced": [
+          {
+            "id": "mern-adv-001",
+            "slug": "social-media-platform",
+            "title": "Social Media Platform",
+            "summary": {
+              "english": "Build a full social media platform with real-time features.",
+              "hinglish": "Real-time features ke sath social media platform banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["mern-int-001"]
+            },
+            "core_features": [
+              "User profiles",
+              "Posts & comments",
+              "Real-time chat",
+              "Notifications"
+            ],
+            "learning_outcomes": [
+              "Socket.io",
+              "Scalable architecture",
+              "System design"
+            ],
+            "interview_topics": [
+              "WebSockets",
+              "Horizontal scaling",
+              "Caching strategies"
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "stackMeta": {
+        "name": "PHP Laravel",
+        "slug": "laravel",
+        "description": "PHP with Laravel framework"
+      },
+      "default_stack": {
+        "frontend": "Blade / React",
+        "backend": "Laravel",
+        "database": "MySQL"
+      },
+      "levels": {
+        "beginner": [
+          {
+            "id": "laravel-beg-001",
+            "slug": "blog-cms",
+            "title": "Blog CMS",
+            "summary": {
+              "english": "Build a blogging CMS using Laravel.",
+              "hinglish": "Laravel se blogging CMS banana."
+            },
+            "duration": "1–2 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["html", "css", "php-basics"]
+            },
+            "core_features": [
+              "Post management",
+              "Categories",
+              "Comments",
+              "Admin panel"
+            ],
+            "learning_outcomes": [
+              "Laravel MVC",
+              "Eloquent ORM",
+              "Blade templating"
+            ]
+          }
+        ],
+        "intermediate": [
+          {
+            "id": "laravel-int-001",
+            "slug": "laravel-ecommerce",
+            "title": "E-commerce with Laravel",
+            "summary": {
+              "english": "Build an e-commerce platform using Laravel.",
+              "hinglish": "Laravel se e-commerce platform banana."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["laravel-beg-001"]
+            },
+            "core_features": [
+              "Cart & checkout",
+              "Orders",
+              "Payment gateway",
+              "Authentication"
+            ],
+            "learning_outcomes": [
+              "Laravel relationships",
+              "Middleware",
+              "Payment integration"
+            ]
+          }
+        ],
+        "advanced": [
+          {
+            "id": "laravel-adv-001",
+            "slug": "laravel-saas",
+            "title": "Laravel SaaS Application",
+            "summary": {
+              "english": "Build a SaaS application with subscriptions.",
+              "hinglish": "Laravel se SaaS application banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["laravel-int-001"]
+            },
+            "core_features": [
+              "Multi-tenancy",
+              "Subscriptions",
+              "Billing",
+              "API access"
+            ],
+            "learning_outcomes": [
+              "SaaS architecture",
+              "Stripe subscriptions",
+              "API authentication"
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "stackMeta": {
+        "name": "SERN Stack",
+        "slug": "sernstack",
+        "description": "SQL, Express, React, Node.js"
+      },
+      "default_stack": {
+        "frontend": "React",
+        "backend": "Node.js + Express",
+        "database": "PostgreSQL / MySQL"
+      },
+      "levels": {
+        "beginner": [
+          {
+            "id": "sern-beg-001",
+            "slug": "expense-tracker",
+            "title": "Expense Tracker",
+            "summary": {
+              "english": "Build a personal finance tracker to manage expenses.",
+              "hinglish": "Personal finance tracker banana jo expenses manage kare."
+            },
+            "duration": "1–2 weeks",
+            "project_type": "CRUD Application",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["javascript", "react-basics", "sql-basics"]
+            },
+            "core_features": [
+              "Add/Edit/Delete expenses",
+              "Categories & tags",
+              "Monthly reports",
+              "User authentication"
             ],
             "api_endpoints": [
-              "POST /api/tasks - Create task",
-              "GET /api/tasks - Get all tasks",
-              "PUT /api/tasks/:id - Update task",
-              "DELETE /api/tasks/:id - Delete task"
-            ]
-          },
-          "examples": [
-            "// Task Model\nconst Task = mongoose.model('Task', {\n  title: String,\n  completed: Boolean,\n  userId: ObjectId\n});"
-          ],
-          "practice": [
-            {
-              "question": "Kaise design karenge Todo app ka database?",
-              "answer": "Do collections: users aur tasks. Tasks collection me userId field hogi."
-            }
-          ]
-        },
-        {
-          "id": 2,
-          "title": "Notes Application",
-          "english": "Create a notes app where users can store and organize notes.",
-          "hinglish": "Notes app jisme users apne notes store aur organize kar sake.",
-          "detailed_explanation": {
-            "difficulty": "Beginner",
-            "duration": "1-2 weeks",
-            "core_features": [
-              "Create / Edit / Delete notes",
-              "Search notes",
-              "Tags system",
-              "User login"
+              "POST /api/expenses",
+              "GET /api/expenses",
+              "PUT /api/expenses/:id",
+              "DELETE /api/expenses/:id",
+              "GET /api/expenses/reports"
             ],
             "learning_outcomes": [
-              "Text-based data handling",
-              "Search queries",
-              "Schema design"
-            ]
-          },
-          "examples": [
-            "// Note with tags\n{\n  \"title\": \"Shopping List\",\n  \"content\": \"Milk, Eggs, Bread\",\n  \"tags\": [\"shopping\", \"personal\"]\n}"
-          ],
-          "practice": [
-            {
-              "question": "Notes me search feature kaise implement karenge?",
-              "answer": "MongoDB me $text search ya SQL me LIKE query use karenge."
+              "SQL database design",
+              "Foreign key relationships",
+              "Complex SQL queries",
+              "Chart.js integration"
+            ],
+            "interview_topics": [
+              "SQL vs NoSQL",
+              "Database normalization",
+              "JOIN operations",
+              "Indexing in SQL"
+            ],
+            "deployment": {
+              "frontend": "Vercel",
+              "backend": "Railway / Heroku",
+              "database": "Supabase / AWS RDS"
             }
-          ]
-        }
-      ]
+          },
+          {
+            "id": "sern-beg-002",
+            "slug": "recipe-book",
+            "title": "Recipe Book",
+            "summary": {
+              "english": "Create a digital recipe book with search and filtering.",
+              "hinglish": "Digital recipe book banana jisme search aur filtering ho."
+            },
+            "duration": "1–2 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["react-basics", "nodejs", "sql-basics"]
+            },
+            "core_features": [
+              "Add/Edit recipes",
+              "Ingredients list",
+              "Search by ingredients",
+              "User ratings & reviews"
+            ],
+            "learning_outcomes": [
+              "Many-to-many relationships",
+              "Full-text search",
+              "Pagination",
+              "File uploads (recipe images)"
+            ]
+          }
+        ],
+        "intermediate": [
+          {
+            "id": "sern-int-001",
+            "slug": "job-portal",
+            "title": "Job Portal",
+            "summary": {
+              "english": "Build a job portal with employer and candidate dashboards.",
+              "hinglish": "Job portal banana jisme employer aur candidate dashboards ho."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["sern-beg-001", "sern-beg-002"]
+            },
+            "core_features": [
+              "Job listings",
+              "Apply for jobs",
+              "Resume upload",
+              "Admin dashboard",
+              "Email notifications"
+            ],
+            "learning_outcomes": [
+              "Role-based permissions",
+              "File storage handling",
+              "Email services",
+              "Advanced SQL queries"
+            ],
+            "interview_topics": [
+              "Database transactions",
+              "SQL optimization",
+              "ACID properties",
+              "Database indexing strategies"
+            ]
+          }
+        ],
+        "advanced": [
+          {
+            "id": "sern-adv-001",
+            "slug": "inventory-management",
+            "title": "Inventory Management System",
+            "summary": {
+              "english": "Build an enterprise inventory management system.",
+              "hinglish": "Enterprise level inventory management system banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["sern-int-001"]
+            },
+            "core_features": [
+              "Product inventory",
+              "Supplier management",
+              "Purchase orders",
+              "Sales tracking",
+              "Low stock alerts",
+              "Analytics dashboard"
+            ],
+            "learning_outcomes": [
+              "Database transactions",
+              "Complex reporting",
+              "Real-time updates",
+              "PDF generation",
+              "Barcode integration"
+            ],
+            "interview_topics": [
+              "Database sharding",
+              "Query optimization",
+              "Data warehousing",
+              "OLTP vs OLAP"
+            ]
+          }
+        ]
+      }
     },
+
     {
-      "level": "intermediate",
-      "description": "Build more complex applications",
-      "topics": [
-        {
-          "id": 3,
-          "title": "Blog Platform",
-          "english": "Build a blogging platform with public and private posts.",
-          "hinglish": "Blogging platform jisme public aur private posts ho.",
-          "detailed_explanation": {
-            "difficulty": "Intermediate",
-            "duration": "2-4 weeks",
+      "stackMeta": {
+        "name": "Django + React",
+        "slug": "django-react",
+        "description": "Django backend with React frontend"
+      },
+      "default_stack": {
+        "frontend": "React",
+        "backend": "Django + Django REST Framework",
+        "database": "PostgreSQL"
+      },
+      "levels": {
+        "beginner": [
+          {
+            "id": "django-beg-001",
+            "slug": "library-management",
+            "title": "Library Management System",
+            "summary": {
+              "english": "Build a library system to manage books and members.",
+              "hinglish": "Library system banana jo books aur members manage kare."
+            },
+            "duration": "1–2 weeks",
+            "project_type": "CRUD Application",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["python-basics", "html", "css"]
+            },
             "core_features": [
-              "User roles (Author / Reader)",
-              "Create & publish blogs",
-              "Likes & comments",
-              "Draft system"
+              "Book catalog",
+              "Member registration",
+              "Borrow/return books",
+              "Late fee calculation",
+              "Admin interface"
+            ],
+            "api_endpoints": [
+              "GET /api/books/",
+              "POST /api/books/",
+              "PUT /api/books/{id}/",
+              "POST /api/borrow/",
+              "POST /api/return/"
             ],
             "learning_outcomes": [
-              "Role-based access",
-              "Relational data handling",
-              "Content management"
-            ]
-          },
-          "examples": [
-            "// Blog Post Schema\n{\n  \"title\": \"My First Blog\",\n  \"content\": \"Hello World!\",\n  \"author\": \"user123\",\n  \"published\": true,\n  \"likes\": 45\n}"
-          ],
-          "practice": [
-            {
-              "question": "Admin aur author ke permissions kaise manage karenge?",
-              "answer": "Role-based access control (RBAC) implement karenge."
+              "Django ORM",
+              "Django Admin customization",
+              "DRF serializers",
+              "Class-based views"
+            ],
+            "interview_topics": [
+              "Django MVT architecture",
+              "Django ORM vs SQL",
+              "Django middleware",
+              "Django signals"
+            ],
+            "deployment": {
+              "frontend": "Vercel",
+              "backend": "PythonAnywhere / Heroku",
+              "database": "PostgreSQL"
             }
-          ]
-        },
-        {
-          "id": 4,
-          "title": "Learning Platform",
-          "english": "Create an online learning platform with courses and progress tracking.",
-          "hinglish": "Online learning platform jisme courses aur progress tracking ho.",
-          "detailed_explanation": {
-            "difficulty": "Intermediate",
-            "duration": "3-5 weeks",
+          }
+        ],
+        "intermediate": [
+          {
+            "id": "django-int-001",
+            "slug": "learning-management-system",
+            "title": "Learning Management System",
+            "summary": {
+              "english": "Build an LMS for online courses and learning.",
+              "hinglish": "Online courses ke liye Learning Management System banana."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["django-beg-001"]
+            },
             "core_features": [
-              "Courses & roadmaps",
-              "Topic unlock system",
+              "Course creation",
+              "Student enrollment",
+              "Video lectures",
+              "Quizzes & assignments",
               "Progress tracking",
-              "Interview preparation"
+              "Discussion forums"
             ],
             "learning_outcomes": [
-              "System design thinking",
-              "Large-scale architecture",
-              "User progress logic"
+              "Django authentication",
+              "File handling (videos)",
+              "Third-party integrations",
+              "Complex database models"
+            ],
+            "interview_topics": [
+              "Django caching",
+              "Database optimization",
+              "Django Channels",
+              "Celery for background tasks"
             ]
-          },
-          "examples": [
-            "// Course Progress\n{\n  \"userId\": \"123\",\n  \"courseId\": \"web-dev\",\n  \"completedLessons\": [\"html\", \"css\"],\n  \"progress\": 40\n}"
-          ],
-          "practice": [
-            {
-              "question": "User ka progress kaise track karenge?",
-              "answer": "Database me progress table banayenge jisme completed lessons store karenge."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "level": "advanced",
-      "description": "Master complex systems",
-      "topics": [
-        {
-          "id": 5,
-          "title": "E-commerce Platform",
-          "english": "Build a full-featured e-commerce platform.",
-          "hinglish": "Ek complete e-commerce platform banana.",
-          "detailed_explanation": {
-            "difficulty": "Advanced",
-            "duration": "4-8 weeks",
+          }
+        ],
+        "advanced": [
+          {
+            "id": "django-adv-001",
+            "slug": "real-estate-platform",
+            "title": "Real Estate Platform",
+            "summary": {
+              "english": "Build a complete real estate listing and management platform.",
+              "hinglish": "Complete real estate listing aur management platform banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["django-int-001"]
+            },
             "core_features": [
-              "Product listing",
-              "Cart & checkout",
-              "Orders management",
+              "Property listings",
+              "Advanced search filters",
+              "Virtual tours",
+              "Agent profiles",
+              "Property valuation",
+              "Booking system",
+              "Document management"
+            ],
+            "learning_outcomes": [
+              "Geolocation services",
+              "Payment processing",
+              "Advanced search algorithms",
+              "Document generation",
+              "API rate limiting"
+            ],
+            "interview_topics": [
+              "Microservices architecture",
+              "API gateway design",
+              "Django with Docker",
+              "Scaling Django applications"
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "stackMeta": {
+        "name": "Next.js Full Stack",
+        "slug": "nextjs",
+        "description": "Next.js with full stack capabilities"
+      },
+      "default_stack": {
+        "frontend": "Next.js",
+        "backend": "Next.js API Routes",
+        "database": "Prisma + PostgreSQL"
+      },
+      "levels": {
+        "beginner": [
+          {
+            "id": "nextjs-beg-001",
+            "slug": "portfolio-builder",
+            "title": "Portfolio Builder",
+            "summary": {
+              "english": "Build a dynamic portfolio website with CMS features.",
+              "hinglish": "Dynamic portfolio website banana jo CMS features rakhe."
+            },
+            "duration": "1–2 weeks",
+            "project_type": "Full Stack Application",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["react-basics", "javascript", "css"]
+            },
+            "core_features": [
+              "Dynamic pages",
+              "Project showcase",
+              "Contact form",
+              "Blog section",
+              "SEO optimization"
+            ],
+            "api_endpoints": [
+              "GET /api/projects",
+              "GET /api/blogs",
+              "POST /api/contact",
+              "GET /api/views/[slug]"
+            ],
+            "learning_outcomes": [
+              "Next.js routing",
+              "Static site generation",
+              "Server-side rendering",
+              "API routes",
+              "SEO best practices"
+            ],
+            "interview_topics": [
+              "SSR vs SSG vs ISR",
+              "Next.js file structure",
+              "API routes vs separate backend",
+              "Image optimization in Next.js"
+            ],
+            "deployment": {
+              "frontend": "Vercel",
+              "backend": "Vercel",
+              "database": "Vercel PostgreSQL / Supabase"
+            }
+          }
+        ],
+        "intermediate": [
+          {
+            "id": "nextjs-int-001",
+            "slug": "e-commerce-nextjs",
+            "title": "E-commerce with Next.js",
+            "summary": {
+              "english": "Build a modern e-commerce store with Next.js.",
+              "hinglish": "Next.js se modern e-commerce store banana."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["nextjs-beg-001"]
+            },
+            "core_features": [
+              "Product catalog",
+              "Shopping cart",
+              "Checkout process",
+              "Order tracking",
+              "User accounts",
               "Admin dashboard"
             ],
             "learning_outcomes": [
-              "Payment integration",
-              "Complex schemas",
-              "Production-ready systems"
+              "Stripe integration",
+              "Middleware in Next.js",
+              "Server components",
+              "Cart state management",
+              "Payment processing"
             ],
-            "payment_gateways": ["Stripe", "Razorpay", "PayPal"]
-          },
-          "examples": [
-            "// Order Schema\n{\n  \"orderId\": \"ORD123\",\n  \"items\": [{\"product\": \"laptop\", \"qty\": 1}],\n  \"total\": 50000,\n  \"paymentStatus\": \"completed\"\n}"
-          ],
-          "practice": [
-            {
-              "question": "Payment gateway kaise integrate karenge?",
-              "answer": "Stripe ya Razorpay ka SDK use karenge aur webhooks handle karenge."
-            }
-          ]
-        },
-        {
-          "id": 6,
-          "title": "Real-time Chat Application",
-          "english": "Create a real-time chat system with live messaging.",
-          "hinglish": "Real-time chat system jisme live messages ho.",
-          "detailed_explanation": {
-            "difficulty": "Advanced",
-            "duration": "3-6 weeks",
+            "interview_topics": [
+              "Next.js 13+ app router",
+              "Server components benefits",
+              "Edge functions",
+              "Performance optimization"
+            ]
+          }
+        ],
+        "advanced": [
+          {
+            "id": "nextjs-adv-001",
+            "slug": "saas-analytics-platform",
+            "title": "SaaS Analytics Platform",
+            "summary": {
+              "english": "Build a SaaS analytics dashboard with real-time data.",
+              "hinglish": "Real-time data ke sath SaaS analytics dashboard banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["nextjs-int-001"]
+            },
             "core_features": [
-              "One-to-one chat",
-              "Online status",
-              "Typing indicator",
-              "Message history"
+              "Multi-tenant architecture",
+              "Real-time dashboards",
+              "Data visualization",
+              "User permissions",
+              "API rate limiting",
+              "Export functionality",
+              "Webhook support"
             ],
             "learning_outcomes": [
-              "WebSockets",
-              "Real-time systems",
-              "Advanced backend logic"
+              "Real-time updates",
+              "Data aggregation",
+              "Chart libraries",
+              "Subscription billing",
+              "Webhook implementation"
             ],
-            "technologies": ["Socket.io", "WebSockets", "Redis"]
-          },
-          "examples": [
-            "// Socket.io message\nsocket.emit('message', {\n  text: 'Hello!',\n  from: 'user1',\n  to: 'user2'\n});"
-          ],
-          "practice": [
-            {
-              "question": "Real-time messaging kaise implement karenge?",
-              "answer": "Socket.io ya WebSockets use karenge aur messages real-time send/receive karenge."
+            "interview_topics": [
+              "Next.js scaling",
+              "Real-time data strategies",
+              "Multi-tenant databases",
+              "Analytics pipeline design"
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "stackMeta": {
+        "name": "WordPress Development",
+        "slug": "wordpress",
+        "description": "WordPress theme and plugin development"
+      },
+      "default_stack": {
+        "frontend": "WordPress Theme",
+        "backend": "WordPress CMS",
+        "database": "MySQL"
+      },
+      "levels": {
+        "beginner": [
+          {
+            "id": "wp-beg-001",
+            "slug": "custom-wordpress-theme",
+            "title": "Custom WordPress Theme",
+            "summary": {
+              "english": "Create a custom WordPress theme from scratch.",
+              "hinglish": "Scratch se custom WordPress theme banana."
+            },
+            "duration": "1–2 weeks",
+            "project_type": "Theme Development",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["html", "css", "php-basics"]
+            },
+            "core_features": [
+              "Custom homepage",
+              "Blog templates",
+              "Widget areas",
+              "Custom menus",
+              "Responsive design",
+              "Theme customization"
+            ],
+            "template_files": [
+              "index.php",
+              "style.css",
+              "header.php",
+              "footer.php",
+              "single.php",
+              "page.php",
+              "functions.php"
+            ],
+            "learning_outcomes": [
+              "WordPress template hierarchy",
+              "Theme development standards",
+              "WordPress hooks",
+              "Customizer API",
+              "Responsive WordPress themes"
+            ],
+            "interview_topics": [
+              "WordPress template hierarchy",
+              "Hook system (actions vs filters)",
+              "Theme vs Plugin",
+              "WordPress security best practices"
+            ],
+            "deployment": {
+              "frontend": "WordPress hosting",
+              "backend": "WordPress hosting",
+              "database": "MySQL on hosting"
             }
-          ]
-        }
-      ]
+          }
+        ],
+        "intermediate": [
+          {
+            "id": "wp-int-001",
+            "slug": "custom-plugin-development",
+            "title": "Custom Plugin Development",
+            "summary": {
+              "english": "Develop a custom WordPress plugin for specific functionality.",
+              "hinglish": "Specific functionality ke liye custom WordPress plugin banana."
+            },
+            "duration": "2–3 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["wp-beg-001"]
+            },
+            "core_features": [
+              "Custom post types",
+              "Meta boxes",
+              "Shortcodes",
+              "Settings page",
+              "Database operations",
+              "AJAX functionality"
+            ],
+            "learning_outcomes": [
+              "Plugin architecture",
+              "Custom post types",
+              "WordPress database API",
+              "AJAX in WordPress",
+              "Plugin security"
+            ],
+            "interview_topics": [
+              "WordPress database schema",
+              "Plugin lifecycle",
+              "WordPress REST API",
+              "Plugin optimization"
+            ]
+          }
+        ],
+        "advanced": [
+          {
+            "id": "wp-adv-001",
+            "slug": "woocommerce-marketplace",
+            "title": "WooCommerce Marketplace",
+            "summary": {
+              "english": "Build a multi-vendor marketplace using WooCommerce.",
+              "hinglish": "WooCommerce ka use karke multi-vendor marketplace banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["wp-int-001"]
+            },
+            "core_features": [
+              "Multi-vendor support",
+              "Vendor dashboards",
+              "Commission system",
+              "Product management",
+              "Order management",
+              "Reviews & ratings",
+              "Payment splitting"
+            ],
+            "learning_outcomes": [
+              "WooCommerce hooks",
+              "Custom payment gateways",
+              "Multi-vendor architecture",
+              "Commission calculations",
+              "Advanced shipping methods"
+            ],
+            "interview_topics": [
+              "WooCommerce architecture",
+              "Multi-vendor challenges",
+              "Payment gateway integration",
+              "Scalability of WordPress"
+            ]
+          }
+        ]
+      }
     }
   ]
 }
