@@ -275,7 +275,7 @@ const ContentPage = () => {
       </button>
 
       <div className="content-header">
-        <h1>{data.technology}</h1>
+        <h1 className="heading">{data.technology}</h1>
         <p className="content-description">{data.description}</p>
       </div>
 

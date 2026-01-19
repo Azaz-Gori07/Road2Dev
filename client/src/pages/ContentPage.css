@@ -18,8 +18,9 @@
     flex-shrink: 0;
 }
 
-.content-header h1 {
+.content-header .heading {
     font-size: 2rem;
+    margin-top: 30px;
     letter-spacing: 5px;
     margin-bottom: 10px;
     color: #fff;
@@ -273,9 +274,10 @@
         padding: 50px 12px 15px;
     }
     
-    .content-header h1 {
+    .content-header .heading {
         font-size: 1.8rem;
         letter-spacing: 3px;
+        margin-top: 0;
     }
     
     .content-description {
@@ -299,7 +301,7 @@
 }
 
 @media (max-width: 350px) {
-    .content-header h1 {
+    .content-header .heading {
         font-size: 1.6rem;
         letter-spacing: 2px;
     }
