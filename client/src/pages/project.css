@@ -10,7 +10,7 @@
     overflow: hidden;
 }
 
-.button {
+.back-btn-23 .button {
     position: fixed;
     top: 15px;
     left: 15px;
@@ -23,11 +23,6 @@
     font-size: 0.9rem;
     transition: all 0.3s ease;
     z-index: 100;
-}
-
-.back-btn-23:hover {
-    background-color: #1a1a1a;
-    border-color: #4a9eff;
 }
 
 .page-header-23 {

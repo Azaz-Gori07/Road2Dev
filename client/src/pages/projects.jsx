@@ -39,9 +39,11 @@ const ProjectsContent = () => {
 
   return (
     <div className="projects-page-23">
-      <button className="button" onClick={handleBack}>
+      <div className="back-btn-23">
+        <button className="button" onClick={handleBack}>
         ← Back
       </button>
+      </div>
 
       <div className="page-header-23">
         <h1 className="page-title-23">{projectsData.category.name} Projects</h1>
