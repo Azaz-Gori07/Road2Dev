@@ -1,0 +1,748 @@
+{
+  "technology": "Python",
+  "slug": "complete-python-course-2026",
+  "description": "Complete Python programming course from fundamentals to advanced topics including web development, data science, automation, and modern Python 3.11+ features",
+  "levels": [
+    {
+      "level": "Beginner",
+      "order": 1,
+      "description": "Python basics, syntax, data structures, and fundamental programming concepts",
+      "topics": [
+        {
+          "id": 1,
+          "title": "Python Introduction & Setup",
+          "english": "Setting up Python development environment and understanding basics",
+          "hinglish": "Python development environment setup karna aur basics samajhna",
+          "examples": [
+            "Installing Python 3.11+ on Windows/Mac/Linux",
+            "Setting up VS Code with Python extensions",
+            "Using Jupyter Notebook for interactive coding",
+            "Creating virtual environments with venv",
+            "Writing and running first Python script"
+          ],
+          "practice": [
+            {
+              "question": "Windows par Python install karne ka best way kya hai?",
+              "answer": "Python.org se official installer download karna ya Microsoft Store se install karna. PATH automatically add ho jata hai."
+            },
+            {
+              "question": "Virtual environment kyun important hai?",
+              "answer": "Virtual environment alag-alag projects ke liye alag dependencies manage karta hai. Package conflicts se bachata hai aur project isolation deta hai."
+            },
+            {
+              "question": "VS Code mein Python ke liye kaunsi extensions chahiye?",
+              "answer": "Python extension (Microsoft), Pylance, Python Test Explorer, Jupyter, Python Indent, autopep8 formatting ke liye."
+            },
+            {
+              "question": "Python interactive shell (REPL) kaise use karte hain?",
+              "answer": "Terminal mein 'python' ya 'python3' type karke. Code directly run kar sakte hain. Exit karne ke liye exit() ya Ctrl+D."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#!/usr/bin/env python3\n# First Python Program\nprint(\"Hello, Python!\")\n\n# Check Python version\nimport sys\nprint(f\"Python version: {sys.version}\")\n\n# Create virtual environment\n# Terminal command: python -m venv myenv\n\n# Activate virtual environment\n# Windows: myenv\\Scripts\\activate\n# Mac/Linux: source myenv/bin/activate\n\n# Install packages\n# pip install package_name\n# pip install -r requirements.txt\n\n# Basic calculations\nx = 10\ny = 20\nsum_result = x + y\nprint(f\"Sum: {x} + {y} = {sum_result}\")\n\n# Using Jupyter Notebook\n# Install: pip install notebook\n# Run: jupyter notebook\n# Creates interactive cells for code and markdown\n\n# Python interpreter modes\n# 1. Script mode: Save as .py file and run\n# 2. Interactive mode: Directly in terminal\n# 3. Notebook mode: Jupyter cells",
+            "components": [
+              {
+                "name": "Python Installation",
+                "english": "Installing Python interpreter and essential tools",
+                "hinglish": "Python interpreter aur essential tools install karna",
+                "importance": "High",
+                "tip": "Install Python from python.org (not from Microsoft Store for development)",
+                "pros": "Latest features, better control, development tools",
+                "cons": "Manual updates needed"
+              },
+              {
+                "name": "Code Editor/IDE",
+                "english": "Tools for writing and editing Python code",
+                "hinglish": "Python code likhne aur edit karne ke tools",
+                "importance": "High",
+                "tip": "VS Code with Python extension is best for beginners",
+                "pros": "IntelliSense, debugging, extensions, free",
+                "cons": "Configuration needed, extensions management"
+              },
+              {
+                "name": "Virtual Environments",
+                "english": "Isolated Python environments for different projects",
+                "hinglish": "Different projects ke liye isolated Python environments",
+                "importance": "High",
+                "tip": "Always use virtual environments for every project",
+                "pros": "Dependency isolation, no conflicts, reproducibility",
+                "cons": "Extra step, management overhead"
+              },
+              {
+                "name": "Package Management",
+                "english": "Installing and managing Python libraries",
+                "hinglish": "Python libraries install aur manage karna",
+                "importance": "High",
+                "tip": "Use pip for packages, requirements.txt for project dependencies",
+                "pros": "Easy installation, version control, dependency resolution",
+                "cons": "Virtual environment management needed"
+              }
+            ]
+          }
+        },
+        {
+          "id": 2,
+          "title": "Python Basics & Syntax",
+          "english": "Fundamental Python syntax, variables, data types, and operations",
+          "hinglish": "Fundamental Python syntax, variables, data types, aur operations",
+          "examples": [
+            "Variables and basic data types (int, float, str, bool)",
+            "String operations and formatting",
+            "Basic input/output operations",
+            "Type conversion and checking",
+            "Comments and documentation"
+          ],
+          "practice": [
+            {
+              "question": "Python mein variables kaise declare karte hain?",
+              "answer": "Python dynamically typed hai. Direct assign karte hain: name = 'John', age = 25. Type specify nahi karna padta."
+            },
+            {
+              "question": "String formatting ke different tarike kya hain?",
+              "answer": "f-strings (f\"Hello {name}\"), format() method, % formatting. f-strings modern aur readable hain."
+            },
+            {
+              "question": "Input kaise lete hain user se?",
+              "answer": "input() function se: name = input(\"Enter your name: \"). Always string return karta hai, type conversion karna padta hai."
+            },
+            {
+              "question": "Type checking aur conversion kaise karte hain?",
+              "answer": "type() se check karte hain: type(variable). Conversion ke liye: int(), float(), str(), bool()."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# Variables and Data Types\nname = \"John Doe\"           # String\nage = 25                    # Integer\nheight = 5.9               # Float\nis_student = True          # Boolean\n\n# Multiple assignment\na, b, c = 1, 2, 3\nx = y = z = 0\n\n# Dynamic typing\nvariable = 10              # Integer\nprint(type(variable))      # <class 'int'>\n\nvariable = \"Hello\"         # Now string\nprint(type(variable))      # <class 'str'>\n\n# String Operations\ntext = \"Python Programming\"\nprint(len(text))           # Length: 18\nprint(text.upper())        # Uppercase\nprint(text.lower())        # Lowercase\nprint(text.split())        # Split into list\nprint(\"Python\" in text)    # Check substring\n\n# String Formatting\nname = \"Alice\"\nage = 30\n\n# f-strings (Python 3.6+)\nmessage = f\"Hello {name}, you are {age} years old.\"\nprint(message)\n\n# format() method\nmessage = \"Hello {}, you are {} years old.\".format(name, age)\nprint(message)\n\n# Old style\nmessage = \"Hello %s, you are %d years old.\" % (name, age)\n\n# Input from user\nname = input(\"Enter your name: \")\nage_input = input(\"Enter your age: \")\nage = int(age_input)  # Convert to integer\n\nprint(f\"Hello {name}, next year you'll be {age + 1}\")\n\n# Type Conversion\nnum_str = \"123\"\nnum_int = int(num_str)     # String to integer\nnum_float = float(num_str) # String to float\n\nbool_val = bool(1)         # True\nbool_val = bool(0)         # False\nbool_val = bool(\"\")        # False (empty string)\nbool_val = bool(\"Hello\")   # True (non-empty)\n\n# Checking types\nprint(type(10) == int)     # True\nprint(isinstance(10, int)) # True (better method)\n\n# Constants (convention)\nPI = 3.14159\nMAX_USERS = 100\n\n# Variable naming conventions\n# snake_case for variables and functions\n# UPPER_CASE for constants\n# PascalCase for classes\n\n# Comments\n# Single line comment\n\n\"\"\"\nMulti-line comment\nor docstring\n\"\"\"\n\n'''\nAnother way for\nmulti-line comments\n'''\n\n# Escape sequences\nprint(\"Line 1\\nLine 2\")     # New line\nprint(\"Tab\\tseparated\")     # Tab\nprint(\"He said \\\"Hello\\\"\") # Quotes\nprint(\"Path: C:\\\\Users\")   # Backslash\n\n# Raw strings (ignore escape sequences)\npath = r\"C:\\Users\\Name\"\nprint(path)  # C:\\Users\\Name\n\n# String methods\ntext = \"  python programming  \"\nprint(text.strip())         # Remove spaces\nprint(text.lstrip())        # Left strip\nprint(text.rstrip())        # Right strip\nprint(text.title())         # Title Case\nprint(text.replace(\"python\", \"Python\"))\nprint(text.find(\"prog\"))    # Find index\n\n# String slicing\ntext = \"Python\"\nprint(text[0])      # P\nprint(text[-1])     # n (last character)\nprint(text[0:3])    # Pyt (slice)\nprint(text[:3])     # Pyt (start from beginning)\nprint(text[3:])     # hon (to end)\nprint(text[::-1])   # nohtyP (reverse)",
+            "components": [
+              {
+                "name": "Variables",
+                "english": "Named storage locations for data",
+                "hinglish": "Data ke liye named storage locations",
+                "importance": "High",
+                "tip": "Use descriptive names and follow naming conventions",
+                "pros": "Data storage, readability, maintainability",
+                "cons": "Memory usage, naming discipline needed"
+              },
+              {
+                "name": "Data Types",
+                "english": "Classification of data determining possible values and operations",
+                "hinglish": "Data ka classification jo possible values aur operations determine karta hai",
+                "importance": "High",
+                "tip": "Understand type hierarchy and automatic conversions",
+                "pros": "Type safety, appropriate operations, error prevention",
+                "cons": "Type errors, conversion complexity"
+              },
+              {
+                "name": "String Operations",
+                "english": "Manipulating and processing text data",
+                "hinglish": "Text data manipulate aur process karna",
+                "importance": "High",
+                "tip": "Use f-strings for modern string formatting",
+                "pros": "Text processing, formatting, data presentation",
+                "cons": "Memory usage for large strings"
+              },
+              {
+                "name": "Input/Output",
+                "english": "Getting data from users and displaying results",
+                "hinglish": "Users se data lena aur results display karna",
+                "importance": "Medium",
+                "tip": "Always validate and sanitize user input",
+                "pros": "Interactive programs, user engagement",
+                "cons": "Input validation complexity, security risks"
+              }
+            ]
+          }
+        },
+        {
+          "id": 3,
+          "title": "Control Structures",
+          "english": "Decision making and loops for controlling program flow",
+          "hinglish": "Program flow control karne ke liye decision making aur loops",
+          "examples": [
+            "If-elif-else conditions",
+            "For loops with range and sequences",
+            "While loops with break/continue",
+            "Match statement (Python 3.10+)",
+            "Ternary conditional expressions"
+          ],
+          "practice": [
+            {
+              "question": "If-elif-else ladder kaise banate hain?",
+              "answer": "if condition1:, elif condition2:, else:. elif multiple conditions handle karta hai. else sab conditions false hone par execute hota hai."
+            },
+            {
+              "question": "For loop mein range() kaise use karte hain?",
+              "answer": "range(start, stop, step). Example: range(5) = 0 to 4, range(1, 6) = 1 to 5, range(0, 10, 2) = 0,2,4,6,8."
+            },
+            {
+              "question": "Break aur continue mein kya difference hai?",
+              "answer": "Break loop se immediately exit karta hai. Continue current iteration skip karta hai aur next iteration continue karta hai."
+            },
+            {
+              "question": "Match statement (Python 3.10+) kya hai?",
+              "answer": "Switch-case ki tarah hai multiple conditions handle karne ke liye. Pattern matching support karta hai. Complex conditions ke liye better hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# If-elif-else statements\nage = 18\n\nif age < 13:\n    print(\"Child\")\nelif age < 20:\n    print(\"Teenager\")\nelif age < 60:\n    print(\"Adult\")\nelse:\n    print(\"Senior\")\n\n# Nested if\nscore = 85\nattendance = 90\n\nif score >= 75:\n    if attendance >= 80:\n        print(\"Eligible for exam\")\n    else:\n        print(\"Improve attendance\")\nelse:\n    print(\"Improve score\")\n\n# Ternary conditional operator\n# condition ? true_value : false_value (in other languages)\n# Python: true_value if condition else false_value\n\nage = 20\nstatus = \"Adult\" if age >= 18 else \"Minor\"\nprint(status)\n\n# Even simpler\na, b = 10, 20\nmax_value = a if a > b else b\n\n# For loops\n# Iterating over a sequence\nfruits = [\"apple\", \"banana\", \"cherry\"]\n\nfor fruit in fruits:\n    print(fruit)\n\n# With index\nfor i, fruit in enumerate(fruits):\n    print(f\"Index {i}: {fruit}\")\n\n# Using range\nfor i in range(5):          # 0 to 4\n    print(i)\n\nfor i in range(1, 6):       # 1 to 5\n    print(i)\n\nfor i in range(0, 10, 2):   # 0, 2, 4, 6, 8\n    print(i)\n\n# While loops\ncount = 0\nwhile count < 5:\n    print(f\"Count: {count}\")\n    count += 1\n\n# Infinite loop with break\nwhile True:\n    user_input = input(\"Enter 'quit' to exit: \")\n    if user_input.lower() == \"quit\":\n        break\n    print(f\"You entered: {user_input}\")\n\n# Continue statement\nfor i in range(10):\n    if i % 2 == 0:  # Skip even numbers\n        continue\n    print(f\"Odd number: {i}\")\n\n# Break vs Continue\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]\n\nprint(\"Using break:\")\nfor num in numbers:\n    if num == 5:\n        break      # Stops the loop\n    print(num)     # Prints: 1 2 3 4\n\nprint(\"\\nUsing continue:\")\nfor num in numbers:\n    if num == 5:\n        continue   # Skips 5, continues loop\n    print(num)     # Prints: 1 2 3 4 6 7 8 9\n\n# Else clause with loops\n# Else executes when loop completes normally (no break)\nfor i in range(5):\n    print(i)\nelse:\n    print(\"Loop completed successfully\")\n\n# With break\nfor i in range(5):\n    if i == 3:\n        break\n    print(i)\nelse:\n    print(\"This won't execute because of break\")\n\n# Match statement (Python 3.10+)\ndef http_status(status):\n    match status:\n        case 200:\n            return \"OK\"\n        case 404:\n            return \"Not Found\"\n        case 500:\n            return \"Internal Server Error\"\n        case _:  # Default case\n            return \"Unknown status\"\n\nprint(http_status(200))  # OK\nprint(http_status(404))  # Not Found\n\n# Pattern matching with match\ncommand = \"hello world\"\n\nmatch command.split():\n    case [\"quit\"]:\n        print(\"Quitting...\")\n    case [\"look\"]:\n        print(\"Looking around\")\n    case [\"get\", item]:\n        print(f\"Getting {item}\")\n    case [\"give\", \"to\", person]:\n        print(f\"Giving to {person}\")\n    case _:\n        print(\"Unknown command\")\n\n# Pass statement (placeholder)\ndef empty_function():\n    pass  # To be implemented later\n\nclass EmptyClass:\n    pass\n\nif True:\n    pass  # Do nothing\n\n# Walrus operator (Python 3.8+)\n# Assign and check in same expression\nwhile (line := input(\"Enter text: \")) != \"quit\":\n    print(f\"You entered: {line}\")\n\n# Reading file line by line\n# with open(\"file.txt\") as file:\n#     while (line := file.readline()):\n#         print(line.strip())\n\n# Complex conditions\nx = 10\ny = 20\nz = 30\n\nif x < y < z:  # Chained comparisons\n    print(\"x is less than y and y is less than z\")\n\nif x == 10 and y == 20:\n    print(\"Both conditions true\")\n\nif x == 10 or y == 100:\n    print(\"At least one condition true\")\n\nif not x == 100:\n    print(\"x is not 100\")",
+            "components": [
+              {
+                "name": "Conditional Statements",
+                "english": "Decision making based on conditions",
+                "hinglish": "Conditions ke basis par decision making",
+                "importance": "High",
+                "tip": "Use match statement for complex pattern matching (Python 3.10+)",
+                "pros": "Program flow control, dynamic behavior",
+                "cons": "Complex nesting reduces readability"
+              },
+              {
+                "name": "Loops",
+                "english": "Repeating code execution",
+                "hinglish": "Code execution repeat karna",
+                "importance": "High",
+                "tip": "Use for loops for known iterations, while for unknown",
+                "pros": "Automation, data processing, iteration",
+                "cons": "Infinite loop risk, performance issues"
+              },
+              {
+                "name": "Loop Control",
+                "english": "Controlling loop execution with break/continue",
+                "hinglish": "Break/continue se loop execution control karna",
+                "importance": "High",
+                "tip": "Use break sparingly, prefer clear loop conditions",
+                "pros": "Flexible control, early exit, skip iterations",
+                "cons": "Can make code harder to follow"
+              },
+              {
+                "name": "Pattern Matching",
+                "english": "Structural pattern matching for complex conditions",
+                "hinglish": "Complex conditions ke liye structural pattern matching",
+                "importance": "Medium",
+                "tip": "Use match statement for cleaner multiple condition handling",
+                "pros": "Clean syntax, powerful patterns, readable",
+                "cons": "Python 3.10+ required, learning curve"
+              }
+            ]
+          }
+        },
+        {
+          "id": 4,
+          "title": "Data Structures",
+          "english": "Built-in data structures: lists, tuples, sets, dictionaries",
+          "hinglish": "Built-in data structures: lists, tuples, sets, dictionaries",
+          "examples": [
+            "List operations and methods",
+            "Tuple immutability and usage",
+            "Set operations (union, intersection, difference)",
+            "Dictionary key-value pairs",
+            "List comprehensions and generators"
+          ],
+          "practice": [
+            {
+              "question": "List aur tuple mein kya difference hai?",
+              "answer": "List mutable hai (modify kar sakte hain), tuple immutable hai (modify nahi kar sakte). List [] brackets use karti hai, tuple () parentheses."
+            },
+            {
+              "question": "Set kyun use karte hain?",
+              "answer": "Set unique elements store karta hai, duplicates automatically remove hote hain. Mathematical operations (union, intersection) ke liye useful hai."
+            },
+            {
+              "question": "Dictionary mein keys kya-kya ho sakti hain?",
+              "answer": "Dictionary keys immutable types ho sakti hain: strings, numbers, tuples (jinke elements immutable hon). Lists aur dictionaries keys nahi ho sakte."
+            },
+            {
+              "question": "List comprehension kya hai?",
+              "answer": "List create karne ka concise tarika. [expression for item in iterable if condition]. Faster hai aur readable hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# Lists (Mutable, Ordered)\nfruits = [\"apple\", \"banana\", \"cherry\", \"date\"]\nnumbers = [1, 2, 3, 4, 5]\nmixed = [1, \"hello\", 3.14, True]\n\n# List operations\nprint(len(fruits))           # Length: 4\nprint(fruits[0])            # First: apple\nprint(fruits[-1])           # Last: date\nprint(fruits[1:3])          # Slice: ['banana', 'cherry']\n\n# List methods\nfruits.append(\"elderberry\")  # Add to end\nfruits.insert(1, \"avocado\")  # Insert at index\nfruits.remove(\"banana\")      # Remove by value\npopped = fruits.pop()        # Remove and return last\npopped = fruits.pop(2)       # Remove at index\n\nfruits.sort()                # Sort in-place\nfruits.reverse()            # Reverse in-place\nsorted_fruits = sorted(fruits)  # Return new sorted list\n\nprint(fruits.index(\"cherry\"))  # Find index\nprint(\"apple\" in fruits)      # Check membership\n\n# List comprehension\nsquares = [x**2 for x in range(10)]\n# [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]\n\neven_squares = [x**2 for x in range(10) if x % 2 == 0]\n# [0, 4, 16, 36, 64]\n\nnested = [(x, y) for x in range(3) for y in range(3)]\n# [(0,0), (0,1), (0,2), (1,0), (1,1), (1,2), (2,0), (2,1), (2,2)]\n\n# Tuples (Immutable, Ordered)\ncoordinates = (10, 20)\ncolors = (\"red\", \"green\", \"blue\")\nsingle = (5,)  # Note comma for single element\nempty = ()\n\n# Tuple operations\nprint(coordinates[0])       # 10\nprint(coordinates[1])       # 20\nprint(len(colors))          # 3\n\n# Tuple unpacking\nx, y = coordinates          # x=10, y=20\nred, green, blue = colors   # Multiple assignment\n\n# Swap variables using tuples\na, b = 10, 20\na, b = b, a  # Swap: a=20, b=10\n\n# Named tuples (more readable)\nfrom collections import namedtuple\n\nPoint = namedtuple('Point', ['x', 'y'])\np = Point(10, 20)\nprint(p.x, p.y)            # 10 20\nprint(p[0], p[1])          # Also works: 10 20\n\n# Sets (Mutable, Unordered, Unique)\nprime_numbers = {2, 3, 5, 7, 11}\neven_numbers = {2, 4, 6, 8, 10}\nempty_set = set()          # Not {} (that's dict)\n\n# Set operations\nprint(prime_numbers | even_numbers)   # Union: {2,3,4,5,6,7,8,10,11}\nprint(prime_numbers & even_numbers)   # Intersection: {2}\nprint(prime_numbers - even_numbers)   # Difference: {3,5,7,11}\nprint(prime_numbers ^ even_numbers)   # Symmetric difference: {3,4,5,6,7,8,10,11}\n\n# Set methods\nprime_numbers.add(13)      # Add element\nprime_numbers.remove(2)    # Remove element (error if not exists)\nprime_numbers.discard(100) # Remove if exists (no error)\n\n# Frozenset (Immutable set)\nimmutable_set = frozenset([1, 2, 3, 4])\n\n# Dictionaries (Key-Value pairs, Mutable)\nperson = {\n    \"name\": \"John\",\n    \"age\": 30,\n    \"city\": \"New York\"\n}\n\n# Access elements\nprint(person[\"name\"])      # John\nprint(person.get(\"age\"))   # 30\nprint(person.get(\"country\", \"USA\"))  # Default if key not found\n\n# Dictionary methods\nperson[\"email\"] = \"john@example.com\"  # Add/update\nperson.update({\"age\": 31, \"job\": \"Engineer\"})  # Multiple updates\n\nkeys = person.keys()       # dict_keys(['name', 'age', 'city', 'email', 'job'])\nvalues = person.values()   # dict_values(['John', 31, 'New York', 'john@example.com', 'Engineer'])\nitems = person.items()     # dict_items([('name', 'John'), ...])\n\nremoved = person.pop(\"age\")  # Remove and return value\nperson.popitem()           # Remove and return last item\n\n# Dictionary comprehension\nsquares_dict = {x: x**2 for x in range(5)}\n# {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}\n\nfiltered = {k: v for k, v in person.items() if len(k) > 3}\n\n# Default dictionaries\nfrom collections import defaultdict\n\nword_count = defaultdict(int)\nfor word in [\"apple\", \"banana\", \"apple\", \"cherry\", \"banana\"]:\n    word_count[word] += 1  # No KeyError for new words\n\n# Counter\nfrom collections import Counter\nwords = [\"apple\", \"banana\", \"apple\", \"cherry\", \"banana\", \"apple\"]\ncount = Counter(words)\nprint(count)  # Counter({'apple': 3, 'banana': 2, 'cherry': 1})\n\n# Stacks and Queues\n# Stack (LIFO) using list\nstack = []\nstack.append(1)  # Push\nstack.append(2)\nstack.append(3)\npopped = stack.pop()  # Pop: 3\n\n# Queue (FIFO) using deque\nfrom collections import deque\nqueue = deque()\nqueue.append(1)   # Enqueue\nqueue.append(2)\nqueue.append(3)\nremoved = queue.popleft()  # Dequeue: 1\n\n# Heap (Priority Queue)\nimport heapq\n\nheap = []\nheapq.heappush(heap, 5)\nheapq.heappush(heap, 2)\nheapq.heappush(heap, 8)\nprint(heapq.heappop(heap))  # 2 (smallest)\n\n# Memory considerations\n# Shallow vs Deep copy\nimport copy\n\nlist1 = [1, 2, [3, 4]]\nlist2 = list1.copy()          # Shallow copy\nlist3 = copy.deepcopy(list1)  # Deep copy\n\nlist1[2][0] = 99\nprint(list2[2][0])  # 99 (affected)\nprint(list3[2][0])  # 3 (not affected)",
+            "components": [
+              {
+                "name": "Lists",
+                "english": "Mutable, ordered collections of items",
+                "hinglish": "Items ki mutable, ordered collections",
+                "importance": "High",
+                "tip": "Use list comprehensions for creating and transforming lists",
+                "pros": "Flexible, many methods, mutable",
+                "cons": "Memory usage, slower for some operations"
+              },
+              {
+                "name": "Tuples",
+                "english": "Immutable, ordered collections",
+                "hinglish": "Immutable, ordered collections",
+                "importance": "High",
+                "tip": "Use tuples for fixed data that shouldn't change",
+                "pros": "Immutable, hashable, memory efficient",
+                "cons": "Cannot modify after creation"
+              },
+              {
+                "name": "Sets",
+                "english": "Unordered collections of unique elements",
+                "hinglish": "Unique elements ki unordered collections",
+                "importance": "Medium",
+                "tip": "Use sets for membership testing and removing duplicates",
+                "pros": "Fast membership testing, mathematical operations",
+                "cons": "No order, no indexing"
+              },
+              {
+                "name": "Dictionaries",
+                "english": "Key-value pairs for efficient data lookup",
+                "hinglish": "Efficient data lookup ke liye key-value pairs",
+                "importance": "High",
+                "tip": "Use dictionary comprehensions and get() method with default",
+                "pros": "Fast lookups, flexible keys, many methods",
+                "cons": "Memory usage, key constraints"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Intermediate",
+      "order": 2,
+      "description": "Functions, modules, file handling, OOP, and error handling in Python",
+      "topics": [
+        {
+          "id": 5,
+          "title": "Functions & Modules",
+          "english": "Defining functions, using modules, and organizing code",
+          "hinglish": "Functions define karna, modules use karna, aur code organize karna",
+          "examples": [
+            "Defining functions with parameters and return values",
+            "Using default arguments and variable-length arguments",
+            "Creating and importing modules",
+            "Working with Python's built-in modules",
+            "Lambda functions and functional programming"
+          ],
+          "practice": [
+            {
+              "question": "Function define karne ka syntax kya hai?",
+              "answer": "def function_name(parameters): aur phir indented block. Return statement optional hai. Example: def greet(name): return f\"Hello {name}\""
+            },
+            {
+              "question": "*args aur **kwargs kya hain?",
+              "answer": "*args variable positional arguments ke liye (tuple mein store hote hain). **kwargs variable keyword arguments ke liye (dictionary mein store hote hain)."
+            },
+            {
+              "question": "Module import karne ke different tarike kya hain?",
+              "answer": "import module, from module import function, from module import * (not recommended), import module as alias."
+            },
+            {
+              "question": "Lambda function kya hai?",
+              "answer": "Lambda anonymous function hai ek line mein define hota hai. Syntax: lambda arguments: expression. map(), filter(), sort() ke saath useful hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# Basic function\ndef greet(name):\n    \"\"\"Return a greeting message.\"\"\"\n    return f\"Hello, {name}!\"\n\nprint(greet(\"Alice\"))  # Hello, Alice!\n\n# Function with default arguments\ndef power(base, exponent=2):\n    \"\"\"Calculate power with default exponent of 2.\"\"\"\n    return base ** exponent\n\nprint(power(3))       # 9 (3^2)\nprint(power(3, 3))    # 27 (3^3)\n\n# Function with type hints (Python 3.5+)\ndef add(a: int, b: int) -> int:\n    \"\"\"Add two integers and return result.\"\"\"\n    return a + b\n\nprint(add(5, 3))  # 8\n\n# *args for variable positional arguments\ndef sum_all(*args):\n    \"\"\"Sum all provided arguments.\"\"\"\n    return sum(args)\n\nprint(sum_all(1, 2, 3))        # 6\nprint(sum_all(1, 2, 3, 4, 5))  # 15\n\n# **kwargs for variable keyword arguments\ndef print_info(**kwargs):\n    \"\"\"Print all keyword arguments.\"\"\"\n    for key, value in kwargs.items():\n        print(f\"{key}: {value}\")\n\nprint_info(name=\"Alice\", age=30, city=\"NYC\")\n# name: Alice\n# age: 30\n# city: NYC\n\n# Combined *args and **kwargs\ndef func(*args, **kwargs):\n    print(f\"Args: {args}\")\n    print(f\"Kwargs: {kwargs}\")\n\nfunc(1, 2, 3, name=\"Alice\", age=30)\n# Args: (1, 2, 3)\n# Kwargs: {'name': 'Alice', 'age': 30}\n\n# Return multiple values (as tuple)\ndef min_max(numbers):\n    \"\"\"Return minimum and maximum of numbers.\"\"\"\n    return min(numbers), max(numbers)\n\nminimum, maximum = min_max([5, 2, 8, 1, 9])\nprint(f\"Min: {minimum}, Max: {maximum}\")  # Min: 1, Max: 9\n\n# Lambda functions (anonymous functions)\nadd = lambda x, y: x + y\nprint(add(3, 4))  # 7\n\n# Commonly used with map, filter, sorted\nnumbers = [1, 2, 3, 4, 5]\n\n# Map: apply function to each element\nsquared = list(map(lambda x: x**2, numbers))\nprint(squared)  # [1, 4, 9, 16, 25]\n\n# Filter: filter elements based on condition\nevens = list(filter(lambda x: x % 2 == 0, numbers))\nprint(evens)  # [2, 4]\n\n# Sorted with custom key\npeople = [\n    {\"name\": \"Alice\", \"age\": 30},\n    {\"name\": \"Bob\", \"age\": 25},\n    {\"name\": \"Charlie\", \"age\": 35}\n]\n\nsorted_by_age = sorted(people, key=lambda p: p[\"age\"])\nsorted_by_name = sorted(people, key=lambda p: p[\"name\"])\n\n# Function annotations\ndef repeat(text: str, times: int = 1) -> str:\n    \"\"\"Repeat text specified number of times.\"\"\"\n    return text * times\n\n# Docstrings\nclass Calculator:\n    \"\"\"A simple calculator class.\n    \n    Attributes:\n        model (str): The calculator model name\n    \"\"\"\n    \n    def add(self, a: float, b: float) -> float:\n        \"\"\"Add two numbers.\n        \n        Args:\n            a (float): First number\n            b (float): Second number\n            \n        Returns:\n            float: Sum of a and b\n        \"\"\"\n        return a + b\n\n# Modules\n# mymodule.py file:\n\"\"\"\n# mymodule.py\n\"\"\"This is a sample module.\"\"\"\n\nPI = 3.14159\n\ndef greet(name):\n    return f\"Hello from module, {name}!\"\n\nclass Calculator:\n    def add(self, a, b):\n        return a + b\n\"\"\"\n\n# Importing modules\n# 1. Import entire module\nimport mymodule\nprint(mymodule.PI)\nprint(mymodule.greet(\"Alice\"))\n\n# 2. Import specific items\nfrom mymodule import greet, PI\nprint(greet(\"Bob\"))\nprint(PI)\n\n# 3. Import with alias\nimport mymodule as mm\nprint(mm.PI)\n\n# 4. Import all (not recommended)\n# from mymodule import *\n\n# Built-in modules\nimport math\nprint(math.sqrt(16))     # 4.0\nprint(math.pi)          # 3.141592653589793\nprint(math.factorial(5)) # 120\n\nimport random\nprint(random.randint(1, 10))  # Random integer 1-10\nprint(random.choice([\"a\", \"b\", \"c\"]))  # Random choice\nrandom.shuffle([1, 2, 3, 4, 5])  # Shuffle list\n\nimport datetime\nnow = datetime.datetime.now()\nprint(now)  # Current date and time\nprint(now.year, now.month, now.day)\n\ntoday = datetime.date.today()\nprint(today)  # Current date\n\nimport os\nprint(os.getcwd())  # Current working directory\nprint(os.listdir('.'))  # List files in current directory\n\n# os.path operations\nprint(os.path.exists(\"file.txt\"))\nprint(os.path.isfile(\"file.txt\"))\nprint(os.path.isdir(\"directory\"))\n\nimport sys\nprint(sys.version)  # Python version\nprint(sys.platform)  # Platform info\nprint(sys.argv)      # Command line arguments\n\n# Creating packages\n# Directory structure:\n# mypackage/\n#   __init__.py\n#   module1.py\n#   module2.py\n#   subpackage/\n#     __init__.py\n#     module3.py\n\n# __init__.py can be empty or contain package initialization\n\n# Relative imports (within package)\n# from . import module1\n# from .module1 import function1\n# from .. import parent_module\n# from ..module import function\n\n# Namespace packages (Python 3.3+)\n# No __init__.py needed\n\n# if __name__ == \"__main__\":\n# Code that runs when script is executed directly\n# Not when imported as module\n\nif __name__ == \"__main__\":\n    print(\"This script is running directly\")\n    # Test code or main execution logic\n\n# Function caching (Python 3.2+)\nfrom functools import lru_cache\n\n@lru_cache(maxsize=128)\ndef fibonacci(n):\n    if n < 2:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n\nprint(fibonacci(10))  # Cached for performance\n\n# Partial functions\nfrom functools import partial\n\ndef power(base, exponent):\n    return base ** exponent\n\nsquare = partial(power, exponent=2)\ncube = partial(power, exponent=3)\n\nprint(square(5))  # 25\nprint(cube(3))    # 27\n\n# Generator functions\ndef count_up_to(max):\n    count = 1\n    while count <= max:\n        yield count  # Returns value and pauses\n        count += 1\n\ncounter = count_up_to(5)\nfor num in counter:\n    print(num)  # 1 2 3 4 5\n\n# Generator expression (like list comprehension but lazy)\nsquares_gen = (x**2 for x in range(10))\nprint(list(squares_gen))  # Convert to list to evaluate",
+            "components": [
+              {
+                "name": "Functions",
+                "english": "Reusable blocks of code with inputs and outputs",
+                "hinglish": "Inputs aur outputs ke saath reusable code blocks",
+                "importance": "High",
+                "tip": "Keep functions small and focused on single responsibility",
+                "pros": "Code reuse, modularity, testing, readability",
+                "cons": "Function call overhead, over-engineering"
+              },
+              {
+                "name": "Modules",
+                "english": "Python files containing reusable code",
+                "hinglish": "Reusable code contain karne wale Python files",
+                "importance": "High",
+                "tip": "Organize related functions and classes into modules",
+                "pros": "Code organization, namespace management, reusability",
+                "cons": "Import complexity, circular imports"
+              },
+              {
+                "name": "Lambda Functions",
+                "english": "Anonymous inline functions",
+                "hinglish": "Anonymous inline functions",
+                "importance": "Medium",
+                "tip": "Use lambda for simple one-line functions, not complex logic",
+                "pros": "Concise, functional programming, inline use",
+                "cons": "Limited to single expression, less readable when complex"
+              },
+              {
+                "name": "Built-in Modules",
+                "english": "Python's standard library modules",
+                "hinglish": "Python ki standard library modules",
+                "importance": "High",
+                "tip": "Learn commonly used modules: os, sys, math, datetime, random",
+                "pros": "No installation needed, well-tested, comprehensive",
+                "cons": "Need to learn API, some modules platform-specific"
+              }
+            ]
+          }
+        },
+        {
+          "id": 6,
+          "title": "File Handling & I/O",
+          "english": "Reading from and writing to files, serialization, and data persistence",
+          "hinglish": "Files se read/write karna, serialization, aur data persistence",
+          "examples": [
+            "Reading and writing text files",
+            "Working with CSV and JSON files",
+            "Binary file operations",
+            "File and directory management",
+            "Data serialization with pickle"
+          ],
+          "practice": [
+            {
+              "question": "File open karne ke different modes kya hain?",
+              "answer": "'r' read, 'w' write (overwrite), 'a' append, 'x' exclusive create, 'b' binary mode, 't' text mode, '+' read/write. 'rb' binary read, 'w+' read/write."
+            },
+            {
+              "question": "with statement kyun use karte hain files ke saath?",
+              "answer": "with statement automatically file close karta hai, even if exception aaye. Context manager provide karta hai resource management ke liye."
+            },
+            {
+              "question": "CSV file kaise read/write karte hain?",
+              "answer": "csv module use karte hain. reader() se read, writer() se write. DictReader aur DictWriter dictionary format mein data handle karte hain."
+            },
+            {
+              "question": "JSON data kaise handle karte hain?",
+              "answer": "json module use karte hain. json.load() file se read, json.loads() string se read. json.dump() file mein write, json.dumps() string mein convert."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# Text file operations\n\n# Writing to a file\nwith open('example.txt', 'w') as file:\n    file.write('Hello, World!\\n')\n    file.write('This is a text file.\\n')\n    file.write('Line 3\\n')\n\n# Appending to a file\nwith open('example.txt', 'a') as file:\n    file.write('Appended line\\n')\n\n# Reading entire file\nwith open('example.txt', 'r') as file:\n    content = file.read()\n    print(\"Entire content:\")\n    print(content)\n\n# Reading line by line\nwith open('example.txt', 'r') as file:\n    print(\"\\nLine by line:\")\n    for line in file:\n        print(line.strip())  # strip removes newline\n\n# Reading all lines into list\nwith open('example.txt', 'r') as file:\n    lines = file.readlines()\n    print(f\"\\nTotal lines: {len(lines)}\")\n\n# Using read with size\nwith open('example.txt', 'r') as file:\n    chunk = file.read(10)  # Read first 10 characters\n    print(f\"\\nFirst 10 chars: {chunk}\")\n\n# File modes explained\n# 'r' - Read (default)\n# 'w' - Write (truncates if exists)\n# 'x' - Exclusive creation (fails if exists)\n# 'a' - Append\n# 'b' - Binary mode\n# 't' - Text mode (default)\n# '+' - Read and write\n\n# Binary files\n# Writing binary data\nwith open('data.bin', 'wb') as file:\n    file.write(b'\\x00\\x01\\x02\\x03')  # Write bytes\n\n# Reading binary data\nwith open('data.bin', 'rb') as file:\n    data = file.read()\n    print(f\"\\nBinary data: {data}\")\n\n# CSV files\nimport csv\n\n# Writing CSV\nheaders = ['Name', 'Age', 'City']\ndata = [\n    ['Alice', 30, 'New York'],\n    ['Bob', 25, 'London'],\n    ['Charlie', 35, 'Paris']\n]\n\nwith open('people.csv', 'w', newline='') as file:\n    writer = csv.writer(file)\n    writer.writerow(headers)  # Write header\n    writer.writerows(data)    # Write all rows\n\n# Reading CSV\nwith open('people.csv', 'r') as file:\n    reader = csv.reader(file)\n    for row in reader:\n        print(row)\n\n# CSV with dictionaries\nwith open('people.csv', 'w', newline='') as file:\n    fieldnames = ['Name', 'Age', 'City']\n    writer = csv.DictWriter(file, fieldnames=fieldnames)\n    \n    writer.writeheader()\n    writer.writerow({'Name': 'Alice', 'Age': 30, 'City': 'NYC'})\n    writer.writerow({'Name': 'Bob', 'Age': 25, 'City': 'London'})\n\nwith open('people.csv', 'r') as file:\n    reader = csv.DictReader(file)\n    for row in reader:\n        print(f\"{row['Name']} is {row['Age']} years old in {row['City']}\")\n\n# JSON files\nimport json\n\n# Python dictionary\ndata = {\n    \"name\": \"John Doe\",\n    \"age\": 30,\n    \"city\": \"New York\",\n    \"hobbies\": [\"reading\", \"gaming\", \"hiking\"],\n    \"married\": False\n}\n\n# Writing JSON to file\nwith open('data.json', 'w') as file:\n    json.dump(data, file, indent=2)  # indent for pretty printing\n\n# Reading JSON from file\nwith open('data.json', 'r') as file:\n    loaded_data = json.load(file)\n    print(f\"\\nLoaded data: {loaded_data}\")\n\n# JSON string operations\njson_string = json.dumps(data, indent=2)\nprint(f\"\\nJSON string:\\n{json_string}\")\n\nparsed_data = json.loads(json_string)\nprint(f\"\\nParsed data: {parsed_data}\")\n\n# Custom JSON encoder/decoder\nclass Person:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n    \n    def to_dict(self):\n        return {\"name\": self.name, \"age\": self.age}\n    \n    @classmethod\n    def from_dict(cls, data):\n        return cls(data[\"name\"], data[\"age\"])\n\nperson = Person(\"Alice\", 30)\n\n# Custom encoding\nclass PersonEncoder(json.JSONEncoder):\n    def default(self, obj):\n        if isinstance(obj, Person):\n            return obj.to_dict()\n        return super().default(obj)\n\njson_string = json.dumps(person, cls=PersonEncoder)\nprint(f\"\\nPerson as JSON: {json_string}\")\n\n# File and directory operations\nimport os\n\n# Check if file/directory exists\nprint(f\"File exists: {os.path.exists('example.txt')}\")\nprint(f\"Is file: {os.path.isfile('example.txt')}\")\nprint(f\"Is directory: {os.path.isdir('.')}\")\n\n# List files in directory\nprint(\"\\nFiles in current directory:\")\nfor item in os.listdir('.'):\n    print(f\"  {item}\")\n\n# Create directory\nos.makedirs('new_folder/subfolder', exist_ok=True)\n\n# Get file info\nfile_stats = os.stat('example.txt')\nprint(f\"\\nFile size: {file_stats.st_size} bytes\")\nprint(f\"Last modified: {file_stats.st_mtime}\")\n\n# Rename file\nos.rename('old_name.txt', 'new_name.txt')\n\n# Delete file\nos.remove('file_to_delete.txt')\n\n# Delete directory\nos.rmdir('empty_directory')\n\n# Walk directory tree\nfor root, dirs, files in os.walk('.'):\n    print(f\"\\nRoot: {root}\")\n    print(f\"  Dirs: {dirs}\")\n    print(f\"  Files: {files}\")\n\n# Path operations with pathlib (Python 3.4+)\nfrom pathlib import Path\n\n# Create Path object\np = Path('example.txt')\n\n# Check properties\nprint(f\"\\nPath exists: {p.exists()}\")\nprint(f\"Is file: {p.is_file()}\")\nprint(f\"Is directory: {p.is_dir()}\")\nprint(f\"File extension: {p.suffix}\")\nprint(f\"File stem (without extension): {p.stem}\")\nprint(f\"Parent directory: {p.parent}\")\nprint(f\"Absolute path: {p.absolute()}\")\n\n# Read/write with pathlib\ncontent = p.read_text()  # Read text\np.write_text('New content')  # Write text\n\n# List files\nfor child in p.parent.iterdir():\n    print(f\"  {child.name}\")\n\n# Pickle for Python object serialization\nimport pickle\n\n# Object to serialize\ncomplex_data = {\n    \"list\": [1, 2, 3],\n    \"tuple\": (4, 5, 6),\n    \"set\": {7, 8, 9},\n    \"datetime\": datetime.datetime.now()\n}\n\n# Serialize to file\nwith open('data.pkl', 'wb') as file:\n    pickle.dump(complex_data, file)\n\n# Deserialize from file\nwith open('data.pkl', 'rb') as file:\n    loaded_complex = pickle.load(file)\n    print(f\"\\nLoaded from pickle: {loaded_complex}\")\n\n# Warning: Only unpickle data from trusted sources!\n\n# Temporary files\nimport tempfile\n\n# Create temporary file\nwith tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as tmp:\n    tmp.write('Temporary content')\n    tmp_path = tmp.name\n    print(f\"\\nTemporary file created: {tmp_path}\")\n\n# Temporary directory\nwith tempfile.TemporaryDirectory() as tmpdir:\n    print(f\"\\nTemporary directory: {tmpdir}\")\n    # Create files in temp directory\n    temp_file = Path(tmpdir) / 'temp.txt'\n    temp_file.write_text('Hello from temp')\n\n# File compression\nimport gzip\nimport zipfile\n\n# Gzip compression\nwith open('example.txt', 'rb') as f_in:\n    with gzip.open('example.txt.gz', 'wb') as f_out:\n        f_out.write(f_in.read())\n\n# Zip file\nwith zipfile.ZipFile('archive.zip', 'w') as zipf:\n    zipf.write('example.txt')\n    zipf.write('data.json')\n\n# Extract zip\nwith zipfile.ZipFile('archive.zip', 'r') as zipf:\n    zipf.extractall('extracted/')\n\n# Working with large files\n# Read file in chunks\ndef process_large_file(filename, chunk_size=1024):\n    \"\"\"Process large file in chunks.\"\"\"\n    with open(filename, 'r') as file:\n        while True:\n            chunk = file.read(chunk_size)\n            if not chunk:\n                break\n            # Process chunk\n            yield chunk\n\n# Use generator\nfor chunk in process_large_file('large_file.txt', 8192):\n    # Process each 8KB chunk\n    pass\n\n# File encoding\n# Specify encoding when reading/writing\nwith open('example.txt', 'r', encoding='utf-8') as file:\n    content = file.read()\n\nwith open('example.txt', 'w', encoding='utf-8') as file:\n    file.write('UTF-8 encoded text')\n\n# Common encodings: utf-8, latin-1, ascii, utf-16",
+            "components": [
+              {
+                "name": "File Operations",
+                "english": "Reading from and writing to files",
+                "hinglish": "Files se read aur write karna",
+                "importance": "High",
+                "tip": "Always use 'with' statement for automatic resource management",
+                "pros": "Data persistence, configuration, logging",
+                "cons": "File system dependencies, error handling"
+              },
+              {
+                "name": "CSV Processing",
+                "english": "Working with comma-separated values files",
+                "hinglish": "Comma-separated values files ke saath kaam karna",
+                "importance": "High",
+                "tip": "Use csv.DictReader/DictWriter for named columns",
+                "pros": "Tabular data, spreadsheet compatibility, simple format",
+                "cons": "No data types, quoting issues"
+              },
+              {
+                "name": "JSON Handling",
+                "english": "Working with JSON data format",
+                "hinglish": "JSON data format ke saath kaam karna",
+                "importance": "High",
+                "tip": "Use json.dump/load for files, dumps/loads for strings",
+                "pros": "Web APIs, configuration, human-readable",
+                "cons": "No comments, security with eval"
+              },
+              {
+                "name": "Path Management",
+                "english": "Handling file and directory paths",
+                "hinglish": "File aur directory paths handle karna",
+                "importance": "High",
+                "tip": "Use pathlib for modern path operations (Python 3.4+)",
+                "pros": "Platform independent, object-oriented, clean API",
+                "cons": "Learning new API, backward compatibility"
+              }
+            ]
+          }
+        },
+        {
+          "id": 7,
+          "title": "Object-Oriented Programming",
+          "english": "Classes, objects, inheritance, and OOP principles in Python",
+          "hinglish": "Python mein classes, objects, inheritance, aur OOP principles",
+          "examples": [
+            "Defining classes and creating objects",
+            "Class attributes and methods",
+            "Inheritance and method overriding",
+            "Special methods (dunder methods)",
+            "Properties and descriptors"
+          ],
+          "practice": [
+            {
+              "question": "Class aur object mein kya difference hai?",
+              "answer": "Class blueprint hoti hai, object uska instance hota hai. Class define karti hai attributes aur methods, object unka use karta hai."
+            },
+            {
+              "question": "__init__ method kya hota hai?",
+              "answer": "__init__ constructor hai jo object create hone par automatically call hota hai. Object initialize karne ke liye use karte hain."
+            },
+            {
+              "question": "Inheritance kaise implement karte hain?",
+              "answer": "Class definition mein parent class specify karte hain: class Child(Parent):. Child class parent ke methods inherit karti hai."
+            },
+            {
+              "question": "@property decorator kya hai?",
+              "answer": "@property getter method ko define karta hai. Object attribute ki tarah access kar sakte hain, par method chalta hai. Setter aur deleter bhi define kar sakte hain."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# Basic class\ndef class Person:\n    \"\"\"A class representing a person.\"\"\"\n    \n    # Class attribute (shared by all instances)\n    species = \"Homo sapiens\"\n    \n    def __init__(self, name, age):\n        \"\"\"Initialize person with name and age.\"\"\"\n        # Instance attributes\n        self.name = name\n        self.age = age\n    \n    def greet(self):\n        \"\"\"Return greeting message.\"\"\"\n        return f\"Hello, my name is {self.name} and I'm {self.age} years old.\"\n    \n    def have_birthday(self):\n        \"\"\"Increase age by 1.\"\"\"\n        self.age += 1\n        return f\"Happy birthday! Now I'm {self.age}.\"\n\n# Creating objects\nperson1 = Person(\"Alice\", 30)\nperson2 = Person(\"Bob\", 25)\n\nprint(person1.greet())  # Hello, my name is Alice and I'm 30 years old.\nprint(person2.greet())  # Hello, my name is Bob and I'm 25 years old.\n\nprint(f\"Species: {Person.species}\")  # Class attribute\nprint(f\"Person1 species: {person1.species}\")  # Access through instance\n\n# Inheritance\nclass Student(Person):\n    \"\"\"A student class that inherits from Person.\"\"\"\n    \n    def __init__(self, name, age, student_id, major):\n        \"\"\"Initialize student with additional attributes.\"\"\"\n        # Call parent class __init__\n        super().__init__(name, age)\n        self.student_id = student_id\n        self.major = major\n        self.courses = []\n    \n    def enroll(self, course):\n        \"\"\"Enroll in a course.\"\"\"\n        self.courses.append(course)\n        return f\"Enrolled in {course}\"\n    \n    # Method overriding\n    def greet(self):\n        \"\"\"Override parent greet method.\"\"\"\n        return f\"Hi, I'm {self.name}, a {self.major} student.\"\n\nstudent = Student(\"Charlie\", 20, \"S12345\", \"Computer Science\")\nprint(student.greet())  # Hi, I'm Charlie, a Computer Science student.\nprint(student.enroll(\"Python Programming\"))\n\n# Multiple inheritance\nclass Researcher:\n    def __init__(self, field):\n        self.field = field\n    \n    def research(self):\n        return f\"Researching in {self.field}\"\n\nclass PhDStudent(Student, Researcher):\n    \"\"\"Multiple inheritance example.\"\"\"\n    def __init__(self, name, age, student_id, major, field, thesis):\n        Student.__init__(self, name, age, student_id, major)\n        Researcher.__init__(self, field)\n        self.thesis = thesis\n\nphd = PhDStudent(\"David\", 25, \"PHD001\", \"AI\", \"Machine Learning\", \"Deep Learning\")\nprint(phd.research())  # Researching in Machine Learning\nprint(phd.greet())     # Hi, I'm David, a AI student.\n\n# Special methods (dunder methods)\nclass Vector:\n    \"\"\"A 2D vector class.\"\"\"\n    \n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    # String representation\n    def __str__(self):\n        return f\"Vector({self.x}, {self.y})\"\n    \n    def __repr__(self):\n        return f\"Vector({self.x}, {self.y})\"\n    \n    # Arithmetic operations\n    def __add__(self, other):\n        return Vector(self.x + other.x, self.y + other.y)\n    \n    def __sub__(self, other):\n        return Vector(self.x - other.x, self.y - other.y)\n    \n    def __mul__(self, scalar):\n        return Vector(self.x * scalar, self.y * scalar)\n    \n    # Comparison\n    def __eq__(self, other):\n        return self.x == other.x and self.y == other.y\n    \n    def __len__(self):\n        return 2  # Always 2D\n    \n    # Container behavior\n    def __getitem__(self, index):\n        if index == 0:\n            return self.x\n        elif index == 1:\n            return self.y\n        else:\n            raise IndexError(\"Vector index out of range\")\n    \n    def __iter__(self):\n        yield self.x\n        yield self.y\n\nv1 = Vector(2, 3)\nv2 = Vector(4, 5)\n\nprint(v1)           # Vector(2, 3)\nprint(v1 + v2)      # Vector(6, 8)\nprint(v1 * 3)       # Vector(6, 9)\nprint(v1 == v2)     # False\nprint(len(v1))      # 2\nprint(v1[0])        # 2\n\n# Unpacking\nx, y = v1\nprint(f\"x={x}, y={y}\")  # x=2, y=3\n\n# Properties\nclass Circle:\n    \"\"\"A circle class with properties.\"\"\"\n    \n    def __init__(self, radius):\n        self._radius = radius  # Private by convention\n    \n    @property\n    def radius(self):\n        \"\"\"Get radius.\"\"\"\n        return self._radius\n    \n    @radius.setter\n    def radius(self, value):\n        if value <= 0:\n            raise ValueError(\"Radius must be positive\")\n        self._radius = value\n    \n    @property\n    def diameter(self):\n        \"\"\"Calculate diameter.\"\"\"\n        return 2 * self._radius\n    \n    @property\n    def area(self):\n        \"\"\"Calculate area.\"\"\"\n        import math\n        return math.pi * self._radius ** 2\n\ncircle = Circle(5)\nprint(f\"Radius: {circle.radius}\")      # 5\nprint(f\"Diameter: {circle.diameter}\")  # 10\nprint(f\"Area: {circle.area:.2f}\")      # 78.54\n\ncircle.radius = 7  # Uses setter\nprint(f\"New area: {circle.area:.2f}\")  # 153.94\n\n# Class methods and static methods\nclass Date:\n    \"\"\"Date class with class and static methods.\"\"\"\n    \n    def __init__(self, year, month, day):\n        self.year = year\n        self.month = month\n        self.day = day\n    \n    def __str__(self):\n        return f\"{self.year}-{self.month:02d}-{self.day:02d}\"\n    \n    @classmethod\n    def from_string(cls, date_string):\n        \"\"\"Create Date from string 'YYYY-MM-DD'.\"\"\"\n        year, month, day = map(int, date_string.split('-'))\n        return cls(year, month, day)\n    \n    @staticmethod\n    def is_leap_year(year):\n        \"\"\"Check if year is leap year.\"\"\"\n        return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)\n\n# Using class method\ndate1 = Date(2024, 12, 25)\ndate2 = Date.from_string(\"2024-12-25\")\n\nprint(date1)  # 2024-12-25\nprint(date2)  # 2024-12-25\n\n# Using static method\nprint(f\"2024 is leap: {Date.is_leap_year(2024)}\")  # True\nprint(f\"2023 is leap: {Date.is_leap_year(2023)}\")  # False\n\n# Abstract base classes\nfrom abc import ABC, abstractmethod\n\nclass Shape(ABC):\n    \"\"\"Abstract base class for shapes.\"\"\"\n    \n    @abstractmethod\n    def area(self):\n        pass\n    \n    @abstractmethod\n    def perimeter(self):\n        pass\n\nclass Rectangle(Shape):\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n    \n    def area(self):\n        return self.width * self.height\n    \n    def perimeter(self):\n        return 2 * (self.width + self.height)\n\n# shape = Shape()  # Error: Can't instantiate abstract class\nrect = Rectangle(5, 3)\nprint(f\"Rectangle area: {rect.area()}\")        # 15\nprint(f\"Rectangle perimeter: {rect.perimeter()}\")  # 16\n\n# Dataclasses (Python 3.7+)\nfrom dataclasses import dataclass, field\nfrom typing import List\n\n@dataclass\nclass Product:\n    \"\"\"A product dataclass.\"\"\"\n    name: str\n    price: float\n    category: str = \"General\"  # Default value\n    tags: List[str] = field(default_factory=list)  # Default factory\n    \n    @property\n    def price_with_tax(self):\n        return self.price * 1.18  # 18% tax\n\n# Automatic __init__, __repr__, __eq__\nproduct1 = Product(\"Laptop\", 999.99, \"Electronics\", [\"tech\", \"portable\"])\nproduct2 = Product(\"Laptop\", 999.99, \"Electronics\", [\"tech\", \"portable\"])\n\nprint(product1)  # Product(name='Laptop', price=999.99, category='Electronics', tags=['tech', 'portable'])\nprint(product1 == product2)  # True (automatically compares fields)\nprint(product1.price_with_tax)  # 1179.9882\n\n# Enums\nfrom enum import Enum, auto\n\nclass Color(Enum):\n    RED = 1\n    GREEN = 2\n    BLUE = 3\n    # Or with auto()\n    # RED = auto()\n    # GREEN = auto()\n    # BLUE = auto()\n\nprint(Color.RED)          # Color.RED\nprint(Color.RED.value)    # 1\nprint(Color(2))           # Color.GREEN\nprint(Color[\"BLUE\"])      # Color.BLUE\n\n# Using enums\ndef get_color_code(color):\n    match color:\n        case Color.RED:\n            return \"#FF0000\"\n        case Color.GREEN:\n            return \"#00FF00\"\n        case Color.BLUE:\n            return \"#0000FF\"\n\nprint(get_color_code(Color.GREEN))  # #00FF00\n\n# Slots for memory optimization\nclass PointWithSlots:\n    __slots__ = ('x', 'y')  # Only these attributes allowed\n    \n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n# Uses less memory than regular classes\n# Faster attribute access\n# Cannot add new attributes dynamically\n\n# Descriptors\nclass PositiveNumber:\n    \"\"\"Descriptor for positive numbers.\"\"\"\n    \n    def __set_name__(self, owner, name):\n        self.name = name\n    \n    def __get__(self, obj, objtype=None):\n        return obj.__dict__.get(self.name, 0)\n    \n    def __set__(self, obj, value):\n        if value <= 0:\n            raise ValueError(f\"{self.name} must be positive\")\n        obj.__dict__[self.name] = value\n\nclass RectangleWithDescriptors:\n    width = PositiveNumber()\n    height = PositiveNumber()\n    \n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\nrect = RectangleWithDescriptors(5, 3)\nprint(f\"Width: {rect.width}, Height: {rect.height}\")  # Width: 5, Height: 3\n\n# rect.width = -5  # Raises ValueError\n\n# Mixins\nclass JSONMixin:\n    \"\"\"Mixin for JSON serialization.\"\"\"\n    \n    def to_json(self):\n        import json\n        return json.dumps(self.__dict__)\n    \n    @classmethod\n    def from_json(cls, json_string):\n        import json\n        data = json.loads(json_string)\n        return cls(**data)\n\nclass ProductWithJSON(Product, JSONMixin):\n    pass\n\nproduct = ProductWithJSON(\"Phone\", 499.99)\njson_str = product.to_json()\nprint(f\"JSON: {json_str}\")",
+            "components": [
+              {
+                "name": "Classes & Objects",
+                "english": "Blueprints and instances for organizing code and data",
+                "hinglish": "Code aur data organize karne ke liye blueprints aur instances",
+                "importance": "High",
+                "tip": "Follow Single Responsibility Principle for classes",
+                "pros": "Encapsulation, code organization, reusability",
+                "cons": "Overhead for simple tasks, complexity"
+              },
+              {
+                "name": "Inheritance",
+                "english": "Creating new classes based on existing ones",
+                "hinglish": "Existing classes se nayi classes banana",
+                "importance": "High",
+                "tip": "Use composition over inheritance when possible",
+                "pros": "Code reuse, hierarchical organization",
+                "cons": "Tight coupling, complex hierarchies"
+              },
+              {
+                "name": "Special Methods",
+                "english": "Methods with double underscores for operator overloading",
+                "hinglish": "Operator overloading ke liye double underscores wale methods",
+                "importance": "High",
+                "tip": "Implement __str__ for user-friendly output, __repr__ for debugging",
+                "pros": "Operator overloading, intuitive APIs, Pythonic",
+                "cons": "Magic behavior can be confusing"
+              },
+              {
+                "name": "Properties",
+                "english": "Managed attributes with getter/setter methods",
+                "hinglish": "Getter/setter methods ke saath managed attributes",
+                "importance": "Medium",
+                "tip": "Use @property for computed attributes and validation",
+                "pros": "Encapsulation, validation, computed attributes",
+                "cons": "Overhead, more code"
+              }
+            ]
+          }
+        },
+        {
+          "id": 8,
+          "title": "Error Handling & Debugging",
+          "english": "Handling exceptions, debugging techniques, and writing robust code",
+          "hinglish": "Exceptions handle karna, debugging techniques, aur robust code likhna",
+          "examples": [
+            "Try-except blocks for exception handling",
+            "Custom exception classes",
+            "Using debugger (pdb) and logging",
+            "Context managers for resource management",
+            "Writing defensive code"
+          ],
+          "practice": [
+            {
+              "question": "Try-except block kaise use karte hain?",
+              "answer": "try block mein code likhte hain jo error throw kar sakta hai. except block specific exception catch karta hai. else block try successful hone par chalta hai. finally block hamesha chalta hai."
+            },
+            {
+              "question": "Multiple exceptions kaise handle karte hain?",
+              "answer": "Multiple except blocks ya tuple mein exceptions specify karte hain: except (ValueError, TypeError) as e:. Sab exceptions catch karne ke liye except Exception as e:"
+            },
+            {
+              "question": "Custom exception class kaise banate hain?",
+              "answer": "Exception class se inherit karte hain: class MyError(Exception): pass. Ya __init__ override karke custom message add kar sakte hain."
+            },
+            {
+              "question": "Debugger (pdb) kaise use karte hain?",
+              "answer": "import pdb; pdb.set_trace() code mein add karte hain. Breakpoint par execution stop hota hai. Commands: n (next), s (step), c (continue), l (list), p (print)."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# Basic exception handling\ntry:\n    # Code that might raise an exception\n    x = int(input(\"Enter a number: \"))\n    result = 10 / x\n    print(f\"Result: {result}\")\nexcept ZeroDivisionError:\n    print(\"Error: Cannot divide by zero!\")\nexcept ValueError:\n    print(\"Error: Invalid input! Please enter a number.\")\nexcept Exception as e:\n    print(f\"Unexpected error: {e}\")\nelse:\n    print(\"Division successful!\")\nfinally:\n    print(\"Execution completed.\")\n\n# Multiple exceptions in one except\ntry:\n    # Some code\n    pass\nexcept (ValueError, TypeError) as e:\n    print(f\"Value or Type error: {e}\")\n\n# Getting exception details\ntry:\n    x = int(\"not_a_number\")\nexcept ValueError as e:\n    print(f\"Error type: {type(e).__name__}\")\n    print(f\"Error message: {e}\")\n    print(f\"Error arguments: {e.args}\")\n\n# Raising exceptions\ndef divide(a, b):\n    if b == 0:\n        raise ZeroDivisionError(\"Cannot divide by zero\")\n    return a / b\n\ntry:\n    result = divide(10, 0)\nexcept ZeroDivisionError as e:\n    print(f\"Caught error: {e}\")\n\n# Custom exception classes\nclass InsufficientFundsError(Exception):\n    \"\"\"Exception raised when account has insufficient funds.\"\"\"\n    \n    def __init__(self, balance, amount):\n        self.balance = balance\n        self.amount = amount\n        self.message = f\"Insufficient funds: Balance {balance}, Required {amount}\"\n        super().__init__(self.message)\n\nclass BankAccount:\n    def __init__(self, balance):\n        self.balance = balance\n    \n    def withdraw(self, amount):\n        if amount > self.balance:\n            raise InsufficientFundsError(self.balance, amount)\n        self.balance -= amount\n        return self.balance\n\naccount = BankAccount(1000)\ntry:\n    account.withdraw(1500)\nexcept InsufficientFundsError as e:\n    print(f\"Withdrawal failed: {e}\")\n    print(f\"Balance: {e.balance}, Amount: {e.amount}\")\n\n# Assertions for debugging\ndef calculate_discount(price, discount_percent):\n    \"\"\"Calculate price after discount.\"\"\"\n    assert 0 <= discount_percent <= 100, \"Discount must be between 0 and 100\"\n    assert price >= 0, \"Price cannot be negative\"\n    \n    return price * (1 - discount_percent / 100)\n\ntry:\n    # This will raise AssertionError\n    result = calculate_discount(100, 150)\nexcept AssertionError as e:\n    print(f\"Assertion failed: {e}\")\n\n# Note: Assertions can be disabled with -O flag\n# python -O script.py\n\n# Logging\nimport logging\n\n# Basic logging\nlogging.basicConfig(\n    level=logging.DEBUG,\n    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',\n    filename='app.log',\n    filemode='w'\n)\n\n# Log messages\nlogging.debug('Debug message')      # Detailed information\nlogging.info('Info message')        # Confirmation\nlogging.warning('Warning message')  # Something unexpected\nlogging.error('Error message')      # Serious problem\nlogging.critical('Critical message') # Fatal error\n\n# Logger with configuration\nlogger = logging.getLogger(__name__)\nlogger.setLevel(logging.DEBUG)\n\n# Console handler\nconsole_handler = logging.StreamHandler()\nconsole_handler.setLevel(logging.INFO)\n\n# File handler\nfile_handler = logging.FileHandler('debug.log')\nfile_handler.setLevel(logging.DEBUG)\n\n# Formatter\nformatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')\nconsole_handler.setFormatter(formatter)\nfile_handler.setFormatter(formatter)\n\n# Add handlers\nlogger.addHandler(console_handler)\nlogger.addHandler(file_handler)\n\n# Use logger\nlogger.debug('This is a debug message')\nlogger.info('Application started')\nlogger.error('An error occurred')\n\n# Debugger (pdb)\nimport pdb\n\ndef buggy_function(numbers):\n    total = 0\n    pdb.set_trace()  # Breakpoint\n    for num in numbers:\n        total += num\n    return total\n\n# Common pdb commands:\n# n (next) - Execute next line\n# s (step) - Step into function\n# c (continue) - Continue until next breakpoint\n# l (list) - Show code around current line\n# p (print) - Print variable value\n# q (quit) - Quit debugger\n\n# Using breakpoint() (Python 3.7+)\ndef another_function():\n    x = 10\n    y = 20\n    breakpoint()  # Enters debugger\n    return x + y\n\n# Context managers\n# Using with statement\nwith open('example.txt', 'r') as file:\n    content = file.read()\n    # File automatically closed\n\n# Creating custom context manager\nclass Timer:\n    \"\"\"Context manager for timing code blocks.\"\"\"\n    \n    def __enter__(self):\n        import time\n        self.start = time.time()\n        return self\n    \n    def __exit__(self, exc_type, exc_val, exc_tb):\n        import time\n        self.end = time.time()\n        self.elapsed = self.end - self.start\n        print(f\"Elapsed time: {self.elapsed:.2f} seconds\")\n        # Return True to suppress exceptions\n        # Return False (default) to propagate exceptions\n\nwith Timer() as timer:\n    # Code to time\n    import time\n    time.sleep(2)\n    print(\"Task completed\")\n\n# Context manager using contextlib\nfrom contextlib import contextmanager\n\n@contextmanager\ndef temporary_change(obj, attr, new_value):\n    \"\"\"Temporarily change an attribute.\"\"\"\n    original = getattr(obj, attr)\n    setattr(obj, attr, new_value)\n    try:\n        yield\n    finally:\n        setattr(obj, attr, original)\n\nclass Config:\n    debug = False\n\nconfig = Config()\nprint(f\"Before: {config.debug}\")  # False\n\nwith temporary_change(config, 'debug', True):\n    print(f\"During: {config.debug}\")  # True\n\nprint(f\"After: {config.debug}\")  # False\n\n# Exception chaining\ndef process_file(filename):\n    try:\n        with open(filename, 'r') as file:\n            return file.read()\n    except FileNotFoundError as e:\n        # Chain with new exception\n        raise RuntimeError(f\"Failed to process {filename}\") from e\n\ntry:\n    process_file(\"nonexistent.txt\")\nexcept RuntimeError as e:\n    print(f\"Error: {e}\")\n    print(f\"Original cause: {e.__cause__}\")\n\n# Suppressing exceptions\nfrom contextlib import suppress\n\nwith suppress(FileNotFoundError):\n    os.remove('somefile.tmp')\n    print(\"File removed\")\n# If file doesn't exist, silently continues\n\n# Warnings\nimport warnings\n\n# Issue warning\nwarnings.warn(\"This feature is deprecated\", DeprecationWarning)\n\n# Filter warnings\nwarnings.filterwarnings('ignore')  # Ignore all\nwarnings.filterwarnings('error')   # Convert to exceptions\nwarnings.filterwarnings('always', category=DeprecationWarning)\n\n# Defensive programming techniques\n\n# 1. Input validation\ndef process_age(age):\n    if not isinstance(age, (int, float)):\n        raise TypeError(\"Age must be a number\")\n    if age < 0 or age > 150:\n        raise ValueError(\"Age must be between 0 and 150\")\n    return age\n\n# 2. Using try-except for type conversion\ndef safe_int(value, default=0):\n    \"\"\"Safely convert to int, return default on failure.\"\"\"\n    try:\n        return int(value)\n    except (ValueError, TypeError):\n        return default\n\nprint(safe_int(\"123\"))     # 123\nprint(safe_int(\"abc\"))     # 0\nprint(safe_int(\"abc\", -1)) # -1\n\n# 3. Using get() for dictionaries\nconfig = {\"host\": \"localhost\", \"port\": 8080}\n\n# Safe access\nhost = config.get(\"host\", \"127.0.0.1\")  # Returns default if key missing\nport = config.get(\"port\", 80)\n\n# 4. EAFP vs LBYL\n# EAFP: Easier to Ask for Forgiveness than Permission\n# (Try first, handle exceptions)\ntry:\n    value = my_dict[key]\nexcept KeyError:\n    value = default\n\n# LBYL: Look Before You Leap\n# (Check first, then act)\nif key in my_dict:\n    value = my_dict[key]\nelse:\n    value = default\n\n# Python encourages EAFP\n\n# 5. Using else in loops\nfor item in items:\n    if item == target:\n        break\nelse:\n    # Executed if loop completes without break\n    print(\"Item not found\")\n\n# 6. Resource cleanup with finally\ndef process_data(filename):\n    file = None\n    try:\n        file = open(filename, 'r')\n        data = file.read()\n        # Process data\n        return data\n    finally:\n        if file:\n            file.close()\n\n# Better: Use context manager\n\n# 7. Using assertions for invariants\ndef calculate_area(width, height):\n    assert width > 0 and height > 0, \"Dimensions must be positive\"\n    return width * height\n\n# 8. Logging instead of printing\nlogger.info(f\"Processing file: {filename}\")\nlogger.error(f\"Failed to process: {filename}\", exc_info=True)\n\n# Traceback module\nimport traceback\n\ntry:\n    # Code that might fail\n    x = 1 / 0\nexcept Exception:\n    # Print full traceback\n    traceback.print_exc()\n    \n    # Get traceback as string\n    error_trace = traceback.format_exc()\n    logger.error(f\"Error occurred:\\n{error_trace}\")",
+            "components": [
+              {
+                "name": "Exception Handling",
+                "english": "Graceful handling of errors and exceptional conditions",
+                "hinglish": "Errors aur exceptional conditions ko gracefully handle karna",
+                "importance": "High",
+                "tip": "Catch specific exceptions, not generic Exception unless necessary",
+                "pros": "Robust applications, better user experience, debugging",
+                "cons": "Code complexity, performance overhead"
+              },
+              {
+                "name": "Logging",
+                "english": "Recording application events and errors",
+                "hinglish": "Application events aur errors record karna",
+                "importance": "High",
+                "tip": "Use different log levels appropriately (DEBUG, INFO, WARNING, ERROR)",
+                "pros": "Debugging, monitoring, audit trail",
+                "cons": "Performance overhead, log management"
+              },
+              {
+                "name": "Debugging Tools",
+                "english": "Tools and techniques for finding and fixing bugs",
+                "hinglish": "Bugs find aur fix karne ke tools aur techniques",
+                "importance": "High",
+                "tip": "Use pdb for complex debugging, print/logging for simple cases",
+                "pros": "Faster debugging, better understanding",
+                "cons": "Time investment, can be complex"
+              },
+              {
+                "name": "Context Managers",
+                "english": "Managing resources and ensuring cleanup",
+                "hinglish": "Resources manage karna aur cleanup ensure karna",
+                "importance": "High",
+                "tip": "Always use 'with' statement for file operations and resources",
+                "pros": "Automatic cleanup, exception safety, clean code",
+                "cons": "Learning curve for custom managers"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Advanced",
+      "order": 3,
+      "description": "Advanced Python concepts, web development, data science, and deployment",
+      "topics": [
+        {
+          "id": 9,
+          "title": "Advanced Python Concepts",
+          "english": "Decorators, generators, async programming, and metaprogramming",
+          "hinglish": "Decorators, generators, async programming, aur metaprogramming",
+          "examples": [
+            "Creating and using decorators",
+            "Generator functions and expressions",
+            "Asynchronous programming with async/await",
+            "Metaclasses and class decorators",
+            "Type hints and static typing"
+          ],
+          "practice": [
+            {
+              "question": "Decorator kya hota hai aur kaise banate hain?",
+              "answer": "Decorator function modify karta hai dusre function ko. @decorator syntax se use karte hain. Nested function banate hain jo original function ko wrap karta hai."
+            },
+            {
+              "question": "Generator function aur regular function mein kya difference hai?",
+              "answer": "Generator function yield statement use karta hai, return ki jagah. Multiple values generate karta hai lazily. Memory efficient hai large sequences ke liye."
+            },
+            {
+              "question": "Async/await kya hai?",
+              "answer": "Async/await asynchronous programming ke liye hai. async def se async function define karte hain. await se async operations wait karte hain. Concurrent execution enable karta hai."
+            },
+            {
+              "question": "Metaclass kya hota hai?",
+              "answer": "Metaclass class ka class hota hai. Class creation control karta hai. type() default metaclass hai. Advanced customization ke liye use karte hain."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# Decorators\n# Basic decorator\ndef simple_decorator(func):\n    def wrapper():\n        print(\"Before function call\")\n        func()\n        print(\"After function call\")\n    return wrapper\n\n@simple_decorator\ndef say_hello():\n    print(\"Hello!\")\n\nsay_hello()\n# Output:\n# Before function call\n# Hello!\n# After function call\n\n# Decorator with arguments\ndef repeat(num_times):\n    \"\"\"Decorator that repeats function call.\"\"\"\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            for _ in range(num_times):\n                result = func(*args, **kwargs)\n            return result\n        return wrapper\n    return decorator\n\n@repeat(num_times=3)\ndef greet(name):\n    print(f\"Hello {name}!\")\n\ngreet(\"Alice\")\n# Output:\n# Hello Alice!\n# Hello Alice!\n# Hello Alice!\n\n# Class decorator\ndef add_method(cls):\n    \"\"\"Add a method to a class.\"\"\"\n    def new_method(self):\n        return f\"New method from {self.__class__.__name__}\"\n    \n    cls.new_method = new_method\n    return cls\n\n@add_method\nclass MyClass:\n    pass\n\nobj = MyClass()\nprint(obj.new_method())  # New method from MyClass\n\n# Property decorator (built-in)\nclass Circle:\n    def __init__(self, radius):\n        self._radius = radius\n    \n    @property\n    def radius(self):\n        return self._radius\n    \n    @radius.setter\n    def radius(self, value):\n        if value < 0:\n            raise ValueError(\"Radius cannot be negative\")\n        self._radius = value\n    \n    @property\n    def area(self):\n        import math\n        return math.pi * self._radius ** 2\n\n# Generators\n# Generator function\ndef count_up_to(max):\n    count = 1\n    while count <= max:\n        yield count  # Pauses and returns value\n        count += 1\n\ncounter = count_up_to(5)\nfor num in counter:\n    print(num)  # 1 2 3 4 5\n\n# Generator expression (like list comprehension but lazy)\nsquares_gen = (x**2 for x in range(10))\nprint(list(squares_gen))  # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]\n\n# Infinite generator\ndef fibonacci():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n\nfib = fibonacci()\nfor _ in range(10):\n    print(next(fib))  # 0 1 1 2 3 5 8 13 21 34\n\n# Generator for reading large files\ndef read_large_file(file_path, chunk_size=1024):\n    with open(file_path, 'r') as file:\n        while True:\n            chunk = file.read(chunk_size)\n            if not chunk:\n                break\n            yield chunk\n\n# Coroutines (generators that receive values)\ndef coroutine_example():\n    print(\"Coroutine started\")\n    while True:\n        value = yield  # Receives value\n        print(f\"Received: {value}\")\n\ncoro = coroutine_example()\nnext(coro)  # Prime the coroutine\ncoro.send(\"Hello\")  # Received: Hello\ncoro.send(\"World\")  # Received: World\n\n# Async/await\nimport asyncio\n\nasync def fetch_data(url):\n    \"\"\"Simulate fetching data from URL.\"\"\"\n    print(f\"Fetching {url}...\")\n    await asyncio.sleep(2)  # Simulate network delay\n    print(f\"Fetched {url}\")\n    return f\"Data from {url}\"\n\nasync def main():\n    # Run concurrently\n    task1 = asyncio.create_task(fetch_data(\"https://api.example.com/data1\"))\n    task2 = asyncio.create_task(fetch_data(\"https://api.example.com/data2\"))\n    \n    # Wait for both\n    results = await asyncio.gather(task1, task2)\n    print(f\"Results: {results}\")\n\n# Run async function\n# asyncio.run(main())\n\n# Async context manager\nimport aiofiles  # Requires installation\n\n# async with aiofiles.open('file.txt', 'r') as f:\n#     content = await f.read()\n\n# Async generators\nasync def async_counter(max):\n    for i in range(max):\n        yield i\n        await asyncio.sleep(0.1)  # Simulate async operation\n\n# Metaclasses\n# Basic metaclass\nclass Meta(type):\n    \"\"\"A custom metaclass.\"\"\"\n    \n    def __new__(cls, name, bases, dct):\n        # Modify class creation\n        dct['created_by'] = 'Meta'\n        dct['version'] = 1.0\n        return super().__new__(cls, name, bases, dct)\n\nclass MyClass(metaclass=Meta):\n    pass\n\nprint(MyClass.created_by)  # Meta\nprint(MyClass.version)     # 1.0\n\n# Singleton using metaclass\nclass SingletonMeta(type):\n    _instances = {}\n    \n    def __call__(cls, *args, **kwargs):\n        if cls not in cls._instances:\n            cls._instances[cls] = super().__call__(*args, **kwargs)\n        return cls._instances[cls]\n\nclass Singleton(metaclass=SingletonMeta):\n    def __init__(self, value):\n        self.value = value\n\ns1 = Singleton(10)\ns2 = Singleton(20)\nprint(s1 is s2)  # True (same instance)\nprint(s1.value)  # 10 (first initialization value)\n\n# Type hints and static typing\nfrom typing import List, Dict, Tuple, Optional, Union, Any, Callable\n\n# Function with type hints\ndef process_items(items: List[str]) -> Dict[str, int]:\n    \"\"\"Process list of strings and return count dictionary.\"\"\"\n    return {item: len(item) for item in items}\n\n# Complex type hints\nfrom typing import TypedDict\n\nclass User(TypedDict):\n    name: str\n    age: int\n    email: Optional[str]\n\ndef get_users() -> List[User]:\n    return [\n        {\"name\": \"Alice\", \"age\": 30, \"email\": \"alice@example.com\"},\n        {\"name\": \"Bob\", \"age\": 25, \"email\": None}\n    ]\n\n# Union types\ndef parse_value(value: Union[str, int, float]) -> float:\n    if isinstance(value, str):\n        return float(value)\n    return float(value)\n\n# Callable type\nMathFunction = Callable[[float, float], float]\n\ndef apply_operation(a: float, b: float, op: MathFunction) -> float:\n    return op(a, b)\n\n# Type aliases\nVector = List[float]\nMatrix = List[Vector]\n\ndef multiply_matrix_vector(m: Matrix, v: Vector) -> Vector:\n    return [sum(m_row[i] * v[i] for i in range(len(v))) for m_row in m]\n\n# Using mypy for type checking\n# Install: pip install mypy\n# Run: mypy script.py\n\n# Descriptors (advanced)\nclass ValidatedAttribute:\n    \"\"\"Descriptor for validated attributes.\"\"\"\n    \n    def __init__(self, validator):\n        self.validator = validator\n        self.data = {}\n    \n    def __get__(self, obj, objtype):\n        if obj is None:\n            return self\n        return self.data.get(id(obj))\n    \n    def __set__(self, obj, value):\n        self.data[id(obj)] = self.validator(value)\n\nclass Person:\n    age = ValidatedAttribute(lambda x: x if x >= 0 else 0)\n    name = ValidatedAttribute(lambda x: str(x).title())\n    \n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\np = Person(\"john doe\", -5)\nprint(p.name)  # John Doe\nprint(p.age)   # 0 (validated)\n\n# Context manager using class\nclass DatabaseConnection:\n    def __init__(self, connection_string):\n        self.connection_string = connection_string\n        self.connection = None\n    \n    def __enter__(self):\n        print(f\"Connecting to {self.connection_string}\")\n        self.connection = \"Simulated connection\"\n        return self\n    \n    def execute(self, query):\n        print(f\"Executing: {query}\")\n        return \"Simulated result\"\n    \n    def __exit__(self, exc_type, exc_val, exc_tb):\n        print(\"Closing connection\")\n        self.connection = None\n        if exc_type:\n            print(f\"Exception occurred: {exc_val}\")\n        # Return True to suppress exception\n        return False\n\nwith DatabaseConnection(\"localhost/db\") as db:\n    result = db.execute(\"SELECT * FROM users\")\n    print(result)\n\n# Monkey patching\nclass MyClass:\n    def original_method(self):\n        return \"Original\"\n\nobj = MyClass()\nprint(obj.original_method())  # Original\n\n# Monkey patch\ndef new_method(self):\n    return \"Patched\"\n\nMyClass.original_method = new_method\nprint(obj.original_method())  # Patched\n\n# Import hooks\nimport importlib.abc\nimport importlib.machinery\nimport sys\n\n# Advanced: Custom import system\n# (Complex topic for plugin systems, etc.)\n\n# Abstract Base Classes (ABCs)\nfrom abc import ABC, abstractmethod\nfrom collections.abc import Sequence, Iterator\n\nclass CustomSequence(Sequence):\n    def __init__(self, data):\n        self.data = data\n    \n    def __getitem__(self, index):\n        return self.data[index]\n    \n    def __len__(self):\n        return len(self.data)\n\nseq = CustomSequence([1, 2, 3, 4, 5])\nprint(len(seq))        # 5\nprint(seq[2])          # 3\nprint(3 in seq)        # True\nprint(list(reversed(seq)))  # [5, 4, 3, 2, 1]\n\n# Data classes (Python 3.7+)\nfrom dataclasses import dataclass, field\nfrom typing import ClassVar\n\n@dataclass(order=True)  # Generate comparison methods\nclass Point:\n    x: float\n    y: float\n    description: str = \"A point\"  # Default value\n    calculated_values: dict = field(default_factory=dict)  # Factory\n    # Class variable\n    dimensions: ClassVar[int] = 2\n    \n    @property\n    def distance_from_origin(self):\n        import math\n        return math.sqrt(self.x**2 + self.y**2)\n\np1 = Point(3, 4)\np2 = Point(1, 2)\nprint(p1)  # Point(x=3, y=4, description='A point', calculated_values={})\nprint(p1.distance_from_origin)  # 5.0\nprint(p1 > p2)  # True (generated by order=True)\n\n# Pattern matching (Python 3.10+)\ndef handle_command(command):\n    match command.split():\n        case [\"quit\"]:\n            return \"Quitting...\"\n        case [\"look\"]:\n            return \"Looking around\"\n        case [\"get\", item]:\n            return f\"Getting {item}\"\n        case [\"go\", direction] if direction in [\"north\", \"south\", \"east\", \"west\"]:\n            return f\"Going {direction}\"\n        case [\"drop\", *items]:\n            return f\"Dropping {', '.join(items)}\"\n        case _:\n            return \"Unknown command\"\n\nprint(handle_command(\"get sword\"))      # Getting sword\nprint(handle_command(\"go north\"))       # Going north\nprint(handle_command(\"drop coin potion\"))  # Dropping coin, potion",
+            "components": [
+              {
+                "name": "Decorators",
+                "english": "Functions that modify other functions or classes",
+                "hinglish": "Functions jo dusre functions ya classes modify karte hain",
+                "importance": "High",
+                "tip": "Use functools.wraps to preserve function metadata",
+                "pros": "Code reuse, cross-cutting concerns, clean syntax",
+                "cons": "Debugging complexity, indirection"
+              },
+              {
+                "name": "Generators",
+                "english": "Functions that yield values lazily",
+                "hinglish": "Functions jo values lazily yield karti hain",
+                "importance": "High",
+                "tip": "Use generators for memory-efficient processing of large datasets",
+                "pros": "Memory efficient, lazy evaluation, infinite sequences",
+                "cons": "One-time use, stateful"
+              },
+              {
+                "name": "Async Programming",
+                "english": "Asynchronous programming for concurrent operations",
+                "hinglish": "Concurrent operations ke liye asynchronous programming",
+                "importance": "High",
+                "tip": "Use asyncio for I/O-bound tasks, not CPU-bound",
+                "pros": "Concurrency, non-blocking I/O, efficient",
+                "cons": "Complexity, debugging challenges"
+              },
+              {
+                "name": "Metaprogramming",
+                "english": "Code that manipulates code",
+                "hinglish": "Code jo dusra code manipulate karta hai",
+                "importance": "Medium",
+                "tip": "Use metaprogramming sparingly - explicit is better than implicit",
+                "pros": "Dynamic behavior, frameworks, code generation",
+                "cons": "Complexity, magic behavior, debugging difficulty"
+              }
+            ]
+          }
+        },
+        {
+          "id": 10,
+          "title": "Web Development & APIs",
+          "english": "Building web applications and APIs with Python frameworks",
+          "hinglish": "Python frameworks ke saath web applications aur APIs banana",
+          "examples": [
+            "Web development with Flask",
+            "Building RESTful APIs with FastAPI",
+            "Web scraping with BeautifulSoup and requests",
+            "Working with databases (SQLAlchemy)",
+            "Deployment and hosting"
+          ],
+          "practice": [
+            {
+              "question": "Flask aur Django mein kya choose karein?",
+              "answer": "Flask micro-framework hai, lightweight, flexible. Django full-stack framework hai, batteries included. Simple APIs/websites ke liye Flask, complex applications ke liye Django."
+            },
+            {
+              "question": "FastAPI ke advantages kya hain?",
+              "answer": "FastAPI modern hai, automatic OpenAPI documentation, async support, type hints based, fast performance. APIs ke liye best hai."
+            },
+            {
+              "question": "Web scraping ke liye basic tools kya hain?",
+              "answer": "requests HTML fetch karta hai, BeautifulSoup HTML parse karta hai, Scrapy advanced scraping framework hai. Selenium dynamic websites ke liye use karte hain."
+            },
+            {
+              "question": "SQLAlchemy ORM kya hai?",
+              "answer": "SQLAlchemy Python ka SQL toolkit aur ORM hai. Database operations object-oriented way mein karta hai. SQL expressions bhi generate kar sakta hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# Flask web application\n# Install: pip install flask\n\nfrom flask import Flask, render_template, request, jsonify, redirect, url_for\n\napp = Flask(__name__)\n\n# Basic route\n@app.route('/')\ndef home():\n    return 'Hello, Flask!'\n\n# Route with parameter\n@app.route('/user/<username>')\ndef show_user(username):\n    return f'User: {username}'\n\n# Route with methods\n@app.route('/api/data', methods=['GET', 'POST'])\ndef handle_data():\n    if request.method == 'POST':\n        data = request.get_json()\n        # Process data\n        return jsonify({'status': 'success', 'data': data})\n    else:\n        return jsonify({'message': 'GET request'})\n\n# Template rendering\n@app.route('/hello/<name>')\ndef hello(name):\n    return render_template('hello.html', name=name)\n\n# templates/hello.html:\n# <h1>Hello {{ name }}!</h1>\n\n# Run Flask app\nif __name__ == '__main__':\n    app.run(debug=True)\n\n# FastAPI application\n# Install: pip install fastapi uvicorn\n\nfrom fastapi import FastAPI, HTTPException, Query, Path, Body\nfrom pydantic import BaseModel, EmailStr\nfrom typing import Optional, List\nimport uvicorn\n\napp = FastAPI(title=\"My API\", version=\"1.0.0\")\n\n# Pydantic models for request/response\nclass Item(BaseModel):\n    name: str\n    description: Optional[str] = None\n    price: float\n    tax: Optional[float] = None\n\nclass User(BaseModel):\n    username: str\n    email: EmailStr\n    full_name: Optional[str] = None\n\n# CRUD endpoints\nitems_db = []\n\n@app.get(\"/\")\ndef read_root():\n    return {\"message\": \"Welcome to FastAPI\"}\n\n@app.get(\"/items/{item_id}\")\ndef read_item(item_id: int = Path(..., gt=0), q: Optional[str] = Query(None)):\n    \"\"\"Get item by ID.\"\"\"\n    for item in items_db:\n        if item[\"id\"] == item_id:\n            return item\n    raise HTTPException(status_code=404, detail=\"Item not found\")\n\n@app.post(\"/items/\")\ndef create_item(item: Item):\n    \"\"\"Create new item.\"\"\"\n    item_dict = item.dict()\n    item_dict[\"id\"] = len(items_db) + 1\n    items_db.append(item_dict)\n    return item_dict\n\n@app.put(\"/items/{item_id}\")\ndef update_item(item_id: int, item: Item):\n    \"\"\"Update existing item.\"\"\"\n    for i, existing_item in enumerate(items_db):\n        if existing_item[\"id\"] == item_id:\n            items_db[i] = item.dict()\n            items_db[i][\"id\"] = item_id\n            return items_db[i]\n    raise HTTPException(status_code=404, detail=\"Item not found\")\n\n# Run FastAPI\n# uvicorn main:app --reload\n\n# Automatic documentation at:\n# http://localhost:8000/docs (Swagger UI)\n# http://localhost:8000/redoc (ReDoc)\n\n# Web scraping with requests and BeautifulSoup\n# Install: pip install requests beautifulsoup4\n\nimport requests\nfrom bs4 import BeautifulSoup\nimport csv\n\n# Fetch webpage\nurl = \"https://example.com\"\nresponse = requests.get(url)\n\nif response.status_code == 200:\n    # Parse HTML\n    soup = BeautifulSoup(response.content, 'html.parser')\n    \n    # Extract data\n    title = soup.title.string\n    print(f\"Title: {title}\")\n    \n    # Find all links\n    links = []\n    for link in soup.find_all('a', href=True):\n        links.append({\n            'text': link.text.strip(),\n            'url': link['href']\n        })\n    \n    # Find elements by class\n    articles = soup.find_all('article', class_='post')\n    for article in articles:\n        headline = article.find('h2').text\n        summary = article.find('p').text\n        print(f\"Headline: {headline}\")\n        print(f\"Summary: {summary[:100]}...\")\n    \n    # Save to CSV\n    with open('links.csv', 'w', newline='', encoding='utf-8') as file:\n        writer = csv.DictWriter(file, fieldnames=['text', 'url'])\n        writer.writeheader()\n        writer.writerows(links)\n\n# Advanced scraping with Selenium\n# Install: pip install selenium\n# Download WebDriver for your browser\n\nfrom selenium import webdriver\nfrom selenium.webdriver.common.by import By\nfrom selenium.webdriver.support.ui import WebDriverWait\nfrom selenium.webdriver.support import expected_conditions as EC\n\n# driver = webdriver.Chrome()  # Requires ChromeDriver\n# driver.get(\"https://example.com\")\n# \n# # Wait for element to load\n# element = WebDriverWait(driver, 10).until(\n#     EC.presence_of_element_located((By.ID, \"myElement\"))\n# )\n# \n# # Interact with page\n# search_box = driver.find_element(By.NAME, \"q\")\n# search_box.send_keys(\"Python\")\n# search_box.submit()\n# \n# driver.quit()\n\n# Working with databases - SQLAlchemy\n# Install: pip install sqlalchemy\n\nfrom sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, ForeignKey\nfrom sqlalchemy.ext.declarative import declarative_base\nfrom sqlalchemy.orm import sessionmaker, relationship\nfrom datetime import datetime\n\n# Database setup\nengine = create_engine('sqlite:///mydatabase.db', echo=True)\nBase = declarative_base()\nSession = sessionmaker(bind=engine)\nsession = Session()\n\n# Define models\nclass User(Base):\n    __tablename__ = 'users'\n    \n    id = Column(Integer, primary_key=True)\n    username = Column(String(50), unique=True, nullable=False)\n    email = Column(String(100), unique=True, nullable=False)\n    created_at = Column(DateTime, default=datetime.utcnow)\n    \n    # Relationship\n    posts = relationship('Post', back_populates='author')\n    \n    def __repr__(self):\n        return f\"<User(username='{self.username}', email='{self.email}')>\"\n\nclass Post(Base):\n    __tablename__ = 'posts'\n    \n    id = Column(Integer, primary_key=True)\n    title = Column(String(200), nullable=False)\n    content = Column(String, nullable=False)\n    user_id = Column(Integer, ForeignKey('users.id'))\n    created_at = Column(DateTime, default=datetime.utcnow)\n    \n    # Relationship\n    author = relationship('User', back_populates='posts')\n    \n    def __repr__(self):\n        return f\"<Post(title='{self.title}', author_id={self.user_id})>\"\n\n# Create tables\nBase.metadata.create_all(engine)\n\n# CRUD operations\n# Create\nnew_user = User(username='alice', email='alice@example.com')\nsession.add(new_user)\nsession.commit()\n\n# Read\nuser = session.query(User).filter_by(username='alice').first()\nprint(user)\n\n# Update\nuser.email = 'alice.new@example.com'\nsession.commit()\n\n# Delete\n# session.delete(user)\n# session.commit()\n\n# Query examples\n# Get all users\nall_users = session.query(User).all()\n\n# Get users with filter\nactive_users = session.query(User).filter(User.email.like('%@example.com')).all()\n\n# Join query\nposts_with_authors = session.query(Post, User).join(User).all()\n\n# Aggregation\nfrom sqlalchemy import func\nuser_count = session.query(func.count(User.id)).scalar()\nprint(f\"Total users: {user_count}\")\n\n# SQLAlchemy Core (SQL expression language)\nfrom sqlalchemy import select, insert, update, delete\n\n# Select with Core\nstmt = select(User).where(User.username == 'alice')\nresult = session.execute(stmt)\nfor row in result:\n    print(row)\n\n# Django (brief example)\n# Install: pip install django\n# django-admin startproject myproject\n# cd myproject\n# python manage.py startapp myapp\n\n# myapp/models.py\n\"\"\"\nfrom django.db import models\n\nclass Product(models.Model):\n    name = models.CharField(max_length=100)\n    price = models.DecimalField(max_digits=10, decimal_places=2)\n    description = models.TextField()\n    created_at = models.DateTimeField(auto_now_add=True)\n    \n    def __str__(self):\n        return self.name\n\"\"\"\n\n# Create migrations: python manage.py makemigrations\n# Apply migrations: python manage.py migrate\n\n# Deployment options\n# 1. Traditional hosting\n# Requirements: Python, web server (Nginx/Apache), WSGI (Gunicorn/uWSGI)\n\n# 2. Platform as a Service (PaaS)\n# Heroku, PythonAnywhere, Google App Engine, AWS Elastic Beanstalk\n\n# 3. Containers\n# Docker + Kubernetes\n\n# 4. Serverless\n# AWS Lambda, Google Cloud Functions, Azure Functions\n\n# Deployment with Gunicorn + Nginx\n# Install: pip install gunicorn\n\n# Run: gunicorn -w 4 -b 0.0.0.0:8000 app:app\n\n# Nginx configuration\n\"\"\"\nserver {\n    listen 80;\n    server_name yourdomain.com;\n    \n    location / {\n        proxy_pass http://127.0.0.1:8000;\n        proxy_set_header Host $host;\n        proxy_set_header X-Real-IP $remote_addr;\n    }\n    \n    location /static {\n        alias /path/to/static/files;\n    }\n}\n\"\"\"\n\n# Docker deployment\n# Dockerfile\n\"\"\"\nFROM python:3.11-slim\n\nWORKDIR /app\n\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\n\nCOPY . .\n\nCMD [\"gunicorn\", \"-w\", \"4\", \"-b\", \"0.0.0.0:8000\", \"app:app\"]\n\"\"\"\n\n# Build: docker build -t myapp .\n# Run: docker run -p 8000:8000 myapp\n\n# Docker Compose\n# docker-compose.yml\n\"\"\"\nversion: '3.8'\nservices:\n  web:\n    build: .\n    ports:\n      - \"8000:8000\"\n    environment:\n      - DATABASE_URL=postgresql://user:pass@db:5432/mydb\n    depends_on:\n      - db\n  \n  db:\n    image: postgres:13\n    environment:\n      - POSTGRES_DB=mydb\n      - POSTGRES_USER=user\n      - POSTGRES_PASSWORD=pass\n    volumes:\n      - postgres_data:/var/lib/postgresql/data\n\nvolumes:\n  postgres_data:\n\"\"\"\n\n# API testing\nimport unittest\nfrom fastapi.testclient import TestClient\n\n# Test FastAPI app\nclient = TestClient(app)\n\ndef test_read_root():\n    response = client.get(\"/\")\n    assert response.status_code == 200\n    assert response.json() == {\"message\": \"Welcome to FastAPI\"}\n\ndef test_create_item():\n    item_data = {\"name\": \"Test\", \"price\": 9.99}\n    response = client.post(\"/items/\", json=item_data)\n    assert response.status_code == 200\n    assert response.json()[\"name\"] == \"Test\"\n\n# Environment configuration\n# Use environment variables\nimport os\nfrom dotenv import load_dotenv  # pip install python-dotenv\n\nload_dotenv()  # Load from .env file\n\nDATABASE_URL = os.getenv(\"DATABASE_URL\", \"sqlite:///default.db\")\nSECRET_KEY = os.getenv(\"SECRET_KEY\", \"dev-secret-key\")\nDEBUG = os.getenv(\"DEBUG\", \"False\").lower() == \"true\"\n\n# Security considerations\n# 1. Input validation\n# 2. SQL injection prevention (use ORM/prepared statements)\n# 3. XSS prevention (escape output)\n# 4. CSRF protection\n# 5. Rate limiting\n# 6. HTTPS enforcement\n# 7. Password hashing (bcrypt, argon2)\n\n# Authentication/Authorization\n# JWT tokens, OAuth2\n\n# Caching\nimport redis  # pip install redis\n\ncache = redis.Redis(host='localhost', port=6379, db=0)\n\n# Set cache\ncache.set('user:1', '{\"name\": \"Alice\", \"age\": 30}', ex=3600)  # Expire in 1 hour\n\n# Get cache\nuser_data = cache.get('user:1')\nif user_data:\n    print(f\"From cache: {user_data.decode()}\")\n\n# Message queues\nimport pika  # pip install pika (RabbitMQ)\n\n# Or use Celery for distributed task queue\n# pip install celery redis\n\n# Monitoring and logging\nimport logging\nfrom logging.handlers import RotatingFileHandler\n\n# Structured logging\nimport structlog  # pip install structlog\n\n# Error tracking\nimport sentry_sdk  # pip install sentry-sdk\n\n# sentry_sdk.init(dsn=\"your-dsn-here\")\n\n# Performance monitoring\nimport prometheus_client  # pip install prometheus-client",
+            "components": [
+              {
+                "name": "Web Frameworks",
+                "english": "Frameworks for building web applications and APIs",
+                "hinglish": "Web applications aur APIs banane ke liye frameworks",
+                "importance": "High",
+                "tip": "Start with Flask for learning, use FastAPI for production APIs",
+                "pros": "Rapid development, best practices, community support",
+                "cons": "Framework lock-in, learning curve"
+              },
+              {
+                "name": "Web Scraping",
+                "english": "Extracting data from websites",
+                "hinglish": "Websites se data extract karna",
+                "importance": "Medium",
+                "tip": "Respect robots.txt, use delays between requests, cache results",
+                "pros": "Data collection, automation, research",
+                "cons": "Legal/ethical concerns, breaking changes"
+              },
+              {
+                "name": "Database ORMs",
+                "english": "Object-Relational Mapping for database operations",
+                "hinglish": "Database operations ke liye Object-Relational Mapping",
+                "importance": "High",
+                "tip": "Use SQLAlchemy for flexibility, Django ORM for Django projects",
+                "pros": "Productivity, database abstraction, type safety",
+                "cons": "Performance overhead, learning curve"
+              },
+              {
+                "name": "Deployment",
+                "english": "Deploying applications to production",
+                "hinglish": "Applications ko production mein deploy karna",
+                "importance": "High",
+                "tip": "Start with PaaS (Heroku), move to containers as needed",
+                "pros": "Application availability, scalability, maintenance",
+                "cons": "DevOps complexity, cost"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

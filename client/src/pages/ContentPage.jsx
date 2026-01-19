@@ -9,6 +9,10 @@ import expressjs from '../api/languages/express.json';
 import mongodb from '../api/languages/mongodb.json';
 import ProjectsContent from '../pages/projects.jsx'
 import mysql from '../api/languages/mysql.json'
+import php from '../api/languages/php.json'
+import laravel from '../api/languages/laravel.json'
+import python from '../api/languages/python.json'
+import django from '../api/languages/django.json'
 import "./ContentPage.css";
 
 const ContentPage = () => {
@@ -31,8 +35,16 @@ const ContentPage = () => {
       ? expressjs
       : techSlug === "mongodb"
       ? mongodb
-      : techSlug === "sql"
+      : techSlug === "sql" || techSlug === "mysql"
       ? mysql
+      : techSlug === "php"
+      ? php
+      : techSlug === "laravel"
+      ? laravel
+      : techSlug === "python"
+      ? python
+      : techSlug === "django"
+      ? django
       : null;
 
   const handleBack = () => {

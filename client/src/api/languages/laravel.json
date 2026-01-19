@@ -1,0 +1,748 @@
+{
+  "technology": "Laravel",
+  "slug": "complete-laravel-course-2026",
+  "description": "Complete Laravel PHP framework course from fundamentals to advanced concepts including modern practices, testing, deployment, and real-world applications",
+  "levels": [
+    {
+      "level": "Beginner",
+      "order": 1,
+      "description": "Laravel fundamentals, installation, basic concepts, and building first applications",
+      "topics": [
+        {
+          "id": 1,
+          "title": "Introduction & Installation",
+          "english": "Understanding Laravel ecosystem, installation methods, and project setup",
+          "hinglish": "Laravel ecosystem samajhna, installation ke tarike, aur project setup",
+          "examples": [
+            "Installing Laravel via Laravel Installer",
+            "Setting up Laravel with Sail (Docker)",
+            "Creating first Laravel project with Composer",
+            "Configuring environment variables in .env file",
+            "Running development server with artisan serve"
+          ],
+          "practice": [
+            {
+              "question": "Laravel install karne ka sabse easy tarika kya hai?",
+              "answer": "Laravel Installer use karna easiest hai: 'composer global require laravel/installer' aur phir 'laravel new project-name'"
+            },
+            {
+              "question": ".env file kya hai aur kyun important hai?",
+              "answer": ".env file environment variables store karti hai (database credentials, API keys). Security ke liye important hai aur different environments (local, production) ke liye alag values."
+            },
+            {
+              "question": "Artisan kya hai?",
+              "answer": "Artisan Laravel ka command-line interface hai. Ye commands provide karta hai project management, code generation, database operations ke liye."
+            },
+            {
+              "question": "Laravel Sail kya hai?",
+              "answer": "Laravel Sail Docker-based development environment hai jo pre-configured Docker setup provide karta hai local development ke liye."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Installation Commands\n// Using Composer directly\ncomposer create-project laravel/laravel example-app\n\n// Using Laravel Installer\nlaravel new example-app\n\n// Using Laravel Sail\ncurl -s https://laravel.build/example-app | bash\n\n// Basic Artisan Commands\nphp artisan serve          # Start development server\nphp artisan --version      # Check Laravel version\nphp artisan list           # List all available commands\nphp artisan route:list     # List all routes\n\n// .env file example\nAPP_NAME=Laravel\nAPP_ENV=local\nAPP_KEY=base64:xxxxxxxxxxxx\nAPP_DEBUG=true\nAPP_URL=http://localhost\n\nDB_CONNECTION=mysql\nDB_HOST=127.0.0.1\nDB_PORT=3306\nDB_DATABASE=laravel\nDB_USERNAME=root\nDB_PASSWORD=\n\n// Running with Sail\n./vendor/bin/sail up\n./vendor/bin/sail artisan serve\n?>",
+            "components": [
+              {
+                "name": "Composer",
+                "english": "PHP dependency manager for installing and managing Laravel",
+                "hinglish": "Laravel install aur manage karne ka PHP dependency manager",
+                "importance": "High",
+                "tip": "Always use Composer for Laravel projects to manage dependencies",
+                "pros": "Dependency management, autoloading, version control",
+                "cons": "Learning curve for beginners"
+              },
+              {
+                "name": "Artisan CLI",
+                "english": "Command-line interface for Laravel development tasks",
+                "hinglish": "Laravel development tasks ke liye command-line interface",
+                "importance": "High",
+                "tip": "Learn frequently used commands: make, migrate, serve, tinker",
+                "pros": "Productivity boost, automation, consistency",
+                "cons": "Need to remember command syntax"
+              },
+              {
+                "name": "Environment Configuration",
+                "english": "Managing application settings for different environments",
+                "hinglish": "Different environments ke liye application settings manage karna",
+                "importance": "High",
+                "tip": "Never commit .env file to version control, use .env.example as template",
+                "pros": "Security, environment-specific settings, flexibility",
+                "cons": "Configuration management complexity"
+              },
+              {
+                "name": "Laravel Sail",
+                "english": "Docker-based development environment for Laravel",
+                "hinglish": "Laravel ke liye Docker-based development environment",
+                "importance": "Medium",
+                "tip": "Use Sail for consistent development environment across team",
+                "pros": "Consistent environment, easy setup, pre-configured services",
+                "cons": "Docker knowledge required, resource intensive"
+              }
+            ]
+          }
+        },
+        {
+          "id": 2,
+          "title": "Routing & Controllers",
+          "english": "Defining application routes and creating controllers to handle requests",
+          "hinglish": "Application routes define karna aur requests handle karne ke liye controllers banana",
+          "examples": [
+            "Creating basic GET and POST routes",
+            "Defining route parameters and constraints",
+            "Creating resource controllers for CRUD operations",
+            "Using route groups and middleware",
+            "Implementing route naming and URL generation"
+          ],
+          "practice": [
+            {
+              "question": "Web routes aur API routes mein kya difference hai?",
+              "answer": "Web routes web.php file mein hote hain aur web middleware use karte hain. API routes api.php file mein hote hain aur api middleware use karte hain (stateless, throttle)."
+            },
+            {
+              "question": "Route parameters kaise define karte hain?",
+              "answer": "Curly braces mein: Route::get('/users/{id}', ...). Optional parameters ke liye question mark: {id?}. Constraints add kar sakte hain: where('id', '[0-9]+')"
+            },
+            {
+              "question": "Resource controller kya hai?",
+              "answer": "Resource controller CRUD operations ke liye predefined methods provide karta hai: index, create, store, show, edit, update, destroy."
+            },
+            {
+              "question": "Route naming kyun important hai?",
+              "answer": "Route naming URL generation ko easy banata hai. route() helper se named routes ke liye URLs generate kar sakte hain. Route changes se bachata hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// routes/web.php\n\n// Basic routes\nRoute::get('/', function () {\n    return view('welcome');\n});\n\nRoute::get('/about', function () {\n    return 'About Page';\n});\n\n// Route with parameters\nRoute::get('/users/{id}', function ($id) {\n    return 'User ID: ' . $id;\n});\n\n// Route with optional parameter\nRoute::get('/users/{id?}', function ($id = null) {\n    return $id ? 'User ID: ' . $id : 'All Users';\n});\n\n// Route with constraint\nRoute::get('/users/{id}', function ($id) {\n    // Only numeric IDs allowed\n})->where('id', '[0-9]+');\n\n// Named routes\nRoute::get('/profile', function () {\n    // Profile page\n})->name('profile');\n\n// Using in views: {{ route('profile') }}\n\n// Controller routes\nRoute::get('/users', [UserController::class, 'index']);\n\n// Resource controller (creates all CRUD routes)\nRoute::resource('users', UserController::class);\n// Equivalent to:\n// GET /users → index\n// GET /users/create → create\n// POST /users → store\n// GET /users/{user} → show\n// GET /users/{user}/edit → edit\n// PUT/PATCH /users/{user} → update\n// DELETE /users/{user} → destroy\n\n// Route groups\nRoute::prefix('admin')->middleware('auth')->group(function () {\n    Route::get('/dashboard', function () {\n        // Admin dashboard\n    });\n    \n    Route::resource('users', AdminUserController::class);\n});\n\n// Controller example\n// app/Http/Controllers/UserController.php\nnamespace App\\Http\\Controllers;\n\nuse App\\Models\\User;\nuse Illuminate\\Http\\Request;\n\nclass UserController extends Controller\n{\n    public function index()\n    {\n        $users = User::all();\n        return view('users.index', compact('users'));\n    }\n    \n    public function show(User $user) // Route Model Binding\n    {\n        return view('users.show', compact('user'));\n    }\n    \n    public function store(Request $request)\n    {\n        $validated = $request->validate([\n            'name' => 'required|string|max:255',\n            'email' => 'required|email|unique:users'\n        ]);\n        \n        User::create($validated);\n        \n        return redirect()->route('users.index')\n                         ->with('success', 'User created successfully.');\n    }\n}\n?>",
+            "components": [
+              {
+                "name": "Route Definitions",
+                "english": "Mapping URLs to application logic and controllers",
+                "hinglish": "URLs ko application logic aur controllers se map karna",
+                "importance": "High",
+                "tip": "Use descriptive URLs and follow RESTful conventions",
+                "pros": "Clean URL structure, SEO friendly, organized",
+                "cons": "Route caching complexity in production"
+              },
+              {
+                "name": "Controllers",
+                "english": "Classes that handle HTTP requests and return responses",
+                "hinglish": "Classes jo HTTP requests handle karti hain aur responses return karti hain",
+                "importance": "High",
+                "tip": "Keep controllers thin - delegate business logic to services",
+                "pros": "Separation of concerns, organized code, reusable",
+                "cons": "Can become bloated if not careful"
+              },
+              {
+                "name": "Route Parameters",
+                "english": "Dynamic segments in URLs that capture values",
+                "hinglish": "URLs ke dynamic segments jo values capture karte hain",
+                "importance": "High",
+                "tip": "Validate parameters with where() constraints for security",
+                "pros": "Dynamic routing, clean URLs, flexible",
+                "cons": "Validation required, potential security issues"
+              },
+              {
+                "name": "Route Model Binding",
+                "english": "Automatic injection of model instances based on route parameters",
+                "hinglish": "Route parameters ke basis par model instances automatic inject karna",
+                "importance": "High",
+                "tip": "Use implicit binding for cleaner code and automatic 404 responses",
+                "pros": "Cleaner code, automatic validation, less boilerplate",
+                "cons": "Magic behavior can be confusing"
+              }
+            ]
+          }
+        },
+        {
+          "id": 3,
+          "title": "Blade Templating",
+          "english": "Creating dynamic views using Laravel's Blade templating engine",
+          "hinglish": "Laravel ke Blade templating engine ka use karke dynamic views banana",
+          "examples": [
+            "Creating Blade layouts with template inheritance",
+            "Using Blade directives for control structures",
+            "Displaying data with escaping and non-escaping",
+            "Creating and using Blade components",
+            "Implementing slots and named slots"
+          ],
+          "practice": [
+            {
+              "question": "@extends aur @include mein kya difference hai?",
+              "answer": "@extends template inheritance ke liye hai (parent-child relationship). @include partial views include karne ke liye hai (reusable components)."
+            },
+            {
+              "question": "Blade ke safe operators kaise use karte hain?",
+              "answer": "{!! $html !!} raw HTML display karta hai (dangerous agar user input hai). {{ $variable }} automatically escape karta hai. {{ $variable ?? 'default' }} null coalescing."
+            },
+            {
+              "question": "Blade components kya hain?",
+              "answer": "Blade components reusable UI pieces hain jo class-based ya anonymous ho sakte hain. Props accept karte hain, slots support karte hain, aur methods define kar sakte hain."
+            },
+            {
+              "question": "@foreach aur @forelse mein kya difference hai?",
+              "answer": "@foreach sirf loop ke liye hai. @forelse loop ke saath empty case bhi handle karta hai: @forelse($items as $item) ... @empty No items found @endforelse"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// resources/views/layouts/app.blade.php (Master layout)\n<!DOCTYPE html>\n<html lang=\"{{ str_replace('_', '-', app()->getLocale()) }}\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>@yield('title', 'Laravel')</title>\n    @vite(['resources/css/app.css', 'resources/js/app.js'])\n    @stack('styles')\n</head>\n<body>\n    <div id=\"app\">\n        @include('partials.header')\n        \n        <main class=\"py-4\">\n            @yield('content')\n        </main>\n        \n        @include('partials.footer')\n    </div>\n    \n    @stack('scripts')\n</body>\n</html>\n\n// resources/views/users/index.blade.php (Child view)\n@extends('layouts.app')\n\n@section('title', 'Users List')\n\n@section('content')\n<div class=\"container\">\n    <h1>Users</h1>\n    \n    @if(session('success'))\n        <div class=\"alert alert-success\">\n            {{ session('success') }}\n        </div>\n    @endif\n    \n    @forelse($users as $user)\n        <div class=\"card mb-3\">\n            <div class=\"card-body\">\n                <h5 class=\"card-title\">{{ $user->name }}</h5>\n                <p class=\"card-text\">\n                    Email: {{ $user->email }}<br>\n                    Created: {{ $user->created_at->format('d/m/Y') }}\n                </p>\n                <a href=\"{{ route('users.show', $user) }}\" class=\"btn btn-primary\">\n                    View Profile\n                </a>\n            </div>\n        </div>\n    @empty\n        <div class=\"alert alert-info\">\n            No users found.\n        </div>\n    @endforelse\n    \n    {{ $users->links() }} <!-- Pagination links -->\n</div>\n@endsection\n\n// Blade component example\n// resources/views/components/alert.blade.php\n@props(['type' => 'info', 'message'])\n\n<div {{ $attributes->merge(['class' => 'alert alert-'.$type]) }} role=\"alert\">\n    {{ $message }}\n    {{ $slot }}\n</div>\n\n// Using the component\n<x-alert type=\"success\" message=\"Operation completed successfully!\" class=\"mb-4\">\n    <p>Additional details can go here in the slot.</p>\n</x-alert>\n\n// Blade directives\n@auth\n    <!-- Show for authenticated users -->\n    <p>Welcome, {{ Auth::user()->name }}!</p>\n@else\n    <a href=\"{{ route('login') }}\">Login</a>\n@endauth\n\n@guest\n    <!-- Show for guests -->\n    <p>Please login to continue.</p>\n@endguest\n\n@can('edit-post', $post)\n    <button>Edit Post</button>\n@endcan\n\n// Loops\n@for($i = 0; $i < 10; $i++)\n    <p>Item {{ $i }}</p>\n@endfor\n\n@foreach($users as $user)\n    <p>{{ $user->name }}</p>\n    @break($user->id == 5)\n    @continue($user->status == 'inactive')\n@endforeach\n\n// Raw PHP\n@php\n    $count = 0;\n    $items = ['apple', 'banana', 'orange'];\n@endphp\n\n// Form components\n<form method=\"POST\" action=\"{{ route('users.store') }}\">\n    @csrf\n    \n    <div class=\"form-group\">\n        <label for=\"name\">Name</label>\n        <input type=\"text\" name=\"name\" id=\"name\" \n               value=\"{{ old('name') }}\"\n               class=\"form-control @error('name') is-invalid @enderror\">\n        @error('name')\n            <div class=\"invalid-feedback\">{{ $message }}</div>\n        @enderror\n    </div>\n    \n    <button type=\"submit\" class=\"btn btn-primary\">Submit</button>\n</form>\n?>",
+            "components": [
+              {
+                "name": "Template Inheritance",
+                "english": "Creating parent-child relationships between views",
+                "hinglish": "Views ke beech parent-child relationships banana",
+                "importance": "High",
+                "tip": "Create a master layout and extend it in all pages",
+                "pros": "DRY principle, consistent layout, easy maintenance",
+                "cons": "Initial setup required"
+              },
+              {
+                "name": "Blade Directives",
+                "english": "Special syntax for control structures and logic in views",
+                "hinglish": "Views mein control structures aur logic ke liye special syntax",
+                "importance": "High",
+                "tip": "Use Blade directives instead of raw PHP for cleaner templates",
+                "pros": "Clean syntax, readable, compiled for performance",
+                "cons": "Learning custom directives"
+              },
+              {
+                "name": "Components",
+                "english": "Reusable UI elements with their own logic and styling",
+                "hinglish": "Apne logic aur styling ke saath reusable UI elements",
+                "importance": "High",
+                "tip": "Create components for frequently used UI patterns",
+                "pros": "Reusability, consistency, separation of concerns",
+                "cons": "Over-engineering simple elements"
+              },
+              {
+                "name": "Escaping & Security",
+                "english": "Protecting against XSS attacks in template output",
+                "hinglish": "Template output mein XSS attacks se protection",
+                "importance": "High",
+                "tip": "Always use {{ }} for escaping, {!! !!} only for trusted HTML",
+                "pros": "Security, automatic protection, clean output",
+                "cons": "Need to remember when to escape"
+              }
+            ]
+          }
+        },
+        {
+          "id": 4,
+          "title": "Database & Eloquent",
+          "english": "Working with databases using Laravel's Eloquent ORM and query builder",
+          "hinglish": "Laravel ke Eloquent ORM aur query builder ka use karke databases ke saath kaam karna",
+          "examples": [
+            "Defining Eloquent models and relationships",
+            "Performing CRUD operations with Eloquent",
+            "Using query builder for complex queries",
+            "Implementing database migrations and seeders",
+            "Working with model factories for testing"
+          ],
+          "practice": [
+            {
+              "question": "Eloquent model aur migration mein kya relationship hai?",
+              "answer": "Migration database table structure define karti hai. Eloquent model table se data fetch/store karta hai. Model migration ke baad create karte hain."
+            },
+            {
+              "question": "hasMany aur belongsTo mein kya difference hai?",
+              "answer": "hasMany: one-to-many relationship (User hasMany Posts). belongsTo: inverse relationship (Post belongsTo User). belongsTo foreign key rakhta hai."
+            },
+            {
+              "question": "Eager loading kya hai aur kyun important hai?",
+              "answer": "Eager loading related models ek saath load karta hai N+1 query problem solve karne ke liye. with() method se use karte hain."
+            },
+            {
+              "question": "Query builder aur Eloquent mein kya choose karein?",
+              "answer": "Eloquent object-oriented, relationships ke liye better. Query builder complex queries, raw expressions ke liye better. Performance ke liye query builder better hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// app/Models/User.php\nnamespace App\\Models;\n\nuse Illuminate\\Database\\Eloquent\\Model;\nuse Illuminate\\Database\\Eloquent\\Factories\\HasFactory;\nuse Illuminate\\Notifications\\Notifiable;\nuse Illuminate\\Foundation\\Auth\\User as Authenticatable;\n\nclass User extends Authenticatable\n{\n    use HasFactory, Notifiable;\n    \n    protected $fillable = [\n        'name', 'email', 'password'\n    ];\n    \n    protected $hidden = [\n        'password', 'remember_token'\n    ];\n    \n    protected $casts = [\n        'email_verified_at' => 'datetime',\n        'is_admin' => 'boolean'\n    ];\n    \n    // Relationships\n    public function posts()\n    {\n        return $this->hasMany(Post::class);\n    }\n    \n    public function profile()\n    {\n        return $this->hasOne(Profile::class);\n    }\n    \n    public function roles()\n    {\n        return $this->belongsToMany(Role::class);\n    }\n}\n\n// app/Models/Post.php\nclass Post extends Model\n{\n    use HasFactory;\n    \n    protected $fillable = ['title', 'content', 'user_id'];\n    \n    public function user()\n    {\n        return $this->belongsTo(User::class);\n    }\n    \n    public function tags()\n    {\n        return $this->belongsToMany(Tag::class);\n    }\n    \n    public function scopePublished($query)\n    {\n        return $query->where('published', true);\n    }\n    \n    public function scopeLatest($query)\n    {\n        return $query->orderBy('created_at', 'desc');\n    }\n}\n\n// Database operations\n// Creating records\n$user = User::create([\n    'name' => 'John Doe',\n    'email' => 'john@example.com',\n    'password' => bcrypt('password123')\n]);\n\n// Or\n$user = new User();\n$user->name = 'Jane Doe';\n$user->email = 'jane@example.com';\n$user->save();\n\n// Reading records\n$users = User::all(); // Get all users\n$user = User::find(1); // Find by primary key\n$user = User::where('email', 'john@example.com')->first();\n$admins = User::where('is_admin', true)->get();\n\n// Eager loading\n$posts = Post::with('user', 'tags')->get();\n\n// Updating records\n$user = User::find(1);\n$user->name = 'John Updated';\n$user->save();\n\n// Or\nUser::where('id', 1)->update(['name' => 'John Updated']);\n\n// Deleting records\n$user->delete();\nUser::destroy(1);\nUser::where('is_admin', false)->delete();\n\n// Query Builder examples\n$users = DB::table('users')\n            ->select('name', 'email')\n            ->where('status', 'active')\n            ->orderBy('name')\n            ->limit(10)\n            ->get();\n\n// Complex query\n$popularPosts = DB::table('posts')\n    ->join('users', 'posts.user_id', '=', 'users.id')\n    ->select('posts.*', 'users.name as author_name')\n    ->where('posts.published', true)\n    ->whereBetween('posts.created_at', [now()->subMonth(), now()])\n    ->orderBy('posts.view_count', 'desc')\n    ->paginate(15);\n\n// Raw expressions\n$users = DB::table('users')\n    ->select(DB::raw('count(*) as user_count, status'))\n    ->where('status', '<>', 1)\n    ->groupBy('status')\n    ->get();\n\n// Migration example\n// database/migrations/2024_01_01_000000_create_users_table.php\nuse Illuminate\\Database\\Migrations\\Migration;\nuse Illuminate\\Database\\Schema\\Blueprint;\nuse Illuminate\\Support\\Facades\\Schema;\n\nclass CreateUsersTable extends Migration\n{\n    public function up()\n    {\n        Schema::create('users', function (Blueprint $table) {\n            $table->id();\n            $table->string('name');\n            $table->string('email')->unique();\n            $table->timestamp('email_verified_at')->nullable();\n            $table->string('password');\n            $table->boolean('is_admin')->default(false);\n            $table->rememberToken();\n            $table->timestamps(); // created_at, updated_at\n            $table->softDeletes(); // deleted_at\n        });\n    }\n    \n    public function down()\n    {\n        Schema::dropIfExists('users');\n    }\n}\n\n// Seeder example\n// database/seeders/DatabaseSeeder.php\nclass DatabaseSeeder extends Seeder\n{\n    public function run()\n    {\n        // Create 10 users\n        User::factory(10)->create();\n        \n        // Create admin user\n        User::factory()->create([\n            'name' => 'Admin User',\n            'email' => 'admin@example.com',\n            'is_admin' => true\n        ]);\n        \n        // Create posts for each user\n        User::all()->each(function ($user) {\n            Post::factory(5)->create(['user_id' => $user->id]);\n        });\n    }\n}\n\n// Factory example\n// database/factories/UserFactory.php\nclass UserFactory extends Factory\n{\n    public function definition()\n    {\n        return [\n            'name' => fake()->name(),\n            'email' => fake()->unique()->safeEmail(),\n            'email_verified_at' => now(),\n            'password' => Hash::make('password'),\n            'remember_token' => Str::random(10),\n        ];\n    }\n    \n    public function unverified()\n    {\n        return $this->state(fn (array $attributes) => [\n            'email_verified_at' => null,\n        ]);\n    }\n}\n?>",
+            "components": [
+              {
+                "name": "Eloquent Models",
+                "english": "Active Record implementation for database operations",
+                "hinglish": "Database operations ke liye Active Record implementation",
+                "importance": "High",
+                "tip": "Use relationships instead of manual JOINs for cleaner code",
+                "pros": "Object-oriented, expressive, relationships support",
+                "cons": "Performance overhead for complex queries"
+              },
+              {
+                "name": "Migrations",
+                "english": "Version control for database schema changes",
+                "hinglish": "Database schema changes ke liye version control",
+                "importance": "High",
+                "tip": "Always create new migrations instead of modifying existing ones",
+                "pros": "Version control, team collaboration, rollback capability",
+                "cons": "Migration conflicts in teams"
+              },
+              {
+                "name": "Query Builder",
+                "english": "Fluent interface for building database queries",
+                "hinglish": "Database queries build karne ka fluent interface",
+                "importance": "High",
+                "tip": "Use query builder for complex queries and performance optimization",
+                "pros": "Performance, flexibility, raw query support",
+                "cons": "Less object-oriented than Eloquent"
+              },
+              {
+                "name": "Factories & Seeders",
+                "english": "Generating test data and populating databases",
+                "hinglish": "Test data generate karna aur databases populate karna",
+                "importance": "Medium",
+                "tip": "Use factories for testing and seeders for development data",
+                "pros": "Test data generation, consistent data, time-saving",
+                "cons": "Learning curve for complex relationships"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Intermediate",
+      "order": 2,
+      "description": "Advanced Laravel features, authentication, middleware, and API development",
+      "topics": [
+        {
+          "id": 5,
+          "title": "Authentication & Authorization",
+          "english": "Implementing user authentication, authorization, and security features",
+          "hinglish": "User authentication, authorization, aur security features implement karna",
+          "examples": [
+            "Setting up Laravel's built-in authentication",
+            "Implementing social authentication (OAuth)",
+            "Creating custom guards and providers",
+            "Defining authorization policies and gates",
+            "Implementing role-based access control (RBAC)"
+          ],
+          "practice": [
+            {
+              "question": "Laravel authentication kaise set up karte hain?",
+              "answer": "'php artisan make:auth' (older) ya 'laravel/ui' package. Laravel 8+ mein 'php artisan ui bootstrap --auth' ya 'composer require laravel/breeze' ya 'composer require laravel/jetstream'"
+            },
+            {
+              "question": "Policies aur Gates mein kya difference hai?",
+              "answer": "Policies model-specific authorization ke liye hain (PostPolicy). Gates general abilities ke liye hain (edit-settings, visit-admin)."
+            },
+            {
+              "question": "Social authentication kaise implement karte hain?",
+              "answer": "Socialite package use karte hain. Providers (Google, Facebook, GitHub) configure karte hain. Callback handle karte hain aur user create/find karte hain."
+            },
+            {
+              "question": "Remember me functionality kaise implement karte hain?",
+              "answer": "Login form mein remember checkbox add karte hain. Auth::attempt() mein remember parameter true set karte hain. Laravel automatically remember token manage karta hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Laravel Breeze/Laravel UI setup\n// Install Breeze\ncomposer require laravel/breeze --dev\nphp artisan breeze:install\nnpm install && npm run dev\n\n// Or Jetstream (more features)\ncomposer require laravel/jetstream\nphp artisan jetstream:install livewire\nnpm install && npm run dev\nphp artisan migrate\n\n// Authentication in controllers\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass LoginController extends Controller\n{\n    public function authenticate(Request $request)\n    {\n        $credentials = $request->validate([\n            'email' => ['required', 'email'],\n            'password' => ['required'],\n        ]);\n        \n        if (Auth::attempt($credentials, $request->remember)) {\n            $request->session()->regenerate();\n            return redirect()->intended('dashboard');\n        }\n        \n        return back()->withErrors([\n            'email' => 'The provided credentials do not match our records.',\n        ])->onlyInput('email');\n    }\n    \n    public function logout(Request $request)\n    {\n        Auth::logout();\n        $request->session()->invalidate();\n        $request->session()->regenerateToken();\n        return redirect('/');\n    }\n}\n\n// Authorization with Gates\n// App\\Providers\\AuthServiceProvider.php\npublic function boot()\n{\n    $this->registerPolicies();\n    \n    // Define gates\n    Gate::define('edit-settings', function (User $user) {\n        return $user->is_admin;\n    });\n    \n    Gate::define('update-post', function (User $user, Post $post) {\n        return $user->id === $post->user_id;\n    });\n}\n\n// Using gates in controllers\nif (Gate::allows('update-post', $post)) {\n    // Update post\n}\n\n// Or with can() helper\nif ($request->user()->can('update-post', $post)) {\n    // Update post\n}\n\n// Blade directives\n@can('update-post', $post)\n    <a href=\"{{ route('posts.edit', $post) }}\">Edit</a>\n@endcan\n\n// Policies\n// Create policy: php artisan make:policy PostPolicy --model=Post\n\n// app/Policies/PostPolicy.php\nclass PostPolicy\n{\n    public function view(User $user, Post $post)\n    {\n        return $post->published || $user->id === $post->user_id;\n    }\n    \n    public function update(User $user, Post $post)\n    {\n        return $user->id === $post->user_id;\n    }\n    \n    public function delete(User $user, Post $post)\n    {\n        return $user->id === $post->user_id || $user->is_admin;\n    }\n}\n\n// Using policies in controllers\npublic function update(Request $request, Post $post)\n{\n    $this->authorize('update', $post);\n    // Update the post\n}\n\n// Middleware in routes\nRoute::middleware(['auth'])->group(function () {\n    Route::get('/dashboard', [DashboardController::class, 'index']);\n    \n    Route::middleware(['can:edit-settings'])->group(function () {\n        Route::get('/settings', [SettingsController::class, 'index']);\n    });\n});\n\n// Socialite authentication\n// Install: composer require laravel/socialite\n\n// config/services.php\n'github' => [\n    'client_id' => env('GITHUB_CLIENT_ID'),\n    'client_secret' => env('GITHUB_CLIENT_SECRET'),\n    'redirect' => env('GITHUB_REDIRECT_URI'),\n],\n\n// Controller\npublic function redirectToGithub()\n{\n    return Socialite::driver('github')->redirect();\n}\n\npublic function handleGithubCallback()\n{\n    $githubUser = Socialite::driver('github')->user();\n    \n    $user = User::updateOrCreate([\n        'github_id' => $githubUser->id,\n    ], [\n        'name' => $githubUser->name,\n        'email' => $githubUser->email,\n        'github_token' => $githubUser->token,\n        'github_refresh_token' => $githubUser->refreshToken,\n    ]);\n    \n    Auth::login($user);\n    \n    return redirect('/dashboard');\n}\n\n// Role-based permissions (using packages like spatie/laravel-permission)\n// Install: composer require spatie/laravel-permission\n\n// Assign role\n$user->assignRole('writer');\n\n// Check role\nif ($user->hasRole('admin')) {\n    // Admin actions\n}\n\n// Permission check\nif ($user->can('edit articles')) {\n    // Edit article\n}\n\n// Sanctum API authentication\n// Install: composer require laravel/sanctum\n// app/Models/User.php\nuse Laravel\\Sanctum\\HasApiTokens;\n\nclass User extends Authenticatable\n{\n    use HasApiTokens, HasFactory, Notifiable;\n}\n\n// Create token\n$token = $user->createToken('api-token');\n$plainTextToken = $token->plainTextToken; // Store this\n\n// Authenticate with token\n// Header: Authorization: Bearer {token}\n?>",
+            "components": [
+              {
+                "name": "Authentication",
+                "english": "Verifying user identity and managing login sessions",
+                "hinglish": "User identity verify karna aur login sessions manage karna",
+                "importance": "High",
+                "tip": "Use Laravel's built-in authentication scaffolding for security",
+                "pros": "Security, time-saving, best practices included",
+                "cons": "Customization needed for complex requirements"
+              },
+              {
+                "name": "Authorization",
+                "english": "Controlling access to resources based on user permissions",
+                "hinglish": "User permissions ke basis par resources tak access control karna",
+                "importance": "High",
+                "tip": "Use policies for model authorization and gates for general abilities",
+                "pros": "Fine-grained control, security, clean code",
+                "cons": "Complexity for large applications"
+              },
+              {
+                "name": "Social Authentication",
+                "english": "Allowing users to login with social media accounts",
+                "hinglish": "Users ko social media accounts se login karne dena",
+                "importance": "Medium",
+                "tip": "Use Socialite package for easy OAuth integration",
+                "pros": "User convenience, faster registration, trust",
+                "cons": "Dependency on third-party services"
+              },
+              {
+                "name": "API Authentication",
+                "english": "Securing API endpoints with token-based authentication",
+                "hinglish": "Token-based authentication se API endpoints secure karna",
+                "importance": "High",
+                "tip": "Use Sanctum for SPA/mobile apps, Passport for OAuth",
+                "pros": "Stateless, scalable, mobile-friendly",
+                "cons": "Token management, security considerations"
+              }
+            ]
+          }
+        },
+        {
+          "id": 6,
+          "title": "Middleware & Requests",
+          "english": "Working with HTTP middleware, request handling, and validation",
+          "hinglish": "HTTP middleware, request handling, aur validation ke saath kaam karna",
+          "examples": [
+            "Creating custom middleware for various purposes",
+            "Handling form requests and validation",
+            "Working with file uploads and storage",
+            "Implementing rate limiting and CORS",
+            "Creating custom validation rules"
+          ],
+          "practice": [
+            {
+              "question": "Middleware kya hota hai?",
+              "answer": "Middleware HTTP request aur response ke beech filter ka kaam karta hai. Request process hone se pehle ya response bhejne se pehle execution hota hai."
+            },
+            {
+              "question": "Form Request kya hai?",
+              "answer": "Form Request special class hai jo validation logic aur authorization contain karta hai. Controller se validation logic separate karta hai."
+            },
+            {
+              "question": "Rate limiting kaise implement karte hain?",
+              "answer": "Throttle middleware use karte hain. Route ya global middleware ke through. API calls limit kar sakte hain user/IP basis par."
+            },
+            {
+              "question": "Custom validation rule kaise banate hain?",
+              "answer": "'php artisan make:rule RuleName' se rule class create karte hain. Passes() method mein validation logic define karte hain."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Creating middleware\n// php artisan make:middleware CheckAge\n\nnamespace App\\Http\\Middleware;\n\nuse Closure;\nuse Illuminate\\Http\\Request;\n\nclass CheckAge\n{\n    public function handle(Request $request, Closure $next)\n    {\n        if ($request->age <= 18) {\n            return redirect('home');\n        }\n        \n        return $next($request);\n    }\n}\n\n// Register middleware in kernel\n// app/Http/Kernel.php\nprotected $routeMiddleware = [\n    'age' => \\App\\Http\\Middleware\\CheckAge::class,\n    // ...\n];\n\n// Using middleware\nRoute::get('/adults-only', function () {\n    // Adults only content\n})->middleware('age');\n\n// Group middleware\nRoute::middleware(['auth', 'verified'])->group(function () {\n    Route::get('/dashboard', [DashboardController::class, 'index']);\n});\n\n// Global middleware\n// app/Http/Kernel.php\nprotected $middleware = [\n    \\App\\Http\\Middleware\\TrustProxies::class,\n    \\App\\Http\\Middleware\\CheckForMaintenanceMode::class,\n    // ...\n];\n\n// Form Request\n// php artisan make:request StorePostRequest\n\nnamespace App\\Http\\Requests;\n\nuse Illuminate\\Foundation\\Http\\FormRequest;\n\nclass StorePostRequest extends FormRequest\n{\n    public function authorize()\n    {\n        return $this->user()->can('create', Post::class);\n    }\n    \n    public function rules()\n    {\n        return [\n            'title' => 'required|string|max:255',\n            'content' => 'required|string|min:100',\n            'category_id' => 'required|exists:categories,id',\n            'tags' => 'array',\n            'tags.*' => 'exists:tags,id',\n            'published_at' => 'nullable|date',\n            'image' => 'nullable|image|max:2048',\n        ];\n    }\n    \n    public function messages()\n    {\n        return [\n            'title.required' => 'A title is required',\n            'content.min' => 'Content must be at least 100 characters',\n        ];\n    }\n    \n    public function attributes()\n    {\n        return [\n            'category_id' => 'category',\n        ];\n    }\n}\n\n// Using form request in controller\npublic function store(StorePostRequest $request)\n{\n    // Request is already validated and authorized\n    $post = Post::create($request->validated());\n    \n    if ($request->hasFile('image')) {\n        $path = $request->file('image')->store('posts', 'public');\n        $post->update(['image_path' => $path]);\n    }\n    \n    if ($request->has('tags')) {\n        $post->tags()->attach($request->tags);\n    }\n    \n    return redirect()->route('posts.show', $post);\n}\n\n// File uploads\npublic function upload(Request $request)\n{\n    $request->validate([\n        'file' => 'required|file|mimes:pdf,doc,docx|max:5120', // 5MB\n    ]);\n    \n    // Store in storage/app/uploads\n    $path = $request->file('file')->store('uploads');\n    \n    // Store with custom name\n    $path = $request->file('file')->storeAs(\n        'uploads',\n        $request->user()->id . '_' . time() . '.pdf'\n    );\n    \n    // Public disk (storage/app/public)\n    $path = $request->file('avatar')->store('avatars', 'public');\n    \n    // URL: asset('storage/avatars/filename.jpg')\n    \n    return $path;\n}\n\n// Custom validation rule\n// php artisan make:rule Uppercase\n\nnamespace App\\Rules;\n\nuse Illuminate\\Contracts\\Validation\\Rule;\n\nclass Uppercase implements Rule\n{\n    public function passes($attribute, $value)\n    {\n        return strtoupper($value) === $value;\n    }\n    \n    public function message()\n    {\n        return 'The :attribute must be uppercase.';\n    }\n}\n\n// Using custom rule\n$request->validate([\n    'code' => ['required', new Uppercase],\n]);\n\n// Rate limiting\nRoute::middleware('throttle:10,1')->group(function () {\n    // 10 requests per minute\n    Route::post('/api/data', [ApiController::class, 'store']);\n});\n\n// Custom rate limiting\n// app/Providers/RouteServiceProvider.php\nRateLimiter::for('api', function (Request $request) {\n    return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());\n});\n\n// CORS configuration\n// config/cors.php\nreturn [\n    'paths' => ['api/*', 'sanctum/csrf-cookie'],\n    'allowed_methods' => ['*'],\n    'allowed_origins' => ['http://localhost:3000'],\n    'allowed_origins_patterns' => [],\n    'allowed_headers' => ['*'],\n    'exposed_headers' => [],\n    'max_age' => 0,\n    'supports_credentials' => false,\n];\n\n// Request data handling\npublic function process(Request $request)\n{\n    // Get input\n    $name = $request->input('name');\n    $name = $request->name; // Same as above\n    \n    // With default\n    $name = $request->input('name', 'Guest');\n    \n    // Check if input exists\n    if ($request->has('name')) {\n        // Name exists\n    }\n    \n    // Get all input\n    $input = $request->all();\n    \n    // Get only specific fields\n    $data = $request->only(['name', 'email']);\n    \n    // Get except specific fields\n    $data = $request->except(['password', 'token']);\n    \n    // Old input (for form repopulation)\n    $oldName = $request->old('name');\n    \n    // Flash input to session\n    $request->flash();\n    \n    // Flash only specific fields\n    $request->flashOnly(['name', 'email']);\n    \n    // Check request type\n    if ($request->is('admin/*')) {\n        // Admin routes\n    }\n    \n    if ($request->routeIs('posts.*')) {\n        // Posts routes\n    }\n    \n    // AJAX request check\n    if ($request->ajax()) {\n        return response()->json($data);\n    }\n}\n?>",
+            "components": [
+              {
+                "name": "Middleware",
+                "english": "HTTP request/response pipeline components",
+                "hinglish": "HTTP request/response pipeline components",
+                "importance": "High",
+                "tip": "Create middleware for cross-cutting concerns like logging, CORS, auth",
+                "pros": "Code reuse, separation of concerns, request pipeline",
+                "cons": "Performance overhead if overused"
+              },
+              {
+                "name": "Form Requests",
+                "english": "Custom request classes for validation and authorization",
+                "hinglish": "Validation aur authorization ke liye custom request classes",
+                "importance": "High",
+                "tip": "Use form requests to keep controllers clean and validation logic separate",
+                "pros": "Clean controllers, reusable validation, authorization",
+                "cons": "More files, learning curve"
+              },
+              {
+                "name": "Validation",
+                "english": "Ensuring data integrity and correctness",
+                "hinglish": "Data integrity aur correctness ensure karna",
+                "importance": "High",
+                "tip": "Always validate on server side, client-side validation is complementary",
+                "pros": "Data quality, security, user experience",
+                "cons": "Validation logic maintenance"
+              },
+              {
+                "name": "File Handling",
+                "english": "Managing file uploads, storage, and retrieval",
+                "hinglish": "File uploads, storage, aur retrieval manage karna",
+                "importance": "Medium",
+                "tip": "Use Laravel's filesystem abstraction for cloud storage support",
+                "pros": "Consistent API, multiple drivers, security",
+                "cons": "Storage configuration, file validation"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Advanced",
+      "order": 3,
+      "description": "Advanced Laravel concepts, performance optimization, testing, and deployment",
+      "topics": [
+        {
+          "id": 7,
+          "title": "API Development",
+          "english": "Building RESTful and GraphQL APIs with Laravel",
+          "hinglish": "Laravel ke saath RESTful aur GraphQL APIs banana",
+          "examples": [
+            "Creating RESTful API resources and controllers",
+            "Implementing API authentication with Sanctum/Passport",
+            "Building GraphQL APIs with Lighthouse",
+            "API versioning and documentation",
+            "Rate limiting and API caching"
+          ],
+          "practice": [
+            {
+              "question": "API resource kya hai?",
+              "answer": "API resource data transformation layer hai jo Eloquent models ko JSON mein convert karta hai. Format control, relationships include, aur meta data add kar sakte hain."
+            },
+            {
+              "question": "Sanctum aur Passport mein kya choose karein?",
+              "answer": "Sanctum simple token-based authentication ke liye (SPA, mobile apps). Passport full OAuth2 server ke liye (third-party apps ko access dena)."
+            },
+            {
+              "question": "API versioning kaise implement karte hain?",
+              "answer": "URL versioning (/api/v1/users), header versioning, ya route prefixing. Laravel mein route groups aur middleware se implement karte hain."
+            },
+            {
+              "question": "GraphQL ke advantages kya hain REST ke comparison mein?",
+              "answer": "Single endpoint, client specifies needed data (no over-fetching), strong typing, introspection. REST simpler hai, caching better hai, tooling mature hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// API routes\n// routes/api.php\n\nRoute::middleware('auth:sanctum')->group(function () {\n    Route::apiResource('users', UserController::class);\n    Route::apiResource('posts', PostController::class);\n});\n\n// API Controller\n// php artisan make:controller Api/UserController --api\n\nnamespace App\\Http\\Controllers\\Api;\n\nuse App\\Http\\Controllers\\Controller;\nuse App\\Http\\Resources\\UserResource;\nuse App\\Models\\User;\nuse Illuminate\\Http\\Request;\n\nclass UserController extends Controller\n{\n    public function index()\n    {\n        $users = User::with('posts')->paginate(20);\n        return UserResource::collection($users);\n    }\n    \n    public function show(User $user)\n    {\n        return new UserResource($user->load('posts'));\n    }\n    \n    public function store(Request $request)\n    {\n        $validated = $request->validate([\n            'name' => 'required|string|max:255',\n            'email' => 'required|email|unique:users',\n            'password' => 'required|min:8',\n        ]);\n        \n        $user = User::create($validated);\n        \n        return new UserResource($user);\n    }\n    \n    public function update(Request $request, User $user)\n    {\n        $validated = $request->validate([\n            'name' => 'sometimes|string|max:255',\n            'email' => 'sometimes|email|unique:users,email,' . $user->id,\n        ]);\n        \n        $user->update($validated);\n        \n        return new UserResource($user);\n    }\n    \n    public function destroy(User $user)\n    {\n        $user->delete();\n        \n        return response()->json([\n            'message' => 'User deleted successfully'\n        ]);\n    }\n}\n\n// API Resource\n// php artisan make:resource UserResource\n\nnamespace App\\Http\\Resources;\n\nuse Illuminate\\Http\\Resources\\Json\\JsonResource;\n\nclass UserResource extends JsonResource\n{\n    public function toArray($request)\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->name,\n            'email' => $this->email,\n            'created_at' => $this->created_at->toISOString(),\n            'updated_at' => $this->updated_at->toISOString(),\n            'posts' => PostResource::collection($this->whenLoaded('posts')),\n            'links' => [\n                'self' => route('api.users.show', $this->id),\n                'posts' => route('api.users.posts.index', $this->id),\n            ],\n        ];\n    }\n    \n    public function with($request)\n    {\n        return [\n            'meta' => [\n                'version' => '1.0.0',\n                'author' => 'Your Name',\n            ],\n        ];\n    }\n}\n\n// Sanctum API Authentication\n// Install: composer require laravel/sanctum\n// php artisan vendor:publish --provider=\"Laravel\\Sanctum\\SanctumServiceProvider\"\n// php artisan migrate\n\n// Create token\nRoute::post('/api/login', function (Request $request) {\n    $request->validate([\n        'email' => 'required|email',\n        'password' => 'required',\n        'device_name' => 'required',\n    ]);\n    \n    $user = User::where('email', $request->email)->first();\n    \n    if (!$user || !Hash::check($request->password, $user->password)) {\n        throw ValidationException::withMessages([\n            'email' => ['The provided credentials are incorrect.'],\n        ]);\n    }\n    \n    $token = $user->createToken($request->device_name)->plainTextToken;\n    \n    return response()->json([\n        'token' => $token,\n        'user' => new UserResource($user),\n    ]);\n});\n\n// Protected route\nRoute::middleware('auth:sanctum')->get('/api/user', function (Request $request) {\n    return $request->user();\n});\n\n// Revoke token\nRoute::post('/api/logout', function (Request $request) {\n    $request->user()->currentAccessToken()->delete();\n    \n    return response()->json(['message' => 'Logged out']);\n});\n\n// API versioning\nRoute::prefix('v1')->group(function () {\n    Route::apiResource('users', V1\\UserController::class);\n});\n\nRoute::prefix('v2')->group(function () {\n    Route::apiResource('users', V2\\UserController::class);\n});\n\n// Or with middleware\nRoute::prefix('api')->middleware('api.version:v1')->group(function () {\n    // V1 routes\n});\n\n// API documentation with Scribe/API Blueprint\n// Install: composer require --dev knuckleswtf/scribe\n// php artisan vendor:publish --provider=\"Knuckles\\Scribe\\ScribeServiceProvider\"\n// php artisan scribe:generate\n\n// GraphQL with Lighthouse\n// Install: composer require nuwave/lighthouse\n// php artisan vendor:publish --provider=\"Nuwave\\Lighthouse\\LighthouseServiceProvider\"\n\n// schema.graphql\ntype Query {\n    users: [User!]! @paginate\n    user(id: ID! @eq): User @find\n}\n\ntype Mutation {\n    createUser(name: String!, email: String!): User @create\n    updateUser(id: ID!, name: String): User @update\n    deleteUser(id: ID!): User @delete\n}\n\ntype User {\n    id: ID!\n    name: String!\n    email: String!\n    posts: [Post!]! @hasMany\n}\n\n// API caching\nRoute::middleware(['cache.headers:public;max_age=300;etag'])->group(function () {\n    Route::get('/api/posts', [PostController::class, 'index']);\n});\n\n// Or in controller\npublic function index()\n{\n    $posts = Cache::remember('posts.index', 300, function () {\n        return Post::with('user')->latest()->paginate(20);\n    });\n    \n    return PostResource::collection($posts);\n}\n\n// API rate limiting\nRoute::middleware(['throttle:api'])->group(function () {\n    // API routes\n});\n\n// Custom API responses\npublic function respond($data, $status = 200, $message = null)\n{\n    return response()->json([\n        'success' => $status >= 200 && $status < 300,\n        'message' => $message,\n        'data' => $data,\n    ], $status);\n}\n\npublic function respondError($message, $status = 400)\n{\n    return $this->respond(null, $status, $message);\n}\n\n// Using response macros\n// AppServiceProvider.php\nResponse::macro('api', function ($data, $status = 200, $message = null) {\n    return Response::json([\n        'success' => $status >= 200 && $status < 300,\n        'message' => $message,\n        'data' => $data,\n    ], $status);\n});\n\n// In controller\nreturn response()->api($users, 200, 'Users retrieved successfully');\n?>",
+            "components": [
+              {
+                "name": "API Resources",
+                "english": "Transformers for converting models to JSON API responses",
+                "hinglish": "Models ko JSON API responses mein convert karne ke liye transformers",
+                "importance": "High",
+                "tip": "Use API resources for consistent response formatting",
+                "pros": "Consistent format, data transformation, relationships",
+                "cons": "Additional layer, learning curve"
+              },
+              {
+                "name": "API Authentication",
+                "english": "Securing API endpoints with token-based authentication",
+                "hinglish": "Token-based authentication se API endpoints secure karna",
+                "importance": "High",
+                "tip": "Use Sanctum for simple token auth, Passport for OAuth2",
+                "pros": "Security, stateless, mobile-friendly",
+                "cons": "Token management, security considerations"
+              },
+              {
+                "name": "API Versioning",
+                "english": "Managing multiple versions of APIs concurrently",
+                "hinglish": "Multiple API versions ko concurrently manage karna",
+                "importance": "Medium",
+                "tip": "Plan versioning strategy early and document breaking changes",
+                "pros": "Backward compatibility, gradual migration",
+                "cons": "Maintenance overhead, complexity"
+              },
+              {
+                "name": "GraphQL",
+                "english": "Query language for APIs with flexible data fetching",
+                "hinglish": "Flexible data fetching ke saath APIs ke liye query language",
+                "importance": "Medium",
+                "tip": "Use Lighthouse package for GraphQL in Laravel",
+                "pros": "Flexible queries, single endpoint, strong typing",
+                "cons": "Complexity, caching challenges, N+1 queries"
+              }
+            ]
+          }
+        },
+        {
+          "id": 8,
+          "title": "Queues & Background Jobs",
+          "english": "Implementing asynchronous processing with queues and jobs",
+          "hinglish": "Queues aur jobs ke saath asynchronous processing implement karna",
+          "examples": [
+            "Creating and dispatching jobs",
+            "Setting up queue drivers (Redis, database, SQS)",
+            "Implementing job batching and chaining",
+            "Handling failed jobs and retries",
+            "Real-time broadcasting with WebSockets"
+          ],
+          "practice": [
+            {
+              "question": "Queue kya hoti hai aur kyun use karte hain?",
+              "answer": "Queue background mein tasks process karti hai. Time-consuming tasks (emails, image processing) ke liye use karte hain taki user response fast mile."
+            },
+            {
+              "question": "Different queue drivers ke options kya hain?",
+              "answer": "Sync (for testing), Database, Redis, Beanstalkd, Amazon SQS, RabbitMQ. Redis recommended hai performance ke liye."
+            },
+            {
+              "question": "Job batching kya hoti hai?",
+              "answer": "Multiple jobs ko ek group mein run karna, progress track karna, aur batch complete hone par callback run karna."
+            },
+            {
+              "question": "Failed jobs kaise handle karte hain?",
+              "answer": "php artisan queue:failed-table se failed jobs table create karte hain. Failed jobs retry, flush, ya forget kar sakte hain."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Creating a job\n// php artisan make:job ProcessPodcast\n\nnamespace App\\Jobs;\n\nuse Illuminate\\Bus\\Queueable;\nuse Illuminate\\Contracts\\Queue\\ShouldQueue;\nuse Illuminate\\Foundation\\Bus\\Dispatchable;\nuse Illuminate\\Queue\\InteractsWithQueue;\nuse Illuminate\\Queue\\SerializesModels;\nuse App\\Models\\Podcast;\n\nclass ProcessPodcast implements ShouldQueue\n{\n    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;\n    \n    public $tries = 3; // Number of retry attempts\n    public $maxExceptions = 3; // Max exceptions before failing\n    public $timeout = 120; // Job timeout in seconds\n    public $backoff = [60, 120, 300]; // Retry delay in seconds\n    \n    protected $podcast;\n    \n    public function __construct(Podcast $podcast)\n    {\n        $this->podcast = $podcast;\n    }\n    \n    public function handle()\n    {\n        // Process the podcast...\n        // This could be: converting audio, generating thumbnails, etc.\n        \n        // Update podcast status\n        $this->podcast->update(['status' => 'processed']);\n        \n        // Send notification\n        $this->podcast->user->notify(new PodcastProcessed($this->podcast));\n    }\n    \n    public function failed(Throwable $exception)\n    {\n        // Handle job failure\n        $this->podcast->update(['status' => 'failed']);\n        \n        // Notify admin about failure\n        // Mail::to('admin@example.com')->send(new JobFailedMail($this->podcast, $exception));\n    }\n}\n\n// Dispatching jobs\n// From controller\npublic function store(Request $request)\n{\n    $podcast = Podcast::create($request->validated());\n    \n    // Dispatch immediately\n    ProcessPodcast::dispatch($podcast);\n    \n    // Or with delay\n    ProcessPodcast::dispatch($podcast)\n        ->delay(now()->addMinutes(10));\n    \n    // Dispatch on specific queue\n    ProcessPodcast::dispatch($podcast)\n        ->onQueue('audio');\n    \n    return response()->json(['message' => 'Podcast processing started']);\n}\n\n// Queue configuration\n// config/queue.php\n'default' => env('QUEUE_CONNECTION', 'sync'),\n\n'connections' => [\n    'sync' => [\n        'driver' => 'sync',\n    ],\n    \n    'database' => [\n        'driver' => 'database',\n        'table' => 'jobs',\n        'queue' => 'default',\n        'retry_after' => 90,\n    ],\n    \n    'redis' => [\n        'driver' => 'redis',\n        'connection' => 'default',\n        'queue' => env('REDIS_QUEUE', 'default'),\n        'retry_after' => 90,\n        'block_for' => null,\n    ],\n],\n\n// Running queue workers\n// Start worker\nphp artisan queue:work\n\n// With specific connection\nphp artisan queue:work redis\n\n// Process specific queue\nphp artisan queue:work --queue=high,default\n\n// Job batching\n$batch = Bus::batch([\n    new ProcessPodcast($podcast1),\n    new ProcessPodcast($podcast2),\n    new ProcessPodcast($podcast3),\n])->then(function (Batch $batch) {\n    // All jobs completed successfully\n})->catch(function (Batch $batch, Throwable $e) {\n    // First batch job failure detected\n})->finally(function (Batch $batch) {\n    // The batch has finished executing\n})->dispatch();\n\n// Job chaining\nProcessPodcast::withChain([\n    new OptimizePodcast($podcast),\n    new ReleasePodcast($podcast),\n])->dispatch($podcast);\n\n// Event broadcasting (real-time)\n// php artisan make:event PodcastProcessed\n\nnamespace App\\Events;\n\nuse Illuminate\\Broadcasting\\Channel;\nuse Illuminate\\Broadcasting\\InteractsWithSockets;\nuse Illuminate\\Broadcasting\\PresenceChannel;\nuse Illuminate\\Broadcasting\\PrivateChannel;\nuse Illuminate\\Contracts\\Broadcasting\\ShouldBroadcast;\nuse Illuminate\\Foundation\\Events\\Dispatchable;\nuse Illuminate\\Queue\\SerializesModels;\n\nclass PodcastProcessed implements ShouldBroadcast\n{\n    use Dispatchable, InteractsWithSockets, SerializesModels;\n    \n    public $podcast;\n    \n    public function __construct(Podcast $podcast)\n    {\n        $this->podcast = $podcast;\n    }\n    \n    public function broadcastOn()\n    {\n        return new Channel('podcasts');\n        // Or private channel\n        // return new PrivateChannel('podcasts.' . $this->podcast->id);\n    }\n    \n    public function broadcastWith()\n    {\n        return [\n            'id' => $this->podcast->id,\n            'title' => $this->podcast->title,\n            'status' => 'processed',\n        ];\n    }\n}\n\n// Broadcasting from job\npublic function handle()\n{\n    // Process podcast\n    broadcast(new PodcastProcessed($this->podcast));\n}\n\n// Setting up broadcasting (Pusher/Redis)\n// Install: composer require pusher/pusher-php-server\n// Or for Redis: composer require predis/predis\n\n// config/broadcasting.php\n'connections' => [\n    'pusher' => [\n        'driver' => 'pusher',\n        'key' => env('PUSHER_APP_KEY'),\n        'secret' => env('PUSHER_APP_SECRET'),\n        'app_id' => env('PUSHER_APP_ID'),\n        'options' => [\n            'cluster' => env('PUSHER_APP_CLUSTER'),\n            'useTLS' => true,\n        ],\n    ],\n    \n    'redis' => [\n        'driver' => 'redis',\n        'connection' => 'default',\n    ],\n],\n\n// Frontend setup (Laravel Echo)\n// npm install --save laravel-echo pusher-js\n\n// resources/js/bootstrap.js\nimport Echo from 'laravel-echo';\nimport Pusher from 'pusher-js';\n\nwindow.Pusher = Pusher;\n\nwindow.Echo = new Echo({\n    broadcaster: 'pusher',\n    key: process.env.MIX_PUSHER_APP_KEY,\n    cluster: process.env.MIX_PUSHER_APP_CLUSTER,\n    forceTLS: true\n});\n\n// Listening to events\nwindow.Echo.channel('podcasts')\n    .listen('PodcastProcessed', (e) => {\n        console.log('Podcast processed:', e.podcast.title);\n    });\n\n// Schedule jobs (Task Scheduling)\n// app/Console/Kernel.php\nprotected function schedule(Schedule $schedule)\n{\n    // Run command daily\n    $schedule->command('inspire')->daily();\n    \n    // Run queue worker every minute\n    $schedule->command('queue:work --stop-when-empty')\n             ->everyMinute()\n             ->withoutOverlapping();\n    \n    // Run job daily at specific time\n    $schedule->job(new SendDailyReport)->dailyAt('23:55');\n    \n    // Run callback\n    $schedule->call(function () {\n        DB::table('recent_users')->delete();\n    })->weekly();\n}\n\n// On server: set up cron\n// * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1\n?>",
+            "components": [
+              {
+                "name": "Jobs",
+                "english": "Units of work that can be processed asynchronously",
+                "hinglish": "Work ke units jo asynchronously process kiye ja sakte hain",
+                "importance": "High",
+                "tip": "Use jobs for time-consuming tasks to improve response time",
+                "pros": "Improved performance, background processing, scalability",
+                "cons": "Complexity, debugging challenges"
+              },
+              {
+                "name": "Queue Drivers",
+                "english": "Backend systems for storing and processing queued jobs",
+                "hinglish": "Queued jobs store aur process karne ke liye backend systems",
+                "importance": "High",
+                "tip": "Use Redis for production for better performance",
+                "pros": "Reliability, persistence, different backends",
+                "cons": "Additional infrastructure, monitoring needed"
+              },
+              {
+                "name": "Job Batching",
+                "english": "Grouping multiple jobs together for coordinated processing",
+                "hinglish": "Coordinated processing ke liye multiple jobs ko group karna",
+                "importance": "Medium",
+                "tip": "Use batching for related jobs that should be tracked together",
+                "pros": "Progress tracking, coordinated completion, callbacks",
+                "cons": "Complexity, error handling"
+              },
+              {
+                "name": "Event Broadcasting",
+                "english": "Real-time communication between server and clients",
+                "hinglish": "Server aur clients ke beech real-time communication",
+                "importance": "Medium",
+                "tip": "Use Laravel Echo for easy frontend integration",
+                "pros": "Real-time updates, interactive applications",
+                "cons": "Complex setup, additional services (Pusher/Redis)"
+              }
+            ]
+          }
+        },
+        {
+          "id": 9,
+          "title": "Testing & Debugging",
+          "english": "Writing tests, debugging, and ensuring code quality in Laravel applications",
+          "hinglish": "Laravel applications mein tests likhna, debugging, aur code quality ensure karna",
+          "examples": [
+            "Writing unit and feature tests with PHPUnit",
+            "Testing APIs and database operations",
+            "Using Telescope for debugging",
+            "Implementing TDD (Test-Driven Development)",
+            "Performance testing and profiling"
+          ],
+          "practice": [
+            {
+              "question": "Unit test aur feature test mein kya difference hai?",
+              "answer": "Unit test small units (methods, classes) ko isolate test karta hai. Feature test complete features ko user perspective se test karta hai (multiple components)."
+            },
+            {
+              "question": "Database testing ke liye best practices kya hain?",
+              "answer": "RefreshDatabase trait use karo, factories se test data create karo, database assertions use karo (assertDatabaseHas), aur test database separate rakhho."
+            },
+            {
+              "question": "Laravel Telescope kya hai?",
+              "answer": "Telescope debugging aur monitoring tool hai jo requests, exceptions, database queries, jobs, etc. debug karne mein help karta hai."
+            },
+            {
+              "question": "Mocking kya hai aur kahan use karna chahiye?",
+              "answer": "Mocking fake objects create karta hai external dependencies simulate karne ke liye. APIs, services, aur complex dependencies ke liye use karna chahiye."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Unit test example\n// tests/Unit/CalculatorTest.php\n\nnamespace Tests\\Unit;\n\nuse Tests\\TestCase;\nuse App\\Services\\Calculator;\n\nclass CalculatorTest extends TestCase\n{\n    public function test_adds_two_numbers()\n    {\n        $calculator = new Calculator();\n        \n        $result = $calculator->add(2, 3);\n        \n        $this->assertEquals(5, $result);\n    }\n    \n    public function test_throws_exception_when_dividing_by_zero()\n    {\n        $this->expectException(\\InvalidArgumentException::class);\n        \n        $calculator = new Calculator();\n        $calculator->divide(10, 0);\n    }\n}\n\n// Feature test example\n// tests/Feature/UserRegistrationTest.php\n\nnamespace Tests\\Feature;\n\nuse Tests\\TestCase;\nuse App\\Models\\User;\nuse Illuminate\\Foundation\\Testing\\RefreshDatabase;\n\nclass UserRegistrationTest extends TestCase\n{\n    use RefreshDatabase;\n    \n    public function test_user_can_register()\n    {\n        $response = $this->post('/register', [\n            'name' => 'Test User',\n            'email' => 'test@example.com',\n            'password' => 'password123',\n            'password_confirmation' => 'password123',\n        ]);\n        \n        $response->assertRedirect('/dashboard');\n        $this->assertAuthenticated();\n        $this->assertDatabaseHas('users', [\n            'email' => 'test@example.com'\n        ]);\n    }\n    \n    public function test_user_cannot_register_with_invalid_email()\n    {\n        $response = $this->post('/register', [\n            'name' => 'Test User',\n            'email' => 'invalid-email',\n            'password' => 'password123',\n            'password_confirmation' => 'password123',\n        ]);\n        \n        $response->assertSessionHasErrors('email');\n        $this->assertGuest();\n    }\n}\n\n// API testing\n// tests/Feature/Api/UserApiTest.php\n\nclass UserApiTest extends TestCase\n{\n    use RefreshDatabase;\n    \n    public function test_can_get_all_users()\n    {\n        User::factory()->count(3)->create();\n        \n        $response = $this->getJson('/api/users');\n        \n        $response->assertStatus(200)\n                 ->assertJsonStructure([\n                     'data' => [\n                         '*' => ['id', 'name', 'email']\n                     ]\n                 ]);\n    }\n    \n    public function test_can_create_user()\n    {\n        $userData = [\n            'name' => 'John Doe',\n            'email' => 'john@example.com',\n            'password' => 'password123',\n        ];\n        \n        $response = $this->postJson('/api/users', $userData);\n        \n        $response->assertStatus(201)\n                 ->assertJsonPath('data.email', 'john@example.com');\n        \n        $this->assertDatabaseHas('users', ['email' => 'john@example.com']);\n    }\n}\n\n// Testing with authentication\npublic function test_authenticated_user_can_view_dashboard()\n{\n    $user = User::factory()->create();\n    \n    $response = $this->actingAs($user)\n                     ->get('/dashboard');\n    \n    $response->assertStatus(200);\n}\n\n// Mocking examples\npublic function test_sends_email_when_user_registers()\n{\n    // Mock the Mail facade\n    Mail::fake();\n    \n    // Assert no mail was sent...\n    Mail::assertNothingSent();\n    \n    // Perform registration\n    $response = $this->post('/register', [\n        'name' => 'Test User',\n        'email' => 'test@example.com',\n        'password' => 'password123',\n        'password_confirmation' => 'password123',\n    ]);\n    \n    // Assert a specific type of mailable was sent...\n    Mail::assertSent(WelcomeEmail::class, function ($mail) {\n        return $mail->hasTo('test@example.com');\n    });\n    \n    // Assert a mailable was sent 2 times...\n    Mail::assertSent(WelcomeEmail::class, 2);\n}\n\n// Mocking external APIs\npublic function test_fetches_weather_data()\n{\n    // Mock HTTP client\n    Http::fake([\n        'api.weather.com/*' => Http::response([\n            'temperature' => 25,\n            'condition' => 'Sunny'\n        ], 200),\n    ]);\n    \n    $weatherService = new WeatherService();\n    $weather = $weatherService->getWeather('London');\n    \n    $this->assertEquals(25, $weather['temperature']);\n    \n    // Assert request was made\n    Http::assertSent(function ($request) {\n        return $request->url() === 'https://api.weather.com/london' &&\n               $request->method() === 'GET';\n    });\n}\n\n// Database testing\npublic function test_deletes_user()\n{\n    $user = User::factory()->create();\n    \n    $response = $this->delete(\"/users/{$user->id}\");\n    \n    $response->assertRedirect('/users');\n    \n    // Assert record was deleted\n    $this->assertDatabaseMissing('users', [\n        'id' => $user->id\n    ]);\n    \n    // Or using model\n    $this->assertNull(User::find($user->id));\n}\n\n// Laravel Telescope\n// Install: composer require laravel/telescope\n// php artisan telescope:install\n// php artisan migrate\n\n// Access at /telescope (in local environment)\n\n// Telescope provides:\n// - Requests monitoring\n// - Database queries\n// - Mail previews\n// - Notifications\n// - Jobs\n// - Exceptions\n// - Logs\n// - Cache\n// - Scheduled tasks\n\n// Performance testing\npublic function test_homepage_loads_quickly()\n{\n    $start = microtime(true);\n    \n    $response = $this->get('/');\n    \n    $end = microtime(true);\n    $loadTime = ($end - $start) * 1000; // Convert to milliseconds\n    \n    $response->assertStatus(200);\n    \n    // Assert page loads in less than 500ms\n    $this->assertLessThan(500, $loadTime);\n}\n\n// Debugging with dd() and dump()\npublic function debug_method()\n{\n    $users = User::with('posts')->get();\n    \n    // Dump and die\n    dd($users);\n    \n    // Dump and continue\n    dump($users);\n    \n    // Logging\n    \\Log::info('Users fetched', ['count' => $users->count()]);\n    \\Log::error('Something went wrong!');\n    \n    // Throw exception for debugging\n    throw new \\Exception('Debugging exception');\n}\n\n// Running tests\n// Run all tests\nphp artisan test\n\n// Run specific test file\nphp artisan test tests/Feature/UserTest.php\n\n// Run specific test method\nphp artisan test --filter test_user_can_register\n\n// Run tests with coverage\nphp artisan test --coverage\n\n// Run tests in parallel\nphp artisan test --parallel\n\n// Continuous Integration\n// .github/workflows/tests.yml\nname: Laravel Tests\n\non: [push, pull_request]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    \n    steps:\n    - uses: actions/checkout@v2\n    \n    - name: Setup PHP\n      uses: shivammathur/setup-php@v2\n      with:\n        php-version: '8.3'\n        extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql\n        coverage: xdebug\n    \n    - name: Install dependencies\n      run: composer install --prefer-dist --no-progress\n    \n    - name: Copy environment file\n      run: cp .env.example .env\n    \n    - name: Generate key\n      run: php artisan key:generate\n    \n    - name: Run migrations\n      run: php artisan migrate --force\n    \n    - name: Execute tests\n      run: vendor/bin/phpunit --coverage-text\n?>",
+            "components": [
+              {
+                "name": "PHPUnit Testing",
+                "english": "Testing framework for writing and running tests",
+                "hinglish": "Tests likhne aur run karne ka testing framework",
+                "importance": "High",
+                "tip": "Follow Arrange-Act-Assert pattern in tests",
+                "pros": "Automated testing, bug prevention, documentation",
+                "cons": "Time investment, maintenance overhead"
+              },
+              {
+                "name": "Database Testing",
+                "english": "Testing database operations and data persistence",
+                "hinglish": "Database operations aur data persistence testing",
+                "importance": "High",
+                "tip": "Use RefreshDatabase trait to reset database between tests",
+                "pros": "Data integrity, integration testing, real scenarios",
+                "cons": "Slower tests, database setup"
+              },
+              {
+                "name": "Mocking & Faking",
+                "english": "Creating fake dependencies for isolated testing",
+                "hinglish": "Isolated testing ke liye fake dependencies create karna",
+                "importance": "High",
+                "tip": "Mock external services to make tests fast and reliable",
+                "pros": "Fast tests, isolated testing, controlled environment",
+                "cons": "Can mask integration issues"
+              },
+              {
+                "name": "Debugging Tools",
+                "english": "Tools and techniques for finding and fixing bugs",
+                "hinglish": "Bugs find aur fix karne ke tools aur techniques",
+                "importance": "High",
+                "tip": "Use Telescope for local debugging and monitoring",
+                "pros": "Faster debugging, insights, monitoring",
+                "cons": "Performance overhead, security considerations"
+              }
+            ]
+          }
+        },
+        {
+          "id": 10,
+          "title": "Deployment & DevOps",
+          "english": "Deploying Laravel applications, server management, and DevOps practices",
+          "hinglish": "Laravel applications deploy karna, server management, aur DevOps practices",
+          "examples": [
+            "Deploying to shared hosting and VPS",
+            "Using Laravel Forge for server management",
+            "Dockerizing Laravel applications",
+            "Setting up CI/CD pipelines",
+            "Performance optimization and caching strategies"
+          ],
+          "practice": [
+            {
+              "question": "Production deployment se pehle kya-kya steps follow karna chahiye?",
+              "answer": "Environment check, composer install --no-dev, npm run production, storage link, cache clear, config cache, route cache, view cache, migration run."
+            },
+            {
+              "question": ".env file production mein kaise manage karte hain?",
+              "answer": ".env file manually create karte hain production server par. Ya environment variables server level par set karte hain. Never commit .env to version control."
+            },
+            {
+              "question": "Laravel Forge kya hai?",
+              "answer": "Laravel Forge server provisioning aur deployment automation tool hai. DigitalOcean, AWS, etc. par servers provision aur deploy karne mein help karta hai."
+            },
+            {
+              "question": "Docker ke saath Laravel kaise deploy karte hain?",
+              "answer": "Dockerfile create karte hain, docker-compose.yml define karte hain, images build karte hain, aur containers run karte hain. Laravel Sail pre-configured Docker environment provide karta hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Deployment checklist\n\n// 1. Environment preparation\n// Update .env file with production values\nAPP_ENV=production\nAPP_DEBUG=false\nAPP_URL=https://yourdomain.com\n\n// Database configuration\nDB_CONNECTION=mysql\nDB_HOST=127.0.0.1\nDB_PORT=3306\nDB_DATABASE=production_db\nDB_USERNAME=production_user\nDB_PASSWORD=secure_password\n\n// Cache/Session driver (Redis recommended)\nCACHE_DRIVER=redis\nSESSION_DRIVER=redis\nQUEUE_CONNECTION=redis\n\n// 2. Deployment commands\n// Pull latest code\ngit pull origin main\n\n// Install dependencies\ncomposer install --optimize-autoloader --no-dev\n\n// NPM build\nnpm ci --only=production\nnpm run production\n\n// Environment\ncp .env.example .env  # Or create manually\nphp artisan key:generate\n\n// Database migrations\nphp artisan migrate --force\n\n// Link storage\nphp artisan storage:link\n\n// Cache optimization\nphp artisan config:cache\nphp artisan route:cache\nphp artisan view:cache\nphp artisan event:cache\n\n// Queue workers (supervisor setup)\n// See supervisor configuration below\n\n// 3. Nginx configuration\n// /etc/nginx/sites-available/yourdomain.com\nserver {\n    listen 80;\n    server_name yourdomain.com www.yourdomain.com;\n    root /var/www/yourproject/public;\n\n    add_header X-Frame-Options \"SAMEORIGIN\";\n    add_header X-Content-Type-Options \"nosniff\";\n\n    index index.php;\n\n    charset utf-8;\n\n    location / {\n        try_files $uri $uri/ /index.php?$query_string;\n    }\n\n    location = /favicon.ico { access_log off; log_not_found off; }\n    location = /robots.txt  { access_log off; log_not_found off; }\n\n    error_page 404 /index.php;\n\n    location ~ \\.php$ {\n        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;\n        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;\n        include fastcgi_params;\n    }\n\n    location ~ /\\.(?!well-known).* {\n        deny all;\n    }\n}\n\n// 4. Supervisor configuration for queue workers\n// /etc/supervisor/conf.d/laravel-worker.conf\n[program:laravel-worker]\nprocess_name=%(program_name)s_%(process_num)02d\ncommand=php /var/www/yourproject/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600\nautostart=true\nautorestart=true\nstopasgroup=true\nkillasgroup=true\nuser=www-data\nnumprocs=8\nredirect_stderr=true\nstdout_logfile=/var/www/yourproject/storage/logs/worker.log\nstopwaitsecs=3600\n\n// Start supervisor\nsudo supervisorctl reread\nsudo supervisorctl update\nsudo supervisorctl start laravel-worker:*\n\n// 5. Laravel Forge setup\n// Connect Forge to your server provider (DigitalOcean, AWS, etc.)\n// Forge automates:\n// - Server provisioning\n// - Nginx configuration\n// - SSL certificates (Let's Encrypt)\n// - Deployment scripts\n// - Queue management\n// - Database management\n\n// 6. Docker deployment\n// Dockerfile\nFROM php:8.3-fpm\n\n# Install dependencies\nRUN apt-get update && apt-get install -y \\\n    git \\\n    curl \\\n    libpng-dev \\\n    libonig-dev \\\n    libxml2-dev \\\n    zip \\\n    unzip \\\n    libpq-dev\n\n# Clear cache\nRUN apt-get clean && rm -rf /var/lib/apt/lists/*\n\n# Install PHP extensions\nRUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd\n\n# Get latest Composer\nCOPY --from=composer:latest /usr/bin/composer /usr/bin/composer\n\n# Set working directory\nWORKDIR /var/www\n\n# Copy existing application directory\nCOPY . /var/www\n\n# Install dependencies\nRUN composer install --optimize-autoloader --no-dev\n\n# Copy .env\nCOPY .env.production .env\n\n# Generate key\nRUN php artisan key:generate\n\n# Set permissions\nRUN chown -R www-data:www-data /var/www/storage\nRUN chmod -R 775 /var/www/storage\n\nEXPOSE 9000\nCMD [\"php-fpm\"]\n\n// docker-compose.yml\nversion: '3.8'\n\nservices:\n  app:\n    build:\n      context: .\n      dockerfile: Dockerfile\n    container_name: laravel_app\n    restart: unless-stopped\n    working_dir: /var/www\n    volumes:\n      - ./:/var/www\n      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini\n    networks:\n      - laravel\n\n  nginx:\n    image: nginx:alpine\n    container_name: laravel_nginx\n    restart: unless-stopped\n    ports:\n      - \"80:80\"\n      - \"443:443\"\n    volumes:\n      - ./:/var/www\n      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/\n    networks:\n      - laravel\n\n  mysql:\n    image: mysql:8.0\n    container_name: laravel_mysql\n    restart: unless-stopped\n    environment:\n      MYSQL_DATABASE: ${DB_DATABASE}\n      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}\n      MYSQL_PASSWORD: ${DB_PASSWORD}\n      MYSQL_USER: ${DB_USERNAME}\n    volumes:\n      - dbdata:/var/lib/mysql\n    networks:\n      - laravel\n\n  redis:\n    image: redis:alpine\n    container_name: laravel_redis\n    restart: unless-stopped\n    networks:\n      - laravel\n\nvolumes:\n  dbdata:\n\nnetworks:\n  laravel:\n    driver: bridge\n\n// 7. CI/CD with GitHub Actions\n// .github/workflows/deploy.yml\nname: Deploy Laravel\n\non:\n  push:\n    branches: [ main ]\n\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n    \n    steps:\n    - name: Checkout code\n      uses: actions/checkout@v2\n      \n    - name: Setup PHP\n      uses: shivammathur/setup-php@v2\n      with:\n        php-version: '8.3'\n    \n    - name: Install dependencies\n      run: composer install --no-dev --optimize-autoloader\n    \n    - name: Run tests\n      run: vendor/bin/phpunit\n      \n    - name: Deploy to production\n      uses: appleboy/ssh-action@master\n      with:\n        host: ${{ secrets.HOST }}\n        username: ${{ secrets.USERNAME }}\n        key: ${{ secrets.SSH_KEY }}\n        script: |\n          cd /var/www/yourproject\n          git pull origin main\n          composer install --no-dev --optimize-autoloader\n          php artisan migrate --force\n          php artisan config:cache\n          php artisan route:cache\n          php artisan view:cache\n          sudo supervisorctl restart laravel-worker:*\n\n// 8. Performance optimization\n\n// Database optimization\n// Use indexes\n// Optimize queries (avoid N+1)\n// Use caching\n\n// Cache configuration\n// config/cache.php\n'default' => env('CACHE_DRIVER', 'file'),\n\n'stores' => [\n    'file' => [\n        'driver' => 'file',\n        'path' => storage_path('framework/cache/data'),\n    ],\n    \n    'redis' => [\n        'driver' => 'redis',\n        'connection' => 'default',\n    ],\n],\n\n// Caching in code\n// Cache for 1 hour\n$users = Cache::remember('users', 3600, function () {\n    return User::with('posts')->get();\n});\n\n// Cache tags (Redis only)\nCache::tags(['users', 'posts'])->put('key', $value, 3600);\n\n// Clear cache\nexpiration artisan cache:clear\nphp artisan config:clear\nphp artisan route:clear\nphp artisan view:clear\n\n// 9. Monitoring and logging\n\n// Logging configuration\n// config/logging.php\n'channels' => [\n    'stack' => [\n        'driver' => 'stack',\n        'channels' => ['single', 'slack'],\n        'ignore_exceptions' => false,\n    ],\n    \n    'single' => [\n        'driver' => 'single',\n        'path' => storage_path('logs/laravel.log'),\n        'level' => 'debug',\n    ],\n    \n    'slack' => [\n        'driver' => 'slack',\n        'url' => env('LOG_SLACK_WEBHOOK_URL'),\n        'username' => 'Laravel Log',\n        'emoji' => ':boom:',\n        'level' => 'critical',\n    ],\n],\n\n// Error tracking with Sentry/Bugsnag\n// Install: composer require sentry/sentry-laravel\n\n// AppServiceProvider.php\n\\Sentry\\Laravel\\Integration::handlesExceptions();\n\n// 10. Security hardening\n\n// CSRF protection (enabled by default)\n// XSS protection\n// SQL injection prevention (Eloquent/Query Builder)\n// HTTPS enforcement\n// Secure headers\n// Rate limiting\n// Input validation\n// File upload validation\n// Password hashing\n\n// Force HTTPS in production\n// AppServiceProvider.php\nif (app()->environment('production')) {\n    \\URL::forceScheme('https');\n}\n\n// Or in .env\nAPP_URL=https://yourdomain.com\nFORCE_HTTPS=true\n\n// Secure headers middleware\n// Create middleware: php artisan make:middleware SecureHeaders\n\npublic function handle($request, Closure $next)\n{\n    $response = $next($request);\n    \n    $response->headers->set('X-Frame-Options', 'DENY');\n    $response->headers->set('X-Content-Type-Options', 'nosniff');\n    $response->headers->set('X-XSS-Protection', '1; mode=block');\n    $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');\n    \n    return $response;\n}\n?>",
+            "components": [
+              {
+                "name": "Server Deployment",
+                "english": "Deploying applications to production servers",
+                "hinglish": "Applications ko production servers par deploy karna",
+                "importance": "High",
+                "tip": "Use Laravel Forge or Envoyer for simplified deployment",
+                "pros": "Production readiness, automation, reliability",
+                "cons": "Server management complexity"
+              },
+              {
+                "name": "Docker Containers",
+                "english": "Containerizing applications for consistent deployment",
+                "hinglish": "Consistent deployment ke liye applications ko containerize karna",
+                "importance": "High",
+                "tip": "Use Laravel Sail for local Docker development",
+                "pros": "Consistency, isolation, easy scaling",
+                "cons": "Learning curve, resource usage"
+              },
+              {
+                "name": "CI/CD Pipelines",
+                "english": "Automating testing and deployment processes",
+                "hinglish": "Testing aur deployment processes automate karna",
+                "importance": "High",
+                "tip": "Start with simple GitHub Actions workflow",
+                "pros": "Automation, quality assurance, faster releases",
+                "cons": "Setup complexity, maintenance"
+              },
+              {
+                "name": "Performance Optimization",
+                "english": "Improving application speed and efficiency",
+                "hinglish": "Application speed aur efficiency improve karna",
+                "importance": "High",
+                "tip": "Cache frequently accessed data and optimize database queries",
+                "pros": "Better user experience, reduced costs, scalability",
+                "cons": "Additional complexity, cache invalidation"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -46,7 +46,7 @@ const ProjectsContent = () => {
       </div>
 
       <div className="page-header-23">
-        <h1 className="page-title-23">{projectsData.category.name} Projects</h1>
+        <h1 className="heading">{projectsData.category.name} Projects</h1>
         <p className="page-description-23">{projectsData.category.description}</p>
       </div>
 

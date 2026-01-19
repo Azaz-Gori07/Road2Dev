@@ -1,0 +1,946 @@
+{
+  "technology": "PHP",
+  "slug": "complete-php-course-2026",
+  "description": "Complete PHP web development course from beginner to advanced level covering modern PHP 8.3+ features, best practices, frameworks, and real-world applications",
+  "levels": [
+    {
+      "level": "Beginner",
+      "order": 1,
+      "description": "Learn PHP fundamentals, setup, basic syntax, and essential programming concepts",
+      "topics": [
+        {
+          "id": 1,
+          "title": "Setup Basics",
+          "english": "Setting up PHP development environment with modern tools",
+          "hinglish": "PHP development environment setup karna - aaj kal ke tools ke saath",
+          "examples": [
+            "Installing PHP 8.3+ on Windows using XAMPP",
+            "Setting up Docker with PHP-FPM and Nginx",
+            "Configuring VS Code with PHP IntelliSense extension",
+            "Testing PHP installation with phpinfo()",
+            "Setting up Composer and creating first project"
+          ],
+          "practice": [
+            {
+              "question": "Windows par PHP 8.3 install karne ka sabse easy tarika kya hai?",
+              "answer": "XAMPP use karna easiest hai, ya phir directly PHP download karke system PATH mein add karna."
+            },
+            {
+              "question": "VS Code mein PHP ke liye kaunsi extensions important hain?",
+              "answer": "PHP IntelliSense, PHP Debug, PHP Namespace Resolver, Composer"
+            },
+            {
+              "question": "Composer kya hai aur isko kaise install karte hain?",
+              "answer": "Composer PHP ka dependency manager hai. getcomposer.org se installer download karo."
+            },
+            {
+              "question": "Local server ke bina kaise test kar sakte hain PHP code?",
+              "answer": "PHP built-in server use kar sakte hain: php -S localhost:8000 command se."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Check PHP version\necho 'PHP Version: ' . phpversion();\n\n// Simple HTTP response\necho '<h1>Hello, PHP 8.3!</h1>';\n\n// Check if Composer is available\nif (file_exists(__DIR__ . '/vendor/autoload.php')) {\n    require_once __DIR__ . '/vendor/autoload.php';\n    echo 'Composer autoload loaded successfully!';\n}\n?>",
+            "components": [
+              {
+                "name": "PHP 8.3+",
+                "english": "Latest stable version of PHP",
+                "hinglish": "PHP ka latest version",
+                "importance": "High",
+                "tip": "Always use the latest stable version",
+                "pros": "Better performance, new features",
+                "cons": "Old code might need updates"
+              },
+              {
+                "name": "Local Server",
+                "english": "Software to run PHP locally",
+                "hinglish": "Apne computer par PHP chalane ka software",
+                "importance": "High",
+                "tip": "Docker for modern development, XAMPP for quick setup",
+                "pros": "Easy testing, no internet needed",
+                "cons": "Might differ from production"
+              },
+              {
+                "name": "IDE",
+                "english": "Code editor with PHP features",
+                "hinglish": "Code editor jo PHP ke liye features deta hai",
+                "importance": "Medium",
+                "tip": "VS Code for beginners, PHPStorm for advanced",
+                "pros": "Code completion, debugging",
+                "cons": "Learning curve"
+              },
+              {
+                "name": "HTTP Basics",
+                "english": "Understanding web requests and responses",
+                "hinglish": "Web requests aur responses kaise kaam karte hain",
+                "importance": "Medium",
+                "tip": "Learn status codes (200, 404, 500) and request methods",
+                "pros": "Better debugging understanding",
+                "cons": "Abstract concept for beginners"
+              },
+              {
+                "name": "Composer",
+                "english": "PHP dependency manager",
+                "hinglish": "PHP ka package manager",
+                "importance": "High",
+                "tip": "Learn basic commands: install, update, require",
+                "pros": "Easy package management, autoloading",
+                "cons": "Another tool to learn"
+              }
+            ]
+          }
+        },
+        {
+          "id": 2,
+          "title": "Core Fundamentals",
+          "english": "Master PHP syntax, data types, control structures, and basic I/O operations",
+          "hinglish": "PHP ki basic syntax, data types, control flow aur input/output sikhna",
+          "examples": [
+            "Variables and different data types in PHP",
+            "If-else conditions and switch statements",
+            "Different types of loops (for, while, foreach)",
+            "String manipulation functions",
+            "Handling GET and POST form data"
+          ],
+          "practice": [
+            {
+              "question": "PHP mein variable declare karne ke liye konsa symbol use hota hai?",
+              "answer": "Dollar ($) symbol use hota hai. Example: $name = 'John';"
+            },
+            {
+              "question": "Array aur object mein kya difference hai?",
+              "answer": "Array key-value pairs store karta hai, jabki object properties aur methods ke saath ek structure hota hai."
+            },
+            {
+              "question": "Ternary operator kya hai aur iska syntax kya hai?",
+              "answer": "Ternary operator short if-else hai. Syntax: (condition) ? true_value : false_value;"
+            },
+            {
+              "question": "GET aur POST mein kya antar hai?",
+              "answer": "GET data URL mein visible hota hai, POST data hidden hota hai aur secure hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Variables and Data Types\n$name = 'John';\n$age = 25;\n$colors = ['red', 'green', 'blue'];\n\n// Control Structures\nif ($age >= 18) {\n    echo \"You are an adult.<br>\";\n}\n\n// Loops\nforeach ($colors as $color) {\n    echo \"Color: $color<br>\";\n}\n\n// Form input handling\nif ($_SERVER['REQUEST_METHOD'] === 'POST') {\n    $username = $_POST['username'] ?? 'Guest';\n    echo \"Welcome, $username!\";\n}\n?>",
+            "components": [
+              {
+                "name": "Variables & Data Types",
+                "english": "Storage containers for data with specific types",
+                "hinglish": "Data store karne ke containers alag-alag types ke",
+                "importance": "High",
+                "tip": "Use meaningful variable names and proper type declarations",
+                "pros": "Better code organization, type safety",
+                "cons": "Type juggling can be confusing"
+              },
+              {
+                "name": "Control Structures",
+                "english": "Decision making and flow control in code",
+                "hinglish": "Code ka flow control karna aur decisions lena",
+                "importance": "High",
+                "tip": "Use match() for cleaner multiple conditions (PHP 8+)",
+                "pros": "Dynamic behavior, conditional execution",
+                "cons": "Complex nesting can reduce readability"
+              },
+              {
+                "name": "Loops",
+                "english": "Repeated execution of code blocks",
+                "hinglish": "Code ko repeatedly execute karna",
+                "importance": "High",
+                "tip": "foreach() is best for arrays, for() for numeric sequences",
+                "pros": "Automate repetitive tasks, process collections",
+                "cons": "Infinite loops can crash scripts"
+              },
+              {
+                "name": "String & Number Operations",
+                "english": "Manipulating and processing text and numeric data",
+                "hinglish": "Text aur numbers ko process aur modify karna",
+                "importance": "Medium",
+                "tip": "Learn common string functions: strlen(), substr(), str_replace()",
+                "pros": "Data transformation, formatting",
+                "cons": "Memory intensive for large strings"
+              },
+              {
+                "name": "User Input Handling",
+                "english": "Processing data from forms and URLs",
+                "hinglish": "Forms aur URLs se data receive aur process karna",
+                "importance": "High",
+                "tip": "Always validate and sanitize user input for security",
+                "pros": "Interactive applications, dynamic content",
+                "cons": "Security risks if not handled properly"
+              }
+            ]
+          }
+        },
+        {
+          "id": 3,
+          "title": "Functions and Superglobals",
+          "english": "Working with functions, variable scope, and PHP superglobal arrays",
+          "hinglish": "Functions banana, variable scope samajhna aur PHP ke superglobals use karna",
+          "examples": [
+            "Creating custom functions with parameters and return values",
+            "Using anonymous functions and closures",
+            "Handling form data with $_POST and $_GET",
+            "Managing user sessions with $_SESSION",
+            "File uploads with $_FILES array"
+          ],
+          "practice": [
+            {
+              "question": "Function mein default parameter kaise set karte hain?",
+              "answer": "Function definition mein parameter ke saath default value assign kar dete hain. Example: function greet($name = 'Guest') { echo \"Hello $name\"; }"
+            },
+            {
+              "question": "$_SESSION aur $_COOKIE mein kya difference hai?",
+              "answer": "$_SESSION data server par store hota hai (temporary), $_COOKIE user ke browser mein store hota hai (persistent). Session safer hota hai."
+            },
+            {
+              "question": "File upload handle karne ke liye $_FILES array mein kya-kya information hoti hai?",
+              "answer": "name, type, tmp_name, error, size - ye sab information $_FILES array mein milti hai uploaded file ki."
+            },
+            {
+              "question": "try-catch block ka use kyun karte hain?",
+              "answer": "Errors gracefully handle karne ke liye, taki application crash na ho. Exception catch karke proper error message show kar sakte hain."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Function with parameters and return type\nfunction add(int $a, int $b): int {\n    return $a + $b;\n}\n\n// Function with default parameter\nfunction greet(string $name = 'Guest'): string {\n    return \"Hello, $name!\";\n}\n\n// Anonymous function (closure)\n$multiply = function($x, $y) {\n    return $x * $y;\n};\n\n// Session handling\nsession_start();\n$_SESSION['user_id'] = 123;\n$_SESSION['username'] = 'john_doe';\n\n// Cookie handling\nsetcookie('preference', 'dark_mode', time() + (86400 * 30), '/');\n\n// File upload handling\nif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {\n    $fileName = $_FILES['file']['name'];\n    $fileTmp = $_FILES['file']['tmp_name'];\n    move_uploaded_file($fileTmp, 'uploads/' . $fileName);\n}\n\n// Error handling with try-catch\ntry {\n    $result = 10 / 0;\n} catch (DivisionByZeroError $e) {\n    echo 'Error: Cannot divide by zero';\n}\n?>",
+            "components": [
+              {
+                "name": "User Functions",
+                "english": "Reusable blocks of code with inputs and outputs",
+                "hinglish": "Reusable code blocks jo input lete hain aur output dete hain",
+                "importance": "High",
+                "tip": "Keep functions small and focused on single responsibility",
+                "pros": "Code reusability, better organization",
+                "cons": "Over-engineering small tasks"
+              },
+              {
+                "name": "Superglobals",
+                "english": "Predefined PHP arrays available in all scopes",
+                "hinglish": "PHP ke predefined arrays jo har jagah available hain",
+                "importance": "High",
+                "tip": "Always validate and sanitize data from superglobals",
+                "pros": "Easy access to important data",
+                "cons": "Security risk if used carelessly"
+              },
+              {
+                "name": "Session Management",
+                "english": "Maintaining user state across multiple requests",
+                "hinglish": "User ka state multiple requests tak maintain karna",
+                "importance": "High",
+                "tip": "Always use session_regenerate_id() for security",
+                "pros": "User tracking, stateful applications",
+                "cons": "Server memory usage, scalability issues"
+              },
+              {
+                "name": "File Handling",
+                "english": "Reading, writing, and managing files on server",
+                "hinglish": "Server par files read/write aur manage karna",
+                "importance": "Medium",
+                "tip": "Check file permissions and validate file types",
+                "pros": "Data persistence, file operations",
+                "cons": "Security risks with file uploads"
+              },
+              {
+                "name": "Error Handling",
+                "english": "Graceful handling of errors and exceptions",
+                "hinglish": "Errors aur exceptions ko gracefully handle karna",
+                "importance": "High",
+                "tip": "Use custom error handlers for production",
+                "pros": "Better user experience, easier debugging",
+                "cons": "Can hide serious issues if overused"
+              }
+            ]
+          }
+        },
+        {
+          "id": 4,
+          "title": "Arrays and Data Handling",
+          "english": "Advanced array operations and data processing techniques",
+          "hinglish": "Advanced array operations aur data processing techniques",
+          "examples": [
+            "Creating and manipulating multidimensional arrays",
+            "Using array functions like array_map and array_filter",
+            "JSON encoding and decoding",
+            "File inclusion with include and require",
+            "Autoloading classes and functions"
+          ],
+          "practice": [
+            {
+              "question": "array_map() aur array_filter() mein kya difference hai?",
+              "answer": "array_map() har array element par function apply karta hai aur new array return karta hai. array_filter() condition ke basis par elements filter karta hai."
+            },
+            {
+              "question": "JSON data kaise decode karte hain PHP mein?",
+              "answer": "json_decode() function use karte hain. Example: $data = json_decode($jsonString, true); // true for associative array"
+            },
+            {
+              "question": "include aur require mein kya antar hai?",
+              "answer": "include file not found hone par warning deta hai, require fatal error deta hai. require_once aur include_once ek hi file ko ek baar hi include karte hain."
+            },
+            {
+              "question": "Autoloading kya hai aur kaise implement karte hain?",
+              "answer": "Autoloading automatically classes load karta hai jab zaroorat hoti hai. spl_autoload_register() se implement karte hain. Composer bhi autoloading provide karta hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Indexed array\n$fruits = ['Apple', 'Banana', 'Orange'];\n\n// Associative array\n$person = [\n    'name' => 'John',\n    'age' => 25,\n    'city' => 'New York'\n];\n\n// Multidimensional array\n$students = [\n    ['id' => 1, 'name' => 'Alice', 'grade' => 'A'],\n    ['id' => 2, 'name' => 'Bob', 'grade' => 'B'],\n    ['id' => 3, 'name' => 'Charlie', 'grade' => 'A+']\n];\n\n// array_map() example\n$numbers = [1, 2, 3, 4, 5];\n$squared = array_map(function($n) {\n    return $n * $n;\n}, $numbers);\n\n// array_filter() example\n$evenNumbers = array_filter($numbers, function($n) {\n    return $n % 2 === 0;\n});\n\n// JSON operations\n$data = ['name' => 'John', 'age' => 30];\n$json = json_encode($data); // Encode to JSON\n$decoded = json_decode($json, true); // Decode to array\n\n// File inclusion\ninclude 'header.php';\nrequire 'config.php';\nrequire_once 'database.php';\n\n// Simple autoloading example\nspl_autoload_register(function ($className) {\n    include 'classes/' . $className . '.php';\n});\n?>",
+            "components": [
+              {
+                "name": "Array Types",
+                "english": "Different ways to organize and store collections of data",
+                "hinglish": "Data collections ko organize aur store karne ke alag-alag tarike",
+                "importance": "High",
+                "tip": "Use associative arrays for named data, indexed for ordered lists",
+                "pros": "Flexible data organization, easy iteration",
+                "cons": "Memory usage for large arrays"
+              },
+              {
+                "name": "Array Functions",
+                "english": "Built-in functions for array manipulation and processing",
+                "hinglish": "Array manipulate aur process karne ke liye built-in functions",
+                "importance": "High",
+                "tip": "Learn array_map(), array_filter(), array_reduce() for functional programming",
+                "pros": "Powerful data transformations, clean code",
+                "cons": "Performance overhead for simple operations"
+              },
+              {
+                "name": "JSON Processing",
+                "english": "Working with JSON data format for APIs and storage",
+                "hinglish": "APIs aur storage ke liye JSON data format ke saath kaam karna",
+                "importance": "High",
+                "tip": "Always validate JSON before decoding, handle errors gracefully",
+                "pros": "Universal data format, easy to read/write",
+                "cons": "No schema enforcement, security risks with eval"
+              },
+              {
+                "name": "File Inclusion",
+                "english": "Organizing code across multiple files and modules",
+                "hinglish": "Code ko multiple files aur modules mein organize karna",
+                "importance": "Medium",
+                "tip": "Use require for essential files, include for optional ones",
+                "pros": "Code modularity, separation of concerns",
+                "cons": "Include path issues, security risks"
+              },
+              {
+                "name": "Autoloading",
+                "english": "Automatic loading of classes and dependencies",
+                "hinglish": "Classes aur dependencies ko automatically load karna",
+                "importance": "High",
+                "tip": "Use PSR-4 autoloading standard with Composer",
+                "pros": "Clean code, no manual includes",
+                "cons": "Configuration complexity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Intermediate",
+      "order": 2,
+      "description": "Database operations, object-oriented programming, and building dynamic applications",
+      "topics": [
+        {
+          "id": 5,
+          "title": "Databases Essentials",
+          "english": "Working with databases using PDO, SQL queries, and data modeling",
+          "hinglish": "PDO use karke databases ke saath kaam karna, SQL queries aur data modeling",
+          "examples": [
+            "Connecting to MySQL database with PDO",
+            "Executing SELECT queries with WHERE clause",
+            "Using prepared statements for security",
+            "Implementing JOIN operations between tables",
+            "Handling database transactions"
+          ],
+          "practice": [
+            {
+              "question": "PDO aur mysqli mein kya difference hai?",
+              "answer": "PDO multiple databases support karta hai (MySQL, PostgreSQL, SQLite), mysqli sirf MySQL. PDO prepared statements better handle karta hai aur modern API hai."
+            },
+            {
+              "question": "Prepared statements kya hain aur security ke liye kyun important hain?",
+              "answer": "Prepared statements SQL injection se bachate hain. Query aur data separate hote hain, isliye user input directly SQL mein nahi jaata."
+            },
+            {
+              "question": "SQL JOIN ke kitne types hote hain?",
+              "answer": "INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN, CROSS JOIN. Sabse common INNER JOIN aur LEFT JOIN hain."
+            },
+            {
+              "question": "Database transactions ka use kyun karte hain?",
+              "answer": "Multiple database operations atomic banane ke liye. Sab operations successful honge ya koi nahi hoga. Example: bank transfer mein debit aur credit dono hona chahiye."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Database connection with PDO\ntry {\n    $pdo = new PDO(\n        'mysql:host=localhost;dbname=mydb;charset=utf8mb4',\n        'username',\n        'password',\n        [\n            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,\n            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC\n        ]\n    );\n} catch (PDOException $e) {\n    die('Connection failed: ' . $e->getMessage());\n}\n\n// SELECT query with prepared statement\n$stmt = $pdo->prepare('SELECT * FROM users WHERE age > :age');\n$stmt->execute([':age' => 18]);\n$users = $stmt->fetchAll();\n\n// INSERT with prepared statement\n$stmt = $pdo->prepare('INSERT INTO users (name, email) VALUES (?, ?)');\n$stmt->execute(['John Doe', 'john@example.com']);\n$lastId = $pdo->lastInsertId();\n\n// UPDATE query\n$stmt = $pdo->prepare('UPDATE users SET status = :status WHERE id = :id');\n$stmt->execute([':status' => 'active', ':id' => 1]);\n\n// JOIN example\n$sql = \"SELECT users.name, orders.total \n        FROM users \n        INNER JOIN orders ON users.id = orders.user_id\";\n$result = $pdo->query($sql);\n\n// Transaction example\ntry {\n    $pdo->beginTransaction();\n    \n    // Multiple operations\n    $pdo->exec('UPDATE accounts SET balance = balance - 100 WHERE id = 1');\n    $pdo->exec('UPDATE accounts SET balance = balance + 100 WHERE id = 2');\n    \n    $pdo->commit();\n    echo 'Transaction successful!';\n} catch (Exception $e) {\n    $pdo->rollBack();\n    echo 'Transaction failed: ' . $e->getMessage();\n}\n?>",
+            "components": [
+              {
+                "name": "PDO (PHP Data Objects)",
+                "english": "Database abstraction layer for multiple databases",
+                "hinglish": "Multiple databases ke liye abstraction layer",
+                "importance": "High",
+                "tip": "Always use PDO over mysqli for better security and flexibility",
+                "pros": "Database agnostic, prepared statements, secure",
+                "cons": "Slightly more complex than mysqli"
+              },
+              {
+                "name": "Prepared Statements",
+                "english": "SQL queries with parameter placeholders for security",
+                "hinglish": "Security ke liye parameter placeholders wale SQL queries",
+                "importance": "High",
+                "tip": "Always use prepared statements for user input",
+                "pros": "SQL injection prevention, better performance with repeated queries",
+                "cons": "Slightly more code to write"
+              },
+              {
+                "name": "SQL Queries",
+                "english": "Database operations using Structured Query Language",
+                "hinglish": "Structured Query Language use karke database operations",
+                "importance": "High",
+                "tip": "Learn JOINs, subqueries, and indexing for performance",
+                "pros": "Powerful data retrieval and manipulation",
+                "cons": "Complex queries can be difficult to optimize"
+              },
+              {
+                "name": "Database Normalization",
+                "english": "Organizing database to reduce redundancy",
+                "hinglish": "Reduction kam karne ke liye database organize karna",
+                "importance": "Medium",
+                "tip": "Follow normalization forms but don't over-normalize",
+                "pros": "Data consistency, less storage",
+                "cons": "More JOINs needed, complex queries"
+              },
+              {
+                "name": "NoSQL Basics (Redis)",
+                "english": "Non-relational database for specific use cases",
+                "hinglish": "Specific use cases ke liye non-relational database",
+                "importance": "Medium",
+                "tip": "Use Redis for caching, sessions, real-time data",
+                "pros": "Fast, scalable, flexible schema",
+                "cons": "No ACID guarantees, limited query capabilities"
+              }
+            ]
+          }
+        },
+        {
+          "id": 6,
+          "title": "OOP Foundations",
+          "english": "Object-oriented programming concepts and implementation in PHP",
+          "hinglish": "Object-oriented programming concepts aur PHP mein implementation",
+          "examples": [
+            "Creating classes and objects",
+            "Defining properties and methods",
+            "Using constructors and destructors",
+            "Implementing inheritance between classes",
+            "Working with access modifiers"
+          ],
+          "practice": [
+            {
+              "question": "Class aur object mein kya difference hai?",
+              "answer": "Class blueprint hoti hai, object uska actual instance hota hai. Class define karti hai properties aur methods, object unka use karta hai."
+            },
+            {
+              "question": "public, protected, private access modifiers ka meaning kya hai?",
+              "answer": "public: sab access kar sakte hain, protected: class ke andar aur child classes, private: sirf same class ke andar."
+            },
+            {
+              "question": "Constructor kya hota hai?",
+              "answer": "Constructor special method hota hai jo object create hone par automatically call hota hai. PHP mein __construct() naam se hota hai."
+            },
+            {
+              "question": "Inheritance kya hai aur kaise implement karte hain?",
+              "answer": "Inheritance ek class se dusri class properties/methods inherit karne ka process hai. extends keyword use karte hain."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Basic class definition\nclass Person {\n    // Properties\n    public string $name;\n    protected int $age;\n    private string $email;\n    \n    // Constructor\n    public function __construct(string $name, int $age, string $email) {\n        $this->name = $name;\n        $this->age = $age;\n        $this->email = $email;\n    }\n    \n    // Method\n    public function introduce(): string {\n        return \"Hello, my name is {$this->name} and I am {$this->age} years old.\";\n    }\n    \n    // Getter method for private property\n    public function getEmail(): string {\n        return $this->email;\n    }\n    \n    // Setter method for protected property\n    public function setAge(int $age): void {\n        if ($age > 0) {\n            $this->age = $age;\n        }\n    }\n}\n\n// Creating objects\n$person1 = new Person('John Doe', 25, 'john@example.com');\n$person2 = new Person('Jane Smith', 30, 'jane@example.com');\n\necho $person1->introduce();\necho $person1->getEmail();\n\n// Inheritance\nclass Student extends Person {\n    public string $studentId;\n    public string $course;\n    \n    public function __construct(string $name, int $age, string $email, string $studentId, string $course) {\n        parent::__construct($name, $age, $email);\n        $this->studentId = $studentId;\n        $this->course = $course;\n    }\n    \n    // Method overriding\n    public function introduce(): string {\n        return parent::introduce() . \" I am a student of {$this->course}.\";\n    }\n}\n\n// Static properties and methods\nclass MathHelper {\n    public static float $pi = 3.14159;\n    \n    public static function add(float $a, float $b): float {\n        return $a + $b;\n    }\n}\n\necho MathHelper::$pi;\necho MathHelper::add(5, 3);\n\n// Namespaces\nnamespace MyApp\\Models;\n\nclass User {\n    // Class code\n}\n?>",
+            "components": [
+              {
+                "name": "Classes and Objects",
+                "english": "Blueprints and instances for organizing code and data",
+                "hinglish": "Code aur data organize karne ke liye blueprints aur instances",
+                "importance": "High",
+                "tip": "Follow Single Responsibility Principle - one class, one purpose",
+                "pros": "Code organization, reusability, maintainability",
+                "cons": "Overhead for small projects"
+              },
+              {
+                "name": "Properties and Methods",
+                "english": "Data members and functions within a class",
+                "hinglish": "Class ke andar data members aur functions",
+                "importance": "High",
+                "tip": "Keep properties private and provide public getters/setters",
+                "pros": "Encapsulation, data protection",
+                "cons": "More code to write"
+              },
+              {
+                "name": "Access Modifiers",
+                "english": "Visibility control for class members",
+                "hinglish": "Class members ki visibility control karna",
+                "importance": "High",
+                "tip": "Start with private, then protected if needed, public as last resort",
+                "pros": "Encapsulation, controlled access",
+                "cons": "Can be restrictive if overused"
+              },
+              {
+                "name": "Inheritance",
+                "english": "Creating new classes based on existing ones",
+                "hinglish": "Existing classes se nayi classes banana",
+                "importance": "Medium",
+                "tip": "Use inheritance for 'is-a' relationships, not for code reuse alone",
+                "pros": "Code reuse, hierarchical organization",
+                "cons": "Tight coupling, fragile base class problem"
+              },
+              {
+                "name": "Namespaces",
+                "english": "Organizing classes and functions into logical groups",
+                "hinglish": "Classes aur functions ko logical groups mein organize karna",
+                "importance": "High",
+                "tip": "Follow PSR-4 autoloading standard for namespace structure",
+                "pros": "Avoid naming conflicts, better organization",
+                "cons": "Longer class names, import statements needed"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Advanced",
+      "order": 3,
+      "description": "Advanced OOP, frameworks, APIs, security, testing, and deployment strategies",
+      "topics": [
+        {
+          "id": 7,
+          "title": "OOP Advanced",
+          "english": "Advanced object-oriented concepts, design patterns, and SOLID principles",
+          "hinglish": "Advanced OOP concepts, design patterns, aur SOLID principles",
+          "examples": [
+            "Creating and implementing interfaces",
+            "Using abstract classes and traits",
+            "Implementing design patterns like Factory and Singleton",
+            "Using magic methods for dynamic behavior",
+            "Applying SOLID principles in code"
+          ],
+          "practice": [
+            {
+              "question": "Interface aur abstract class mein kya difference hai?",
+              "answer": "Interface sirf method signatures define karta hai (contract), abstract class partial implementation de sakta hai. Ek class multiple interfaces implement kar sakti hai, lekin ek hi class extend kar sakti hai."
+            },
+            {
+              "question": "Traits kya hain aur kaise use karte hain?",
+              "answer": "Traits code reuse ke liye hain multiple inheritance ki tarah. use keyword se include karte hain class mein. Methods provide karte hain jo multiple classes share kar sakti hain."
+            },
+            {
+              "question": "Singleton pattern kya hai aur kahan use karte hain?",
+              "answer": "Singleton pattern ensure karta hai ki class ka sirf ek hi instance ho. Database connections, configuration objects ke liye use karte hain."
+            },
+            {
+              "question": "SOLID principles ka full form aur meaning kya hai?",
+              "answer": "S: Single Responsibility, O: Open-Closed, L: Liskov Substitution, I: Interface Segregation, D: Dependency Inversion. Yeh OOP design principles hain."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Interface\nexample\ninterface LoggerInterface {\n    public function log(string $message): void;\n}\n\n// Abstract class\nexample\nabstract class Animal {\n    protected string $name;\n    \n    public function __construct(string $name) {\n        $this->name = $name;\n    }\n    \n    abstract public function makeSound(): string;\n    \n    public function getName(): string {\n        return $this->name;\n    }\n}\n\n// Trait example\ntrait Timestampable {\n    protected \\DateTime $createdAt;\n    protected ?\\DateTime $updatedAt = null;\n    \n    public function setCreatedAt(\\DateTime $date): void {\n        $this->createdAt = $date;\n    }\n    \n    public function setUpdatedAt(\\DateTime $date): void {\n        $this->updatedAt = $date;\n    }\n}\n\n// Singleton pattern\nclass DatabaseConnection {\n    private static ?self $instance = null;\n    \n    private function __construct() {\n        // Private constructor\n    }\n    \n    public static function getInstance(): self {\n        if (self::$instance === null) {\n            self::$instance = new self();\n        }\n        return self::$instance;\n    }\n    \n    public function connect(): void {\n        echo \"Database connected\\n\";\n    }\n}\n\n// Magic methods example\nclass Product {\n    private array $data = [];\n    \n    public function __set(string $name, $value): void {\n        $this->data[$name] = $value;\n    }\n    \n    public function __get(string $name) {\n        return $this->data[$name] ?? null;\n    }\n    \n    public function __toString(): string {\n        return json_encode($this->data);\n    }\n}\n\n// Factory pattern\nclass PaymentFactory {\n    public static function create(string $type): PaymentProcessor {\n        return match($type) {\n            'credit_card' => new CreditCardProcessor(),\n            'paypal' => new PayPalProcessor(),\n            'stripe' => new StripeProcessor(),\n            default => throw new InvalidArgumentException('Invalid payment type')\n        };\n    }\n}\n?>",
+            "components": [
+              {
+                "name": "Interfaces",
+                "english": "Contracts that define methods implementing classes must have",
+                "hinglish": "Contracts jo define karte hain ki implementing classes mein kaunse methods hone chahiye",
+                "importance": "High",
+                "tip": "Use interfaces to define capabilities, not implementations",
+                "pros": "Polymorphism, loose coupling, contract enforcement",
+                "cons": "More files to manage"
+              },
+              {
+                "name": "Abstract Classes",
+                "english": "Classes that cannot be instantiated and may contain abstract methods",
+                "hinglish": "Classes jo instantiate nahi ki ja sakti aur abstract methods contain kar sakti hain",
+                "importance": "Medium",
+                "tip": "Use abstract classes when you have common implementation to share",
+                "pros": "Code reuse, template pattern implementation",
+                "cons": "Single inheritance limitation"
+              },
+              {
+                "name": "Traits",
+                "english": "Mechanism for code reuse in single inheritance languages",
+                "hinglish": "Single inheritance languages mein code reuse ka mechanism",
+                "importance": "Medium",
+                "tip": "Use traits for horizontal code sharing, not vertical inheritance",
+                "pros": "Multiple code reuse, avoids inheritance chains",
+                "cons": "Can cause naming conflicts, hard to trace"
+              },
+              {
+                "name": "Design Patterns",
+                "english": "Proven solutions to common software design problems",
+                "hinglish": "Common software design problems ke proven solutions",
+                "importance": "High",
+                "tip": "Learn patterns but don't force them - use when appropriate",
+                "pros": "Tested solutions, better architecture",
+                "cons": "Over-engineering, complexity"
+              },
+              {
+                "name": "SOLID Principles",
+                "english": "Five design principles for maintainable and scalable OOP",
+                "hinglish": "Maintainable aur scalable OOP ke liye paanch design principles",
+                "importance": "High",
+                "tip": "Start with Single Responsibility Principle - easiest to implement",
+                "pros": "Better code quality, easier maintenance",
+                "cons": "Initial learning curve, more planning needed"
+              }
+            ]
+          }
+        },
+        {
+          "id": 8,
+          "title": "Frameworks and MVC",
+          "english": "Working with PHP frameworks and implementing MVC architecture",
+          "hinglish": "PHP frameworks ke saath kaam karna aur MVC architecture implement karna",
+          "examples": [
+            "Building custom MVC framework from scratch",
+            "Creating routes and controllers in Laravel",
+            "Working with Eloquent ORM for database operations",
+            "Using Blade templating engine",
+            "Implementing authentication and authorization"
+          ],
+          "practice": [
+            {
+              "question": "MVC architecture mein Model, View, Controller ka kya role hai?",
+              "answer": "Model: data aur business logic, View: presentation layer (HTML), Controller: user input handle karta hai Model aur View ke beech bridge ka kaam karta hai."
+            },
+            {
+              "question": "Laravel routes kaise define karte hain?",
+              "answer": "routes/web.php file mein. Example: Route::get('/users', [UserController::class, 'index']);"
+            },
+            {
+              "question": "Eloquent ORM kya hai?",
+              "answer": "Laravel ka Active Record implementation jo database tables ko classes se map karta hai. Database operations object-oriented way mein karne deta hai."
+            },
+            {
+              "question": "Middleware kya hota hai?",
+              "answer": "Middleware HTTP request aur response ke beech filter ka kaam karta hai. Authentication, logging, CORS handling ke liye use hota hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Custom MVC Framework Example\n// Router\nclass Router {\n    private array $routes = [];\n    \n    public function add(string $method, string $path, callable $handler): void {\n        $this->routes[] = ['method' => $method, 'path' => $path, 'handler' => $handler];\n    }\n    \n    public function dispatch(): void {\n        $requestMethod = $_SERVER['REQUEST_METHOD'];\n        $requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);\n        \n        foreach ($this->routes as $route) {\n            if ($route['method'] === $requestMethod && $route['path'] === $requestPath) {\n                call_user_func($route['handler']);\n                return;\n            }\n        }\n        http_response_code(404);\n        echo '404 Not Found';\n    }\n}\n\n// Controller\nclass UserController {\n    public function index(): void {\n        $users = ['John', 'Jane', 'Bob'];\n        include 'views/users/index.php';\n    }\n    \n    public function show(int $id): void {\n        $user = ['id' => $id, 'name' => 'John Doe'];\n        include 'views/users/show.php';\n    }\n}\n\n// Laravel Example (conceptual)\n/*\n// web.php (routes)\nRoute::get('/users', [UserController::class, 'index']);\nRoute::post('/users', [UserController::class, 'store']);\nRoute::get('/users/{id}', [UserController::class, 'show']);\n\n// UserController.php\nclass UserController extends Controller {\n    public function index() {\n        $users = User::all();\n        return view('users.index', compact('users'));\n    }\n    \n    public function store(Request $request) {\n        $validated = $request->validate([\n            'name' => 'required|string|max:255',\n            'email' => 'required|email|unique:users'\n        ]);\n        \n        User::create($validated);\n        return redirect('/users');\n    }\n}\n\n// User.php (Eloquent Model)\nclass User extends Model {\n    protected $fillable = ['name', 'email', 'password'];\n    \n    public function orders() {\n        return $this->hasMany(Order::class);\n    }\n}\n*/\n\n// Blade Template Example (conceptual)\n/*\n{{-- resources/views/users/index.blade.php --}}\n@extends('layouts.app')\n@section('content')\n    <h1>Users</h1>\n    <ul>\n    @foreach($users as $user)\n        <li>{{ $user->name }}</li>\n    @endforeach\n    </ul>\n@endsection\n*/\n?>",
+            "components": [
+              {
+                "name": "MVC Architecture",
+                "english": "Design pattern separating application into Model, View, Controller",
+                "hinglish": "Design pattern jo application ko Model, View, Controller mein separate karta hai",
+                "importance": "High",
+                "tip": "Keep controllers thin - delegate business logic to models/services",
+                "pros": "Separation of concerns, maintainability, testability",
+                "cons": "Initial complexity, overkill for simple apps"
+              },
+              {
+                "name": "Routing",
+                "english": "Mapping URLs to controller actions",
+                "hinglish": "URLs ko controller actions se map karna",
+                "importance": "High",
+                "tip": "Use named routes for easier URL generation and maintenance",
+                "pros": "Clean URLs, organized structure",
+                "cons": "Route caching complexity in production"
+              },
+              {
+                "name": "ORM (Eloquent)",
+                "english": "Object-Relational Mapping for database operations",
+                "hinglish": "Database operations ke liye Object-Relational Mapping",
+                "importance": "High",
+                "tip": "Use relationships (hasMany, belongsTo) instead of manual JOINs",
+                "pros": "Productivity, type safety, less SQL",
+                "cons": "Performance overhead, N+1 query problem"
+              },
+              {
+                "name": "Templating (Blade)",
+                "english": "PHP templating engine for views",
+                "hinglish": "Views ke liye PHP templating engine",
+                "importance": "High",
+                "tip": "Use template inheritance (@extends) for consistent layouts",
+                "pros": "Clean separation, built-in directives, caching",
+                "cons": "Learning curve, compilation step"
+              },
+              {
+                "name": "Authentication",
+                "english": "User login, registration, and session management",
+                "hinglish": "User login, registration, aur session management",
+                "importance": "High",
+                "tip": "Always use framework's built-in auth for security",
+                "pros": "Security, time-saving, standardized",
+                "cons": "May need customization for complex requirements"
+              }
+            ]
+          }
+        },
+        {
+          "id": 9,
+          "title": "APIs and Integrations",
+          "english": "Building RESTful APIs, working with third-party services, and integrations",
+          "hinglish": "RESTful APIs banana, third-party services ke saath kaam karna, aur integrations",
+          "examples": [
+            "Creating RESTful API endpoints",
+            "Implementing JWT authentication for APIs",
+            "Working with third-party APIs like Stripe or Google",
+            "Building GraphQL endpoints",
+            "Implementing webhooks"
+          ],
+          "practice": [
+            {
+              "question": "RESTful API ke principles kya hain?",
+              "answer": "Stateless, client-server architecture, cacheable, uniform interface, layered system. HTTP methods: GET(read), POST(create), PUT(update), DELETE(delete)."
+            },
+            {
+              "question": "JWT token kya hota hai?",
+              "answer": "JSON Web Token - compact URL-safe token jo JSON data carry karta hai. Header, payload, signature se milke banta hai. Stateless authentication ke liye use hota hai."
+            },
+            {
+              "question": "GraphQL aur REST mein kya difference hai?",
+              "answer": "REST fixed endpoints, GraphQL single endpoint with flexible queries. GraphQL mein client specify karta hai kya data chahiye, REST mein server fixed response deta hai."
+            },
+            {
+              "question": "Webhooks kya hote hain?",
+              "answer": "Webhooks event-driven HTTP callbacks hote hain. Jab koi event hota hai (jaise payment successful), server dusre server ko HTTP POST request bhejta hai."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// RESTful API endpoint example\nheader('Content-Type: application/json');\n\n$method = $_SERVER['REQUEST_METHOD'];\n$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);\n\n// Simple routing for API\nif ($path === '/api/users' && $method === 'GET') {\n    // Get all users\n    $users = [\n        ['id' => 1, 'name' => 'John', 'email' => 'john@example.com'],\n        ['id' => 2, 'name' => 'Jane', 'email' => 'jane@example.com']\n    ];\n    echo json_encode(['success' => true, 'data' => $users]);\n} elseif (preg_match('#^/api/users/(\\d+)$#', $path, $matches) && $method === 'GET') {\n    // Get single user\n    $userId = (int)$matches[1];\n    $user = ['id' => $userId, 'name' => 'John Doe', 'email' => 'john@example.com'];\n    echo json_encode(['success' => true, 'data' => $user]);\n} elseif ($path === '/api/users' && $method === 'POST') {\n    // Create user\n    $input = json_decode(file_get_contents('php://input'), true);\n    // Validate and process...\n    $newUser = ['id' => 3, 'name' => $input['name'], 'email' => $input['email']];\n    echo json_encode(['success' => true, 'data' => $newUser], JSON_PRETTY_PRINT);\n} else {\n    http_response_code(404);\n    echo json_encode(['success' => false, 'error' => 'Endpoint not found']);\n}\n\n// JWT Authentication example (conceptual)\n/*\nuse Firebase\\JWT\\JWT;\nuse Firebase\\JWT\\Key;\n\n// Generate token\n$payload = [\n    'user_id' => 123,\n    'email' => 'user@example.com',\n    'exp' => time() + 3600 // 1 hour expiration\n];\n\n$jwt = JWT::encode($payload, 'your-secret-key', 'HS256');\n\n// Verify token\ntry {\n    $decoded = JWT::decode($jwt, new Key('your-secret-key', 'HS256'));\n    $userId = $decoded->user_id;\n} catch (Exception $e) {\n    http_response_code(401);\n    echo json_encode(['error' => 'Invalid token']);\n}\n*/\n\n// Third-party API call example (cURL)\n$ch = curl_init();\ncurl_setopt_array($ch, [\n    CURLOPT_URL => 'https://api.example.com/data',\n    CURLOPT_RETURNTRANSFER => true,\n    CURLOPT_HTTPHEADER => [\n        'Authorization: Bearer YOUR_API_KEY',\n        'Content-Type: application/json'\n    ]\n]);\n\n$response = curl_exec($ch);\ncurl_close($ch);\n\n$data = json_decode($response, true);\n\n// Webhook receiver example\nif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SERVER['REQUEST_URI'] === '/webhook/payment') {\n    $payload = json_decode(file_get_contents('php://input'), true);\n    \n    // Verify signature (important for security)\n    $signature = $_SERVER['HTTP_X_SIGNATURE'] ?? '';\n    $expectedSig = hash_hmac('sha256', json_encode($payload), 'your-webhook-secret');\n    \n    if (hash_equals($expectedSig, $signature)) {\n        // Process webhook\n        $event = $payload['event'];\n        $data = $payload['data'];\n        \n        // Handle different events\n        switch ($event) {\n            case 'payment.succeeded':\n                // Update order status\n                break;\n            case 'payment.failed':\n                // Notify user\n                break;\n        }\n        \n        http_response_code(200);\n    } else {\n        http_response_code(401);\n    }\n}\n?>",
+            "components": [
+              {
+                "name": "RESTful APIs",
+                "english": "Architectural style for creating web services",
+                "hinglish": "Web services banane ka architectural style",
+                "importance": "High",
+                "tip": "Use proper HTTP status codes and meaningful error messages",
+                "pros": "Standardized, stateless, scalable",
+                "cons": "Over-fetching/under-fetching data"
+              },
+              {
+                "name": "API Authentication",
+                "english": "Securing API endpoints with various authentication methods",
+                "hinglish": "API endpoints ko various authentication methods se secure karna",
+                "importance": "High",
+                "tip": "Use JWT for stateless auth, OAuth for third-party access",
+                "pros": "Security, user identification, access control",
+                "cons": "Token management, security complexity"
+              },
+              {
+                "name": "Third-party APIs",
+                "english": "Integrating external services and APIs",
+                "hinglish": "External services aur APIs integrate karna",
+                "importance": "High",
+                "tip": "Always use API client libraries when available",
+                "pros": "Extended functionality, time-saving",
+                "cons": "Dependency on external services, rate limits"
+              },
+              {
+                "name": "GraphQL",
+                "english": "Query language for APIs that provides more flexibility",
+                "hinglish": "APIs ke liye query language jo zyada flexibility deti hai",
+                "importance": "Medium",
+                "tip": "Use GraphQL when clients need flexible data fetching",
+                "pros": "Flexible queries, single endpoint, no over-fetching",
+                "cons": "Complexity, caching challenges, N+1 problem"
+              },
+              {
+                "name": "Webhooks",
+                "english": "Event-driven HTTP callbacks for real-time notifications",
+                "hinglish": "Real-time notifications ke liye event-driven HTTP callbacks",
+                "importance": "Medium",
+                "tip": "Always verify webhook signatures for security",
+                "pros": "Real-time updates, server-to-server communication",
+                "cons": "Delivery reliability, retry logic needed"
+              }
+            ]
+          }
+        },
+        {
+          "id": 10,
+          "title": "Security Practices",
+          "english": "Implementing security measures and best practices in PHP applications",
+          "hinglish": "PHP applications mein security measures aur best practices implement karna",
+          "examples": [
+            "Input validation and sanitization",
+            "Preventing SQL injection and XSS attacks",
+            "Password hashing with bcrypt/Argon2",
+            "Implementing CSRF protection",
+            "Setting secure HTTP headers"
+          ],
+          "practice": [
+            {
+              "question": "SQL injection se kaise bach sakte hain?",
+              "answer": "Prepared statements use karke. PDO ya mysqli ke prepared statements SQL injection prevent karte hain."
+            },
+            {
+              "question": "XSS attack kya hota hai aur kaise prevent karte hain?",
+              "answer": "Cross-Site Scripting - malicious scripts inject karna. htmlspecialchars() use kare user output display karne se pehle. Content Security Policy (CSP) headers bhi help karte hain."
+            },
+            {
+              "question": "Password kaise hash karte hain securely?",
+              "answer": "password_hash() function use kare bcrypt ya Argon2 algorithm ke saath. Example: password_hash($password, PASSWORD_BCRYPT)"
+            },
+            {
+              "question": "CSRF attack kya hai aur kaise prevent karte hain?",
+              "answer": "Cross-Site Request Forgery - user ke naam par unauthorized actions. CSRF tokens use karte hain forms mein aur verify karte hain server side."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// Input validation\n$email = $_POST['email'] ?? '';\nif (filter_var($email, FILTER_VALIDATE_EMAIL)) {\n    // Valid email\n    $cleanEmail = filter_var($email, FILTER_SANITIZE_EMAIL);\n} else {\n    // Invalid email\n    die('Invalid email address');\n}\n\n// Preventing SQL Injection with PDO\n$pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');\n$stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');\n$stmt->execute([':email' => $email]);\n$user = $stmt->fetch();\n\n// Preventing XSS\n$userInput = '<script>alert(\"XSS\")</script>Hello';\n$safeOutput = htmlspecialchars($userInput, ENT_QUOTES, 'UTF-8');\necho $safeOutput; // Shows as text, not executed\n\n// Password hashing\n$password = 'user_password_123';\n// Hash password\n$hash = password_hash($password, PASSWORD_BCRYPT);\n// Verify password\nif (password_verify($password, $hash)) {\n    echo 'Password is valid!';\n}\n\n// CSRF Protection\nsession_start();\nif ($_SERVER['REQUEST_METHOD'] === 'POST') {\n    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {\n        die('CSRF token validation failed');\n    }\n    // Process form\n}\n\n// Generate CSRF token for form\n$_SESSION['csrf_token'] = bin2hex(random_bytes(32));\n\n// Secure HTTP headers\nheader('Strict-Transport-Security: max-age=31536000; includeSubDomains');\nheader('X-Content-Type-Options: nosniff');\nheader('X-Frame-Options: DENY');\nheader('X-XSS-Protection: 1; mode=block');\n\n// Content Security Policy\nheader(\"Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.google.com\");\n\n// File upload security\nif (isset($_FILES['file'])) {\n    $allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];\n    $maxSize = 5 * 1024 * 1024; // 5MB\n    \n    if (!in_array($_FILES['file']['type'], $allowedTypes)) {\n        die('Invalid file type');\n    }\n    \n    if ($_FILES['file']['size'] > $maxSize) {\n        die('File too large');\n    }\n    \n    // Generate safe filename\n    $extension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);\n    $safeFilename = bin2hex(random_bytes(8)) . '.' . $extension;\n    \n    move_uploaded_file($_FILES['file']['tmp_name'], 'uploads/' . $safeFilename);\n}\n\n// Session security\nsession_start();\n// Regenerate session ID periodically\nif (!isset($_SESSION['created'])) {\n    $_SESSION['created'] = time();\n} elseif (time() - $_SESSION['created'] > 1800) { // 30 minutes\n    session_regenerate_id(true);\n    $_SESSION['created'] = time();\n}\n\n// Set secure session cookie params\nsession_set_cookie_params([\n    'lifetime' => 86400,\n    'path' => '/',\n    'domain' => $_SERVER['HTTP_HOST'],\n    'secure' => true, // HTTPS only\n    'httponly' => true, // HTTP only, no JS access\n    'samesite' => 'Strict' // CSRF protection\n]);\n?>",
+            "components": [
+              {
+                "name": "Input Validation",
+                "english": "Checking and sanitizing user input before processing",
+                "hinglish": "Process karne se pehle user input check aur sanitize karna",
+                "importance": "High",
+                "tip": "Validate early, sanitize before use, escape before output",
+                "pros": "Prevents many attacks, data integrity",
+                "cons": "Performance overhead, more code"
+              },
+              {
+                "name": "SQL Injection Prevention",
+                "english": "Protecting database queries from malicious input",
+                "hinglish": "Database queries ko malicious input se protect karna",
+                "importance": "High",
+                "tip": "Always use parameterized queries (prepared statements)",
+                "pros": "Critical security protection",
+                "cons": "Slightly more code"
+              },
+              {
+                "name": "Password Security",
+                "english": "Secure storage and verification of user passwords",
+                "hinglish": "User passwords ko securely store aur verify karna",
+                "importance": "High",
+                "tip": "Always use password_hash() and password_verify()",
+                "pros": "Protects user credentials, industry standard",
+                "cons": "Cannot recover hashed passwords"
+              },
+              {
+                "name": "CSRF Protection",
+                "english": "Preventing Cross-Site Request Forgery attacks",
+                "hinglish": "Cross-Site Request Forgery attacks se bachana",
+                "importance": "High",
+                "tip": "Use framework's built-in CSRF protection when available",
+                "pros": "Prevents unauthorized actions",
+                "cons": "Extra form fields, token management"
+              },
+              {
+                "name": "HTTP Security Headers",
+                "english": "Setting security-related HTTP response headers",
+                "hinglish": "Security-related HTTP response headers set karna",
+                "importance": "Medium",
+                "tip": "Use security headers middleware in frameworks",
+                "pros": "Additional security layer, browser protection",
+                "cons": "Can break functionality if misconfigured"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Expert",
+      "order": 4,
+      "description": "Advanced testing strategies, quality assurance, and continuous integration for enterprise PHP applications",
+      "topics": [
+        {
+          "id": 1,
+          "title": "Testing and Quality",
+          "english": "Comprehensive testing strategies, quality assurance, and continuous integration for PHP applications",
+          "hinglish": "PHP applications ke liye comprehensive testing strategies, quality assurance, aur continuous integration",
+          "examples": [
+            "Writing unit tests with PHPUnit",
+            "Implementing Test-Driven Development (TDD)",
+            "Creating integration tests for database operations",
+            "Using Behat for Behavior-Driven Development",
+            "Setting up continuous integration with GitHub Actions"
+          ],
+          "practice": [
+            {
+              "question": "Unit test aur integration test mein kya difference hai?",
+              "answer": "Unit test individual components/functions ko alag-alag test karta hai (isolated). Integration test multiple components ko ek saath test karta hai ki woh sahi se work kar rahe hain."
+            },
+            {
+              "question": "TDD (Test-Driven Development) ka process kya hai?",
+              "answer": "TDD mein pehle test likhte hain (jo fail hoga), phir minimal code likhte hain test pass karne ke liye, phir code refactor karte hain. Red-Green-Refactor cycle follow karte hain."
+            },
+            {
+              "question": "Mock objects kya hain aur kyun use karte hain?",
+              "answer": "Mock objects fake objects hote hain jo real objects ki tarah behave karte hain. External dependencies (database, APIs) ko isolate karne ke liye use karte hain taki tests fast aur independent rahein."
+            },
+            {
+              "question": "Continuous Integration (CI) kya hai aur kaise implement karte hain?",
+              "answer": "CI ek practice hai jisme developers regularly code integrate karte hain, aur automated tests run hote hain. GitHub Actions, Jenkins, GitLab CI use karte hain. Har commit par tests automatically run hote hain."
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n// PHPUnit Test Example\nuse PHPUnit\\Framework\\TestCase;\n\nclass CalculatorTest extends TestCase\n{\n    public function testAddReturnsCorrectSum()\n    {\n        $calculator = new Calculator();\n        $result = $calculator->add(2, 3);\n        $this->assertEquals(5, $result);\n    }\n    \n    public function testDivideByZeroThrowsException()\n    {\n        $this->expectException(DivisionByZeroError::class);\n        \n        $calculator = new Calculator();\n        $calculator->divide(10, 0);\n    }\n    \n    public function testAddWithDataProvider()\n    {\n        $calculator = new Calculator();\n        $this->assertEquals(4, $calculator->add(2, 2));\n        $this->assertEquals(10, $calculator->add(5, 5));\n        $this->assertEquals(0, $calculator->add(-5, 5));\n    }\n}\n\n// Calculator class being tested\nclass Calculator\n{\n    public function add(float $a, float $b): float\n    {\n        return $a + $b;\n    }\n    \n    public function divide(float $a, float $b): float\n    {\n        if ($b == 0) {\n            throw new DivisionByZeroError('Cannot divide by zero');\n        }\n        return $a / $b;\n    }\n}\n\n// Mock example with PHPUnit\nclass UserServiceTest extends TestCase\n{\n    public function testGetUserEmail()\n    {\n        // Create a mock UserRepository\n        $userRepoMock = $this->createMock(UserRepository::class);\n        \n        // Configure the mock to return specific data\n        $userRepoMock->method('findById')\n                     ->willReturn(new User(1, 'john@example.com'));\n        \n        $userService = new UserService($userRepoMock);\n        $email = $userService->getUserEmail(1);\n        \n        $this->assertEquals('john@example.com', $email);\n    }\n}\n\n// Behat BDD Example (Feature file)\n/*\nFeature: User registration\n  As a new user\n  I want to register an account\n  So that I can access the application\n\n  Scenario: Successful registration\n    Given I am on the registration page\n    When I fill in \"email\" with \"test@example.com\"\n    And I fill in \"password\" with \"secure123\"\n    And I fill in \"confirm_password\" with \"secure123\"\n    And I click \"Register\"\n    Then I should see \"Registration successful\"\n    And I should be on the dashboard page\n*/\n\n// Pest Testing Framework Example (simplified syntax)\n/*\ntest('calculator adds numbers correctly', function () {\n    $calculator = new Calculator();\n    expect($calculator->add(2, 3))->toBe(5);\n});\n\ntest('division by zero throws exception', function () {\n    $calculator = new Calculator();\n    $calculator->divide(10, 0);\n})->throws(DivisionByZeroError::class);\n*/\n\n// Integration Test Example\ndatabaseTest('User can be created and retrieved', function () {\n    // Setup test database\n    $pdo = new PDO('sqlite::memory:');\n    $pdo->exec('CREATE TABLE users (id INTEGER PRIMARY KEY, email TEXT)');\n    \n    $userRepo = new UserRepository($pdo);\n    \n    // Test create user\n    $userId = $userRepo->create('test@example.com');\n    $this->assertIsInt($userId);\n    \n    // Test retrieve user\n    $user = $userRepo->findById($userId);\n    $this->assertEquals('test@example.com', $user->email);\n});\n\n// GitHub Actions CI Configuration Example (YAML)\n/*\nname: PHP Tests\n\non: [push, pull_request]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    \n    steps:\n    - uses: actions/checkout@v2\n    \n    - name: Setup PHP\n      uses: shivammathur/setup-php@v2\n      with:\n        php-version: '8.3'\n        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite\n        coverage: xdebug\n    \n    - name: Install dependencies\n      run: composer install --prefer-dist --no-progress\n    \n    - name: Run tests\n      run: vendor/bin/phpunit --coverage-text\n    \n    - name: Run static analysis\n      run: vendor/bin/phpstan analyse\n*/\n?>",
+            "components": [
+              {
+                "name": "PHPUnit",
+                "english": "The standard testing framework for PHP applications",
+                "hinglish": "PHP applications ke liye standard testing framework",
+                "importance": "High",
+                "tip": "Follow Arrange-Act-Assert pattern in test methods",
+                "pros": "Industry standard, comprehensive features, good documentation",
+                "cons": "Learning curve, verbose syntax"
+              },
+              {
+                "name": "Test-Driven Development (TDD)",
+                "english": "Development methodology where tests are written before code",
+                "hinglish": "Development methodology jahan code se pehle tests likhe jaate hain",
+                "importance": "High",
+                "tip": "Start with simple tests and gradually increase complexity",
+                "pros": "Better code design, regression protection, documentation",
+                "cons": "Slower initial development, requires discipline"
+              },
+              {
+                "name": "Mocking and Stubs",
+                "english": "Creating fake objects to isolate components during testing",
+                "hinglish": "Testing ke dauran components ko isolate karne ke liye fake objects banana",
+                "importance": "High",
+                "tip": "Mock external dependencies, test internal logic separately",
+                "pros": "Faster tests, isolated testing, control over dependencies",
+                "cons": "Can mask integration issues, setup complexity"
+              },
+              {
+                "name": "Behavior-Driven Development (BDD)",
+                "english": "Testing methodology focused on system behavior and user stories",
+                "hinglish": "Testing methodology jo system behavior aur user stories par focus karti hai",
+                "importance": "Medium",
+                "tip": "Use Gherkin syntax (Given-When-Then) for clear specifications",
+                "pros": "Business-readable tests, collaboration, documentation",
+                "cons": "Slower tests, more maintenance"
+              },
+              {
+                "name": "Continuous Integration (CI)",
+                "english": "Practice of regularly integrating code changes with automated testing",
+                "hinglish": "Regularly code changes integrate karna aur automated testing karna",
+                "importance": "High",
+                "tip": "Start with simple CI pipeline and gradually add more checks",
+                "pros": "Early bug detection, quality assurance, team confidence",
+                "cons": "Setup complexity, maintenance overhead"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Testing Type", "Purpose", "When to Use", "Tools"],
+              "rows": [
+                ["Unit Testing", "Test individual components in isolation", "For testing business logic and algorithms", "PHPUnit, Pest"],
+                ["Integration Testing", "Test interaction between components", "For testing database operations, API calls", "PHPUnit, Codeception"],
+                ["Functional Testing", "Test complete features from user perspective", "For testing user workflows and scenarios", "Behat, Codeception"],
+                ["Performance Testing", "Test application performance under load", "Before deployment, after major changes", "ApacheBench, k6"],
+                ["Security Testing", "Test for vulnerabilities and security issues", "Regular security audits, before releases", "OWASP ZAP, PHPStan Security"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["Scenario", "Recommended Approach", "Reason"],
+              "rows": [
+                ["Testing business logic", "Unit tests with PHPUnit", "Fast, isolated, easy to debug"],
+                ["Testing database operations", "Integration tests with test database", "Real database interaction testing"],
+                ["Testing user workflows", "BDD with Behat", "Business-readable, user-focused"],
+                ["Testing API endpoints", "Integration tests with HTTP client", "End-to-end API testing"],
+                ["Testing legacy code", "Characterization tests first", "Safe refactoring, understand behavior"]
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
