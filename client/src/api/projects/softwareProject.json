@@ -1,0 +1,1736 @@
+{
+  "category": {
+    "name": "Software Development",
+    "slug": "software-dev",
+    "description": "Complete software development projects across multiple programming languages and technology stacks with beginner to advanced progression."
+  },
+
+  "stacks": [
+    {
+      "stackMeta": {
+        "name": "C Programming",
+        "slug": "c-programming",
+        "description": "Systems programming, Algorithms, Data Structures in C"
+      },
+      "default_stack": {
+        "language": "C",
+        "compiler": "GCC",
+        "tools": "Make, GDB, Valgrind"
+      },
+      "levels": {
+        "beginner": [
+          {
+            "id": "c-beg-001",
+            "slug": "student-management-system",
+            "title": "Student Management System",
+            "summary": {
+              "english": "Build a console-based student record management system using file handling.",
+              "hinglish": "File handling use karke console-based student record management system banana."
+            },
+            "duration": "1–2 weeks",
+            "project_type": "Console Application",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["c-basics", "file-handling", "structures"]
+            },
+            "core_features": [
+              "Add student records",
+              "View all students",
+              "Search by roll number",
+              "Update student info",
+              "Delete records",
+              "Save to binary file"
+            ],
+            "files": [
+              "student.h (header file)",
+              "student.c (structures & functions)",
+              "main.c (user interface)",
+              "students.dat (binary data file)"
+            ],
+            "learning_outcomes": [
+              "File I/O operations",
+              "Structure implementation",
+              "Modular programming",
+              "Memory management",
+              "Error handling"
+            ],
+            "interview_topics": [
+              "File operations in C",
+              "Structure vs Union",
+              "Memory allocation",
+              "Pointers and arrays"
+            ],
+            "deployment": {
+              "compilation": "Makefile",
+              "testing": "Unit tests with Check",
+              "distribution": "Executable binary"
+            }
+          },
+          {
+            "id": "c-beg-002",
+            "slug": "library-management",
+            "title": "Library Management System",
+            "summary": {
+              "english": "Create a library system to manage books, members, and transactions.",
+              "hinglish": "Library system banana jo books, members aur transactions manage kare."
+            },
+            "duration": "1–2 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["c-basics", "linked-lists"]
+            },
+            "core_features": [
+              "Book catalog with linked list",
+              "Member registration",
+              "Issue/return books",
+              "Fine calculation",
+              "Search functionality",
+              "Report generation"
+            ],
+            "learning_outcomes": [
+              "Linked list implementation",
+              "Dynamic memory allocation",
+              "Date-time operations",
+              "Console UI design"
+            ]
+          }
+        ],
+        "intermediate": [
+          {
+            "id": "c-int-001",
+            "slug": "mini-database-engine",
+            "title": "Mini Database Engine",
+            "summary": {
+              "english": "Build a simple database engine supporting basic SQL operations.",
+              "hinglish": "Simple database engine banana jo basic SQL operations support kare."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["c-beg-001", "c-beg-002"]
+            },
+            "core_features": [
+              "CREATE TABLE command",
+              "INSERT records",
+              "SELECT queries",
+              "WHERE clause filtering",
+              "Indexing using B-trees",
+              "Transaction logging"
+            ],
+            "learning_outcomes": [
+              "B-tree implementation",
+              "Query parsing",
+              "Index structures",
+              "File organization",
+              "Buffer management"
+            ],
+            "interview_topics": [
+              "Database indexing",
+              "B-tree vs B+ tree",
+              "Query optimization",
+              "ACID properties"
+            ]
+          },
+          {
+            "id": "c-int-002",
+            "slug": "text-editor",
+            "title": "Text Editor (like Vim Lite)",
+            "summary": {
+              "english": "Create a terminal-based text editor with basic editing features.",
+              "hinglish": "Terminal-based text editor banana jisme basic editing features ho."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["c-basics", "file-handling", "ncurses"]
+            },
+            "core_features": [
+              "Open/save files",
+              "Insert/delete text",
+              "Cursor movement",
+              "Search and replace",
+              "Syntax highlighting",
+              "Multiple buffers"
+            ],
+            "learning_outcomes": [
+              "ncurses library",
+              "Buffer management",
+              "Key binding",
+              "Undo/redo functionality",
+              "Regular expressions"
+            ]
+          }
+        ],
+        "advanced": [
+          {
+            "id": "c-adv-001",
+            "slug": "http-server",
+            "title": "HTTP Web Server",
+            "summary": {
+              "english": "Build a multithreaded HTTP server from scratch.",
+              "hinglish": "Scratch se multithreaded HTTP server banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["c-int-001", "c-int-002"]
+            },
+            "core_features": [
+              "HTTP/1.1 protocol support",
+              "GET/POST/PUT/DELETE methods",
+              "Multithreading with pthreads",
+              "Static file serving",
+              "CGI support",
+              "Connection pooling",
+              "Logging system"
+            ],
+            "learning_outcomes": [
+              "Socket programming",
+              "Multithreading",
+              "HTTP protocol",
+              "Network programming",
+              "Server architecture"
+            ],
+            "interview_topics": [
+              "Socket programming",
+              "Thread synchronization",
+              "HTTP protocol details",
+              "Server performance"
+            ]
+          },
+          {
+            "id": "c-adv-002",
+            "slug": "compiler-frontend",
+            "title": "Compiler Frontend (Lexer & Parser)",
+            "summary": {
+              "english": "Create a compiler frontend for a custom programming language.",
+              "hinglish": "Custom programming language ke liye compiler frontend banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["c-int-001"]
+            },
+            "core_features": [
+              "Lexical analyzer (lexer)",
+              "Syntax analyzer (parser)",
+              "Abstract syntax tree",
+              "Symbol table",
+              "Error reporting",
+              "Intermediate code generation"
+            ],
+            "learning_outcomes": [
+              "Compiler construction",
+              "Regular expressions",
+              "Context-free grammars",
+              "AST implementation",
+              "Semantic analysis"
+            ],
+            "interview_topics": [
+              "Compiler phases",
+              "Lexical analysis",
+              "Parsing algorithms",
+              "Symbol table management"
+            ]
+          }
+        ],
+        "expert": [
+          {
+            "id": "c-exp-001",
+            "slug": "operating-system-kernel",
+            "title": "Mini Operating System Kernel",
+            "summary": {
+              "english": "Build a minimal operating system kernel with basic functionality.",
+              "hinglish": "Minimal operating system kernel banana jisme basic functionality ho."
+            },
+            "duration": "8–12 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["c-adv-001", "c-adv-002"]
+            },
+            "core_features": [
+              "Bootloader integration",
+              "Interrupt handling",
+              "Process scheduling",
+              "Memory management",
+              "Simple shell",
+              "File system",
+              "Device drivers"
+            ],
+            "learning_outcomes": [
+              "OS concepts implementation",
+              "Assembly integration",
+              "Hardware interaction",
+              "Kernel development",
+              "System programming"
+            ],
+            "interview_topics": [
+              "Process vs Thread",
+              "Memory management",
+              "Scheduling algorithms",
+              "Interrupt handling"
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "stackMeta": {
+        "name": "C++ with DSA",
+        "slug": "cpp-dsa",
+        "description": "Object-Oriented Programming and Data Structures in C++"
+      },
+      "default_stack": {
+        "language": "C++",
+        "version": "C++17/20",
+        "build_system": "CMake",
+        "testing": "Google Test"
+      },
+      "levels": {
+        "beginner": [
+          {
+            "id": "cpp-beg-001",
+            "slug": "banking-system",
+            "title": "Banking System",
+            "summary": {
+              "english": "Create an object-oriented banking system with accounts and transactions.",
+              "hinglish": "Object-oriented banking system banana jisme accounts aur transactions ho."
+            },
+            "duration": "1–2 weeks",
+            "project_type": "Console Application",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["cpp-basics", "oop-concepts"]
+            },
+            "core_features": [
+              "Account creation (Savings/Current)",
+              "Deposit/withdrawal",
+              "Fund transfer",
+              "Transaction history",
+              "Interest calculation",
+              "Customer management"
+            ],
+            "classes": [
+              "Account (abstract base class)",
+              "SavingsAccount",
+              "CurrentAccount",
+              "Customer",
+              "Transaction",
+              "Bank"
+            ],
+            "learning_outcomes": [
+              "Inheritance and polymorphism",
+              "Exception handling",
+              "STL containers",
+              "File serialization",
+              "Operator overloading"
+            ],
+            "interview_topics": [
+              "OOP principles",
+              "Virtual functions",
+              "Exception safety",
+              "RAII principle"
+            ],
+            "deployment": {
+              "build": "CMake",
+              "testing": "Google Test",
+              "documentation": "Doxygen"
+            }
+          },
+          {
+            "id": "cpp-beg-002",
+            "slug": "university-course-registration",
+            "title": "University Course Registration System",
+            "summary": {
+              "english": "Build a course registration system for university students.",
+              "hinglish": "University students ke liye course registration system banana."
+            },
+            "duration": "1–2 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["cpp-basics", "stl"]
+            },
+            "core_features": [
+              "Student registration",
+              "Course catalog",
+              "Prerequisite checking",
+              "Schedule conflict detection",
+              "Grade management",
+              "Faculty portal"
+            ],
+            "learning_outcomes": [
+              "STL algorithms",
+              "Smart pointers",
+              "Lambda expressions",
+              "Custom comparators",
+              "Data serialization"
+            ]
+          }
+        ],
+        "intermediate": [
+          {
+            "id": "cpp-int-001",
+            "slug": "custom-stl-container",
+            "title": "Custom STL Container Library",
+            "summary": {
+              "english": "Implement custom versions of STL containers with full functionality.",
+              "hinglish": "STL containers ke custom versions implement karna jo full functionality rakhe."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["cpp-beg-001", "cpp-beg-002"]
+            },
+            "core_features": [
+              "Vector implementation",
+              "Linked list (forward_list)",
+              "Hash map (unordered_map)",
+              "Binary search tree (map)",
+              "Iterator support",
+              "Allocator support"
+            ],
+            "learning_outcomes": [
+              "Template metaprogramming",
+              "Iterator concepts",
+              "Allocator design",
+              "Exception guarantees",
+              "Move semantics"
+            ],
+            "interview_topics": [
+              "STL implementation details",
+              "Template specialization",
+              "Iterator categories",
+              "Memory allocation strategies"
+            ]
+          },
+          {
+            "id": "cpp-int-002",
+            "slug": "multiplayer-chess-game",
+            "title": "Multiplayer Chess Game",
+            "summary": {
+              "english": "Create a chess game with AI opponent and multiplayer support.",
+              "hinglish": "Chess game banana jisme AI opponent aur multiplayer support ho."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["cpp-basics", "algorithms"]
+            },
+            "core_features": [
+              "Chess rules enforcement",
+              "Minimax AI with alpha-beta pruning",
+              "Network multiplayer",
+              "Move validation",
+              "Game history",
+              "PGN export"
+            ],
+            "learning_outcomes": [
+              "Game tree algorithms",
+              "Network programming",
+              "GUI with Qt/SFML",
+              "State machine design",
+              "Undo/redo system"
+            ]
+          }
+        ],
+        "advanced": [
+          {
+            "id": "cpp-adv-001",
+            "slug": "database-management-system",
+            "title": "Database Management System",
+            "summary": {
+              "english": "Build a relational database management system with SQL support.",
+              "hinglish": "Relational database management system banana jo SQL support kare."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["cpp-int-001", "cpp-int-002"]
+            },
+            "core_features": [
+              "SQL parser",
+              "Query optimizer",
+              "B+ tree indexing",
+              "Transaction management",
+              "Join algorithms",
+              "Concurrency control",
+              "Recovery system"
+            ],
+            "learning_outcomes": [
+              "Database internals",
+              "Query optimization",
+              "Locking protocols",
+              "Crash recovery",
+              "Buffer pool management"
+            ],
+            "interview_topics": [
+              "Database architecture",
+              "Query processing",
+              "Concurrency control",
+              "Indexing strategies"
+            ]
+          },
+          {
+            "id": "cpp-adv-002",
+            "slug": "game-engine",
+            "title": "2D Game Engine",
+            "summary": {
+              "english": "Create a 2D game engine with rendering, physics, and scripting.",
+              "hinglish": "2D game engine banana jisme rendering, physics aur scripting ho."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["cpp-int-002"]
+            },
+            "core_features": [
+              "Entity-Component-System architecture",
+              "2D rendering with OpenGL",
+              "Physics engine",
+              "Scripting with Lua",
+              "Resource management",
+              "Scene graph",
+              "Particle system"
+            ],
+            "learning_outcomes": [
+              "ECS architecture",
+              "OpenGL programming",
+              "Physics simulation",
+              "Script engine integration",
+              "Memory management for games"
+            ],
+            "interview_topics": [
+              "Game architecture",
+              "Render pipeline",
+              "Physics engines",
+              "Scripting systems"
+            ]
+          }
+        ],
+        "expert": [
+          {
+            "id": "cpp-exp-001",
+            "slug": "distributed-file-system",
+            "title": "Distributed File System",
+            "summary": {
+              "english": "Build a distributed file system with replication and fault tolerance.",
+              "hinglish": "Distributed file system banana jisme replication aur fault tolerance ho."
+            },
+            "duration": "8–12 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["cpp-adv-001", "cpp-adv-002"]
+            },
+            "core_features": [
+              "Distributed architecture",
+              "Data replication",
+              "Fault tolerance",
+              "Consistency models",
+              "Load balancing",
+              "Security with encryption",
+              "Monitoring dashboard"
+            ],
+            "learning_outcomes": [
+              "Distributed systems",
+              "Consensus algorithms",
+              "Network protocols",
+              "Fault tolerance",
+              "System design"
+            ],
+            "interview_topics": [
+              "CAP theorem",
+              "Consensus algorithms",
+              "Distributed transactions",
+              "System design patterns"
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "stackMeta": {
+        "name": "Java Development",
+        "slug": "java-development",
+        "description": "Enterprise Java applications with Spring Framework"
+      },
+      "default_stack": {
+        "language": "Java",
+        "version": "Java 17+",
+        "build_tool": "Maven/Gradle",
+        "framework": "Spring Boot"
+      },
+      "levels": {
+        "beginner": [
+          {
+            "id": "java-beg-001",
+            "slug": "hotel-management-system",
+            "title": "Hotel Management System",
+            "summary": {
+              "english": "Build a hotel management system for room bookings and customer management.",
+              "hinglish": "Hotel management system banana jisme room bookings aur customer management ho."
+            },
+            "duration": "1–2 weeks",
+            "project_type": "Console Application",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["java-basics", "oop", "collections"]
+            },
+            "core_features": [
+              "Room management",
+              "Booking system",
+              "Customer registration",
+              "Billing and invoices",
+              "Check-in/check-out",
+              "Room availability"
+            ],
+            "technologies": [
+              "Java Core",
+              "Collections Framework",
+              "File I/O",
+              "Date-Time API"
+            ],
+            "learning_outcomes": [
+              "Java collections",
+              "Exception handling",
+              "File operations",
+              "Object-oriented design",
+              "Package organization"
+            ],
+            "interview_topics": [
+              "Java collections hierarchy",
+              "Exception handling",
+              "Object class methods",
+              "String manipulation"
+            ],
+            "deployment": {
+              "build": "Maven",
+              "packaging": "JAR file",
+              "testing": "JUnit 5"
+            }
+          },
+          {
+            "id": "java-beg-002",
+            "slug": "library-management-java",
+            "title": "Library Management System (Java)",
+            "summary": {
+              "english": "Create a library management system with JDBC and MySQL.",
+              "hinglish": "JDBC aur MySQL ke sath library management system banana."
+            },
+            "duration": "1–2 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["java-basics", "jdbc", "sql"]
+            },
+            "core_features": [
+              "Book catalog with CRUD",
+              "Member management",
+              "Book issuing/returning",
+              "Fine calculation",
+              "Search functionality",
+              "Reports generation"
+            ],
+            "learning_outcomes": [
+              "JDBC programming",
+              "Database connectivity",
+              "DAO pattern",
+              "Transaction management",
+              "Connection pooling"
+            ]
+          }
+        ],
+        "intermediate": [
+          {
+            "id": "java-int-001",
+            "slug": "online-exam-system",
+            "title": "Online Examination System",
+            "summary": {
+              "english": "Build an online exam platform with timer and automatic evaluation.",
+              "hinglish": "Online exam platform banana jisme timer aur automatic evaluation ho."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["java-beg-001", "java-beg-002"]
+            },
+            "core_features": [
+              "Question bank",
+              "Multiple question types",
+              "Timer functionality",
+              "Auto evaluation",
+              "Result analysis",
+              "Admin panel"
+            ],
+            "learning_outcomes": [
+              "Multithreading",
+              "Swing/AWT GUI",
+              "Serialization",
+              "Design patterns",
+              "Event handling"
+            ],
+            "interview_topics": [
+              "Multithreading in Java",
+              "Swing architecture",
+              "Design patterns",
+              "Serialization"
+            ]
+          },
+          {
+            "id": "java-int-002",
+            "slug": "multiplayer-chat-application",
+            "title": "Multiplayer Chat Application",
+            "summary": {
+              "english": "Create a chat application with server-client architecture.",
+              "hinglish": "Server-client architecture ke sath chat application banana."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["java-basics", "networking"]
+            },
+            "core_features": [
+              "Multiple chat rooms",
+              "Private messaging",
+              "File sharing",
+              "User authentication",
+              "Message history",
+              "Online status"
+            ],
+            "learning_outcomes": [
+              "Socket programming",
+              "Network protocols",
+              "Thread synchronization",
+              "Client-server architecture",
+              "Protocol design"
+            ]
+          }
+        ],
+        "advanced": [
+          {
+            "id": "java-adv-001",
+            "slug": "ecommerce-platform-java",
+            "title": "E-commerce Platform",
+            "summary": {
+              "english": "Build a complete e-commerce platform with Spring Boot.",
+              "hinglish": "Spring Boot ke sath complete e-commerce platform banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["java-int-001", "java-int-002"]
+            },
+            "core_features": [
+              "Product catalog",
+              "Shopping cart",
+              "Order management",
+              "Payment integration",
+              "User authentication",
+              "Admin dashboard"
+            ],
+            "technologies": [
+              "Spring Boot",
+              "Spring Security",
+              "Spring Data JPA",
+              "MySQL/PostgreSQL",
+              "REST APIs",
+              "JWT authentication"
+            ],
+            "learning_outcomes": [
+              "Spring Boot framework",
+              "REST API development",
+              "JPA/Hibernate",
+              "Spring Security",
+              "Microservices basics"
+            ],
+            "interview_topics": [
+              "Spring framework architecture",
+              "Dependency injection",
+              "Spring Security",
+              "JPA relationships"
+            ]
+          },
+          {
+            "id": "java-adv-002",
+            "slug": "real-time-trading-system",
+            "title": "Real-time Stock Trading System",
+            "summary": {
+              "english": "Create a stock trading platform with real-time updates.",
+              "hinglish": "Stock trading platform banana jisme real-time updates ho."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["java-int-002"]
+            },
+            "core_features": [
+              "Real-time stock prices",
+              "Buy/sell orders",
+              "Portfolio tracking",
+              "Market data streaming",
+              "Order matching engine",
+              "Risk management"
+            ],
+            "learning_outcomes": [
+              "WebSocket programming",
+              "Concurrent data structures",
+              "Performance optimization",
+              "Financial algorithms",
+              "Real-time systems"
+            ],
+            "interview_topics": [
+              "Concurrency patterns",
+              "WebSocket vs REST",
+              "Performance optimization",
+              "Financial system design"
+            ]
+          }
+        ],
+        "expert": [
+          {
+            "id": "java-exp-001",
+            "slug": "microservices-banking-system",
+            "title": "Microservices Banking System",
+            "summary": {
+              "english": "Build a banking system using microservices architecture.",
+              "hinglish": "Microservices architecture use karke banking system banana."
+            },
+            "duration": "8–12 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["java-adv-001", "java-adv-002"]
+            },
+            "core_features": [
+              "Account service",
+              "Transaction service",
+              "Notification service",
+              "API gateway",
+              "Service discovery",
+              "Circuit breaker",
+              "Distributed tracing"
+            ],
+            "technologies": [
+              "Spring Cloud",
+              "Docker",
+              "Kubernetes",
+              "RabbitMQ/Kafka",
+              "Zipkin",
+              "Eureka/Consul"
+            ],
+            "learning_outcomes": [
+              "Microservices architecture",
+              "Service communication",
+              "Containerization",
+              "Message queues",
+              "Distributed systems"
+            ],
+            "interview_topics": [
+              "Microservices patterns",
+              "Service discovery",
+              "Circuit breaker pattern",
+              "Distributed transactions"
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "stackMeta": {
+        "name": "Python Development",
+        "slug": "python-development",
+        "description": "Python applications across web, data science, automation, and AI/ML"
+      },
+      "default_stack": {
+        "language": "Python",
+        "version": "Python 3.10+",
+        "package_manager": "pip/poetry",
+        "virtual_env": "venv/conda"
+      },
+      "levels": {
+        "beginner": [
+          {
+            "id": "py-beg-001",
+            "slug": "contact-management-system",
+            "title": "Contact Management System",
+            "summary": {
+              "english": "Build a contact management system with CRUD operations and search.",
+              "hinglish": "Contact management system banana jisme CRUD operations aur search ho."
+            },
+            "duration": "1–2 weeks",
+            "project_type": "Console Application",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["python-basics", "file-handling"]
+            },
+            "core_features": [
+              "Add/update/delete contacts",
+              "Search by name/phone",
+              "Contact groups",
+              "Import/export CSV",
+              "Birthday reminders",
+              "Data validation"
+            ],
+            "technologies": [
+              "Python core",
+              "CSV module",
+              "JSON serialization",
+              "Regular expressions"
+            ],
+            "learning_outcomes": [
+              "File handling",
+              "Data structures",
+              "Regular expressions",
+              "Error handling",
+              "CLI interface design"
+            ],
+            "interview_topics": [
+              "Python data structures",
+              "File I/O operations",
+              "Exception handling",
+              "List comprehensions"
+            ],
+            "deployment": {
+              "packaging": "setuptools",
+              "distribution": "PyPI (optional)",
+              "documentation": "docstrings"
+            }
+          },
+          {
+            "id": "py-beg-002",
+            "slug": "expense-tracker-python",
+            "title": "Expense Tracker",
+            "summary": {
+              "english": "Create an expense tracker with data visualization.",
+              "hinglish": "Expense tracker banana jisme data visualization ho."
+            },
+            "duration": "1–2 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["python-basics", "matplotlib"]
+            },
+            "core_features": [
+              "Add daily expenses",
+              "Categorize expenses",
+              "Monthly reports",
+              "Data visualization",
+              "Budget planning",
+              "Export to Excel"
+            ],
+            "learning_outcomes": [
+              "Matplotlib plotting",
+              "Pandas dataframes",
+              "SQLite database",
+              "Chart generation",
+              "Data analysis"
+            ]
+          }
+        ],
+        "intermediate": [
+          {
+            "id": "py-int-001",
+            "slug": "web-scraper-analytics",
+            "title": "Web Scraper with Analytics",
+            "summary": {
+              "english": "Build a web scraper that collects data and provides analytics.",
+              "hinglish": "Web scraper banana jo data collect kare aur analytics provide kare."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["py-beg-001", "py-beg-002"]
+            },
+            "core_features": [
+              "Multi-site scraping",
+              "Data cleaning",
+              "Sentiment analysis",
+              "Trend visualization",
+              "Scheduled scraping",
+              "Export to database"
+            ],
+            "technologies": [
+              "BeautifulSoup/Scrapy",
+              "Selenium",
+              "Pandas",
+              "NLTK",
+              "SQLAlchemy"
+            ],
+            "learning_outcomes": [
+              "Web scraping techniques",
+              "Data cleaning",
+              "Natural language processing",
+              "Database integration",
+              "Scheduling tasks"
+            ],
+            "interview_topics": [
+              "Web scraping ethics",
+              "BeautifulSoup vs Scrapy",
+              "Data cleaning techniques",
+              "NLP basics"
+            ]
+          },
+          {
+            "id": "py-int-002",
+            "slug": "automation-toolkit",
+            "title": "Automation Toolkit",
+            "summary": {
+              "english": "Create a toolkit for automating repetitive tasks.",
+              "hinglish": "Repetitive tasks automate karne ke liye toolkit banana."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["python-basics", "os-module"]
+            },
+            "core_features": [
+              "File organizer",
+              "Bulk file renamer",
+              "Image processor",
+              "PDF merger/splitter",
+              "Email automation",
+              "System monitor"
+            ],
+            "learning_outcomes": [
+              "OS module operations",
+              "PIL for images",
+              "PyPDF2 for PDFs",
+              "SMTP for emails",
+              "GUI with Tkinter"
+            ]
+          }
+        ],
+        "advanced": [
+          {
+            "id": "py-adv-001",
+            "slug": "django-ecommerce",
+            "title": "Django E-commerce Platform",
+            "summary": {
+              "english": "Build a full-featured e-commerce platform with Django.",
+              "hinglish": "Django ke sath full-featured e-commerce platform banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["py-int-001", "py-int-002"]
+            },
+            "core_features": [
+              "Product catalog",
+              "Shopping cart",
+              "Payment integration",
+              "Order tracking",
+              "User reviews",
+              "Admin dashboard",
+              "REST API"
+            ],
+            "technologies": [
+              "Django",
+              "Django REST Framework",
+              "PostgreSQL",
+              "Stripe/PayPal",
+              "Celery",
+              "Redis"
+            ],
+            "learning_outcomes": [
+              "Django framework",
+              "REST API development",
+              "Payment processing",
+              "Async tasks with Celery",
+              "Caching with Redis"
+            ],
+            "interview_topics": [
+              "Django ORM",
+              "Django middleware",
+              "REST API design",
+              "Database optimization"
+            ]
+          },
+          {
+            "id": "py-adv-002",
+            "slug": "machine-learning-pipeline",
+            "title": "Machine Learning Pipeline",
+            "summary": {
+              "english": "Create an end-to-end ML pipeline for predictive modeling.",
+              "hinglish": "Predictive modeling ke liye end-to-end ML pipeline banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["py-int-001"]
+            },
+            "core_features": [
+              "Data preprocessing",
+              "Feature engineering",
+              "Model training",
+              "Hyperparameter tuning",
+              "Model deployment",
+              "Prediction API",
+              "Monitoring dashboard"
+            ],
+            "technologies": [
+              "Scikit-learn",
+              "TensorFlow/PyTorch",
+              "Pandas",
+              "Flask/FastAPI",
+              "Docker",
+              "MLflow"
+            ],
+            "learning_outcomes": [
+              "Machine learning workflow",
+              "Model evaluation",
+              "API deployment",
+              "Docker containerization",
+              "MLOps basics"
+            ],
+            "interview_topics": [
+              "ML algorithms",
+              "Feature engineering",
+              "Model evaluation metrics",
+              "ML deployment challenges"
+            ]
+          }
+        ],
+        "expert": [
+          {
+            "id": "py-exp-001",
+            "slug": "real-time-analytics-platform",
+            "title": "Real-time Analytics Platform",
+            "summary": {
+              "english": "Build a real-time analytics platform for streaming data.",
+              "hinglish": "Streaming data ke liye real-time analytics platform banana."
+            },
+            "duration": "8–12 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["py-adv-001", "py-adv-002"]
+            },
+            "core_features": [
+              "Data ingestion pipeline",
+              "Real-time processing",
+              "Stream analytics",
+              "Alert system",
+              "Dashboard with live updates",
+              "Historical data analysis",
+              "Scalable architecture"
+            ],
+            "technologies": [
+              "Apache Kafka",
+              "Apache Spark",
+              "FastAPI",
+              "Redis Streams",
+              "Docker/Kubernetes",
+              "Grafana"
+            ],
+            "learning_outcomes": [
+              "Stream processing",
+              "Big data technologies",
+              "Real-time systems",
+              "Scalable architecture",
+              "Monitoring and alerts"
+            ],
+            "interview_topics": [
+              "Stream processing architecture",
+              "Kafka concepts",
+              "Spark streaming",
+              "System scalability"
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "stackMeta": {
+        "name": "Java Spring Boot",
+        "slug": "java-spring-boot",
+        "description": "Enterprise applications with Spring Boot ecosystem"
+      },
+      "default_stack": {
+        "framework": "Spring Boot",
+        "language": "Java 17+",
+        "build_tool": "Gradle",
+        "database": "PostgreSQL/MySQL"
+      },
+      "levels": {
+        "beginner": [
+          {
+            "id": "spring-beg-001",
+            "slug": "rest-api-blog-platform",
+            "title": "REST API Blog Platform",
+            "summary": {
+              "english": "Build a blog platform REST API with Spring Boot.",
+              "hinglish": "Spring Boot ke sath blog platform REST API banana."
+            },
+            "duration": "1–2 weeks",
+            "project_type": "REST API",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["java-basics", "spring-basics"]
+            },
+            "core_features": [
+              "User authentication",
+              "Create/read/update posts",
+              "Comments system",
+              "Categories and tags",
+              "Search functionality",
+              "Pagination"
+            ],
+            "technologies": [
+              "Spring Boot",
+              "Spring Security",
+              "JPA/Hibernate",
+              "PostgreSQL",
+              "JWT",
+              "Swagger/OpenAPI"
+            ],
+            "learning_outcomes": [
+              "Spring Boot setup",
+              "REST controller design",
+              "JPA entity mapping",
+              "Spring Security integration",
+              "API documentation"
+            ],
+            "interview_topics": [
+              "Spring Boot auto-configuration",
+              "REST API best practices",
+              "JPA relationships",
+              "Spring Security filters"
+            ],
+            "deployment": {
+              "cloud": "AWS/Google Cloud",
+              "container": "Docker",
+              "ci_cd": "GitHub Actions"
+            }
+          },
+          {
+            "id": "spring-beg-002",
+            "slug": "employee-management-system",
+            "title": "Employee Management System",
+            "summary": {
+              "english": "Create an employee management system with department hierarchy.",
+              "hinglish": "Employee management system banana jisme department hierarchy ho."
+            },
+            "duration": "1–2 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["spring-basics", "jpa"]
+            },
+            "core_features": [
+              "Employee CRUD operations",
+              "Department management",
+              "Reporting structure",
+              "Attendance tracking",
+              "Leave management",
+              "Payroll integration"
+            ],
+            "learning_outcomes": [
+              "One-to-many relationships",
+              "Custom queries with @Query",
+              "DTO pattern",
+              "Validation annotations",
+              "Exception handling"
+            ]
+          }
+        ],
+        "intermediate": [
+          {
+            "id": "spring-int-001",
+            "slug": "ecommerce-microservices",
+            "title": "E-commerce Microservices",
+            "summary": {
+              "english": "Build an e-commerce system using microservices architecture.",
+              "hinglish": "Microservices architecture use karke e-commerce system banana."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["spring-beg-001", "spring-beg-002"]
+            },
+            "core_features": [
+              "Product service",
+              "Order service",
+              "Payment service",
+              "Inventory service",
+              "Notification service",
+              "API gateway"
+            ],
+            "technologies": [
+              "Spring Cloud",
+              "Eureka",
+              "Feign Client",
+              "Circuit Breaker",
+              "Spring Cloud Gateway",
+              "RabbitMQ"
+            ],
+            "learning_outcomes": [
+              "Microservices communication",
+              "Service discovery",
+              "Circuit breaker pattern",
+              "Message queues",
+              "Distributed tracing"
+            ],
+            "interview_topics": [
+              "Microservices vs Monolith",
+              "Service discovery",
+              "Circuit breaker implementation",
+              "Message broker patterns"
+            ]
+          },
+          {
+            "id": "spring-int-002",
+            "slug": "real-time-chat-application",
+            "title": "Real-time Chat Application",
+            "summary": {
+              "english": "Create a real-time chat app with WebSocket and Spring Boot.",
+              "hinglish": "WebSocket aur Spring Boot ke sath real-time chat app banana."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["spring-basics", "websocket"]
+            },
+            "core_features": [
+              "One-to-one chat",
+              "Group chat rooms",
+              "File sharing",
+              "Message persistence",
+              "Online status",
+              "Message delivery status"
+            ],
+            "learning_outcomes": [
+              "WebSocket programming",
+              "STOMP protocol",
+              "Real-time messaging",
+              "Message brokering",
+              "Frontend integration"
+            ]
+          }
+        ],
+        "advanced": [
+          {
+            "id": "spring-adv-001",
+            "slug": "banking-system-spring",
+            "title": "Banking System",
+            "summary": {
+              "english": "Build a secure banking system with transaction processing.",
+              "hinglish": "Secure banking system banana jisme transaction processing ho."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["spring-int-001", "spring-int-002"]
+            },
+            "core_features": [
+              "Account management",
+              "Fund transfer",
+              "Transaction history",
+              "Loan processing",
+              "Fraud detection",
+              "Reporting",
+              "Audit logging"
+            ],
+            "technologies": [
+              "Spring Boot",
+              "Spring Security",
+              "JPA/Hibernate",
+              "Redis caching",
+              "Scheduled tasks",
+              "PDF generation"
+            ],
+            "learning_outcomes": [
+              "Transaction management",
+              "Audit logging",
+              "Caching strategies",
+              "Scheduled tasks",
+              "PDF report generation"
+            ],
+            "interview_topics": [
+              "ACID properties",
+              "Transaction isolation",
+              "Caching strategies",
+              "Security best practices"
+            ]
+          },
+          {
+            "id": "spring-adv-002",
+            "slug": "flight-booking-system",
+            "title": "Flight Booking System",
+            "summary": {
+              "english": "Create a flight booking system with seat allocation and pricing.",
+              "hinglish": "Flight booking system banana jisme seat allocation aur pricing ho."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["spring-int-001"]
+            },
+            "core_features": [
+              "Flight search",
+              "Seat selection",
+              "Dynamic pricing",
+              "Booking management",
+              "Payment processing",
+              "Email notifications",
+              "Cancellation/refund"
+            ],
+            "learning_outcomes": [
+              "Complex business logic",
+              "Dynamic pricing algorithms",
+              "Seat allocation strategies",
+              "Payment gateway integration",
+              "Email service integration"
+            ],
+            "interview_topics": [
+              "Booking system design",
+              "Concurrency handling",
+              "Payment processing",
+              "Notification systems"
+            ]
+          }
+        ],
+        "expert": [
+          {
+            "id": "spring-exp-001",
+            "slug": "saas-multi-tenant-platform",
+            "title": "SaaS Multi-tenant Platform",
+            "summary": {
+              "english": "Build a multi-tenant SaaS platform with separate databases.",
+              "hinglish": "Multi-tenant SaaS platform banana jisme separate databases ho."
+            },
+            "duration": "8–12 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["spring-adv-001", "spring-adv-002"]
+            },
+            "core_features": [
+              "Multi-tenancy architecture",
+              "Tenant isolation",
+              "Subscription management",
+              "Billing system",
+              "Custom domain support",
+              "Analytics per tenant",
+              "White-labeling"
+            ],
+            "technologies": [
+              "Spring Boot",
+              "Database per tenant",
+              "Schema per tenant",
+              "Stripe integration",
+              "Custom DNS",
+              "Docker/Kubernetes"
+            ],
+            "learning_outcomes": [
+              "Multi-tenancy patterns",
+              "Database isolation strategies",
+              "Subscription billing",
+              "Custom domain routing",
+              "SaaS architecture"
+            ],
+            "interview_topics": [
+              "Multi-tenancy approaches",
+              "Database isolation",
+              "SaaS billing",
+              "Tenant onboarding"
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "stackMeta": {
+        "name": "C# .NET Development",
+        "slug": "csharp-dotnet",
+        "description": "Windows applications, web APIs, and enterprise solutions with .NET"
+      },
+      "default_stack": {
+        "language": "C#",
+        "framework": ".NET 8+",
+        "ide": "Visual Studio 2022",
+        "database": "SQL Server"
+      },
+      "levels": {
+        "beginner": [
+          {
+            "id": "csharp-beg-001",
+            "slug": "windows-forms-inventory",
+            "title": "Windows Forms Inventory System",
+            "summary": {
+              "english": "Build an inventory management system with Windows Forms.",
+              "hinglish": "Windows Forms ke sath inventory management system banana."
+            },
+            "duration": "1–2 weeks",
+            "project_type": "Desktop Application",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["csharp-basics", "winforms"]
+            },
+            "core_features": [
+              "Product management",
+              "Stock tracking",
+              "Supplier management",
+              "Purchase orders",
+              "Sales tracking",
+              "Reporting"
+            ],
+            "technologies": [
+              "Windows Forms",
+              "ADO.NET",
+              "SQL Server",
+              "Crystal Reports/RDLC",
+              "Entity Framework Core"
+            ],
+            "learning_outcomes": [
+              "Windows Forms development",
+              "Database connectivity",
+              "Data binding",
+              "Report generation",
+              "Exception handling"
+            ],
+            "interview_topics": [
+              "Windows Forms architecture",
+              "ADO.NET vs EF Core",
+              "Event handling",
+              "Data binding"
+            ],
+            "deployment": {
+              "setup": "ClickOnce/Installer",
+              "database": "SQL Server Express",
+              "distribution": "MSI package"
+            }
+          },
+          {
+            "id": "csharp-beg-002",
+            "slug": "student-gradebook",
+            "title": "Student Gradebook System",
+            "summary": {
+              "english": "Create a student grade tracking system with ASP.NET Core MVC.",
+              "hinglish": "ASP.NET Core MVC ke sath student grade tracking system banana."
+            },
+            "duration": "1–2 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["csharp-basics", "aspnet-mvc"]
+            },
+            "core_features": [
+              "Student registration",
+              "Course management",
+              "Grade entry",
+              "GPA calculation",
+              "Transcript generation",
+              "Teacher portal"
+            ],
+            "learning_outcomes": [
+              "ASP.NET Core MVC",
+              "Razor pages",
+              "Model binding",
+              "Authentication/Authorization",
+              "PDF generation"
+            ]
+          }
+        ],
+        "intermediate": [
+          {
+            "id": "csharp-int-001",
+            "slug": "hospital-management-system",
+            "title": "Hospital Management System",
+            "summary": {
+              "english": "Build a comprehensive hospital management system.",
+              "hinglish": "Comprehensive hospital management system banana."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["csharp-beg-001", "csharp-beg-002"]
+            },
+            "core_features": [
+              "Patient registration",
+              "Appointment scheduling",
+              "Doctor management",
+              "Medical records",
+              "Billing and invoices",
+              "Pharmacy management"
+            ],
+            "technologies": [
+              "ASP.NET Core Web API",
+              "Entity Framework Core",
+              "SQL Server",
+              "Angular/React frontend",
+              "SignalR for real-time"
+            ],
+            "learning_outcomes": [
+              "Web API development",
+              "Complex relationships",
+              "Real-time updates",
+              "File upload handling",
+              "Reporting services"
+            ],
+            "interview_topics": [
+              "Web API design",
+              "EF Core performance",
+              "SignalR implementation",
+              "Database optimization"
+            ]
+          },
+          {
+            "id": "csharp-int-002",
+            "slug": "task-management-wpf",
+            "title": "Task Management System (WPF)",
+            "summary": {
+              "english": "Create a task management system with WPF and MVVM.",
+              "hinglish": "WPF aur MVVM ke sath task management system banana."
+            },
+            "duration": "3–4 weeks",
+            "unlock_rules": {
+              "type": "skill-based",
+              "requires": ["csharp-basics", "wpf", "mvvm"]
+            },
+            "core_features": [
+              "Task creation/assignment",
+              "Progress tracking",
+              "Team collaboration",
+              "Time tracking",
+              "Gantt charts",
+              "Notifications"
+            ],
+            "learning_outcomes": [
+              "WPF development",
+              "MVVM pattern",
+              "Data binding in WPF",
+              "Custom controls",
+              "Prism/Caliburn.Micro"
+            ]
+          }
+        ],
+        "advanced": [
+          {
+            "id": "csharp-adv-001",
+            "slug": "ecommerce-platform-dotnet",
+            "title": "E-commerce Platform",
+            "summary": {
+              "english": "Build a full e-commerce platform with .NET Core.",
+              "hinglish": ".NET Core ke sath full e-commerce platform banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["csharp-int-001", "csharp-int-002"]
+            },
+            "core_features": [
+              "Product catalog",
+              "Shopping cart",
+              "Checkout process",
+              "Payment integration",
+              "Order management",
+              "Customer accounts",
+              "Admin dashboard"
+            ],
+            "technologies": [
+              ".NET Core Web API",
+              "Entity Framework Core",
+              "SQL Server",
+              "Redis caching",
+              "Stripe/PayPal",
+              "Identity Server"
+            ],
+            "learning_outcomes": [
+              "Microservices architecture",
+              "Payment processing",
+              "Caching strategies",
+              "Identity management",
+              "API gateway"
+            ],
+            "interview_topics": [
+              ".NET Core architecture",
+              "Microservices in .NET",
+              "Payment integration",
+              "Security best practices"
+            ]
+          },
+          {
+            "id": "csharp-adv-002",
+            "slug": "real-time-dashboard",
+            "title": "Real-time Analytics Dashboard",
+            "summary": {
+              "english": "Create a real-time dashboard with SignalR and Blazor.",
+              "hinglish": "SignalR aur Blazor ke sath real-time dashboard banana."
+            },
+            "duration": "4–6 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["csharp-int-001"]
+            },
+            "core_features": [
+              "Real-time data updates",
+              "Interactive charts",
+              "Data filtering",
+              "Export functionality",
+              "User permissions",
+              "Alert system",
+              "Historical analysis"
+            ],
+            "learning_outcomes": [
+              "Blazor development",
+              "SignalR for real-time",
+              "Chart.js integration",
+              "Real-time data processing",
+              "WebAssembly"
+            ],
+            "interview_topics": [
+              "Blazor Server vs WebAssembly",
+              "SignalR architecture",
+              "Real-time data handling",
+              "WebAssembly in .NET"
+            ]
+          }
+        ],
+        "expert": [
+          {
+            "id": "csharp-exp-001",
+            "slug": "enterprise-erp-system",
+            "title": "Enterprise ERP System",
+            "summary": {
+              "english": "Build an enterprise ERP system with multiple modules.",
+              "hinglish": "Enterprise ERP system banana jisme multiple modules ho."
+            },
+            "duration": "8–12 weeks",
+            "unlock_rules": {
+              "type": "project-based",
+              "requires": ["csharp-adv-001", "csharp-adv-002"]
+            },
+            "core_features": [
+              "HR management",
+              "Payroll processing",
+              "Inventory management",
+              "Accounting module",
+              "CRM module",
+              "Project management",
+              "Reporting and analytics"
+            ],
+            "technologies": [
+              ".NET Core Microservices",
+              "Docker/Kubernetes",
+              "RabbitMQ",
+              "Redis",
+              "SQL Server/PostgreSQL",
+              "Angular/React",
+              "Identity Server"
+            ],
+            "learning_outcomes": [
+              "Enterprise architecture",
+              "Microservices design",
+              "Message queuing",
+              "Distributed transactions",
+              "Legacy system integration"
+            ],
+            "interview_topics": [
+              "ERP system design",
+              "Microservices communication",
+              "Database sharding",
+              "System integration"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

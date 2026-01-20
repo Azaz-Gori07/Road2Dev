@@ -1,0 +1,687 @@
+{
+  "technology": "C Programming Language",
+  "slug": "c-programming-complete-course",
+  "description": "Complete C programming course from basics to advanced concepts including memory management, pointers, data structures, and real-world applications. C programming language is the foundation of modern programming and operating systems.",
+  "levels": [
+    {
+      "level": "Foundation - C Basics",
+      "order": 1,
+      "description": "Learn C programming fundamentals, syntax, and basic programs",
+      "topics": [
+        {
+          "id": 1,
+          "title": "Introduction to C Language",
+          "english": "History, features, and importance of C programming",
+          "hinglish": "C programming ka history, features aur importance",
+          "examples": [
+            "First C program - Hello World",
+            "Compilation process"
+          ],
+          "practice": [
+            {
+              "question": "C language kisne develop kiya?",
+              "answer": "Dennis Ritchie (1972) Bell Labs mein"
+            },
+            {
+              "question": "C ko 'Mother Language' kyun kehte hain?",
+              "answer": "Kyuki modern languages (C++, Java, Python) C se influence hui hain"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}",
+            "components": [
+              {
+                "name": "#include <stdio.h>",
+                "english": "Header file for input/output functions",
+                "hinglish": "Input/output functions ke liye header file",
+                "importance": "High",
+                "tip": "Standard Input Output header file",
+                "role": "Provides printf(), scanf() functions"
+              },
+              {
+                "name": "main() function",
+                "english": "Entry point of every C program",
+                "hinglish": "Har C program ka entry point",
+                "importance": "Critical",
+                "example": "Execution starts from main() function"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Feature", "C", "Other Languages"],
+              "rows": [
+                ["Type", "Procedural", "OOP/Functional"],
+                ["Memory Management", "Manual", "Automatic (mostly)"],
+                ["Speed", "Very Fast", "Varies"],
+                ["Learning Curve", "Medium", "Easy to Hard"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 2,
+          "title": "C Program Structure",
+          "english": "Understanding C program components and compilation process",
+          "hinglish": "C program ke components aur compilation process samjhein",
+          "examples": [
+            "Complete program structure",
+            "Comments and documentation"
+          ],
+          "practice": [
+            {
+              "question": "C program compilation steps?",
+              "answer": "Preprocessing → Compilation → Assembly → Linking"
+            },
+            {
+              "question": "Single line comment kaise likhein?",
+              "answer": "// ye single line comment hai"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "/*\nMulti-line comment\nProgram: Calculator\nAuthor: Student\n*/\n\n#include <stdio.h>  // Header file\n#include <math.h>   // Math functions\n\n#define PI 3.14159  // Constant definition\n\n// Function declaration\nint add(int a, int b);\n\n// Main function\nint main() {\n    // Variable declaration\n    int x = 10, y = 20;\n    \n    // Function call\n    int result = add(x, y);\n    \n    // Output\n    printf(\"Sum: %d\\n\", result);\n    \n    return 0;\n}\n\n// Function definition\nint add(int a, int b) {\n    return a + b;\n}",
+            "components": [
+              {
+                "name": "Preprocessor Directives",
+                "english": "#include, #define statements",
+                "hinglish": "#include, #define statements",
+                "role": "Handle before compilation",
+                "tip": "Start with # symbol"
+              },
+              {
+                "name": "Comments",
+                "english": "Code documentation",
+                "hinglish": "Code documentation",
+                "importance": "High",
+                "pros": "Makes code readable",
+                "cons": "Ignored by compiler"
+              }
+            ]
+          }
+        },
+        {
+          "id": 3,
+          "title": "Variables & Data Types",
+          "english": "Declaring variables and understanding data types in C",
+          "hinglish": "C mein variables declare karna aur data types samjhein",
+          "examples": [
+            "Integer variables",
+            "Float and double",
+            "Character variables"
+          ],
+          "practice": [
+            {
+              "question": "int data type kitna memory leta hai?",
+              "answer": "Typically 4 bytes (system dependent)"
+            },
+            {
+              "question": "float aur double mein difference?",
+              "answer": "float: 4 bytes (6-7 decimal digits), double: 8 bytes (15-16 decimal digits)"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <limits.h>\n#include <float.h>\n\nint main() {\n    // Integer types\n    int age = 25;\n    short smallNumber = 100;\n    long bigNumber = 1000000L;\n    \n    // Floating point types\n    float price = 99.99f;\n    double pi = 3.141592653589793;\n    \n    // Character type\n    char grade = 'A';\n    \n    // Boolean (using stdbool.h)\n    _Bool isTrue = 1;  // 0 = false, non-zero = true\n    \n    // Display sizes\n    printf(\"Size of int: %zu bytes\\n\", sizeof(int));\n    printf(\"Size of float: %zu bytes\\n\", sizeof(float));\n    printf(\"Size of double: %zu bytes\\n\", sizeof(double));\n    printf(\"Size of char: %zu byte\\n\", sizeof(char));\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Data Type Modifiers",
+                "english": "short, long, signed, unsigned",
+                "hinglish": "short, long, signed, unsigned",
+                "importance": "Medium",
+                "tip": "Use for memory optimization",
+                "example": "unsigned int for positive-only numbers"
+              },
+              {
+                "name": "sizeof() operator",
+                "english": "Returns size in bytes",
+                "hinglish": "Bytes mein size deta hai",
+                "role": "Memory size checking",
+                "pros": "Platform independent code"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Data Type", "Size", "Range"],
+              "rows": [
+                ["char", "1 byte", "-128 to 127"],
+                ["int", "4 bytes", "-2,147,483,648 to 2,147,483,647"],
+                ["float", "4 bytes", "1.2E-38 to 3.4E+38"],
+                ["double", "8 bytes", "2.3E-308 to 1.7E+308"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 4,
+          "title": "Input/Output Operations",
+          "english": "Reading input and displaying output in C",
+          "hinglish": "C mein input read karna aur output display karna",
+          "examples": [
+            "Using printf()",
+            "Using scanf()",
+            "Format specifiers"
+          ],
+          "practice": [
+            {
+              "question": "User se integer input kaise lein?",
+              "answer": "scanf(\"%d\", &variable);"
+            },
+            {
+              "question": "Float value ko 2 decimal places tak kaise print karein?",
+              "answer": "printf(\"%.2f\", value);"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n\nint main() {\n    // Output examples\n    printf(\"Hello World!\\n\");\n    printf(\"Number: %d\\n\", 42);\n    printf(\"Float: %.2f\\n\", 3.14159);\n    printf(\"Character: %c\\n\", 'A');\n    printf(\"String: %s\\n\", \"C Programming\");\n    \n    // Input examples\n    int age;\n    float salary;\n    char name[50];\n    \n    printf(\"Enter your age: \");\n    scanf(\"%d\", &age);\n    \n    printf(\"Enter your salary: \");\n    scanf(\"%f\", &salary);\n    \n    printf(\"Enter your name: \");\n    scanf(\"%s\", name);  // For single word\n    // For multi-word: scanf(\"%[^\\n]\", name);\n    \n    printf(\"\\n--- Details ---\\n\");\n    printf(\"Name: %s\\n\", name);\n    printf(\"Age: %d\\n\", age);\n    printf(\"Salary: $%.2f\\n\", salary);\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "printf() function",
+                "english": "Formatted output function",
+                "hinglish": "Formatted output function",
+                "importance": "High",
+                "tip": "Use \\n for new line",
+                "pros": "Flexible formatting"
+              },
+              {
+                "name": "scanf() function",
+                "english": "Formatted input function",
+                "hinglish": "Formatted input function",
+                "importance": "High",
+                "tip": "Always use & before variable name (except strings)",
+                "cons": "Buffer overflow risk with strings"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Intermediate - Control Flow & Functions",
+      "order": 2,
+      "description": "Master control structures, functions, and basic algorithms",
+      "topics": [
+        {
+          "id": 5,
+          "title": "Operators in C",
+          "english": "Arithmetic, relational, logical, and bitwise operators",
+          "hinglish": "Arithmetic, relational, logical, aur bitwise operators",
+          "examples": [
+            "Basic arithmetic operations",
+            "Comparison operations",
+            "Bit manipulation"
+          ],
+          "practice": [
+            {
+              "question": "i++ aur ++i mein difference?",
+              "answer": "i++: use then increment, ++i: increment then use"
+            },
+            {
+              "question": "Logical AND operator kaunsa hai?",
+              "answer": "&& (double ampersand)"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n\nint main() {\n    int a = 10, b = 3;\n    \n    // Arithmetic operators\n    printf(\"Addition: %d\\n\", a + b);\n    printf(\"Subtraction: %d\\n\", a - b);\n    printf(\"Multiplication: %d\\n\", a * b);\n    printf(\"Division: %d\\n\", a / b);\n    printf(\"Modulus: %d\\n\", a % b);\n    \n    // Relational operators\n    printf(\"a > b: %d\\n\", a > b);  // 1 (true)\n    printf(\"a == b: %d\\n\", a == b); // 0 (false)\n    \n    // Logical operators\n    int x = 1, y = 0;\n    printf(\"x && y: %d\\n\", x && y); // 0 (false)\n    printf(\"x || y: %d\\n\", x || y); // 1 (true)\n    printf(\"!x: %d\\n\", !x);         // 0 (false)\n    \n    // Bitwise operators\n    int num1 = 5;  // 0101\n    int num2 = 3;  // 0011\n    \n    printf(\"Bitwise AND: %d\\n\", num1 & num2);  // 1 (0001)\n    printf(\"Bitwise OR: %d\\n\", num1 | num2);   // 7 (0111)\n    printf(\"Bitwise XOR: %d\\n\", num1 ^ num2);  // 6 (0110)\n    printf(\"Left shift: %d\\n\", num1 << 1);     // 10 (1010)\n    printf(\"Right shift: %d\\n\", num1 >> 1);    // 2 (0010)\n    \n    // Assignment operators\n    int c = 5;\n    c += 3;  // c = c + 3\n    printf(\"c += 3: %d\\n\", c);\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Arithmetic Operators",
+                "english": "+, -, *, /, %",
+                "hinglish": "+, -, *, /, %",
+                "importance": "High",
+                "tip": "% (modulus) only works with integers"
+              },
+              {
+                "name": "Bitwise Operators",
+                "english": "&, |, ^, ~, <<, >>",
+                "hinglish": "&, |, ^, ~, <<, >>",
+                "role": "Direct bit manipulation",
+                "use_case": "Low-level programming, flags, optimization"
+              }
+            ],
+            "decision_table": {
+              "headers": ["Operation", "Operator", "Example"],
+              "rows": [
+                ["Add", "+", "a + b"],
+                ["Subtract", "-", "a - b"],
+                ["Multiply", "*", "a * b"],
+                ["Divide", "/", "a / b"],
+                ["Modulus", "%", "a % b"],
+                ["Increment", "++", "i++"],
+                ["Decrement", "--", "i--"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 6,
+          "title": "Control Statements",
+          "english": "Conditional statements and loops for program flow control",
+          "hinglish": "Conditional statements aur loops se program flow control",
+          "examples": [
+            "if-else statements",
+            "switch-case",
+            "for, while, do-while loops"
+          ],
+          "practice": [
+            {
+              "question": "Infinite loop kaise banayein?",
+              "answer": "while(1) { } ya for(;;) { }"
+            },
+            {
+              "question": "break aur continue mein difference?",
+              "answer": "break: loop se bahar, continue: next iteration"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n\nint main() {\n    // If-else statement\n    int marks = 85;\n    \n    if (marks >= 90) {\n        printf(\"Grade: A\\n\");\n    } else if (marks >= 75) {\n        printf(\"Grade: B\\n\");\n    } else if (marks >= 50) {\n        printf(\"Grade: C\\n\");\n    } else {\n        printf(\"Grade: F\\n\");\n    }\n    \n    // Switch-case statement\n    char grade = 'B';\n    \n    switch(grade) {\n        case 'A':\n            printf(\"Excellent!\\n\");\n            break;\n        case 'B':\n            printf(\"Good!\\n\");\n            break;\n        case 'C':\n            printf(\"Average\\n\");\n            break;\n        default:\n            printf(\"Invalid grade\\n\");\n    }\n    \n    // For loop\n    printf(\"For loop: \");\n    for(int i = 1; i <= 5; i++) {\n        printf(\"%d \", i);\n    }\n    printf(\"\\n\");\n    \n    // While loop\n    printf(\"While loop: \");\n    int j = 1;\n    while(j <= 5) {\n        printf(\"%d \", j);\n        j++;\n    }\n    printf(\"\\n\");\n    \n    // Do-while loop\n    printf(\"Do-while loop: \");\n    int k = 1;\n    do {\n        printf(\"%d \", k);\n        k++;\n    } while(k <= 5);\n    printf(\"\\n\");\n    \n    // Nested loops\n    printf(\"Multiplication Table:\\n\");\n    for(int row = 1; row <= 5; row++) {\n        for(int col = 1; col <= 5; col++) {\n            printf(\"%d\\t\", row * col);\n        }\n        printf(\"\\n\");\n    }\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "if-else ladder",
+                "english": "Multiple condition checking",
+                "hinglish": "Multiple conditions check karna",
+                "importance": "High",
+                "tip": "Use else if for multiple conditions"
+              },
+              {
+                "name": "switch-case",
+                "english": "Multi-way branch based on value",
+                "hinglish": "Value ke basis par multi-way branch",
+                "use_case": "Menu-driven programs, state machines"
+              }
+            ]
+          }
+        },
+        {
+          "id": 7,
+          "title": "Functions in C",
+          "english": "Creating reusable code with functions",
+          "hinglish": "Functions ke through reusable code banayein",
+          "examples": [
+            "Function declaration and definition",
+            "Parameters and return values",
+            "Recursive functions"
+          ],
+          "practice": [
+            {
+              "question": "Function prototype kyun important hai?",
+              "answer": "Compiler ko batata hai ki function exist karta hai"
+            },
+            {
+              "question": "Recursive function ka example?",
+              "answer": "Factorial calculation: n! = n * (n-1)!"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n\n// Function prototypes (declaration)\nint add(int a, int b);\nvoid greet();\nfloat calculateAverage(int arr[], int size);\nint factorial(int n);\n\nint main() {\n    // Function calls\n    greet();\n    \n    int sum = add(10, 20);\n    printf(\"Sum: %d\\n\", sum);\n    \n    // Array average\n    int numbers[] = {10, 20, 30, 40, 50};\n    float avg = calculateAverage(numbers, 5);\n    printf(\"Average: %.2f\\n\", avg);\n    \n    // Recursive function\n    int fact = factorial(5);\n    printf(\"Factorial of 5: %d\\n\", fact);\n    \n    return 0;\n}\n\n// Function definitions\n\n// Simple function\nvoid greet() {\n    printf(\"Welcome to C Functions!\\n\");\n}\n\n// Function with parameters and return value\nint add(int a, int b) {\n    return a + b;\n}\n\n// Function with array parameter\nfloat calculateAverage(int arr[], int size) {\n    int sum = 0;\n    for(int i = 0; i < size; i++) {\n        sum += arr[i];\n    }\n    return (float)sum / size;\n}\n\n// Recursive function\nint factorial(int n) {\n    if (n == 0 || n == 1) {\n        return 1;\n    }\n    return n * factorial(n - 1);\n}\n\n// Function with call by value\nvoid swapByValue(int a, int b) {\n    int temp = a;\n    a = b;\n    b = temp;\n    printf(\"Inside swapByValue: a=%d, b=%d\\n\", a, b);\n}\n\n// Function with call by reference\nvoid swapByReference(int *a, int *b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}",
+            "components": [
+              {
+                "name": "Function Prototype",
+                "english": "Function declaration before use",
+                "hinglish": "Use se pehle function declaration",
+                "importance": "Medium",
+                "tip": "Always declare functions before main()",
+                "pros": "Better code organization"
+              },
+              {
+                "name": "Recursive Functions",
+                "english": "Function that calls itself",
+                "hinglish": "Function jo khud ko call kare",
+                "use_case": "Factorial, Fibonacci, tree traversal",
+                "cons": "Stack overflow risk for deep recursion"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Parameter Type", "Effect", "Use When"],
+              "rows": [
+                ["Call by Value", "Copy passed, original unchanged", "Small data, don't modify original"],
+                ["Call by Reference", "Address passed, original modified", "Need to modify original, arrays"]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "level": "Advanced - Arrays, Pointers & Memory",
+      "order": 3,
+      "description": "Master arrays, pointers, strings, and memory management",
+      "topics": [
+        {
+          "id": 8,
+          "title": "Arrays in C",
+          "english": "Working with single and multi-dimensional arrays",
+          "hinglish": "Single aur multi-dimensional arrays ke saath kaam karna",
+          "examples": [
+            "Integer arrays",
+            "Character arrays (strings)",
+            "2D arrays (matrices)"
+          ],
+          "practice": [
+            {
+              "question": "Array index kahan se start hota hai?",
+              "answer": "0 (zero) se"
+            },
+            {
+              "question": "2D array declare kaise karein?",
+              "answer": "datatype arrayName[rows][columns];"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n\nint main() {\n    // 1D Array\n    int numbers[5] = {10, 20, 30, 40, 50};\n    \n    printf(\"1D Array:\\n\");\n    for(int i = 0; i < 5; i++) {\n        printf(\"numbers[%d] = %d\\n\", i, numbers[i]);\n    }\n    \n    // Array of characters (String)\n    char name[] = \"C Programming\";\n    printf(\"\\nString: %s\\n\", name);\n    printf(\"First character: %c\\n\", name[0]);\n    \n    // 2D Array (Matrix)\n    int matrix[3][3] = {\n        {1, 2, 3},\n        {4, 5, 6},\n        {7, 8, 9}\n    };\n    \n    printf(\"\\n2D Array (Matrix):\\n\");\n    for(int i = 0; i < 3; i++) {\n        for(int j = 0; j < 3; j++) {\n            printf(\"%d \", matrix[i][j]);\n        }\n        printf(\"\\n\");\n    }\n    \n    // Array operations\n    int arr[10];\n    int size = 5;\n    \n    // Insertion\n    for(int i = 0; i < size; i++) {\n        arr[i] = (i + 1) * 10;\n    }\n    \n    // Deletion (remove element at index 2)\n    for(int i = 2; i < size - 1; i++) {\n        arr[i] = arr[i + 1];\n    }\n    size--;\n    \n    // Searching\n    int search = 40;\n    int found = -1;\n    for(int i = 0; i < size; i++) {\n        if(arr[i] == search) {\n            found = i;\n            break;\n        }\n    }\n    \n    if(found != -1) {\n        printf(\"\\nElement %d found at index %d\\n\", search, found);\n    } else {\n        printf(\"\\nElement not found\\n\");\n    }\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Array Declaration",
+                "english": "datatype arrayName[size];",
+                "hinglish": "datatype arrayName[size];",
+                "importance": "High",
+                "tip": "Size compile time pe fixed hota hai",
+                "example": "int marks[100];"
+              },
+              {
+                "name": "Array Initialization",
+                "english": "Ways to initialize array elements",
+                "hinglish": "Array elements initialize karne ke tareeke",
+                "examples": "int arr[5] = {1,2,3,4,5}; or int arr[] = {1,2,3};"
+              }
+            ]
+          }
+        },
+        {
+          "id": 9,
+          "title": "Pointers in C",
+          "english": "Understanding and using pointers for memory manipulation",
+          "hinglish": "Pointers ko samjhein aur memory manipulation ke liye use karein",
+          "examples": [
+            "Pointer declaration",
+            "Pointer arithmetic",
+            "Pointers and arrays"
+          ],
+          "practice": [
+            {
+              "question": "Pointer variable kaise declare karein?",
+              "answer": "datatype *pointerName;"
+            },
+            {
+              "question": "& operator kya karta hai?",
+              "answer": "Address of operator - variable ka address deta hai"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n\nint main() {\n    int num = 42;\n    int *ptr;  // Pointer declaration\n    \n    ptr = &num; // Assign address of num to ptr\n    \n    printf(\"Value of num: %d\\n\", num);\n    printf(\"Address of num: %p\\n\", &num);\n    printf(\"Value of ptr: %p\\n\", ptr);\n    printf(\"Value at ptr: %d\\n\", *ptr); // Dereferencing\n    \n    // Pointer arithmetic\n    int arr[] = {10, 20, 30, 40, 50};\n    int *arrPtr = arr; // Points to first element\n    \n    printf(\"\\nArray elements using pointers:\\n\");\n    for(int i = 0; i < 5; i++) {\n        printf(\"arr[%d] = %d\\n\", i, *(arrPtr + i));\n        // *(arrPtr + i) is same as arr[i]\n    }\n    \n    // Pointer to pointer\n    int x = 100;\n    int *p1 = &x;\n    int **p2 = &p1;\n    \n    printf(\"\\nPointer to pointer:\\n\");\n    printf(\"x = %d\\n\", x);\n    printf(\"*p1 = %d\\n\", *p1);\n    printf(\"**p2 = %d\\n\", **p2);\n    \n    // Void pointer (generic pointer)\n    void *voidPtr;\n    float f = 3.14;\n    voidPtr = &f;\n    \n    printf(\"\\nVoid pointer:\\n\");\n    printf(\"Float value: %.2f\\n\", *(float*)voidPtr); // Type casting needed\n    \n    // NULL pointer\n    int *nullPtr = NULL;\n    if(nullPtr == NULL) {\n        printf(\"\\nPointer is NULL\\n\");\n    }\n    \n    // Pointer comparison\n    int *ptr1 = &arr[0];\n    int *ptr2 = &arr[2];\n    \n    if(ptr1 < ptr2) {\n        printf(\"ptr1 points to lower memory address\\n\");\n    }\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Dereference Operator",
+                "english": "* - Gets value at pointer address",
+                "hinglish": "* - Pointer address par value leta hai",
+                "importance": "Critical",
+                "tip": "*ptr means value at address stored in ptr"
+              },
+              {
+                "name": "Address Operator",
+                "english": "& - Gets address of variable",
+                "hinglish": "& - Variable ka address deta hai",
+                "importance": "High",
+                "example": "&num gives address of num"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Operator", "Name", "Purpose"],
+              "rows": [
+                ["&", "Address of", "Get variable's address"],
+                ["*", "Dereference", "Get value at address"],
+                ["++", "Increment", "Move to next memory location"],
+                ["--", "Decrement", "Move to previous memory location"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 10,
+          "title": "Strings in C",
+          "english": "Working with character arrays and string functions",
+          "hinglish": "Character arrays aur string functions ke saath kaam karna",
+          "examples": [
+            "String declaration",
+            "String functions",
+            "String manipulation"
+          ],
+          "practice": [
+            {
+              "question": "String terminate karne ke liye kaunsa character?",
+              "answer": "Null character: \\0"
+            },
+            {
+              "question": "strlen() function kya karta hai?",
+              "answer": "String ki length batata hai"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    // String declaration methods\n    char str1[] = \"Hello\";  // Automatic null termination\n    char str2[10] = {'W', 'o', 'r', 'l', 'd', '\\0'};\n    char str3[50];\n    \n    printf(\"str1: %s\\n\", str1);\n    printf(\"str2: %s\\n\", str2);\n    \n    // String input\n    printf(\"Enter your name: \");\n    fgets(str3, sizeof(str3), stdin);  // Safe input\n    printf(\"Name: %s\", str3);\n    \n    // String functions\n    char source[] = \"C Programming\";\n    char destination[50];\n    \n    // strlen() - string length\n    printf(\"Length of '%s': %zu\\n\", source, strlen(source));\n    \n    // strcpy() - string copy\n    strcpy(destination, source);\n    printf(\"Copied string: %s\\n\", destination);\n    \n    // strcat() - string concatenation\n    char greet[] = \"Hello \";\n    char name[] = \"Alice\";\n    strcat(greet, name);\n    printf(\"Concatenated: %s\\n\", greet);\n    \n    // strcmp() - string comparison\n    char pass1[] = \"password123\";\n    char pass2[] = \"password123\";\n    \n    if(strcmp(pass1, pass2) == 0) {\n        printf(\"Passwords match\\n\");\n    } else {\n        printf(\"Passwords don't match\\n\");\n    }\n    \n    // strstr() - find substring\n    char text[] = \"Learning C programming is fun\";\n    char word[] = \"C\";\n    \n    char *result = strstr(text, word);\n    if(result != NULL) {\n        printf(\"'%s' found in text\\n\", word);\n    }\n    \n    // Manual string operations\n    char manual[50] = \"Hello\";\n    int length = 0;\n    \n    // Calculate length manually\n    while(manual[length] != '\\0') {\n        length++;\n    }\n    printf(\"Manual length: %d\\n\", length);\n    \n    // Reverse string\n    char rev[] = \"ABCDE\";\n    int len = strlen(rev);\n    \n    printf(\"Original: %s\\n\", rev);\n    printf(\"Reversed: \");\n    for(int i = len - 1; i >= 0; i--) {\n        printf(\"%c\", rev[i]);\n    }\n    printf(\"\\n\");\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "fgets()",
+                "english": "Safe string input function",
+                "hinglish": "Safe string input function",
+                "importance": "High",
+                "tip": "Use instead of gets() to avoid buffer overflow",
+                "pros": "Includes newline, limits input size"
+              },
+              {
+                "name": "strlen()",
+                "english": "String length function",
+                "hinglish": "String length function",
+                "role": "Calculate string length",
+                "tip": "Excludes null terminator in count"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Function", "Purpose", "Header"],
+              "rows": [
+                ["strlen()", "String length", "string.h"],
+                ["strcpy()", "String copy", "string.h"],
+                ["strcat()", "String concatenate", "string.h"],
+                ["strcmp()", "String compare", "string.h"],
+                ["strstr()", "Find substring", "string.h"]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "level": "Expert - Advanced Concepts",
+      "order": 4,
+      "description": "Master structures, file handling, dynamic memory, and advanced algorithms",
+      "topics": [
+        {
+          "id": 11,
+          "title": "Structures & Unions",
+          "english": "Creating custom data types with structures and unions",
+          "hinglish": "Structures aur unions ke through custom data types banayein",
+          "examples": [
+            "Student structure",
+            "Employee structure",
+            "Union examples"
+          ],
+          "practice": [
+            {
+              "question": "Structure aur array mein difference?",
+              "answer": "Array: same type elements, Structure: different type elements"
+            },
+            {
+              "question": "Union ka advantage?",
+              "answer": "Memory efficient - sab members same memory share karte hain"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <string.h>\n\n// Structure definition\nstruct Student {\n    int rollNo;\n    char name[50];\n    float marks;\n    char grade;\n};\n\n// Structure with typedef\ntypedef struct {\n    int id;\n    char title[100];\n    char author[50];\n    float price;\n} Book;\n\n// Nested structure\nstruct Address {\n    char city[50];\n    char state[50];\n    int pincode;\n};\n\nstruct Person {\n    char name[50];\n    int age;\n    struct Address addr;  // Nested structure\n};\n\n// Union definition\nunion Data {\n    int i;\n    float f;\n    char str[20];\n};\n\nint main() {\n    // Structure variable declaration\n    struct Student s1;\n    \n    // Assigning values\n    s1.rollNo = 101;\n    strcpy(s1.name, \"Rahul Kumar\");\n    s1.marks = 85.5;\n    s1.grade = 'A';\n    \n    printf(\"Student Details:\\n\");\n    printf(\"Roll No: %d\\n\", s1.rollNo);\n    printf(\"Name: %s\\n\", s1.name);\n    printf(\"Marks: %.2f\\n\", s1.marks);\n    printf(\"Grade: %c\\n\", s1.grade);\n    \n    // Using typedef\n    Book b1 = {1, \"C Programming\", \"Dennis Ritchie\", 499.99};\n    printf(\"\\nBook: %s by %s\\n\", b1.title, b1.author);\n    \n    // Array of structures\n    struct Student class[3] = {\n        {101, \"Alice\", 90.0, 'A'},\n        {102, \"Bob\", 75.5, 'B'},\n        {103, \"Charlie\", 60.0, 'C'}\n    };\n    \n    printf(\"\\nClass Details:\\n\");\n    for(int i = 0; i < 3; i++) {\n        printf(\"%s: %.1f marks\\n\", class[i].name, class[i].marks);\n    }\n    \n    // Pointer to structure\n    struct Student *ptr = &s1;\n    printf(\"\\nUsing pointer: %s\\n\", ptr->name);  // Arrow operator\n    \n    // Nested structure\n    struct Person p1 = {\n        \"John Doe\",\n        30,\n        {\"Mumbai\", \"Maharashtra\", 400001}\n    };\n    \n    printf(\"\\nPerson lives in: %s, %s\\n\", p1.addr.city, p1.addr.state);\n    \n    // Union example\n    union Data data;\n    \n    data.i = 10;\n    printf(\"\\nUnion integer value: %d\\n\", data.i);\n    \n    data.f = 3.14;\n    printf(\"Union float value: %.2f\\n\", data.f);\n    // data.i is now corrupted\n    \n    printf(\"Size of union: %zu bytes\\n\", sizeof(union Data));\n    printf(\"Size of struct Student: %zu bytes\\n\", sizeof(struct Student));\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "typedef",
+                "english": "Create type alias",
+                "hinglish": "Type alias create karein",
+                "importance": "Medium",
+                "tip": "Makes code cleaner and portable",
+                "example": "typedef struct {...} Book;"
+              },
+              {
+                "name": "Arrow Operator",
+                "english": "-> access structure via pointer",
+                "hinglish": "-> pointer se structure access karein",
+                "importance": "High",
+                "example": "ptr->name is same as (*ptr).name"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Feature", "Structure", "Union"],
+              "rows": [
+                ["Memory", "Sum of all members", "Largest member only"],
+                ["Usage", "All members accessible", "One member at a time"],
+                ["Size", "Larger", "Smaller"],
+                ["Use Case", "Record keeping", "Memory efficient storage"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 12,
+          "title": "Dynamic Memory Allocation",
+          "english": "Allocate and manage memory at runtime",
+          "hinglish": "Runtime par memory allocate aur manage karna",
+          "examples": [
+            "malloc() usage",
+            "calloc() and realloc()",
+            "Memory leak prevention"
+          ],
+          "practice": [
+            {
+              "question": "malloc() aur calloc() mein difference?",
+              "answer": "malloc(): uninitialized memory, calloc(): initialized to zero"
+            },
+            {
+              "question": "Memory leak kya hota hai?",
+              "answer": "Allocated memory free nahi kiya to memory waste ho jati hai"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // malloc() - Memory Allocation\n    int *arr;\n    int n;\n    \n    printf(\"Enter array size: \");\n    scanf(\"%d\", &n);\n    \n    // Allocate memory for n integers\n    arr = (int*)malloc(n * sizeof(int));\n    \n    if(arr == NULL) {\n        printf(\"Memory allocation failed!\\n\");\n        return 1;\n    }\n    \n    printf(\"Enter %d integers:\\n\", n);\n    for(int i = 0; i < n; i++) {\n        scanf(\"%d\", &arr[i]);\n    }\n    \n    printf(\"Array elements: \");\n    for(int i = 0; i < n; i++) {\n        printf(\"%d \", arr[i]);\n    }\n    printf(\"\\n\");\n    \n    // Free allocated memory\n    free(arr);\n    \n    // calloc() - Contiguous Allocation\n    int *arr2;\n    printf(\"\\nEnter new array size: \");\n    scanf(\"%d\", &n);\n    \n    arr2 = (int*)calloc(n, sizeof(int));\n    \n    if(arr2 == NULL) {\n        printf(\"Memory allocation failed!\\n\");\n        return 1;\n    }\n    \n    // calloc initializes to zero\n    printf(\"calloc array (initialized to 0): \");\n    for(int i = 0; i < n; i++) {\n        printf(\"%d \", arr2[i]);\n    }\n    printf(\"\\n\");\n    \n    // realloc() - Reallocate memory\n    printf(\"\\nEnter new size for reallocation: \");\n    scanf(\"%d\", &n);\n    \n    arr2 = (int*)realloc(arr2, n * sizeof(int));\n    \n    if(arr2 == NULL) {\n        printf(\"Reallocation failed!\\n\");\n        return 1;\n    }\n    \n    printf(\"Enter %d new integers:\\n\", n);\n    for(int i = 0; i < n; i++) {\n        scanf(\"%d\", &arr2[i]);\n    }\n    \n    printf(\"Reallocated array: \");\n    for(int i = 0; i < n; i++) {\n        printf(\"%d \", arr2[i]);\n    }\n    printf(\"\\n\");\n    \n    // Dynamic 2D array\n    int rows, cols;\n    printf(\"\\nEnter rows and columns for 2D array: \");\n    scanf(\"%d %d\", &rows, &cols);\n    \n    int **matrix = (int**)malloc(rows * sizeof(int*));\n    for(int i = 0; i < rows; i++) {\n        matrix[i] = (int*)malloc(cols * sizeof(int));\n    }\n    \n    // Initialize 2D array\n    int value = 1;\n    for(int i = 0; i < rows; i++) {\n        for(int j = 0; j < cols; j++) {\n            matrix[i][j] = value++;\n        }\n    }\n    \n    printf(\"\\n2D Dynamic Array:\\n\");\n    for(int i = 0; i < rows; i++) {\n        for(int j = 0; j < cols; j++) {\n            printf(\"%d\\t\", matrix[i][j]);\n        }\n        printf(\"\\n\");\n    }\n    \n    // Free 2D array memory\n    for(int i = 0; i < rows; i++) {\n        free(matrix[i]);\n    }\n    free(matrix);\n    \n    // Free remaining memory\n    free(arr2);\n    \n    // Set pointers to NULL after freeing\n    arr = NULL;\n    arr2 = NULL;\n    matrix = NULL;\n    \n    printf(\"\\nAll memory freed successfully!\\n\");\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "malloc()",
+                "english": "Memory allocation",
+                "hinglish": "Memory allocation",
+                "importance": "High",
+                "tip": "Always check if NULL, always free after use",
+                "pros": "Flexible runtime allocation"
+              },
+              {
+                "name": "free()",
+                "english": "Memory deallocation",
+                "hinglish": "Memory deallocation",
+                "importance": "Critical",
+                "tip": "Always free allocated memory to prevent leaks",
+                "example": "free(ptr); ptr = NULL;"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Function", "Purpose", "Initialization"],
+              "rows": [
+                ["malloc()", "Allocate memory", "Uninitialized (garbage)"],
+                ["calloc()", "Allocate & initialize", "Initialized to 0"],
+                ["realloc()", "Resize memory", "Preserves existing data"],
+                ["free()", "Free memory", "Makes memory available"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 13,
+          "title": "File Handling in C",
+          "english": "Reading from and writing to files",
+          "hinglish": "Files se read karna aur files mein write karna",
+          "examples": [
+            "Text file operations",
+            "Binary file operations",
+            "File error handling"
+          ],
+          "practice": [
+            {
+              "question": "File open modes kitne hote hain?",
+              "answer": "r, w, a, r+, w+, a+ for text; rb, wb, etc for binary"
+            },
+            {
+              "question": "feof() function kya karta hai?",
+              "answer": "Check karta hai ki file end ho gayi hai ya nahi"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    FILE *filePtr;\n    char data[100];\n    \n    // Writing to a text file\n    filePtr = fopen(\"example.txt\", \"w\");\n    \n    if(filePtr == NULL) {\n        printf(\"Error opening file for writing!\\n\");\n        return 1;\n    }\n    \n    printf(\"Enter text to write to file: \");\n    fgets(data, sizeof(data), stdin);\n    \n    fprintf(filePtr, \"%s\", data);\n    printf(\"Data written to file successfully!\\n\");\n    \n    fclose(filePtr);\n    \n    // Reading from a text file\n    filePtr = fopen(\"example.txt\", \"r\");\n    \n    if(filePtr == NULL) {\n        printf(\"Error opening file for reading!\\n\");\n        return 1;\n    }\n    \n    printf(\"\\nReading from file:\\n\");\n    while(fgets(data, sizeof(data), filePtr) != NULL) {\n        printf(\"%s\", data);\n    }\n    \n    fclose(filePtr);\n    \n    // Appending to a file\n    filePtr = fopen(\"example.txt\", \"a\");\n    \n    if(filePtr == NULL) {\n        printf(\"Error opening file for appending!\\n\");\n        return 1;\n    }\n    \n    printf(\"\\nEnter text to append: \");\n    fgets(data, sizeof(data), stdin);\n    \n    fprintf(filePtr, \"%s\", data);\n    printf(\"Data appended successfully!\\n\");\n    \n    fclose(filePtr);\n    \n    // Binary file operations\n    struct Student {\n        int rollNo;\n        char name[50];\n        float marks;\n    };\n    \n    struct Student s;\n    \n    // Write to binary file\n    filePtr = fopen(\"students.dat\", \"wb\");\n    \n    if(filePtr == NULL) {\n        printf(\"Error creating binary file!\\n\");\n        return 1;\n    }\n    \n    for(int i = 1; i <= 3; i++) {\n        s.rollNo = i;\n        sprintf(s.name, \"Student %d\", i);\n        s.marks = 70.0 + i * 5;\n        \n        fwrite(&s, sizeof(struct Student), 1, filePtr);\n    }\n    \n    fclose(filePtr);\n    \n    // Read from binary file\n    filePtr = fopen(\"students.dat\", \"rb\");\n    \n    if(filePtr == NULL) {\n        printf(\"Error opening binary file!\\n\");\n        return 1;\n    }\n    \n    printf(\"\\nStudents from binary file:\\n\");\n    printf(\"Roll No\\tName\\t\\tMarks\\n\");\n    printf(\"------------------------\\n\");\n    \n    while(fread(&s, sizeof(struct Student), 1, filePtr)) {\n        printf(\"%d\\t%s\\t%.1f\\n\", s.rollNo, s.name, s.marks);\n    }\n    \n    fclose(filePtr);\n    \n    // File error handling\n    filePtr = fopen(\"nonexistent.txt\", \"r\");\n    \n    if(filePtr == NULL) {\n        perror(\"Error opening file\");\n        printf(\"Error code: %d\\n\", errno);\n    }\n    \n    // File position operations\n    filePtr = fopen(\"example.txt\", \"r\");\n    \n    if(filePtr != NULL) {\n        // Move to 10th byte from beginning\n        fseek(filePtr, 10, SEEK_SET);\n        \n        // Get current position\n        long position = ftell(filePtr);\n        printf(\"\\nCurrent file position: %ld\\n\", position);\n        \n        // Move to beginning\n        rewind(filePtr);\n        \n        fclose(filePtr);\n    }\n    \n    // Delete file\n    if(remove(\"example.txt\") == 0) {\n        printf(\"File deleted successfully!\\n\");\n    } else {\n        printf(\"Error deleting file!\\n\");\n    }\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "fopen() modes",
+                "english": "File opening modes",
+                "hinglish": "File opening modes",
+                "importance": "High",
+                "tip": "Use correct mode for intended operation",
+                "examples": "r: read, w: write (overwrite), a: append"
+              },
+              {
+                "name": "fseek()",
+                "english": "File position setting",
+                "hinglish": "File position setting",
+                "role": "Move file pointer",
+                "use_case": "Random access file operations"
+              }
+            ]
+          }
+        },
+        {
+          "id": 14,
+          "title": "Data Structures in C",
+          "english": "Implementing basic data structures",
+          "hinglish": "Basic data structures implement karna",
+          "examples": [
+            "Linked List",
+            "Stack",
+            "Queue",
+            "Binary Tree"
+          ],
+          "practice": [
+            {
+              "question": "Linked List ka advantage array se?",
+              "answer": "Dynamic size, easy insertion/deletion"
+            },
+            {
+              "question": "Stack LIFO ya FIFO?",
+              "answer": "LIFO - Last In First Out"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <stdlib.h>\n\n// Linked List Node\nstruct Node {\n    int data;\n    struct Node* next;\n};\n\n// Stack using array\n#define MAX 100\n\nstruct Stack {\n    int arr[MAX];\n    int top;\n};\n\n// Queue using array\nstruct Queue {\n    int arr[MAX];\n    int front, rear;\n};\n\n// Linked List operations\nvoid insertNode(struct Node** head, int data) {\n    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = data;\n    newNode->next = *head;\n    *head = newNode;\n}\n\nvoid displayList(struct Node* head) {\n    printf(\"Linked List: \");\n    while(head != NULL) {\n        printf(\"%d -> \", head->data);\n        head = head->next;\n    }\n    printf(\"NULL\\n\");\n}\n\n// Stack operations\nvoid initStack(struct Stack* s) {\n    s->top = -1;\n}\n\nint isStackEmpty(struct Stack* s) {\n    return s->top == -1;\n}\n\nint isStackFull(struct Stack* s) {\n    return s->top == MAX - 1;\n}\n\nvoid push(struct Stack* s, int data) {\n    if(isStackFull(s)) {\n        printf(\"Stack Overflow!\\n\");\n        return;\n    }\n    s->arr[++(s->top)] = data;\n}\n\nint pop(struct Stack* s) {\n    if(isStackEmpty(s)) {\n        printf(\"Stack Underflow!\\n\");\n        return -1;\n    }\n    return s->arr[(s->top)--];\n}\n\n// Queue operations\nvoid initQueue(struct Queue* q) {\n    q->front = q->rear = -1;\n}\n\nint isQueueEmpty(struct Queue* q) {\n    return q->front == -1;\n}\n\nint isQueueFull(struct Queue* q) {\n    return (q->rear + 1) % MAX == q->front;\n}\n\nvoid enqueue(struct Queue* q, int data) {\n    if(isQueueFull(q)) {\n        printf(\"Queue Overflow!\\n\");\n        return;\n    }\n    \n    if(isQueueEmpty(q)) {\n        q->front = q->rear = 0;\n    } else {\n        q->rear = (q->rear + 1) % MAX;\n    }\n    \n    q->arr[q->rear] = data;\n}\n\nint dequeue(struct Queue* q) {\n    if(isQueueEmpty(q)) {\n        printf(\"Queue Underflow!\\n\");\n        return -1;\n    }\n    \n    int data = q->arr[q->front];\n    \n    if(q->front == q->rear) {\n        q->front = q->rear = -1;\n    } else {\n        q->front = (q->front + 1) % MAX;\n    }\n    \n    return data;\n}\n\nint main() {\n    printf(\"=== Data Structures in C ===\\n\\n\");\n    \n    // Linked List Demo\n    printf(\"1. Linked List Demo:\\n\");\n    struct Node* head = NULL;\n    \n    insertNode(&head, 10);\n    insertNode(&head, 20);\n    insertNode(&head, 30);\n    \n    displayList(head);\n    \n    // Stack Demo\n    printf(\"\\n2. Stack Demo:\\n\");\n    struct Stack s;\n    initStack(&s);\n    \n    push(&s, 100);\n    push(&s, 200);\n    push(&s, 300);\n    \n    printf(\"Popped: %d\\n\", pop(&s));\n    printf(\"Popped: %d\\n\", pop(&s));\n    \n    // Queue Demo\n    printf(\"\\n3. Queue Demo:\\n\");\n    struct Queue q;\n    initQueue(&q);\n    \n    enqueue(&q, 1000);\n    enqueue(&q, 2000);\n    enqueue(&q, 3000);\n    \n    printf(\"Dequeued: %d\\n\", dequeue(&q));\n    printf(\"Dequeued: %d\\n\", dequeue(&q));\n    \n    // Binary Tree (Basic)\n    printf(\"\\n4. Binary Tree Concept:\\n\");\n    printf(\"struct TreeNode {\\n\");\n    printf(\"    int data;\\n\");\n    printf(\"    struct TreeNode* left;\\n\");\n    printf(\"    struct TreeNode* right;\\n\");\n    printf(\"};\\n\");\n    \n    // Memory cleanup for linked list\n    struct Node* temp;\n    while(head != NULL) {\n        temp = head;\n        head = head->next;\n        free(temp);\n    }\n    \n    printf(\"\\nAll data structures demonstrated!\\n\");\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Linked List",
+                "english": "Dynamic linear data structure",
+                "hinglish": "Dynamic linear data structure",
+                "importance": "High",
+                "pros": "Dynamic size, efficient insert/delete",
+                "cons": "Sequential access only"
+              },
+              {
+                "name": "Stack",
+                "english": "LIFO data structure",
+                "hinglish": "LIFO data structure",
+                "use_case": "Function calls, undo operations, expression evaluation"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Data Structure", "Access", "Insert/Delete"],
+              "rows": [
+                ["Array", "Random (O(1))", "Slow (O(n))"],
+                ["Linked List", "Sequential (O(n))", "Fast (O(1))"],
+                ["Stack", "Top only", "Top only"],
+                ["Queue", "Front only", "Ends only"]
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

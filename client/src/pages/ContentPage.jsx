@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import fundamentals from "../api/fundamentals.json";
+import fundamentals from "../api/webfundamentals.json";
 import html from "../api/languages/html5.json";
 import css from "../api/languages/css.json";
 import javascript from '../api/languages/javascript.json';
@@ -7,20 +7,29 @@ import react from '../api/languages/reactDuplicate.json';
 import nodejs from '../api/languages/nodejs.json';
 import expressjs from '../api/languages/express.json';
 import mongodb from '../api/languages/mongodb.json';
-import ProjectsContent from '../pages/projects.jsx'
-import mysql from '../api/languages/mysql.json'
-import php from '../api/languages/php.json'
-import laravel from '../api/languages/laravel.json'
-import python from '../api/languages/python.json'
-import django from '../api/languages/django.json'
+import ProjectsContent from '../pages/projects.jsx';
+import mysql from '../api/languages/mysql.json';
+import php from '../api/languages/php.json';
+import laravel from '../api/languages/laravel.json';
+import python from '../api/languages/python.json';
+import django from '../api/languages/django.json';
+import wordpress from '../api/languages/wordpress.json';
+import nextjs from '../api/languages/nextjs.json';
+import softwareFundamentles from '../api/softwareFundamentles.json';
+import C from '../api/languages/c.json';
+import dsaC from '../api/languages/dsaC.json';
+import dsaCpp from '../api/languages/dsaCpp.json';
 import "./ContentPage.css";
 
 const ContentPage = () => {
   const { techSlug } = useParams();
+  const {stackSlug} = useParams();
 
   const data =
     techSlug === "web-fundamentals"
       ? fundamentals
+      : techSlug === "programming-fundamentals"
+      ? softwareFundamentles
       : techSlug === "html"
       ? html
       : techSlug === "css"
@@ -45,6 +54,16 @@ const ContentPage = () => {
       ? python
       : techSlug === "django"
       ? django
+      : techSlug === "wordpress"
+      ? wordpress
+      : techSlug === "nextjs"
+      ? nextjs
+      : techSlug === "c"
+      ? C
+      : stackSlug === "c-programming" && techSlug === "dsa"
+      ? dsaC
+      : stackSlug === "cpp-dsa" && techSlug === "dsa"
+      ? dsaCpp
       : null;
 
   const handleBack = () => {

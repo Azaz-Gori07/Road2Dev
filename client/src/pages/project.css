@@ -507,3 +507,109 @@
         grid-template-columns: 1fr;
     }
 }
+
+
+/* Expert level styling */
+.expert-23 {
+  color: #8b0000;
+  background: linear-gradient(135deg, #8b0000 0%, #ff0000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  border-left: 4px solid #8b0000;
+  padding-left: 10px;
+}
+
+.expert-23-card-23 {
+  border: 2px solid #8b0000;
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.1) 0%, rgba(255, 0, 0, 0.05) 100%);
+}
+
+/* Additional tech tag colors */
+.language-23 {
+  background: #2ecc71;
+  color: white;
+}
+
+.framework-23 {
+  background: #9b59b6;
+  color: white;
+}
+
+.compiler-23 {
+  background: #34495e;
+  color: white;
+}
+
+/* Small tech tags */
+.tech-tags-small-23 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.tech-tag-small-23 {
+  background: #3498db;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+/* Class tags */
+.class-tags-23 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.class-tag-23 {
+  background: #e74c3c;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+/* File tags */
+.file-tags-23 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.file-tag-23 {
+  background: #95a5a6;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+/* Template tags */
+.template-tags-23 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.template-tag-23 {
+  background: #d35400;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+/* Stack slug styling */
+.stack-slug-23 {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin-left: 10px;
+  font-family: monospace;
+}

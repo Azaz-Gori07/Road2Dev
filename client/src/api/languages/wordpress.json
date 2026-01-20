@@ -1,0 +1,834 @@
+{
+  "technology": "WordPress",
+  "slug": "wordpress-complete-mastery",
+  "description": "Complete WordPress course covering basics, theme development, plugin creation, WooCommerce, and advanced optimization for professional WordPress developers",
+  "levels": [
+    {
+      "level": "Foundation - WordPress Basics",
+      "order": 1,
+      "description": "Learn WordPress fundamentals, installation, and basic administration",
+      "topics": [
+        {
+          "id": 1,
+          "title": "Introduction to WordPress",
+          "english": "Understanding WordPress CMS and its ecosystem",
+          "hinglish": "WordPress CMS aur uska ecosystem samjhein",
+          "examples": [
+            "WordPress.com vs WordPress.org",
+            "Popular websites using WordPress"
+          ],
+          "practice": [
+            {
+              "question": "WordPress market share kitna hai?",
+              "answer": "43% of all websites (2024 data)"
+            },
+            {
+              "question": "WordPress ke 3 main components?",
+              "answer": "1. Core 2. Themes 3. Plugins"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "",
+            "components": [
+              {
+                "name": "WordPress Core",
+                "english": "Base WordPress software",
+                "hinglish": "Base WordPress software",
+                "importance": "High",
+                "tip": "Regularly update for security",
+                "pros": "Free, open-source, community-driven",
+                "cons": "Customization needs technical knowledge"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Platform", "Use Case", "Best For"],
+              "rows": [
+                ["WordPress.org", "Full control", "Developers, Businesses"],
+                ["WordPress.com", "Hosted solution", "Bloggers, Beginners"],
+                ["Other CMS", "Alternatives", "Specific needs"]
+              ]
+            },
+            "types_of_databases": [
+              {
+                "type": "MySQL/MariaDB",
+                "examples": "WordPress default database",
+                "characteristics": "Relational, stores posts, users, settings"
+              }
+            ]
+          }
+        },
+        {
+          "id": 2,
+          "title": "WordPress Installation & Setup",
+          "english": "Install WordPress locally and on hosting servers",
+          "hinglish": "WordPress locally aur hosting servers par install karein",
+          "examples": [
+            "Local setup with XAMPP",
+            "cPanel installation",
+            "Manual installation"
+          ],
+          "practice": [
+            {
+              "question": "Local development ke liye kaunse tools use karein?",
+              "answer": "Local by Flywheel, XAMPP, WAMP, Docker"
+            },
+            {
+              "question": "WordPress database ka name kya hai?",
+              "answer": "wp_ (prefix) by default, configurable"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// wp-config.php database settings\ndefine('DB_NAME', 'wordpress_db');\ndefine('DB_USER', 'root');\ndefine('DB_PASSWORD', 'password');\ndefine('DB_HOST', 'localhost');\ndefine('DB_CHARSET', 'utf8mb4');",
+            "components": [
+              {
+                "name": "wp-config.php",
+                "english": "WordPress configuration file",
+                "hinglish": "WordPress configuration file",
+                "role": "Database and core settings",
+                "tip": "Never share this file publicly",
+                "example": "Database credentials, security keys, debugging"
+              },
+              {
+                "name": ".htaccess",
+                "english": "Apache server configuration",
+                "hinglish": "Apache server configuration file",
+                "responsibility": "URL rewriting, security rules",
+                "tip": "Backup before editing"
+              }
+            ]
+          }
+        },
+        {
+          "id": 3,
+          "title": "WordPress Dashboard Mastery",
+          "english": "Master WordPress admin dashboard and settings",
+          "hinglish": "WordPress admin dashboard aur settings master karein",
+          "examples": [
+            "Dashboard widgets",
+            "General settings",
+            "User management"
+          ],
+          "practice": [
+            {
+              "question": "Permalinks settings kya important hai?",
+              "answer": "SEO-friendly URLs banane ke liye"
+            },
+            {
+              "question": "User roles kitne hote hain?",
+              "answer": "Administrator, Editor, Author, Contributor, Subscriber"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "",
+            "components": [
+              {
+                "name": "Admin Dashboard",
+                "english": "WordPress control panel",
+                "hinglish": "WordPress control panel",
+                "role": "Site management interface",
+                "responsibility": "Content, users, settings management"
+              },
+              {
+                "name": "Settings API",
+                "english": "WordPress settings management",
+                "hinglish": "WordPress settings management",
+                "importance": "Medium",
+                "tip": "Use for custom plugin settings"
+              }
+            ],
+            "decision_table": {
+              "headers": ["Setting", "Recommendation", "Reason"],
+              "rows": [
+                ["Permalinks", "Post name", "SEO friendly"],
+                ["Timezone", "Your city", "Schedule posts"],
+                ["Discussion", "Moderate comments", "Spam control"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 4,
+          "title": "Content Management Basics",
+          "english": "Create and manage posts, pages, and media",
+          "hinglish": "Posts, pages, aur media create aur manage karein",
+          "examples": [
+            "Create blog post",
+            "Add images to media library",
+            "Page hierarchy"
+          ],
+          "practice": [
+            {
+              "question": "Post aur Page mein difference?",
+              "answer": "Post: Blog content, Page: Static content (About, Contact)"
+            },
+            {
+              "question": "Featured image kya hai?",
+              "answer": "Post/Page ka main image, social media pe show hota hai"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "",
+            "components": [
+              {
+                "name": "Gutenberg Editor",
+                "english": "Block-based content editor",
+                "hinglish": "Block-based content editor",
+                "tool": "WordPress Core",
+                "pros": "Flexible, modern, extensible",
+                "cons": "Learning curve for beginners"
+              },
+              {
+                "name": "Media Library",
+                "english": "File management system",
+                "hinglish": "File management system",
+                "characteristics": "Images, PDFs, videos storage",
+                "tip": "Optimize images before uploading"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Intermediate - Theme Development",
+      "order": 2,
+      "description": "Learn WordPress theme development from scratch",
+      "topics": [
+        {
+          "id": 5,
+          "title": "Theme Structure & Hierarchy",
+          "english": "Understand WordPress theme file hierarchy",
+          "hinglish": "WordPress theme file hierarchy samjhein",
+          "examples": [
+            "Create basic theme",
+            "Template hierarchy examples",
+            "Child theme creation"
+          ],
+          "practice": [
+            {
+              "question": "Home page kaunsi template file use karti hai?",
+              "answer": "1. front-page.php 2. home.php 3. index.php (hierarchy)"
+            },
+            {
+              "question": "Child theme kyun important hai?",
+              "answer": "Parent theme updates se customizations safe rehte hain"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "/*\nTheme Hierarchy:\n1. front-page.php\n2. home.php\n3. page.php\n4. singular.php\n5. index.php\n*/\n\n// style.css - Theme header\n/*\nTheme Name: My Theme\nTemplate: parent-theme\nVersion: 1.0\n*/",
+            "components": [
+              {
+                "name": "Template Hierarchy",
+                "english": "WordPress template selection system",
+                "hinglish": "WordPress template selection system",
+                "importance": "High",
+                "tip": "Learn hierarchy to override specific pages",
+                "example": "single-post.php overrides single.php for posts"
+              },
+              {
+                "name": "Child Theme",
+                "english": "Theme customization without editing parent",
+                "hinglish": "Parent theme edit kiye bina customization",
+                "pros": "Safe updates, maintainable",
+                "cons": "Extra setup required"
+              }
+            ]
+          }
+        },
+        {
+          "id": 6,
+          "title": "Template Tags & Functions",
+          "english": "Use WordPress template tags and functions",
+          "hinglish": "WordPress template tags aur functions use karein",
+          "examples": [
+            "Display blog title",
+            "Show post content",
+            "Navigation menus"
+          ],
+          "practice": [
+            {
+              "question": "Site title kaise show karein?",
+              "answer": "<?php bloginfo('name'); ?>"
+            },
+            {
+              "question": "Loop mein post content kaise show karein?",
+              "answer": "<?php the_content(); ?>"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<!-- header.php -->\n<!DOCTYPE html>\n<html <?php language_attributes(); ?>>\n<head>\n    <meta charset=\"<?php bloginfo('charset'); ?>\">\n    <title><?php wp_title('|', true, 'right'); ?></title>\n    <?php wp_head(); ?>\n</head>\n<body <?php body_class(); ?>>\n\n<!-- Loop in index.php -->\n<?php if (have_posts()) : ?>\n    <?php while (have_posts()) : the_post(); ?>\n        <h2><?php the_title(); ?></h2>\n        <?php the_content(); ?>\n    <?php endwhile; ?>\n<?php endif; ?>",
+            "components": [
+              {
+                "name": "Template Tags",
+                "english": "PHP functions for theme development",
+                "hinglish": "Theme development ke liye PHP functions",
+                "role": "Display dynamic content",
+                "tip": "Use in theme files, not in plugins"
+              },
+              {
+                "name": "The Loop",
+                "english": "Core WordPress content display system",
+                "hinglish": "Core WordPress content display system",
+                "importance": "Critical",
+                "example": "Posts display, pagination handling"
+              }
+            ]
+          }
+        },
+        {
+          "id": 7,
+          "title": "Custom Post Types & Taxonomies",
+          "english": "Create custom content types and classifications",
+          "hinglish": "Custom content types aur classifications banayein",
+          "examples": [
+            "Create 'Portfolio' post type",
+            "Add 'Skills' taxonomy",
+            "Custom fields for CPT"
+          ],
+          "practice": [
+            {
+              "question": "Custom Post Type kyun use karein?",
+              "answer": "Default posts/pages se alag structure ke content ke liye"
+            },
+            {
+              "question": "Taxonomy aur Category mein difference?",
+              "answer": "Category: Posts ki taxonomy, Taxonomy: Any classification system"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// functions.php - Register Custom Post Type\nfunction register_portfolio_cpt() {\n    register_post_type('portfolio',\n        array(\n            'labels' => array(\n                'name' => __('Portfolio'),\n                'singular_name' => __('Portfolio Item')\n            ),\n            'public' => true,\n            'has_archive' => true,\n            'supports' => array('title', 'editor', 'thumbnail'),\n            'menu_icon' => 'dashicons-portfolio',\n        )\n    );\n}\nadd_action('init', 'register_portfolio_cpt');",
+            "components": [
+              {
+                "name": "register_post_type()",
+                "english": "Register custom post type",
+                "hinglish": "Custom post type register karein",
+                "importance": "High",
+                "tip": "Use in theme's functions.php or plugin",
+                "pros": "Extends WordPress content system"
+              },
+              {
+                "name": "register_taxonomy()",
+                "english": "Register custom taxonomy",
+                "hinglish": "Custom taxonomy register karein",
+                "role": "Organize content",
+                "example": "Skills for portfolio, Brands for products"
+              }
+            ]
+          }
+        },
+        {
+          "id": 8,
+          "title": "Advanced Theme Features",
+          "english": "Implement theme customization and advanced features",
+          "hinglish": "Theme customization aur advanced features implement karein",
+          "examples": [
+            "Theme Customizer API",
+            "Widget areas",
+            "Custom menus",
+            "Sidebars"
+          ],
+          "practice": [
+            {
+              "question": "Theme Customizer ka advantage?",
+              "answer": "Live preview ke saath settings change kar sakte hain"
+            },
+            {
+              "question": "Widget area kaise register karein?",
+              "answer": "register_sidebar() function use karein"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Register Sidebar\nregister_sidebar(array(\n    'name' => 'Main Sidebar',\n    'id' => 'main-sidebar',\n    'before_widget' => '<div class=\"widget\">',\n    'after_widget' => '</div>',\n));\n\n// Theme Customizer Setting\nfunction mytheme_customize_register($wp_customize) {\n    $wp_customize->add_setting('header_color', array(\n        'default' => '#ffffff',\n        'transport' => 'refresh',\n    ));\n    \n    $wp_customize->add_control(new WP_Customize_Color_Control(\n        $wp_customize,\n        'header_color',\n        array(\n            'label' => __('Header Color'),\n            'section' => 'colors',\n        )\n    ));\n}\nadd_action('customize_register', 'mytheme_customize_register');",
+            "components": [
+              {
+                "name": "Theme Customizer API",
+                "english": "Live theme customization interface",
+                "hinglish": "Live theme customization interface",
+                "tool": "WordPress Core",
+                "pros": "User-friendly, real-time preview",
+                "cons": "Complex setup for advanced options"
+              },
+              {
+                "name": "Widgets API",
+                "english": "Widget system for sidebars",
+                "hinglish": "Sidebars ke liye widget system",
+                "role": "Dynamic content blocks",
+                "tip": "Create custom widgets for repeated content"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Advanced - Plugin Development",
+      "order": 3,
+      "description": "Master WordPress plugin development and APIs",
+      "topics": [
+        {
+          "id": 9,
+          "title": "Plugin Basics & Structure",
+          "english": "Create WordPress plugins from scratch",
+          "hinglish": "WordPress plugins scratch se banayein",
+          "examples": [
+            "Simple plugin creation",
+            "Plugin header comments",
+            "Activation/deactivation hooks"
+          ],
+          "practice": [
+            {
+              "question": "Plugin file ka minimum structure kya hai?",
+              "answer": "PHP opening tag and plugin header comment"
+            },
+            {
+              "question": "Plugin ko WordPress mein kaise install karein?",
+              "answer": "ZIP file upload karein plugins section mein"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "<?php\n/*\nPlugin Name: My First Plugin\nPlugin URI: https://example.com/\nDescription: This is my first WordPress plugin\nVersion: 1.0.0\nAuthor: Your Name\nLicense: GPL v2 or later\n*/\n\n// Plugin code starts here\nfunction myplugin_init() {\n    // Initialization code\n}\nadd_action('init', 'myplugin_init');",
+            "components": [
+              {
+                "name": "Plugin Header",
+                "english": "Plugin metadata in comments",
+                "hinglish": "Comments mein plugin metadata",
+                "importance": "Required",
+                "tip": "Follow standard format for WordPress.org",
+                "example": "Name, URI, Description, Version, Author"
+              },
+              {
+                "name": "Main Plugin File",
+                "english": "Primary plugin PHP file",
+                "hinglish": "Primary plugin PHP file",
+                "role": "Plugin entry point",
+                "responsibility": "Load all plugin functionality"
+              }
+            ]
+          }
+        },
+        {
+          "id": 10,
+          "title": "Actions & Filters (Hooks)",
+          "english": "Master WordPress hook system - actions and filters",
+          "hinglish": "WordPress hook system master karein - actions aur filters",
+          "examples": [
+            "Create custom action",
+            "Modify content with filter",
+            "Hook priorities"
+          ],
+          "practice": [
+            {
+              "question": "Action aur Filter mein difference?",
+              "answer": "Action: Code execute karta hai, Filter: Data modify karta hai"
+            },
+            {
+              "question": "Hook priority kya hoti hai?",
+              "answer": "Execution order determine karti hai"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Action Hook Example\nfunction myplugin_custom_action() {\n    echo '<p>Action executed!</p>';\n}\nadd_action('wp_footer', 'myplugin_custom_action');\n\n// Filter Hook Example\nfunction myplugin_modify_title($title) {\n    return $title . ' - My Site';\n}\nadd_filter('the_title', 'myplugin_modify_title');\n\n// Custom Hook Creation\ndo_action('myplugin_custom_hook'); // Trigger action\napply_filters('myplugin_custom_filter', $data); // Apply filter",
+            "components": [
+              {
+                "name": "Actions",
+                "english": "Execute code at specific points",
+                "hinglish": "Specific points par code execute karein",
+                "role": "Add functionality",
+                "tip": "Use to add new features without editing core"
+              },
+              {
+                "name": "Filters",
+                "english": "Modify data before display/save",
+                "hinglish": "Display/save se pehle data modify karein",
+                "role": "Modify existing functionality",
+                "tip": "Always return value from filter functions"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Hook Type", "Purpose", "Returns"],
+              "rows": [
+                ["Action", "Do something", "Nothing (void)"],
+                ["Filter", "Change something", "Modified value"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 11,
+          "title": "Custom Database Tables",
+          "english": "Create and manage custom database tables",
+          "hinglish": "Custom database tables create aur manage karein",
+          "examples": [
+            "Create plugin table",
+            "CRUD operations",
+            "Database migrations"
+          ],
+          "practice": [
+            {
+              "question": "Custom table kyun banayein?",
+              "answer": "Complex data store karne ke liye jo default tables mein na aa sake"
+            },
+            {
+              "question": "$wpdb global kya hai?",
+              "answer": "WordPress database class for safe queries"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Create custom table on plugin activation\nfunction myplugin_create_table() {\n    global $wpdb;\n    \n    $table_name = $wpdb->prefix . 'myplugin_data';\n    $charset_collate = $wpdb->get_charset_collate();\n    \n    $sql = \"CREATE TABLE $table_name (\n        id mediumint(9) NOT NULL AUTO_INCREMENT,\n        name varchar(100) NOT NULL,\n        email varchar(100) NOT NULL,\n        created_at datetime DEFAULT CURRENT_TIMESTAMP,\n        PRIMARY KEY (id)\n    ) $charset_collate;\";\n    \n    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');\n    dbDelta($sql);\n}\nregister_activation_hook(__FILE__, 'myplugin_create_table');",
+            "components": [
+              {
+                "name": "$wpdb",
+                "english": "WordPress database class",
+                "hinglish": "WordPress database class",
+                "importance": "High",
+                "tip": "Always use for database operations",
+                "pros": "Safe, prepared statements, table prefix handling"
+              },
+              {
+                "name": "dbDelta()",
+                "english": "Safe table creation/updates",
+                "hinglish": "Safe table creation/updates",
+                "tool": "WordPress Core",
+                "pros": "Idempotent, handles updates",
+                "cons": "Strict SQL format required"
+              }
+            ],
+            "acid_properties": [
+              {
+                "property": "Atomicity",
+                "english": "Transactions complete fully or not at all",
+                "hinglish": "Transactions complete ya bilkul nahi",
+                "example": "Use $wpdb->query() with transactions"
+              }
+            ]
+          }
+        },
+        {
+          "id": 12,
+          "title": "Security & Best Practices",
+          "english": "Implement security measures in plugins",
+          "hinglish": "Plugins mein security measures implement karein",
+          "examples": [
+            "Data sanitization",
+            "Nonce verification",
+            "Capability checks",
+            "SQL injection prevention"
+          ],
+          "practice": [
+            {
+              "question": "User input ko kaise sanitize karein?",
+              "answer": "sanitize_text_field(), sanitize_email(), wp_kses() functions use karein"
+            },
+            {
+              "question": "Nonce kya hai?",
+              "answer": "Number used once - CSRF attacks se bachane ke liye"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Secure form processing\nfunction myplugin_process_form() {\n    // Check nonce\n    if (!isset($_POST['myplugin_nonce']) || \n        !wp_verify_nonce($_POST['myplugin_nonce'], 'myplugin_action')) {\n        return;\n    }\n    \n    // Check capabilities\n    if (!current_user_can('manage_options')) {\n        wp_die('Unauthorized access');\n    }\n    \n    // Sanitize input\n    $name = sanitize_text_field($_POST['name']);\n    $email = sanitize_email($_POST['email']);\n    \n    // Validate\n    if (!is_email($email)) {\n        wp_die('Invalid email');\n    }\n    \n    // Safe database operation\n    global $wpdb;\n    $wpdb->insert(\n        $wpdb->prefix . 'myplugin_data',\n        array('name' => $name, 'email' => $email),\n        array('%s', '%s')\n    );\n}\nadd_action('admin_post_myplugin_form', 'myplugin_process_form');",
+            "components": [
+              {
+                "name": "Nonce",
+                "english": "CSRF protection token",
+                "hinglish": "CSRF protection token",
+                "role": "Verify form submissions",
+                "tip": "Use for all form submissions and AJAX calls"
+              },
+              {
+                "name": "Capability Checks",
+                "english": "User permission verification",
+                "hinglish": "User permission verification",
+                "importance": "Critical",
+                "example": "current_user_can('edit_posts') for authors"
+              }
+            ],
+            "security_layers": [
+              {
+                "layer": "Input Validation",
+                "measures": "Sanitize, validate, escape",
+                "hinglish": "User input ko clean karein"
+              },
+              {
+                "layer": "Authorization",
+                "measures": "Capability checks, nonce verification",
+                "hinglish": "User permissions check karein"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Expert - WooCommerce & Optimization",
+      "order": 4,
+      "description": "Master WooCommerce development and production optimization",
+      "topics": [
+        {
+          "id": 13,
+          "title": "WooCommerce Development",
+          "english": "Build custom WooCommerce solutions",
+          "hinglish": "Custom WooCommerce solutions banayein",
+          "examples": [
+            "Custom product types",
+            "Payment gateway integration",
+            "Shipping method creation"
+          ],
+          "practice": [
+            {
+              "question": "WooCommerce kaise install karein?",
+              "answer": "Plugin ki tarah WordPress mein install karein"
+            },
+            {
+              "question": "WooCommerce template override kaise karein?",
+              "answer": "woocommerce/ folder apne theme mein banayein"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Custom product type registration\nfunction register_custom_product_type() {\n    class WC_Product_Custom extends WC_Product {\n        public function __construct($product) {\n            parent::__construct($product);\n            $this->product_type = 'custom';\n        }\n    }\n}\nadd_action('init', 'register_custom_product_type');\n\n// Add to product type selector\nfunction add_custom_product_type($types) {\n    $types['custom'] = __('Custom Product');\n    return $types;\n}\nadd_filter('product_type_selector', 'add_custom_product_type');",
+            "components": [
+              {
+                "name": "WooCommerce Hooks",
+                "english": "WooCommerce-specific actions/filters",
+                "hinglish": "WooCommerce-specific actions/filters",
+                "role": "Extend e-commerce functionality",
+                "tip": "Thousands of hooks available"
+              },
+              {
+                "name": "WooCommerce Templates",
+                "english": "Override-able template files",
+                "hinglish": "Override-able template files",
+                "importance": "High",
+                "example": "Copy from plugin to theme/woocommerce/"
+              }
+            ]
+          }
+        },
+        {
+          "id": 14,
+          "title": "REST API Development",
+          "english": "Create custom WordPress REST API endpoints",
+          "hinglish": "Custom WordPress REST API endpoints banayein",
+          "examples": [
+            "Custom API endpoint",
+            "JWT authentication",
+            "React/Next.js integration"
+          ],
+          "practice": [
+            {
+              "question": "WordPress REST API endpoint URL pattern?",
+              "answer": "/wp-json/namespace/v1/endpoint"
+            },
+            {
+              "question": "API authentication ke methods?",
+              "answer": "Cookie, JWT, OAuth, Application Passwords"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Register custom REST API route\nadd_action('rest_api_init', function() {\n    register_rest_route('myplugin/v1', '/data/(?P<id>\\d+)', array(\n        'methods' => 'GET',\n        'callback' => 'myplugin_get_data',\n        'permission_callback' => function() {\n            return current_user_can('read');\n        },\n        'args' => array(\n            'id' => array(\n                'validate_callback' => function($param) {\n                    return is_numeric($param);\n                }\n            ),\n        ),\n    ));\n});\n\nfunction myplugin_get_data($request) {\n    $id = $request['id'];\n    // Get data logic\n    return rest_ensure_response(array('id' => $id, 'data' => 'value'));\n}",
+            "components": [
+              {
+                "name": "REST API Routes",
+                "english": "Custom API endpoints",
+                "hinglish": "Custom API endpoints",
+                "role": "Headless WordPress backend",
+                "tip": "Use for mobile apps, React frontends"
+              },
+              {
+                "name": "Permission Callback",
+                "english": "API endpoint access control",
+                "hinglish": "API endpoint access control",
+                "importance": "Critical",
+                "example": "Check user capabilities, API keys"
+              }
+            ]
+          }
+        },
+        {
+          "id": 15,
+          "title": "Performance Optimization",
+          "english": "Optimize WordPress for maximum speed",
+          "hinglish": "WordPress ki speed maximize karein",
+          "examples": [
+            "Caching implementation",
+            "Database optimization",
+            "Image optimization",
+            "CDN setup"
+          ],
+          "practice": [
+            {
+              "question": "WordPress caching ke types?",
+              "answer": "Page caching, Object caching, Database caching, CDN"
+            },
+            {
+              "question": "Slow query kaise identify karein?",
+              "answer": "Query Monitor plugin use karein"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Object caching example\n$data = wp_cache_get('my_data');\nif (false === $data) {\n    $data = expensive_database_query();\n    wp_cache_set('my_data', $data, '', 3600); // Cache for 1 hour\n}\n\n// Transients for persistent caching\n$result = get_transient('api_response');\nif (false === $result) {\n    $result = wp_remote_get('https://api.example.com/data');\n    set_transient('api_response', $result, HOUR_IN_SECONDS);\n}",
+            "components": [
+              {
+                "name": "Object Cache",
+                "english": "In-memory data storage",
+                "hinglish": "In-memory data storage",
+                "tool": "Redis/Memcached + plugin",
+                "pros": "Extremely fast, reduces database load",
+                "cons": "Setup complexity"
+              },
+              {
+                "name": "Transients API",
+                "english": "Persistent caching with expiration",
+                "hinglish": "Expiration ke saath persistent caching",
+                "role": "Store expensive query results",
+                "tip": "Auto-cleaned by WordPress"
+              }
+            ],
+            "performance_indicators": [
+              "Time to First Byte (TTFB) < 200ms",
+              "Page Load Time < 2 seconds",
+              "Database Queries < 50 per page"
+            ]
+          }
+        },
+        {
+          "id": 16,
+          "title": "Advanced Caching Strategies",
+          "english": "Implement advanced caching for high-traffic sites",
+          "hinglish": "High-traffic sites ke liye advanced caching implement karein",
+          "examples": [
+            "Redis object caching",
+            "Varnish page caching",
+            "CDN configuration",
+            "Cache invalidation"
+          ],
+          "practice": [
+            {
+              "question": "Redis vs Memcached - konsa better?",
+              "answer": "Redis: Persistence, more features. Memcached: Simpler, multi-threaded"
+            },
+            {
+              "question": "Cache invalidation kab karein?",
+              "answer": "Post update, comment, user action par"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Redis Object Cache setup\n// wp-config.php\ndefine('WP_REDIS_HOST', '127.0.0.1');\ndefine('WP_REDIS_PORT', 6379);\ndefine('WP_REDIS_TIMEOUT', 1);\ndefine('WP_REDIS_READ_TIMEOUT', 1);\n\n// Cache invalidation on post save\nfunction clear_post_cache($post_id) {\n    // Clear specific post cache\n    wp_cache_delete('post_' . $post_id, 'posts');\n    \n    // Clear related transients\n    delete_transient('recent_posts');\n    delete_transient('post_count');\n    \n    // Clear page cache if using plugin\n    if (function_exists('w3tc_pgcache_flush')) {\n        w3tc_pgcache_flush();\n    }\n}\nadd_action('save_post', 'clear_post_cache');",
+            "components": [
+              {
+                "name": "Redis",
+                "english": "In-memory data structure store",
+                "hinglish": "In-memory data structure store",
+                "tool": "Redis server + WordPress plugin",
+                "pros": "Persistence, advanced data types",
+                "cons": "Memory management needed"
+              },
+              {
+                "name": "Varnish",
+                "english": "HTTP accelerator",
+                "hinglish": "HTTP accelerator",
+                "role": "Reverse proxy caching",
+                "tip": "Bypass for logged-in users"
+              }
+            ]
+          }
+        },
+        {
+          "id": 17,
+          "title": "Security Hardening",
+          "english": "Advanced security measures for WordPress",
+          "hinglish": "WordPress ke liye advanced security measures",
+          "examples": [
+            "Firewall implementation",
+            "Malware scanning",
+            "Login security",
+            "File permissions"
+          ],
+          "practice": [
+            {
+              "question": "WordPress hardening ke steps?",
+              "answer": "1. Secure wp-config.php 2. Disable file editing 3. Limit login attempts"
+            },
+            {
+              "question": "Two-factor authentication kaise implement karein?",
+              "answer": "Plugin ya custom solution"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Disable file editor in wp-config.php\ndefine('DISALLOW_FILE_EDIT', true);\n\n// Move wp-config.php one level above\n// Move to directory above WordPress root\n\n// Security headers\nfunction add_security_headers() {\n    header('X-Content-Type-Options: nosniff');\n    header('X-Frame-Options: SAMEORIGIN');\n    header('X-XSS-Protection: 1; mode=block');\n    header('Referrer-Policy: strict-origin-when-cross-origin');\n}\nadd_action('send_headers', 'add_security_headers');\n\n// Hide WordPress version\nfunction remove_version_info() {\n    return '';\n}\nadd_filter('the_generator', 'remove_version_info');",
+            "components": [
+              {
+                "name": "Security Headers",
+                "english": "HTTP headers for security",
+                "hinglish": "Security ke liye HTTP headers",
+                "role": "Browser security policies",
+                "tip": "Implement via .htaccess or plugin"
+              },
+              {
+                "name": "File Permissions",
+                "english": "Proper file/directory permissions",
+                "hinglish": "Proper file/directory permissions",
+                "measures": "Folders: 755, Files: 644, wp-config.php: 600",
+                "tip": "Never use 777 permissions"
+              }
+            ],
+            "backup_types": [
+              {
+                "type": "Full Backup",
+                "tool": "UpdraftPlus, BackupBuddy",
+                "pros": "Complete site restore",
+                "cons": "Large backup size"
+              },
+              {
+                "type": "Incremental Backup",
+                "tool": "BlogVault, Jetpack",
+                "pros": "Small, frequent backups",
+                "cons": "Complex restore"
+              }
+            ]
+          }
+        },
+        {
+          "id": 18,
+          "title": "Multisite & Enterprise Solutions",
+          "english": "Manage WordPress Multisite networks",
+          "hinglish": "WordPress Multisite networks manage karein",
+          "examples": [
+            "Multisite setup",
+            "Network admin",
+            "Domain mapping",
+            "User management"
+          ],
+          "practice": [
+            {
+              "question": "Multisite kya hai?",
+              "answer": "Single WordPress installation mein multiple sites"
+            },
+            {
+              "question": "Super Admin kya hota hai?",
+              "answer": "Multisite network ka main administrator"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Enable Multisite in wp-config.php\ndefine('WP_ALLOW_MULTISITE', true);\n\n// After setup, network settings\n/*\ndefine('MULTISITE', true);\ndefine('SUBDOMAIN_INSTALL', false); // false for subdirectories\ndefine('DOMAIN_CURRENT_SITE', 'example.com');\ndefine('PATH_CURRENT_SITE', '/');\ndefine('SITE_ID_CURRENT_SITE', 1);\ndefine('BLOG_ID_CURRENT_SITE', 1);\n*/\n\n// Domain mapping\n// sunrise.php in wp-content\n// define('SUNRISE', true);\n// add_filter('pre_get_site_by_path', 'custom_domain_mapping');",
+            "components": [
+              {
+                "name": "Multisite Network",
+                "english": "Multiple sites from one installation",
+                "hinglish": "Ek installation se multiple sites",
+                "role": "Manage multiple websites centrally",
+                "tip": "Great for agencies, universities, franchises"
+              },
+              {
+                "name": "Network Admin",
+                "english": "Central administration panel",
+                "hinglish": "Central administration panel",
+                "responsibility": "Themes, plugins, users for all sites",
+                "example": "One-click updates for network"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

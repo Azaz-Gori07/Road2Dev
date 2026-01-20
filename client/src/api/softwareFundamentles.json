@@ -1,0 +1,428 @@
+{
+  "technology": "Software Development Fundamentals (Software Development ke Basic Concepts)",
+  "slug": "software-development-fundamentals",
+  "description": "Complete software development fundamentals explaining how software is built, different types of software, development processes, and essential concepts before learning any programming language. (Software development fundamentals batata hai ki software kaise banaya jata hai, different types ke software, development processes aur basic concepts - aap koi bhi programming language seekhne se pehle ye samjhein)",
+  "order": 1,
+  "levels": [
+    {
+      "level": "Core Fundamentals (Mool Siddhant)",
+      "order": 1,
+      "topics": [
+        {
+          "id": 1,
+          "title": "What is Software? (Software Kya Hota Hai?)",
+          "english": "Software is a set of instructions that tells a computer what to do. It's the programs and applications that run on hardware.",
+          "hinglish": "Software instructions ka set hota hai jo computer ko batata hai ki kya karna hai. Ye programs aur applications hote hain jo hardware par chalti hain.",
+          "examples": [
+            "Windows Operating System",
+            "Google Chrome Browser",
+            "Microsoft Word"
+          ],
+          "practice": [
+            {
+              "question": "What is the difference between software and hardware? (Software aur hardware me antar kya hai?)",
+              "answer": "Hardware is physical (computer, mouse), software is digital instructions (programs) (Hardware physical hota hai (computer, mouse), software digital instructions hote hain (programs))"
+            },
+            {
+              "question": "Can software run without hardware? (Kya software hardware ke bina chal sakta hai?)",
+              "answer": "No, software needs hardware to run (Nahi, software ko chalane ke liye hardware chahiye)"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Types of Software (Software ke Prakar)",
+          "english": "There are mainly three types: System Software, Application Software, and Programming Software.",
+          "hinglish": "Software mainly teen prakar ke hote hain: System Software, Application Software, aur Programming Software.",
+          "examples": [
+            "System: Windows OS, Linux",
+            "Application: MS Office, Photoshop",
+            "Programming: VS Code, Compilers"
+          ],
+          "practice": [
+            {
+              "question": "What type of software is Windows? (Windows kis type ka software hai?)",
+              "answer": "System Software (System Software)"
+            },
+            {
+              "question": "What type of software is Visual Studio Code? (Visual Studio Code kis type ka software hai?)",
+              "answer": "Programming Software (Programming Software)"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "title": "Programming Language vs Natural Language (Programming Language aur Natural Language me Antar)",
+          "english": "Programming languages are formal languages with strict syntax for giving instructions to computers. Natural languages are human languages for communication.",
+          "hinglish": "Programming languages formal languages hote hain jinke strict rules hote hain computer ko instructions dene ke liye. Natural languages human languages hote hain communication ke liye.",
+          "examples": [
+            "Programming: Python, Java, C++",
+            "Natural: English, Hindi, Spanish"
+          ],
+          "practice": [
+            {
+              "question": "Why can't we use English directly to program computers? (Hum English directly computer ko program karne ke liye kyun nahi use kar sakte?)",
+              "answer": "Because computers need precise, unambiguous instructions (Kyuki computers ko precise, clear instructions chahiye)"
+            },
+            {
+              "question": "What makes programming languages different from each other? (Programming languages ek dusre se kaise alag hote hain?)",
+              "answer": "Syntax, use cases, level of abstraction (syntax, use cases, abstraction ka level)"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Source Code vs Executable Code (Source Code aur Executable Code me Antar)",
+          "english": "Source code is human-readable code written by developers. Executable code is machine-readable code that computer can run.",
+          "hinglish": "Source code human-readable code hota hai jo developers likhte hain. Executable code machine-readable code hota hai jo computer chalata hai.",
+          "examples": [
+            "Source: .py, .java, .cpp files",
+            "Executable: .exe, .dll, .class files"
+          ],
+          "practice": [
+            {
+              "question": "Can humans read executable code? (Kya humans executable code padh sakte hain?)",
+              "answer": "No, it's in binary/machine language (Nahi, ye binary/machine language me hota hai)"
+            },
+            {
+              "question": "What converts source code to executable code? (Source code ko executable code me kaun convert karta hai?)",
+              "answer": "Compiler or Interpreter (Compiler ya Interpreter)"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Compiler vs Interpreter (Compiler aur Interpreter me Antar)",
+          "english": "Compiler translates entire source code to machine code at once. Interpreter translates and executes line by line.",
+          "hinglish": "Compiler pura source code ek baar me machine code me convert karta hai. Interpreter line by line translate karke chalta hai.",
+          "examples": [
+            "Compiler: C, C++ (GCC compiler)",
+            "Interpreter: Python, JavaScript"
+          ],
+          "practice": [
+            {
+              "question": "Which is faster generally - compiled or interpreted? (Generally kaun faster hota hai - compiled ya interpreted?)",
+              "answer": "Compiled programs are faster (Compiled programs faster hote hain)"
+            },
+            {
+              "question": "Which gives error immediately? (Kaun error immediately deta hai?)",
+              "answer": "Interpreter - at the line with error (Interpreter - jis line me error hai usi par)"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "High-level vs Low-level Languages (High-level aur Low-level Languages me Antar)",
+          "english": "High-level languages are close to human language. Low-level languages are close to machine language.",
+          "hinglish": "High-level languages human language ke close hote hain. Low-level languages machine language ke close hote hain.",
+          "examples": [
+            "High-level: Python, Java, JavaScript",
+            "Low-level: Assembly, Machine Code"
+          ],
+          "practice": [
+            {
+              "question": "Which is easier to learn? (Kaun seekhna aasan hota hai?)",
+              "answer": "High-level languages (High-level languages)"
+            },
+            {
+              "question": "Which gives more control over hardware? (Kaun hardware par zyada control deta hai?)",
+              "answer": "Low-level languages (Low-level languages)"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "title": "What is an Algorithm? (Algorithm Kya Hota Hai?)",
+          "english": "An algorithm is a step-by-step procedure to solve a problem.",
+          "hinglish": "Algorithm ek step-by-step procedure hota hai koi problem solve karne ke liye.",
+          "examples": [
+            "Recipe for cooking food",
+            "Directions to reach a location"
+          ],
+          "practice": [
+            {
+              "question": "Can you give an example of algorithm from daily life? (Daily life se algorithm ka example de sakte hain?)",
+              "answer": "Making tea step-by-step (Chai banane ka step-by-step process)"
+            },
+            {
+              "question": "Why are algorithms important in programming? (Programming me algorithms kyun important hain?)",
+              "answer": "They provide efficient ways to solve problems efficiently (Ye problems solve karne ke efficient tareeke dete hain)"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "title": "What is a Program? (Program Kya Hota Hai?)",
+          "english": "A program is a set of instructions written in a programming language to perform specific tasks.",
+          "hinglish": "Program instructions ka set hota hai jo programming language me likha hota hai specific tasks perform karne ke liye.",
+          "examples": [
+            "Calculator program",
+            "Weather app"
+          ],
+          "practice": [
+            {
+              "question": "What is the relationship between algorithm and program? (Algorithm aur program me kya rishta hai?)",
+              "answer": "Algorithm is the idea/plan, program is the implementation (Algorithm idea/plan hota hai, program implementation hota hai)"
+            },
+            {
+              "question": "Can one algorithm have multiple program implementations? (Kya ek algorithm ke multiple program implementations ho sakte hain?)",
+              "answer": "Yes, in different programming languages (Haan, different programming languages me)"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "title": "What is a Variable? (Variable Kya Hota Hai?)",
+          "english": "A variable is a named container that stores data in a program.",
+          "hinglish": "Variable ek named container hota hai jo program me data store karta hai.",
+          "examples": [
+            "age = 25",
+            "name = 'John'",
+            "price = 99.99"
+          ],
+          "practice": [
+            {
+              "question": "Why do we need variables? (Humko variables ki kya zaroorat hai?)",
+              "answer": "To store and reuse data in programs (Program me data store aur reuse karne ke liye)"
+            },
+            {
+              "question": "Can variable values change during program execution? (Kya variable ki values program execution ke dauraan change ho sakti hain?)",
+              "answer": "Yes (Haan)"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "title": "Data Types (Data Types - Data ke Prakar)",
+          "english": "Data types define what kind of data can be stored in variables and what operations can be performed on them.",
+          "hinglish": "Data types define karte hain ki variables me kaunse type ka data store ho sakta hai aur us par kaunse operations kiye ja sakte hain.",
+          "examples": [
+            "Integer: 10, 25, -5",
+            "String: 'Hello', 'India'",
+            "Boolean: true, false"
+          ],
+          "practice": [
+            {
+              "question": "What data type would you use for storing someone's age? (Kisi ki age store karne ke liye aap kaunsa data type use karenge?)",
+              "answer": "Integer (Integer)"
+            },
+            {
+              "question": "What data type would you use for storing if a user is logged in? (Check karne ke liye ki user logged in hai ya nahi, kaunsa data type use karenge?)",
+              "answer": "Boolean (true/false) (Boolean (true/false))"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "title": "What are Functions/Methods? (Functions/Methods Kya Hote Hain?)",
+          "english": "Functions are reusable blocks of code that perform specific tasks.",
+          "hinglish": "Functions reusable blocks of code hote hain jo specific tasks perform karte hain.",
+          "examples": [
+            "calculateTax()",
+            "loginUser()",
+            "sendEmail()"
+          ],
+          "practice": [
+            {
+              "question": "Why use functions instead of writing code repeatedly? (Code repeatedly likhne ki jagah functions kyun use karein?)",
+              "answer": "To avoid repetition and make code organized (Repetition avoid karne aur code organized banane ke liye)"
+            },
+            {
+              "question": "What is the difference between function and method? (Function aur method me antar kya hai?)",
+              "answer": "Method is a function inside a class (Method class ke andar wala function hota hai)"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "title": "What is an IDE? (IDE Kya Hota Hai?)",
+          "english": "IDE (Integrated Development Environment) is software that provides tools for writing, testing, and debugging code.",
+          "hinglish": "IDE (Integrated Development Environment) ek software hota hai jo code likhne, test karne aur debug karne ke tools provide karta hai.",
+          "examples": [
+            "Visual Studio Code",
+            "IntelliJ IDEA",
+            "PyCharm"
+          ],
+          "practice": [
+            {
+              "question": "Can we write code without IDE? (Kya hum IDE ke bina code likh sakte hain?)",
+              "answer": "Yes, using text editors like Notepad (Haan, Notepad jaise text editors use karke)"
+            },
+            {
+              "question": "What are the advantages of using IDE? (IDE use karne ke kya advantages hain?)",
+              "answer": "Code completion, debugging, project management (Code completion, debugging, project management)"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "title": "Debugging (Debugging Kya Hoti Hai?)",
+          "english": "Debugging is the process of finding and fixing errors (bugs) in software.",
+          "hinglish": "Debugging software me errors (bugs) dhoondhne aur fix karne ka process hota hai.",
+          "examples": [
+            "Using debugger tools",
+            "Printing variable values",
+            "Checking error messages"
+          ],
+          "practice": [
+            {
+              "question": "What is a bug? (Bug kya hota hai?)",
+              "answer": "An error or flaw in software (Software me error ya flaw)"
+            },
+            {
+              "question": "What tools help in debugging? (Debugging me kaunse tools help karte hain?)",
+              "answer": "Debugger, console logs, breakpoints (Debugger, console logs, breakpoints)"
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "title": "Software Development Life Cycle (SDLC) (Software Development Life Cycle - SDLC)",
+          "english": "SDLC is a process for planning, creating, testing, and deploying software.",
+          "hinglish": "SDLC software plan karne, banana, test karne aur deploy karne ka process hota hai.",
+          "examples": [
+            "Waterfall Model",
+            "Agile Methodology",
+            "Scrum Framework"
+          ],
+          "practice": [
+            {
+              "question": "What are the main phases of SDLC? (SDLC ke main phases kaunse hain?)",
+              "answer": "Planning, Design, Development, Testing, Deployment (Planning, Design, Development, Testing, Deployment)"
+            },
+            {
+              "question": "Which model is more flexible - Waterfall or Agile? (Kaunsi model zyada flexible hai - Waterfall ya Agile?)",
+              "answer": "Agile is more flexible (Agile zyada flexible hai)"
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "title": "Version Control (Version Control Kya Hota Hai?)",
+          "english": "Version control is a system that tracks changes to code over time, allowing multiple people to collaborate.",
+          "hinglish": "Version control ek system hota hai jo time ke saath code me changes track karta hai, jisse multiple log collaborate kar sakte hain.",
+          "examples": [
+            "Git",
+            "GitHub",
+            "GitLab"
+          ],
+          "practice": [
+            {
+              "question": "Why is version control important? (Version control kyun important hai?)",
+              "answer": "To track changes, collaborate, and revert if needed (Changes track karne, collaborate karne aur zaroorat par revert karne ke liye)"
+            },
+            {
+              "question": "What is the most popular version control system? (Sabse popular version control system kaunsa hai?)",
+              "answer": "Git (Git)"
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "title": "What is an API? (API Kya Hota Hai?)",
+          "english": "API (Application Programming Interface) is a set of rules that allows different software applications to communicate with each other.",
+          "hinglish": "API (Application Programming Interface) rules ka set hota hai jo different software applications ko ek dusre se baat karne deta hai.",
+          "examples": [
+            "Weather API",
+            "Payment Gateway API",
+            "Google Maps API"
+          ],
+          "practice": [
+            {
+              "question": "How do apps like Swiggy show your location on map? (Swiggy jaise apps aapki location map par kaise dikhate hain?)",
+              "answer": "Using Google Maps API (Google Maps API use karke)"
+            },
+            {
+              "question": "What is the benefit of using APIs? (APIs use karne ke kya benefits hain?)",
+              "answer": "Reuse existing functionality, save development time (Existing functionality reuse karna, development time bachana)"
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "title": "Frontend vs Backend vs Full Stack (Frontend, Backend aur Full Stack me Antar)",
+          "english": "Frontend is user interface, Backend is server-side logic, Full Stack is both frontend and backend.",
+          "hinglish": "Frontend user interface hota hai, Backend server-side logic hoti hai, Full Stack dono frontend aur backend hota hai.",
+          "examples": [
+            "Frontend: HTML, CSS, JavaScript",
+            "Backend: Python, Java, Node.js",
+            "Full Stack: MERN, MEAN stack"
+          ],
+          "practice": [
+            {
+              "question": "Which handles database operations? (Database operations kaun handle karta hai?)",
+              "answer": "Backend (Backend)"
+            },
+            {
+              "question": "What does a full stack developer do? (Full stack developer kya karta hai?)",
+              "answer": "Works on both frontend and backend of applications (Applications ke frontend aur backend dono par kaam karta hai)"
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "title": "What is Open Source? (Open Source Kya Hota Hai?)",
+          "english": "Open source software is software with source code that anyone can inspect, modify, and enhance.",
+          "hinglish": "Open source software aisa software hota hai jiska source code koi bhi dekh sakta hai, modify kar sakta hai aur improve kar sakta hai.",
+          "examples": [
+            "Linux Operating System",
+            "WordPress",
+            "React.js"
+          ],
+          "practice": [
+            {
+              "question": "What are benefits of open source? (Open source ke kya benefits hain?)",
+              "answer": "Free, community support, transparency (Free, community support, transparency)"
+            },
+            {
+              "question": "Can you make money from open source software? (Kya open source software se paise kama sakte hain?)",
+              "answer": "Yes, through support, customization, hosting (Haan, support, customization, hosting ke through)"
+            }
+          ]
+        },
+        {
+          "id": 19,
+          "title": "Software Testing (Software Testing Kya Hoti Hai?)",
+          "english": "Software testing is the process of verifying that software works as expected and finding defects.",
+          "hinglish": "Software testing software ko verify karne ka process hota hai ki wo expected tarike se kaam karta hai aur defects dhoondhta hai.",
+          "examples": [
+            "Unit Testing",
+            "Integration Testing",
+            "Manual Testing"
+          ],
+          "practice": [
+            {
+              "question": "Why is testing important? (Testing kyun important hai?)",
+              "answer": "To ensure software quality and catch bugs early (Software quality ensure karne aur bugs jaldi catch karne ke liye)"
+            },
+            {
+              "question": "What is manual testing vs automated testing? (Manual testing aur automated testing me antar kya hai?)",
+              "answer": "Manual: Human tests, Automated: Scripts test (Manual: Human test karta hai, Automated: Scripts test karti hain)"
+            }
+          ]
+        },
+        {
+          "id": 20,
+          "title": "Deployment & DevOps (Deployment aur DevOps)",
+          "english": "Deployment is making software available for users. DevOps is practices that combine development and operations.",
+          "hinglish": "Deployment software ko users ke liye available banana hota hai. DevOps practices hain jo development aur operations ko combine karte hain.",
+          "examples": [
+            "Deploying to cloud servers",
+            "Continuous Integration/Deployment",
+            "Docker containers"
+          ],
+          "practice": [
+            {
+              "question": "Where is software deployed? (Software kahan deploy kiya jata hai?)",
+              "answer": "On servers (cloud or physical) (Servers par (cloud ya physical))"
+            },
+            {
+              "question": "What is the goal of DevOps? (DevOps ka goal kya hai?)",
+              "answer": "Faster and more reliable software delivery (Software delivery faster aur zyada reliable banana)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

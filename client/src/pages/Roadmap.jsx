@@ -9,7 +9,7 @@ const Roadmap = () => {
   const roadmapKey = stackSlug || fieldSlug;
   const roadmap = stackFlow[roadmapKey];
 
-  const completed = ["web-fundamentals", "html", "css", "javascript", "react", "nodejs", "express", "mongodb", "projects", "sql", "php", "mysql", "laravel", "python", "django"];
+  const completed = [ "html", "css", "javascript", "react", "nodejs", "express", "mongodb", "projects", "sql", "php", "mysql", "laravel", "python", "django", "nextjs", "wordpress", "c", "dsa"]; // Example completed modules
 
   const handleClick = (slug, index) => {
     const isUnlocked = index === 0 || completed.includes(slug);

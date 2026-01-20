@@ -1,0 +1,797 @@
+{
+  "technology": "Next.js",
+  "slug": "next-js-complete-mastery",
+  "description": "Complete Next.js 14 course covering Pages Router, App Router, Server Components, and all modern features with real-world projects",
+  "levels": [
+    {
+      "level": "Beginner - Next.js Fundamentals",
+      "order": 1,
+      "description": "Get started with Next.js basics and core concepts",
+      "topics": [
+        {
+          "id": 1,
+          "title": "Introduction to Next.js Ecosystem",
+          "english": "Understanding Next.js and its position in React ecosystem",
+          "hinglish": "Next.js aur React ecosystem mein iski jagah samjhein",
+          "examples": [
+            "Create first Next.js app",
+            "Compare with Create React App"
+          ],
+          "practice": [
+            {
+              "question": "Next.js ke 5 main advantages traditional React se?",
+              "answer": "1. SSR/SSG 2. File-based Routing 3. API Routes 4. Image Optimization 5. Built-in CSS Support"
+            },
+            {
+              "question": "Next.js kon si company maintain karti hai?",
+              "answer": "Vercel (formerly Zeit)"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "npx create-next-app@latest my-app",
+            "components": [
+              {
+                "name": "Next.js vs React",
+                "english": "Framework vs Library comparison",
+                "hinglish": "Framework aur Library mein antar",
+                "importance": "High",
+                "tip": "Next.js React ka framework hai, React ek library hai",
+                "pros": "Built-in features, optimization, routing",
+                "cons": "Less flexibility than plain React",
+                "example": "Next.js: Ready-made solutions, React: Build everything from scratch"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Feature", "Next.js", "Create React App"],
+              "rows": [
+                ["Routing", "File-based", "React Router needed"],
+                ["SSR", "Built-in", "Not available"],
+                ["API Routes", "Yes", "Need backend server"],
+                ["Image Optimization", "Yes", "Manual implementation"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 2,
+          "title": "Project Structure & Setup",
+          "english": "Understanding Next.js folder structure and configuration",
+          "hinglish": "Next.js folder structure aur configuration samjhein",
+          "examples": [
+            "Explore auto-generated files",
+            "Customize next.config.js"
+          ],
+          "practice": [
+            {
+              "question": "Next.js mein public folder ka use kya hai?",
+              "answer": "Static assets (images, icons, fonts) store karne ke liye"
+            },
+            {
+              "question": "next.config.js file kyun important hai?",
+              "answer": "Custom configuration, environment variables, redirects ke liye"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// next.config.js\nmodule.exports = {\n  reactStrictMode: true,\n  images: {\n    domains: ['example.com'],\n  },\n}",
+            "components": [
+              {
+                "name": "pages/ folder",
+                "english": "Contains all application routes",
+                "hinglish": "Saare application routes yahan hote hain",
+                "role": "Routing controller",
+                "tip": "_app.js for global layout, _document.js for HTML structure"
+              },
+              {
+                "name": "public/ folder",
+                "english": "Static assets storage",
+                "hinglish": "Static assets (images, fonts, icons)",
+                "tip": "Direct access: /logo.png se public/logo.png access hoga"
+              }
+            ]
+          }
+        },
+        {
+          "id": 3,
+          "title": "Pages Router Basics",
+          "english": "File-based routing system in Pages Router",
+          "hinglish": "Pages Router mein file-based routing system",
+          "examples": [
+            "Create static routes",
+            "Create dynamic routes",
+            "Nested routes"
+          ],
+          "practice": [
+            {
+              "question": "pages/about.js banane se kya route banega?",
+              "answer": "/about"
+            },
+            {
+              "question": "Dynamic route pages/users/[id].js kaise kaam karta hai?",
+              "answer": "/users/123, /users/456 jaise URLs handle karega"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// pages/index.js - Home page\nexport default function Home() {\n  return <h1>Welcome Home</h1>;\n}\n\n// pages/blog/[slug].js - Dynamic route\nexport default function BlogPost({ post }) {\n  return <article>{post.content}</article>;\n}",
+            "components": [
+              {
+                "name": "Link Component",
+                "english": "Client-side navigation",
+                "hinglish": "Client-side navigation ke liye",
+                "importance": "High",
+                "tip": "<a> tag ki jagah <Link> use karein for better performance",
+                "example": "<Link href='/about'>About Us</Link>"
+              }
+            ],
+            "decision_table": {
+              "headers": ["Route Type", "File Pattern", "Example URL"],
+              "rows": [
+                ["Static", "pages/page.js", "/page"],
+                ["Dynamic", "pages/[id].js", "/123"],
+                ["Nested", "pages/blog/[id].js", "/blog/123"],
+                ["Catch-all", "pages/[...slug].js", "/docs/a/b/c"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 4,
+          "title": "CSS & Styling Methods",
+          "english": "Different ways to style Next.js applications",
+          "hinglish": "Next.js applications ko style karne ke tareeke",
+          "examples": [
+            "CSS Modules",
+            "Global CSS",
+            "Tailwind CSS setup"
+          ],
+          "practice": [
+            {
+              "question": "CSS Module ka advantage kya hai?",
+              "answer": "Local scoping - class names conflict nahi hote"
+            },
+            {
+              "question": "Global CSS kahan import karein?",
+              "answer": "_app.js file mein"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Button.module.css\n.button {\n  background: blue;\n  color: white;\n}\n\n// Button.js\nimport styles from './Button.module.css';\nexport default function Button() {\n  return <button className={styles.button}>Click</button>;\n}",
+            "components": [
+              {
+                "name": "CSS Modules",
+                "english": "Locally scoped CSS",
+                "hinglish": "Locally scoped CSS",
+                "pros": "No naming conflicts, component-based",
+                "cons": "Extra .module.css files"
+              },
+              {
+                "name": "Tailwind CSS",
+                "english": "Utility-first CSS framework",
+                "hinglish": "Utility-first CSS framework",
+                "tool": "tailwindcss",
+                "pros": "Rapid development, consistent design",
+                "cons": "Large CSS file, learning curve"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Intermediate - Core Features",
+      "order": 2,
+      "description": "Master data fetching, API routes, and state management",
+      "topics": [
+        {
+          "id": 5,
+          "title": "Data Fetching Methods",
+          "english": "SSG, SSR, ISR and client-side data fetching",
+          "hinglish": "SSG, SSR, ISR aur client-side data fetching",
+          "examples": [
+            "getStaticProps example",
+            "getServerSideProps example",
+            "SWR for client fetching"
+          ],
+          "practice": [
+            {
+              "question": "Blog site ke liye konsa data fetching best rahega?",
+              "answer": "getStaticProps with revalidate (ISR) for fast loading with updates"
+            },
+            {
+              "question": "getStaticPaths kab use karein?",
+              "answer": "Dynamic routes with getStaticProps ke saath"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Static Generation\nexport async function getStaticProps() {\n  const res = await fetch('https://api.example.com/posts');\n  const posts = await res.json();\n  return { \n    props: { posts },\n    revalidate: 60 // ISR: regenerate every 60 seconds\n  };\n}\n\n// Server-side Rendering\nexport async function getServerSideProps(context) {\n  const { req, res } = context;\n  // Fresh data on every request\n  return { props: { data } };\n}",
+            "components": [
+              {
+                "name": "getStaticProps",
+                "english": "Static Generation at build time",
+                "hinglish": "Build time par static pages banata hai",
+                "use_case": "Blog posts, documentation, marketing pages",
+                "pros": "Fastest, CDN cacheable, SEO friendly"
+              },
+              {
+                "name": "getServerSideProps",
+                "english": "Server-side Rendering on each request",
+                "hinglish": "Har request par server-side render hota hai",
+                "use_case": "Dashboard, user-specific data, real-time data",
+                "pros": "Always fresh data, access to request object"
+              }
+            ],
+            "decision_table": {
+              "headers": ["When to Use?", "Method", "Example"],
+              "rows": [
+                ["Static content", "getStaticProps", "Blog, Documentation"],
+                ["User-specific", "getServerSideProps", "Dashboard, Profile"],
+                ["Frequently updated", "ISR", "News, Products"],
+                ["Client interaction", "useEffect + fetch", "Search, Filters"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 6,
+          "title": "API Routes (Backend in Next.js)",
+          "english": "Create backend APIs without separate server",
+          "hinglish": "Alag server ke bina backend APIs banayein",
+          "examples": [
+            "REST API endpoints",
+            "Connect to database",
+            "Authentication endpoints"
+          ],
+          "practice": [
+            {
+              "question": "API route se database connect kaise karein?",
+              "answer": "pages/api/users.js mein database client initialize karein"
+            },
+            {
+              "question": "API routes kahan deploy hote hain?",
+              "answer": "Same as frontend - Vercel, Node.js server"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// pages/api/users/[id].js\nexport default async function handler(req, res) {\n  const { id } = req.query;\n  \n  switch (req.method) {\n    case 'GET':\n      const user = await db.user.findUnique({ where: { id } });\n      return res.status(200).json(user);\n      \n    case 'PUT':\n      const updated = await db.user.update({ \n        where: { id }, \n        data: req.body \n      });\n      return res.status(200).json(updated);\n      \n    case 'DELETE':\n      await db.user.delete({ where: { id } });\n      return res.status(204).end();\n  }\n}",
+            "components": [
+              {
+                "name": "API Handler",
+                "english": "Request handler function",
+                "hinglish": "Request handle karne wala function",
+                "responsibility": "Process HTTP methods, send responses",
+                "tip": "Always set proper status codes and headers"
+              }
+            ]
+          }
+        },
+        {
+          "id": 7,
+          "title": "State Management Solutions",
+          "english": "Manage application state in Next.js",
+          "hinglish": "Next.js mein application state manage karein",
+          "examples": [
+            "React Context API",
+            "Zustand setup",
+            "Redux Toolkit with Next.js"
+          ],
+          "practice": [
+            {
+              "question": "Small project ke liye konsa state management best hai?",
+              "answer": "React Context ya Zustand"
+            },
+            {
+              "question": "Server components ke saath state management kaise karein?",
+              "answer": "Client components mein state rakhein, server components props pass karein"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Using Zustand\nimport create from 'zustand';\n\nconst useStore = create((set) => ({\n  count: 0,\n  increment: () => set((state) => ({ count: state.count + 1 })),\n  decrement: () => set((state) => ({ count: state.count - 1 })),\n}));\n\n// Component\nfunction Counter() {\n  const { count, increment } = useStore();\n  return (\n    <div>\n      <span>{count}</span>\n      <button onClick={increment}>+</button>\n    </div>\n  );\n}",
+            "components": [
+              {
+                "name": "React Context",
+                "english": "Built-in React state management",
+                "hinglish": "React ka built-in state management",
+                "pros": "No extra library, good for simple cases",
+                "cons": "Performance issues with frequent updates"
+              },
+              {
+                "name": "Zustand",
+                "english": "Minimal state management library",
+                "hinglish": "Minimal state management library",
+                "pros": "Simple API, no boilerplate, good performance",
+                "cons": "Less features than Redux"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Library", "Use Case", "Learning Curve"],
+              "rows": [
+                ["Context API", "Small apps, theme", "Easy"],
+                ["Zustand", "Medium apps", "Medium"],
+                ["Redux Toolkit", "Large apps", "Steep"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 8,
+          "title": "Authentication & Authorization",
+          "english": "Implement secure authentication in Next.js",
+          "hinglish": "Next.js mein secure authentication implement karein",
+          "examples": [
+            "NextAuth.js setup",
+            "JWT authentication",
+            "Protected routes"
+          ],
+          "practice": [
+            {
+              "question": "NextAuth.js ke main providers kaun se hain?",
+              "answer": "Google, GitHub, Facebook, Email/Password, Credentials"
+            },
+            {
+              "question": "Middleware mein authentication kaise check karein?",
+              "answer": "Next.js middleware mein session check karein"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// pages/api/auth/[...nextauth].js\nimport NextAuth from 'next-auth';\nimport GoogleProvider from 'next-auth/providers/google';\n\nexport default NextAuth({\n  providers: [\n    GoogleProvider({\n      clientId: process.env.GOOGLE_ID,\n      clientSecret: process.env.GOOGLE_SECRET,\n    }),\n  ],\n  callbacks: {\n    async session({ session, token }) {\n      session.user.id = token.sub;\n      return session;\n    },\n  },\n});",
+            "components": [
+              {
+                "name": "NextAuth.js",
+                "english": "Complete authentication solution",
+                "hinglish": "Complete authentication solution",
+                "tool": "next-auth",
+                "pros": "Multiple providers, session management, secure",
+                "cons": "Configuration needed for production"
+              }
+            ],
+            "security_layers": [
+              {
+                "layer": "Authentication",
+                "measures": "OAuth providers, JWT tokens, session management",
+                "hinglish": "User verify karna"
+              },
+              {
+                "layer": "Authorization",
+                "measures": "Role-based access, middleware checks",
+                "hinglish": "User ke permissions check karna"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Advanced - Next.js 13+ & App Router",
+      "order": 3,
+      "description": "Master new App Router, Server Components and modern features",
+      "topics": [
+        {
+          "id": 9,
+          "title": "App Router Introduction",
+          "english": "New routing system in Next.js 13+",
+          "hinglish": "Next.js 13+ ka naya routing system",
+          "examples": [
+            "Migrate from Pages to App Router",
+            "Layouts in App Router",
+            "Loading and Error boundaries"
+          ],
+          "practice": [
+            {
+              "question": "App Router aur Pages Router mein main difference?",
+              "answer": "App Router: React Server Components, nested layouts, better data fetching"
+            },
+            {
+              "question": "app/ folder mein page.js ka role kya hai?",
+              "answer": "Main page component for that route"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// app/layout.js - Root layout\nexport default function RootLayout({ children }) {\n  return (\n    <html lang='en'>\n      <body>\n        <Header />\n        <main>{children}</main>\n        <Footer />\n      </body>\n    </html>\n  );\n}\n\n// app/page.js - Home page\nexport default function HomePage() {\n  return <h1>Welcome</h1>;\n}",
+            "components": [
+              {
+                "name": "app/ directory",
+                "english": "New App Router directory",
+                "hinglish": "Naya App Router directory",
+                "role": "Contains routes, layouts, components",
+                "tip": "page.js required for each route, layout.js optional"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Feature", "Pages Router", "App Router"],
+              "rows": [
+                ["Layouts", "_app.js global only", "Nested layouts"],
+                ["Data Fetching", "getServerSideProps", "async components"],
+                ["Loading States", "Manual", "loading.js"],
+                ["Error Handling", "Manual", "error.js"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 10,
+          "title": "Server Components vs Client Components",
+          "english": "Understanding React Server Components paradigm",
+          "hinglish": "React Server Components paradigm samjhein",
+          "examples": [
+            "Create server component",
+            "Create client component",
+            "When to use which"
+          ],
+          "practice": [
+            {
+              "question": "Server component ke advantages?",
+              "answer": "1. Smaller bundle 2. Direct database access 3. Better security"
+            },
+            {
+              "question": "'use client' directive kya karta hai?",
+              "answer": "Component ko client component declare karta hai"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Server Component (default)\nimport db from '@/lib/db';\n\nexport default async function UserList() {\n  // Direct database access in server component\n  const users = await db.user.findMany();\n  \n  return (\n    <ul>\n      {users.map((user) => (\n        <li key={user.id}>{user.name}</li>\n      ))}\n    </ul>\n  );\n}\n\n// Client Component\n'use client';\nimport { useState } from 'react';\n\nexport default function Counter() {\n  const [count, setCount] = useState(0);\n  \n  return (\n    <div>\n      <button onClick={() => setCount(count + 1)}>\n        Count: {count}\n      </button>\n    </div>\n  );\n}",
+            "components": [
+              {
+                "name": "Server Components",
+                "english": "Render on server, zero JavaScript to client",
+                "hinglish": "Server par render hote hain, client ko JavaScript nahi bhejte",
+                "characteristics": "Async, direct backend access, no interactivity",
+                "use_case": "Data fetching, static content"
+              },
+              {
+                "name": "Client Components",
+                "english": "Render on client, have interactivity",
+                "hinglish": "Client par render hote hain, interactivity hoti hai",
+                "characteristics": "useState, useEffect, browser APIs",
+                "use_case": "Forms, animations, user interactions"
+              }
+            ],
+            "decision_table": {
+              "headers": ["Use", "Component Type", "Reason"],
+              "rows": [
+                ["Fetch data", "Server", "Direct DB access"],
+                ["User input", "Client", "Interactivity needed"],
+                ["SEO content", "Server", "Better SEO"],
+                ["Animations", "Client", "Browser APIs needed"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 11,
+          "title": "Advanced Data Fetching (App Router)",
+          "english": "New data fetching patterns in App Router",
+          "hinglish": "App Router mein naye data fetching patterns",
+          "examples": [
+            "Fetch in server components",
+            "React Cache for deduplication",
+            "Streaming with Suspense"
+          ],
+          "practice": [
+            {
+              "question": "App Router mein data fetch karne ka sabse simple tareeka?",
+              "answer": "Server component mein directly fetch() use karein"
+            },
+            {
+              "question": "Loading state automatic kaise show karein?",
+              "answer": "loading.js file create karein route folder mein"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// app/products/page.js\nexport default async function ProductsPage() {\n  // Direct fetch in server component\n  const response = await fetch('https://api.example.com/products', {\n    cache: 'no-store', // Dynamic data\n  });\n  \n  const products = await response.json();\n  \n  return (\n    <div>\n      <h1>Products</h1>\n      <Suspense fallback={<Loading />}>\n        <ProductList products={products} />\n      </Suspense>\n    </div>\n  );\n}\n\n// app/products/loading.js\nexport default function Loading() {\n  return <div>Loading products...</div>;\n}",
+            "components": [
+              {
+                "name": "fetch() API",
+                "english": "Native fetch with React extensions",
+                "hinglish": "Native fetch with React extensions",
+                "tip": "Next.js extends fetch with caching and revalidation",
+                "example": "fetch(url, { next: { revalidate: 3600 } })"
+              }
+            ]
+          }
+        },
+        {
+          "id": 12,
+          "title": "Server Actions & Forms",
+          "english": "Perform server mutations without API routes",
+          "hinglish": "API routes ke bina server mutations perform karein",
+          "examples": [
+            "Create server action",
+            "Form with server action",
+            "Optimistic updates"
+          ],
+          "practice": [
+            {
+              "question": "Server Action ka advantage kya hai?",
+              "answer": "Direct server function call from client, less boilerplate"
+            },
+            {
+              "question": "Form validation server action mein kaise karein?",
+              "answer": "Zod ya custom validation use karein"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// app/actions/user.js\n'use server';\nimport { revalidatePath } from 'next/cache';\nimport db from '@/lib/db';\n\nexport async function createUser(formData) {\n  'use server';\n  \n  const name = formData.get('name');\n  const email = formData.get('email');\n  \n  // Validation\n  if (!name || !email) {\n    return { error: 'All fields required' };\n  }\n  \n  // Database operation\n  await db.user.create({\n    data: { name, email },\n  });\n  \n  // Revalidate cache\n  revalidatePath('/users');\n  \n  return { success: true };\n}\n\n// app/page.js\nimport { createUser } from '@/app/actions/user';\n\nexport default function Home() {\n  return (\n    <form action={createUser}>\n      <input name='name' placeholder='Name' />\n      <input name='email' type='email' placeholder='Email' />\n      <button type='submit'>Create User</button>\n    </form>\n  );\n}",
+            "components": [
+              {
+                "name": "'use server'",
+                "english": "Declares server-only function",
+                "hinglish": "Server-only function declare karta hai",
+                "importance": "High",
+                "tip": "Top of file or function ke starting mein likhein"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Expert - Production & Optimization",
+      "order": 4,
+      "description": "Build production-ready applications with best practices",
+      "topics": [
+        {
+          "id": 13,
+          "title": "Performance Optimization",
+          "english": "Optimize Next.js applications for maximum performance",
+          "hinglish": "Next.js applications ki performance maximize karein",
+          "examples": [
+            "Image optimization",
+            "Font optimization",
+            "Bundle analysis",
+            "Lazy loading"
+          ],
+          "practice": [
+            {
+              "question": "next/image component ke benefits?",
+              "answer": "Auto format, size optimization, lazy loading, priority loading"
+            },
+            {
+              "question": "Code splitting automatic kaise hota hai?",
+              "answer": "Dynamic imports: import('module') se automatic code split"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Optimized Image Component\nimport Image from 'next/image';\nimport profilePic from '@/public/profile.jpg';\n\nexport default function Profile() {\n  return (\n    <Image\n      src={profilePic}\n      alt='Profile picture'\n      width={500}\n      height={500}\n      priority={true} // Above the fold images\n      placeholder='blur' // Blur while loading\n      sizes='(max-width: 768px) 100vw, 50vw'\n    />\n  );\n}\n\n// Dynamic Import for Code Splitting\nimport dynamic from 'next/dynamic';\nconst HeavyComponent = dynamic(() => import('@/components/HeavyComponent'), {\n  loading: () => <p>Loading...</p>,\n  ssr: false, // Disable SSR if not needed\n});",
+            "components": [
+              {
+                "name": "next/image",
+                "english": "Optimized image component",
+                "hinglish": "Optimized image component",
+                "tool": "Built-in",
+                "pros": "Auto WebP conversion, lazy load, responsive",
+                "cons": "Learning proper usage required"
+              }
+            ],
+            "performance_indicators": [
+              "Largest Contentful Paint (LCP) < 2.5s",
+              "First Input Delay (FID) < 100ms",
+              "Cumulative Layout Shift (CLS) < 0.1"
+            ]
+          }
+        },
+        {
+          "id": 14,
+          "title": "Caching Strategies",
+          "english": "Implement effective caching for better performance",
+          "hinglish": "Better performance ke liye effective caching implement karein",
+          "examples": [
+            "Data cache",
+            "Full route cache",
+            "Router cache",
+            "CDN caching"
+          ],
+          "practice": [
+            {
+              "question": "Static page ka cache kitne time tak rahega?",
+              "answer": "Default: forever (until redeploy), unless revalidate use karein"
+            },
+            {
+              "question": "Dynamic data cache karne ke liye kya karein?",
+              "answer": "fetch() mein next: { revalidate: seconds } option use karein"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Data fetching with revalidation\nasync function getData() {\n  const res = await fetch('https://api.example.com/data', {\n    next: { \n      revalidate: 3600, // Revalidate every hour\n      tags: ['products'], // Tag for revalidation\n    },\n  });\n  return res.json();\n}\n\n// Revalidate by tag\nimport { revalidateTag } from 'next/cache';\n\n// After data mutation\nrevalidateTag('products');",
+            "components": [
+              {
+                "name": "Data Cache",
+                "english": "Caches fetch() responses",
+                "hinglish": "fetch() responses cache karta hai",
+                "role": "Persistent cache across requests",
+                "tip": "Use revalidate for time-based, tags for on-demand"
+              },
+              {
+                "name": "Full Route Cache",
+                "english": "Caches rendered routes",
+                "hinglish": "Rendered routes cache karta hai",
+                "role": "Static generation optimization",
+                "tip": "Dynamic functions disable this cache"
+              }
+            ]
+          }
+        },
+        {
+          "id": 15,
+          "title": "Testing & Quality Assurance",
+          "english": "Test Next.js applications thoroughly",
+          "hinglish": "Next.js applications ko thoroughly test karein",
+          "examples": [
+            "Unit testing with Jest",
+            "Component testing",
+            "E2E testing with Cypress",
+            "Accessibility testing"
+          ],
+          "practice": [
+            {
+              "question": "Next.js mein testing setup kaise karein?",
+              "answer": "Jest + React Testing Library + @testing-library/jest-dom"
+            },
+            {
+              "question": "Server components kaise test karein?",
+              "answer": "@testing-library/react for rendering, mock fetch calls"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// __tests__/Button.test.js\nimport { render, screen, fireEvent } from '@testing-library/react';\nimport Button from '@/components/Button';\n\ndescribe('Button Component', () => {\n  test('renders button with text', () => {\n    render(<Button>Click me</Button>);\n    expect(screen.getByText('Click me')).toBeInTheDocument();\n  });\n  \n  test('calls onClick when clicked', () => {\n    const handleClick = jest.fn();\n    render(<Button onClick={handleClick}>Click</Button>);\n    \n    fireEvent.click(screen.getByText('Click'));\n    expect(handleClick).toHaveBeenCalledTimes(1);\n  });\n});",
+            "components": [
+              {
+                "name": "Jest",
+                "english": "JavaScript testing framework",
+                "hinglish": "JavaScript testing framework",
+                "tool": "jest",
+                "pros": "Fast, snapshot testing, good mocking",
+                "cons": "Configuration needed for Next.js"
+              },
+              {
+                "name": "React Testing Library",
+                "english": "Component testing library",
+                "hinglish": "Component testing library",
+                "tool": "@testing-library/react",
+                "pros": "User-centric testing, encourages good practices",
+                "cons": "More verbose than enzyme"
+              }
+            ]
+          }
+        },
+        {
+          "id": 16,
+          "title": "Deployment & CI/CD",
+          "english": "Deploy Next.js applications to production",
+          "hinglish": "Next.js applications ko production mein deploy karein",
+          "examples": [
+            "Deploy to Vercel",
+            "Dockerize Next.js app",
+            "GitHub Actions setup",
+            "Environment variables"
+          ],
+          "practice": [
+            {
+              "question": "Vercel par deploy kaise karein?",
+              "answer": "Git repository connect karein, Vercel automatically setup karega"
+            },
+            {
+              "question": "Environment variables kaise manage karein?",
+              "answer": ".env.local for local, Vercel project settings for production"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Dockerfile for Next.js\nFROM node:18-alpine AS base\n\n# Install dependencies\nCOPY package.json package-lock.json ./ \nRUN npm ci\n\n# Copy source\nCOPY . .\n\n# Build application\nRUN npm run build\n\n# Production image\nFROM node:18-alpine AS production\nCOPY --from=base /app/.next ./.next\nCOPY --from=base /app/node_modules ./node_modules\nCOPY --from=base /app/package.json ./package.json\n\nEXPOSE 3000\nCMD [\"npm\", \"start\"]",
+            "components": [
+              {
+                "name": "Vercel",
+                "english": "Optimized hosting platform",
+                "hinglish": "Optimized hosting platform",
+                "tool": "vercel.com",
+                "pros": "Zero config, edge network, analytics",
+                "cons": "Vendor lock-in"
+              },
+              {
+                "name": "Docker",
+                "english": "Containerization platform",
+                "hinglish": "Containerization platform",
+                "tool": "Docker",
+                "pros": "Consistent environments, portable",
+                "cons": "Learning curve, maintenance"
+              }
+            ],
+            "backup_types": [
+              {
+                "type": "Git-based",
+                "tool": "Vercel/Netlify",
+                "pros": "Automatic, preview deployments",
+                "cons": "Less control"
+              },
+              {
+                "type": "Self-hosted",
+                "tool": "Docker + Cloud provider",
+                "pros": "Full control, cost-effective",
+                "cons": "Maintenance required"
+              }
+            ]
+          }
+        },
+        {
+          "id": 17,
+          "title": "Monitoring & Analytics",
+          "english": "Monitor production applications and track metrics",
+          "hinglish": "Production applications monitor karein aur metrics track karein",
+          "examples": [
+            "Error tracking with Sentry",
+            "Performance monitoring",
+            "User analytics",
+            "Log management"
+          ],
+          "practice": [
+            {
+              "question": "Production errors kaise track karein?",
+              "answer": "Sentry ya LogRocket integrate karein"
+            },
+            {
+              "question": "Core Web Vitals monitor kaise karein?",
+              "answer": "Vercel Analytics, Google Search Console"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// sentry.config.js\nimport * as Sentry from '@sentry/nextjs';\n\nSentry.init({\n  dsn: process.env.SENTRY_DSN,\n  tracesSampleRate: 1.0,\n  environment: process.env.NODE_ENV,\n});\n\n// next.config.js\nmodule.exports = {\n  // Enable source maps in production\n  productionBrowserSourceMaps: true,\n};",
+            "components": [
+              {
+                "name": "Sentry",
+                "english": "Error tracking and monitoring",
+                "hinglish": "Error tracking aur monitoring",
+                "tool": "@sentry/nextjs",
+                "pros": "Detailed error reports, performance monitoring",
+                "cons": "Cost for high volume"
+              }
+            ],
+            "explain_output_sections": [
+              {
+                "section": "Error Tracking",
+                "purpose": "Catch and report runtime errors",
+                "key_metrics": "Error count, affected users, stack traces"
+              },
+              {
+                "section": "Performance Monitoring",
+                "purpose": "Track application performance",
+                "key_metrics": "LCP, FID, CLS, API response times"
+              }
+            ]
+          }
+        },
+        {
+          "id": 18,
+          "title": "Advanced Patterns & Best Practices",
+          "english": "Enterprise-level patterns and optimization techniques",
+          "hinglish": "Enterprise-level patterns aur optimization techniques",
+          "examples": [
+            "Microfrontends with Module Federation",
+            "A/B testing implementation",
+            "Internationalization (i18n)",
+            "Progressive Web App (PWA)"
+          ],
+          "practice": [
+            {
+              "question": "Next.js mein i18n kaise implement karein?",
+              "answer": "next-intl ya next-i18next package use karein"
+            },
+            {
+              "question": "PWA features kaise add karein?",
+              "answer": "@ducanh2912/next-pwa package se service worker add karein"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// next-i18next setup\n// next-i18next.config.js\nmodule.exports = {\n  i18n: {\n    locales: ['en', 'hi', 'es'],\n    defaultLocale: 'en',\n  },\n};\n\n// Component usage\nimport { useTranslation } from 'next-i18next';\n\nexport default function HomePage() {\n  const { t } = useTranslation('common');\n  \n  return (\n    <div>\n      <h1>{t('welcome')}</h1>\n      <p>{t('description')}</p>\n    </div>\n  );\n}",
+            "components": [
+              {
+                "name": "next-intl",
+                "english": "Internationalization library",
+                "hinglish": "Internationalization library",
+                "tool": "next-intl",
+                "pros": "App Router support, type-safe",
+                "cons": "Setup required"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

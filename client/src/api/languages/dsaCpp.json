@@ -1,0 +1,814 @@
+{
+  "technology": "DSA with C++",
+  "slug": "complete-dsa-cpp-mastery",
+  "description": "Complete Data Structures and Algorithms course with C++ - 100+ topics, 500+ problems, zero to advanced",
+  "duration": "4-6 months",
+  "total_topics": 85,
+  "total_problems": 500,
+  "levels": [
+    {
+      "level": "Foundation",
+      "order": 1,
+      "duration": "4 weeks",
+      "description": "C++ Programming Fundamentals and Basic Concepts",
+      "topics": [
+        {
+          "id": 1,
+          "title": "C++ Introduction & Setup",
+          "english": "Getting started with C++ programming",
+          "hinglish": "C++ programming ki shuruaat",
+          "examples": ["Hello World Program", "Compilation Process"],
+          "problems_count": 10,
+          "practice": [
+            {
+              "question": "C++ program ka structure kya hota hai?",
+              "answer": "#include, main() function, return statement"
+            },
+            {
+              "question": "g++ compiler se kaise compile karein?",
+              "answer": "g++ filename.cpp -o output && ./output"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Basic C++ Program\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Namaste DSA!\" << endl;\n    return 0;\n}",
+            "key_concepts": ["Compiler", "IDE", "Syntax"],
+            "common_mistakes": ["Missing semicolon", "Wrong header files"]
+          }
+        },
+        {
+          "id": 2,
+          "title": "Variables & Data Types",
+          "english": "Understanding variables and data types",
+          "hinglish": "Variables aur data types samjhein",
+          "examples": ["Integer operations", "Type casting"],
+          "problems_count": 15,
+          "practice": [
+            {
+              "question": "C++ ke basic data types?",
+              "answer": "int, float, double, char, bool, void"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "int age = 25;\nfloat price = 99.99;\nchar grade = 'A';\nbool is_valid = true;",
+            "key_concepts": ["Memory allocation", "Type sizes", "Type modifiers"]
+          }
+        },
+        {
+          "id": 3,
+          "title": "Operators",
+          "english": "Arithmetic, relational, logical operators",
+          "hinglish": "Operators ke types aur use",
+          "examples": ["Calculator program", "Comparison operations"],
+          "problems_count": 15,
+          "practice": [
+            {
+              "question": "++i aur i++ mein difference?",
+              "answer": "++i pehle increment phir use, i++ pehle use phir increment"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "int a = 5, b = 3;\nint sum = a + b;\nbool isGreater = a > b;\nint inc = ++a; // a becomes 6",
+            "key_concepts": ["Operator precedence", "Associativity"]
+          }
+        },
+        {
+          "id": 4,
+          "title": "Control Statements",
+          "english": "If-else, switch, loops",
+          "hinglish": "Conditional statements aur loops",
+          "examples": ["Check even-odd", "Print multiplication table"],
+          "problems_count": 20,
+          "practice": [
+            {
+              "question": "for, while, do-while loops ka difference?",
+              "answer": "for: fixed iterations, while: condition check first, do-while: at least once execution"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// If-else example\nif(age >= 18) {\n    cout << \"Adult\";\n} else {\n    cout << \"Minor\";\n}\n\n// For loop\nfor(int i=1; i<=10; i++) {\n    cout << i << \" \";\n}",
+            "key_concepts": ["Condition checking", "Loop control", "Break/continue"]
+          }
+        },
+        {
+          "id": 5,
+          "title": "Functions",
+          "english": "Function declaration, definition, parameters",
+          "hinglish": "Functions kaise banayein aur use karein",
+          "examples": ["Calculate factorial", "Check prime number"],
+          "problems_count": 20,
+          "practice": [
+            {
+              "question": "Call by value aur call by reference mein difference?",
+              "answer": "Call by value: copy pass hoti hai, Call by reference: original variable pass hota hai"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Function definition\nint add(int a, int b) {\n    return a + b;\n}\n\n// Function call\nint result = add(5, 3);",
+            "key_concepts": ["Function prototype", "Parameters", "Return type", "Recursion basics"]
+          }
+        },
+        {
+          "id": 6,
+          "title": "Arrays (1D & 2D)",
+          "english": "Single and multi-dimensional arrays",
+          "hinglish": "Arrays ka use aur operations",
+          "examples": ["Array reversal", "Matrix addition"],
+          "problems_count": 25,
+          "practice": [
+            {
+              "question": "Array ka size compile time par kyun define karna padta hai?",
+              "answer": "C++ static memory allocate karta hai, runtime par size change nahi kar sakte"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// 1D Array\nint arr[5] = {1, 2, 3, 4, 5};\n\n// 2D Array\nint matrix[2][3] = {{1,2,3}, {4,5,6}};\n\n// Traversal\nfor(int i=0; i<5; i++) {\n    cout << arr[i] << \" \";\n}",
+            "key_concepts": ["Indexing", "Memory layout", "Bound checking"]
+          }
+        },
+        {
+          "id": 7,
+          "title": "Strings",
+          "english": "String operations and manipulation",
+          "hinglish": "Strings par operations",
+          "examples": ["Palindrome check", "String reverse"],
+          "problems_count": 20,
+          "practice": [
+            {
+              "question": "C-string aur C++ string class mein difference?",
+              "answer": "C-string: char array, manual memory. C++ string: dynamic, built-in functions"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <string>\nusing namespace std;\n\nstring name = \"John\";\nname.length(); // 4\nname.append(\" Doe\"); // John Doe\nname.substr(0, 2); // Jo",
+            "key_concepts": ["String functions", "Character array", "Input/output"]
+          }
+        },
+        {
+          "id": 8,
+          "title": "Pointers",
+          "english": "Pointers and memory management",
+          "hinglish": "Pointers aur memory management",
+          "examples": ["Pointer arithmetic", "Array using pointers"],
+          "problems_count": 15,
+          "practice": [
+            {
+              "question": "*ptr aur **ptr mein kya difference hai?",
+              "answer": "*ptr: pointer to variable, **ptr: pointer to pointer"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "int x = 10;\nint *ptr = &x; // ptr stores address of x\ncout << *ptr; // 10 (dereferencing)\n\n*ptr = 20; // x becomes 20",
+            "key_concepts": ["Address operator (&)", "Dereference operator (*)", "Pointer arithmetic"]
+          }
+        },
+        {
+          "id": 9,
+          "title": "Structures",
+          "english": "User-defined data types",
+          "hinglish": "Apne data types banayein",
+          "examples": ["Student record", "Book management"],
+          "problems_count": 10,
+          "practice": [
+            {
+              "question": "Structure aur class mein basic difference?",
+              "answer": "Structure: public by default, Class: private by default"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "struct Student {\n    int rollNo;\n    string name;\n    float marks;\n};\n\nStudent s1;\ns1.rollNo = 101;\ns1.name = \"Rahul\";",
+            "key_concepts": ["Data grouping", "Dot operator", "Structure array"]
+          }
+        },
+        {
+          "id": 10,
+          "title": "STL Introduction",
+          "english": "Standard Template Library basics",
+          "hinglish": "STL ke basic components",
+          "examples": ["Vector usage", "Sort using STL"],
+          "problems_count": 15,
+          "practice": [
+            {
+              "question": "STL ke 4 main components?",
+              "answer": "1. Containers 2. Algorithms 3. Iterators 4. Functions"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <vector>\n#include <algorithm>\n\nvector<int> nums = {5, 2, 8, 1};\nsort(nums.begin(), nums.end()); // {1, 2, 5, 8}\nnums.push_back(10); // add element",
+            "key_concepts": ["Templates", "Generic programming", "Common containers"]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Basic DSA",
+      "order": 2,
+      "duration": "5 weeks",
+      "description": "Core Data Structures and Algorithms Concepts",
+      "topics": [
+        {
+          "id": 11,
+          "title": "Time & Space Complexity",
+          "english": "Algorithm analysis and Big O notation",
+          "hinglish": "Algorithm analysis aur Big O notation",
+          "examples": ["Calculate complexity", "Compare algorithms"],
+          "problems_count": 10,
+          "practice": [
+            {
+              "question": "O(1), O(n), O(n²) ka matlab?",
+              "answer": "O(1): constant time, O(n): linear time, O(n²): quadratic time"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// O(n) example\nfor(int i=0; i<n; i++) {\n    // constant time operation\n}\n\n// O(n²) example\nfor(int i=0; i<n; i++) {\n    for(int j=0; j<n; j++) {\n        // constant time\n    }\n}",
+            "key_concepts": ["Big O", "Big Ω", "Big Θ", "Worst/Average/Best case"]
+          }
+        },
+        {
+          "id": 12,
+          "title": "Searching Algorithms",
+          "english": "Linear and Binary Search",
+          "hinglish": "Linear aur Binary Search algorithms",
+          "examples": ["Search in array", "Binary search implementation"],
+          "problems_count": 15,
+          "practice": [
+            {
+              "question": "Binary search ke liye array kaisa hona chahiye?",
+              "answer": "Sorted hona chahiye (ascending/descending)"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Binary Search\nint binarySearch(int arr[], int n, int key) {\n    int left = 0, right = n-1;\n    while(left <= right) {\n        int mid = left + (right-left)/2;\n        if(arr[mid] == key) return mid;\n        else if(arr[mid] < key) left = mid+1;\n        else right = mid-1;\n    }\n    return -1;\n}",
+            "key_concepts": ["Divide and conquer", "Search space reduction", "Recursive/iterative"]
+          }
+        },
+        {
+          "id": 13,
+          "title": "Sorting Algorithms - Basic",
+          "english": "Bubble, Selection, Insertion Sort",
+          "hinglish": "Basic sorting algorithms",
+          "examples": ["Sort array", "Compare sorting methods"],
+          "problems_count": 20,
+          "practice": [
+            {
+              "question": "Bubble sort ki time complexity?",
+              "answer": "Worst: O(n²), Best: O(n), Average: O(n²)"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Insertion Sort\nvoid insertionSort(int arr[], int n) {\n    for(int i=1; i<n; i++) {\n        int key = arr[i];\n        int j = i-1;\n        while(j>=0 && arr[j]>key) {\n            arr[j+1] = arr[j];\n            j--;\n        }\n        arr[j+1] = key;\n    }\n}",
+            "key_concepts": ["In-place sorting", "Stable vs unstable", "Adaptive sorting"]
+          }
+        },
+        {
+          "id": 14,
+          "title": "Recursion",
+          "english": "Recursive functions and problem solving",
+          "hinglish": "Recursive functions aur problem solving",
+          "examples": ["Factorial using recursion", "Fibonacci series"],
+          "problems_count": 25,
+          "practice": [
+            {
+              "question": "Recursion ke 3 main parts?",
+              "answer": "1. Base case 2. Recursive call 3. Progress toward base case"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Factorial using recursion\nint factorial(int n) {\n    if(n <= 1) return 1; // base case\n    return n * factorial(n-1); // recursive call\n}",
+            "key_concepts": ["Call stack", "Base case", "Recurrence relation", "Stack overflow"]
+          }
+        },
+        {
+          "id": 15,
+          "title": "Backtracking Basics",
+          "english": "Introduction to backtracking",
+          "hinglish": "Backtracking ki basic concepts",
+          "examples": ["N-Queens problem", "Sudoku solver"],
+          "problems_count": 20,
+          "practice": [
+            {
+              "question": "Backtracking ka basic idea kya hai?",
+              "answer": "Try karo, agar nahi chala toh wapas aao (backtrack) aur naya option try karo"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Rat in a Maze problem\nbool solveMaze(int maze[N][N], int x, int y, int sol[N][N]) {\n    if(x==N-1 && y==N-1) { // reached destination\n        sol[x][y] = 1;\n        return true;\n    }\n    if(isSafe(maze, x, y)) {\n        sol[x][y] = 1;\n        if(solveMaze(maze, x+1, y, sol)) return true;\n        if(solveMaze(maze, x, y+1, sol)) return true;\n        sol[x][y] = 0; // backtrack\n        return false;\n    }\n    return false;\n}",
+            "key_concepts": ["State space tree", "Pruning", "Constraint satisfaction"]
+          }
+        },
+        {
+          "id": 16,
+          "title": "Linked Lists",
+          "english": "Singly, Doubly, Circular Linked Lists",
+          "hinglish": "Linked Lists ke different types",
+          "examples": ["Implement linked list", "Reverse linked list"],
+          "problems_count": 30,
+          "practice": [
+            {
+              "question": "Linked List mein middle element kaise find karein?",
+              "answer": "Slow and fast pointer technique use karein"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Node structure\nstruct Node {\n    int data;\n    Node* next;\n    Node(int val) {\n        data = val;\n        next = nullptr;\n    }\n};\n\n// Insert at beginning\nvoid insertAtHead(Node* &head, int val) {\n    Node* newNode = new Node(val);\n    newNode->next = head;\n    head = newNode;\n}",
+            "key_concepts": ["Dynamic memory", "Pointers manipulation", "Head/Tail pointers"]
+          }
+        },
+        {
+          "id": 17,
+          "title": "Stacks",
+          "english": "Stack implementation and applications",
+          "hinglish": "Stack implement karein aur applications",
+          "examples": ["Balanced parentheses", "Infix to postfix"],
+          "problems_count": 25,
+          "practice": [
+            {
+              "question": "Stack ke 5 real-life applications?",
+              "answer": "1. Undo operation 2. Browser history 3. Function calls 4. Expression evaluation 5. Backtracking"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Stack using array\nclass Stack {\n    int top;\n    int capacity;\n    int* array;\npublic:\n    Stack(int size) {\n        capacity = size;\n        array = new int[capacity];\n        top = -1;\n    }\n    \n    void push(int x) {\n        if(isFull()) return;\n        array[++top] = x;\n    }\n    \n    int pop() {\n        if(isEmpty()) return -1;\n        return array[top--];\n    }\n};",
+            "key_concepts": ["LIFO", "Operations: push/pop/peek", "Implementation: array/linked list"]
+          }
+        },
+        {
+          "id": 18,
+          "title": "Queues",
+          "english": "Queue implementation and types",
+          "hinglish": "Queue implement karein aur types",
+          "examples": ["Circular queue", "Priority queue implementation"],
+          "problems_count": 20,
+          "practice": [
+            {
+              "question": "Queue aur stack mein basic difference?",
+              "answer": "Queue: FIFO (First In First Out), Stack: LIFO (Last In First Out)"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Queue using array\nclass Queue {\n    int front, rear, size;\n    int capacity;\n    int* array;\npublic:\n    Queue(int cap) {\n        capacity = cap;\n        front = size = 0;\n        rear = capacity - 1;\n        array = new int[capacity];\n    }\n    \n    void enqueue(int item) {\n        if(isFull()) return;\n        rear = (rear + 1) % capacity;\n        array[rear] = item;\n        size++;\n    }\n    \n    int dequeue() {\n        if(isEmpty()) return INT_MIN;\n        int item = array[front];\n        front = (front + 1) % capacity;\n        size--;\n        return item;\n    }\n};",
+            "key_concepts": ["FIFO", "Circular queue", "Deque", "Priority queue"]
+          }
+        },
+        {
+          "id": 19,
+          "title": "Trees - Introduction",
+          "english": "Basic tree concepts and terminology",
+          "hinglish": "Trees ki basic concepts aur terminology",
+          "examples": ["Tree creation", "Tree traversal basics"],
+          "problems_count": 20,
+          "practice": [
+            {
+              "question": "Tree ke main components?",
+              "answer": "Root, Node, Edge, Leaf, Parent, Child, Subtree"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Basic Tree Node\nstruct TreeNode {\n    int data;\n    TreeNode* left;\n    TreeNode* right;\n    TreeNode(int val) {\n        data = val;\n        left = right = nullptr;\n    }\n};\n\n// Create a tree\nTreeNode* root = new TreeNode(1);\nroot->left = new TreeNode(2);\nroot->right = new TreeNode(3);",
+            "key_concepts": ["Tree terminology", "Height/depth", "Degree", "Types of trees"]
+          }
+        },
+        {
+          "id": 20,
+          "title": "Heaps",
+          "english": "Heap data structure and operations",
+          "hinglish": "Heap data structure aur operations",
+          "examples": ["Heap sort", "Priority queue using heap"],
+          "problems_count": 15,
+          "practice": [
+            {
+              "question": "Min Heap aur Max Heap mein difference?",
+              "answer": "Min Heap: parent <= children, Max Heap: parent >= children"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Max Heapify\nvoid heapify(int arr[], int n, int i) {\n    int largest = i;\n    int left = 2*i + 1;\n    int right = 2*i + 2;\n    \n    if(left < n && arr[left] > arr[largest])\n        largest = left;\n    if(right < n && arr[right] > arr[largest])\n        largest = right;\n    \n    if(largest != i) {\n        swap(arr[i], arr[largest]);\n        heapify(arr, n, largest);\n    }\n}",
+            "key_concepts": ["Complete binary tree", "Heap property", "Heap operations"]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Intermediate DSA",
+      "order": 3,
+      "duration": "6 weeks",
+      "description": "Advanced Data Structures and Algorithm Techniques",
+      "topics": [
+        {
+          "id": 21,
+          "title": "Sorting Algorithms - Advanced",
+          "english": "Merge Sort, Quick Sort, Heap Sort",
+          "hinglish": "Advanced sorting algorithms",
+          "examples": ["Implement merge sort", "Quick sort optimization"],
+          "problems_count": 25,
+          "practice": [
+            {
+              "question": "Quick sort mein pivot kaise choose karein?",
+              "answer": "First element, last element, random element, or median of three"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Quick Sort\nint partition(int arr[], int low, int high) {\n    int pivot = arr[high];\n    int i = low - 1;\n    for(int j=low; j<high; j++) {\n        if(arr[j] <= pivot) {\n            i++;\n            swap(arr[i], arr[j]);\n        }\n    }\n    swap(arr[i+1], arr[high]);\n    return i+1;\n}\n\nvoid quickSort(int arr[], int low, int high) {\n    if(low < high) {\n        int pi = partition(arr, low, high);\n        quickSort(arr, low, pi-1);\n        quickSort(arr, pi+1, high);\n    }\n}",
+            "key_concepts": ["Divide and conquer", "Partitioning", "In-place sorting", "Stability"]
+          }
+        },
+        {
+          "id": 22,
+          "title": "Binary Trees",
+          "english": "Binary tree operations and properties",
+          "hinglish": "Binary tree operations aur properties",
+          "examples": ["Level order traversal", "Tree height calculation"],
+          "problems_count": 30,
+          "practice": [
+            {
+              "question": "Tree traversal ke 4 types?",
+              "answer": "Inorder, Preorder, Postorder, Level order"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Level Order Traversal\nvoid levelOrder(TreeNode* root) {\n    if(root == nullptr) return;\n    \n    queue<TreeNode*> q;\n    q.push(root);\n    \n    while(!q.empty()) {\n        TreeNode* current = q.front();\n        q.pop();\n        cout << current->data << \" \";\n        \n        if(current->left) q.push(current->left);\n        if(current->right) q.push(current->right);\n    }\n}",
+            "key_concepts": ["Tree traversals", "Iterative methods", "Queue usage"]
+          }
+        },
+        {
+          "id": 23,
+          "title": "Binary Search Trees",
+          "english": "BST operations and properties",
+          "hinglish": "BST operations aur properties",
+          "examples": ["Insert in BST", "Delete from BST"],
+          "problems_count": 25,
+          "practice": [
+            {
+              "question": "BST ki property kya hoti hai?",
+              "answer": "Left subtree < Root < Right subtree"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Search in BST\nTreeNode* searchBST(TreeNode* root, int key) {\n    if(root == nullptr || root->data == key)\n        return root;\n    \n    if(key < root->data)\n        return searchBST(root->left, key);\n    else\n        return searchBST(root->right, key);\n}",
+            "key_concepts": ["BST property", "Operations complexity", "Balanced vs unbalanced"]
+          }
+        },
+        {
+          "id": 24,
+          "title": "AVL Trees",
+          "english": "Self-balancing binary search trees",
+          "hinglish": "Self-balancing binary search trees",
+          "examples": ["AVL rotations", "Insert in AVL tree"],
+          "problems_count": 15,
+          "practice": [
+            {
+              "question": "AVL tree ke 4 rotation types?",
+              "answer": "LL, RR, LR, RL rotations"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// AVL Tree Node\nstruct AVLNode {\n    int key;\n    AVLNode* left;\n    AVLNode* right;\n    int height;\n    \n    AVLNode(int k) {\n        key = k;\n        left = right = nullptr;\n        height = 1;\n    }\n};\n\n// Get height\nint height(AVLNode* node) {\n    if(node == nullptr) return 0;\n    return node->height;\n}",
+            "key_concepts": ["Balance factor", "Rotations", "Height balancing"]
+          }
+        },
+        {
+          "id": 25,
+          "title": "Graphs - Introduction",
+          "english": "Graph representation and basic concepts",
+          "hinglish": "Graph representation aur basic concepts",
+          "examples": ["Adjacency matrix", "Adjacency list"],
+          "problems_count": 20,
+          "practice": [
+            {
+              "question": "Graph represent karne ke 3 tareeke?",
+              "answer": "1. Adjacency Matrix 2. Adjacency List 3. Edge List"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Adjacency List Representation\nclass Graph {\n    int V;\n    list<int> *adj;\npublic:\n    Graph(int V) {\n        this->V = V;\n        adj = new list<int>[V];\n    }\n    \n    void addEdge(int u, int v) {\n        adj[u].push_back(v);\n        adj[v].push_back(u); // undirected graph\n    }\n};",
+            "key_concepts": ["Vertices", "Edges", "Directed/undirected", "Weighted/unweighted"]
+          }
+        },
+        {
+          "id": 26,
+          "title": "Graph Traversal",
+          "english": "BFS and DFS algorithms",
+          "hinglish": "BFS aur DFS algorithms",
+          "examples": ["BFS traversal", "DFS traversal"],
+          "problems_count": 25,
+          "practice": [
+            {
+              "question": "BFS aur DFS mein difference?",
+              "answer": "BFS: Queue use karta hai, level by level. DFS: Stack use karta hai, depth first"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// BFS Traversal\nvoid BFS(Graph g, int start) {\n    vector<bool> visited(g.V, false);\n    queue<int> q;\n    \n    visited[start] = true;\n    q.push(start);\n    \n    while(!q.empty()) {\n        int current = q.front();\n        q.pop();\n        cout << current << \" \";\n        \n        for(auto neighbor : g.adj[current]) {\n            if(!visited[neighbor]) {\n                visited[neighbor] = true;\n                q.push(neighbor);\n            }\n        }\n    }\n}",
+            "key_concepts": ["Queue for BFS", "Stack for DFS", "Visited array", "Applications"]
+          }
+        },
+        {
+          "id": 27,
+          "title": "Hashing",
+          "english": "Hash tables and collision resolution",
+          "hinglish": "Hash tables aur collision resolution",
+          "examples": ["Implement hash table", "Handle collisions"],
+          "problems_count": 20,
+          "practice": [
+            {
+              "question": "Collision resolution ke 2 main methods?",
+              "answer": "1. Chaining 2. Open Addressing (Linear/Quadratic probing)"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Hash Table with Chaining\nclass HashTable {\n    int TABLE_SIZE;\n    list<int> *table;\n    \n    int hashFunction(int key) {\n        return key % TABLE_SIZE;\n    }\npublic:\n    HashTable(int size) {\n        TABLE_SIZE = size;\n        table = new list<int>[TABLE_SIZE];\n    }\n    \n    void insert(int key) {\n        int index = hashFunction(key);\n        table[index].push_back(key);\n    }\n    \n    bool search(int key) {\n        int index = hashFunction(key);\n        for(auto x : table[index]) {\n            if(x == key) return true;\n        }\n        return false;\n    }\n};",
+            "key_concepts": ["Hash function", "Load factor", "Collision", "Rehashing"]
+          }
+        },
+        {
+          "id": 28,
+          "title": "Dynamic Programming - Basics",
+          "english": "Introduction to dynamic programming",
+          "hinglish": "Dynamic programming ki shuruaat",
+          "examples": ["Fibonacci with DP", "Factorial with memoization"],
+          "problems_count": 30,
+          "practice": [
+            {
+              "question": "DP ke liye problem ki characteristics?",
+              "answer": "1. Optimal substructure 2. Overlapping subproblems"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Fibonacci with Memoization\nint fibMemo(int n, vector<int>& memo) {\n    if(n <= 1) return n;\n    if(memo[n] != -1) return memo[n];\n    \n    memo[n] = fibMemo(n-1, memo) + fibMemo(n-2, memo);\n    return memo[n];\n}\n\n// Fibonacci with Tabulation\nint fibTab(int n) {\n    if(n <= 1) return n;\n    vector<int> dp(n+1);\n    dp[0] = 0; dp[1] = 1;\n    for(int i=2; i<=n; i++) {\n        dp[i] = dp[i-1] + dp[i-2];\n    }\n    return dp[n];\n}",
+            "key_concepts": ["Memoization", "Tabulation", "Top-down", "Bottom-up"]
+          }
+        },
+        {
+          "id": 29,
+          "title": "Greedy Algorithms",
+          "english": "Greedy approach and problems",
+          "hinglish": "Greedy approach aur problems",
+          "examples": ["Coin change", "Activity selection"],
+          "problems_count": 20,
+          "practice": [
+            {
+              "question": "Greedy algorithm kya hota hai?",
+              "answer": "Har step par locally optimal choice karna, hoping ki final solution optimal ho"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Activity Selection Problem\nvoid printMaxActivities(int start[], int finish[], int n) {\n    int i = 0;\n    cout << \"Selected activities: \";\n    cout << i << \" \";\n    \n    for(int j=1; j<n; j++) {\n        if(start[j] >= finish[i]) {\n            cout << j << \" \";\n            i = j;\n        }\n    }\n}",
+            "key_concepts": ["Greedy choice property", "Optimal substructure", "Proof techniques"]
+          }
+        },
+        {
+          "id": 30,
+          "title": "Divide and Conquer",
+          "english": "Divide and conquer strategy",
+          "hinglish": "Divide and conquer strategy",
+          "examples": ["Merge sort", "Binary search"],
+          "problems_count": 15,
+          "practice": [
+            {
+              "question": "Divide and conquer ke 3 steps?",
+              "answer": "1. Divide 2. Conquer 3. Combine"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Merge Sort - Divide and Conquer\nvoid merge(int arr[], int left, int mid, int right) {\n    // merging logic\n}\n\nvoid mergeSort(int arr[], int left, int right) {\n    if(left < right) {\n        int mid = left + (right-left)/2;\n        mergeSort(arr, left, mid);      // Divide\n        mergeSort(arr, mid+1, right);   // Divide\n        merge(arr, left, mid, right);   // Conquer & Combine\n    }\n}",
+            "key_concepts": ["Recursive splitting", "Base case", "Combining results"]
+          }
+        },
+        {
+          "id": 31,
+          "title": "Tries",
+          "english": "Trie data structure",
+          "hinglish": "Trie data structure",
+          "examples": ["Dictionary implementation", "Autocomplete system"],
+          "problems_count": 15,
+          "practice": [
+            {
+              "question": "Trie kyun use karte hain?",
+              "answer": "String operations ke liye efficient: search, insert, prefix search"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Trie Node\nstruct TrieNode {\n    TrieNode* children[26];\n    bool isEndOfWord;\n    \n    TrieNode() {\n        for(int i=0; i<26; i++)\n            children[i] = nullptr;\n        isEndOfWord = false;\n    }\n};\n\n// Insert in Trie\nvoid insert(TrieNode* root, string key) {\n    TrieNode* current = root;\n    for(char c : key) {\n        int index = c - 'a';\n        if(!current->children[index])\n            current->children[index] = new TrieNode();\n        current = current->children[index];\n    }\n    current->isEndOfWord = true;\n}",
+            "key_concepts": ["Prefix tree", "Character by character", "Space-time tradeoff"]
+          }
+        },
+        {
+          "id": 32,
+          "title": "Segment Trees",
+          "english": "Segment tree for range queries",
+          "hinglish": "Range queries ke liye segment tree",
+          "examples": ["Range sum query", "Range minimum query"],
+          "problems_count": 20,
+          "practice": [
+            {
+              "question": "Segment tree build time complexity?",
+              "answer": "O(n) - n elements ke liye tree build karna"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Segment Tree for Sum\nclass SegmentTree {\n    vector<int> tree;\n    int n;\n    \n    void build(vector<int>& arr, int node, int start, int end) {\n        if(start == end) {\n            tree[node] = arr[start];\n        } else {\n            int mid = (start + end) / 2;\n            build(arr, 2*node, start, mid);\n            build(arr, 2*node+1, mid+1, end);\n            tree[node] = tree[2*node] + tree[2*node+1];\n        }\n    }\npublic:\n    SegmentTree(vector<int>& arr) {\n        n = arr.size();\n        tree.resize(4*n);\n        build(arr, 1, 0, n-1);\n    }\n    \n    int query(int l, int r) {\n        return queryUtil(1, 0, n-1, l, r);\n    }\n};",
+            "key_concepts": ["Range queries", "Update operations", "Tree representation"]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Advanced DSA",
+      "order": 4,
+      "duration": "7 weeks",
+      "description": "Expert Level DSA Concepts and Problem Solving",
+      "topics": [
+        {
+          "id": 33,
+          "title": "Advanced Graphs",
+          "english": "Shortest path, MST, topological sort",
+          "hinglish": "Advanced graph algorithms",
+          "examples": ["Dijkstra's algorithm", "Kruskal's MST"],
+          "problems_count": 40,
+          "practice": [
+            {
+              "question": "Dijkstra's algorithm ka use kahan hota hai?",
+              "answer": "Weighted graphs mein shortest path find karne ke liye"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Dijkstra's Algorithm\nvoid dijkstra(vector<vector<pair<int,int>>>& graph, int source) {\n    int V = graph.size();\n    vector<int> dist(V, INT_MAX);\n    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;\n    \n    dist[source] = 0;\n    pq.push({0, source});\n    \n    while(!pq.empty()) {\n        int u = pq.top().second;\n        pq.pop();\n        \n        for(auto &edge : graph[u]) {\n            int v = edge.first;\n            int weight = edge.second;\n            \n            if(dist[u] + weight < dist[v]) {\n                dist[v] = dist[u] + weight;\n                pq.push({dist[v], v});\n            }\n        }\n    }\n}",
+            "key_concepts": ["Single source shortest path", "All pairs shortest path", "Minimum spanning tree"]
+          }
+        },
+        {
+          "id": 34,
+          "title": "Advanced Dynamic Programming",
+          "english": "2D DP, knapsack, LCS, matrix chain",
+          "hinglish": "Advanced DP problems",
+          "examples": ["0/1 Knapsack", "Longest Common Subsequence"],
+          "problems_count": 50,
+          "practice": [
+            {
+              "question": "DP patterns ke kuch examples?",
+              "answer": "1. 0/1 Knapsack 2. LCS 3. Matrix Chain 4. Coin Change 5. Edit Distance"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// 0/1 Knapsack\nint knapSack(int W, int wt[], int val[], int n) {\n    vector<vector<int>> dp(n+1, vector<int>(W+1, 0));\n    \n    for(int i=1; i<=n; i++) {\n        for(int w=1; w<=W; w++) {\n            if(wt[i-1] <= w) {\n                dp[i][w] = max(val[i-1] + dp[i-1][w-wt[i-1]], dp[i-1][w]);\n            } else {\n                dp[i][w] = dp[i-1][w];\n            }\n        }\n    }\n    return dp[n][W];\n}",
+            "key_concepts": ["2D DP", "State transition", "Space optimization"]
+          }
+        },
+        {
+          "id": 35,
+          "title": "String Algorithms",
+          "english": "String matching and manipulation",
+          "hinglish": "String matching aur manipulation",
+          "examples": ["KMP algorithm", "Rabin-Karp"],
+          "problems_count": 25,
+          "practice": [
+            {
+              "question": "KMP algorithm ka advantage kya hai?",
+              "answer": "Worst case O(n+m) time, na ki O(n*m) like naive"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// KMP Algorithm - LPS array\nvector<int> computeLPS(string pattern) {\n    int m = pattern.length();\n    vector<int> lps(m, 0);\n    int len = 0;\n    int i = 1;\n    \n    while(i < m) {\n        if(pattern[i] == pattern[len]) {\n            len++;\n            lps[i] = len;\n            i++;\n        } else {\n            if(len != 0) {\n                len = lps[len-1];\n            } else {\n                lps[i] = 0;\n                i++;\n            }\n        }\n    }\n    return lps;\n}",
+            "key_concepts": ["Pattern matching", "Prefix function", "Substring search"]
+          }
+        },
+        {
+          "id": 36,
+          "title": "Bit Manipulation",
+          "english": "Bitwise operations and tricks",
+          "hinglish": "Bitwise operations aur tricks",
+          "examples": ["Check power of two", "Count set bits"],
+          "problems_count": 30,
+          "practice": [
+            {
+              "question": "Bitwise operators ke names?",
+              "answer": "& (AND), | (OR), ^ (XOR), ~ (NOT), << (Left shift), >> (Right shift)"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Bit Manipulation Tricks\nbool isPowerOfTwo(int n) {\n    return (n > 0) && ((n & (n-1)) == 0);\n}\n\nint countSetBits(int n) {\n    int count = 0;\n    while(n) {\n        n = n & (n-1); // removes the last set bit\n        count++;\n    }\n    return count;\n}\n\n// Swap without temp\nvoid swap(int &a, int &b) {\n    a = a ^ b;\n    b = a ^ b;\n    a = a ^ b;\n}",
+            "key_concepts": ["Bit masks", "Bit manipulation tricks", "Optimization techniques"]
+          }
+        },
+        {
+          "id": 37,
+          "title": "Advanced Data Structures",
+          "english": "Fenwick tree, Disjoint Set Union",
+          "hinglish": "Advanced data structures",
+          "examples": ["Fenwick tree for prefix sum", "DSU implementation"],
+          "problems_count": 20,
+          "practice": [
+            {
+              "question": "DSU ke 2 main operations?",
+              "answer": "1. Find (with path compression) 2. Union (by rank/size)"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Disjoint Set Union\nclass DSU {\n    vector<int> parent, rank;\npublic:\n    DSU(int n) {\n        parent.resize(n);\n        rank.resize(n, 0);\n        for(int i=0; i<n; i++) parent[i] = i;\n    }\n    \n    int find(int x) {\n        if(parent[x] != x)\n            parent[x] = find(parent[x]); // path compression\n        return parent[x];\n    }\n    \n    void unionSets(int x, int y) {\n        int rootX = find(x);\n        int rootY = find(y);\n        \n        if(rootX != rootY) {\n            if(rank[rootX] < rank[rootY])\n                parent[rootX] = rootY;\n            else if(rank[rootX] > rank[rootY])\n                parent[rootY] = rootX;\n            else {\n                parent[rootY] = rootX;\n                rank[rootX]++;\n            }\n        }\n    }\n};",
+            "key_concepts": ["Union-Find", "Path compression", "Union by rank"]
+          }
+        },
+        {
+          "id": 38,
+          "title": "Competitive Programming Patterns",
+          "english": "Common patterns in CP problems",
+          "hinglish": "Competitive programming ke common patterns",
+          "examples": ["Sliding window", "Two pointers", "Binary search on answer"],
+          "problems_count": 40,
+          "practice": [
+            {
+              "question": "Sliding window pattern kahan use hota hai?",
+              "answer": "Array/String pe fixed/variable size window problems ke liye"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Sliding Window - Maximum sum of subarray of size k\nint maxSumSubarray(vector<int>& arr, int k) {\n    int n = arr.size();\n    if(n < k) return -1;\n    \n    int window_sum = 0;\n    for(int i=0; i<k; i++)\n        window_sum += arr[i];\n    \n    int max_sum = window_sum;\n    for(int i=k; i<n; i++) {\n        window_sum += arr[i] - arr[i-k];\n        max_sum = max(max_sum, window_sum);\n    }\n    return max_sum;\n}",
+            "key_concepts": ["Pattern recognition", "Problem categorization", "Template solutions"]
+          }
+        },
+        {
+          "id": 39,
+          "title": "System Design Basics",
+          "english": "Introduction to system design",
+          "hinglish": "System design ki basic concepts",
+          "examples": ["Design URL shortener", "Design cache"],
+          "problems_count": 15,
+          "practice": [
+            {
+              "question": "System design interview ke important topics?",
+              "answer": "1. Scalability 2. Availability 3. Reliability 4. Performance 5. Maintainability"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// LRU Cache Implementation\nclass LRUCache {\n    int capacity;\n    list<pair<int,int>> cache;\n    unordered_map<int, list<pair<int,int>>::iterator> hash;\npublic:\n    LRUCache(int cap) {\n        capacity = cap;\n    }\n    \n    int get(int key) {\n        if(hash.find(key) == hash.end()) return -1;\n        \n        auto it = hash[key];\n        int value = it->second;\n        cache.erase(it);\n        cache.push_front({key, value});\n        hash[key] = cache.begin();\n        return value;\n    }\n    \n    void put(int key, int value) {\n        if(hash.find(key) != hash.end()) {\n            cache.erase(hash[key]);\n        } else if(cache.size() == capacity) {\n            int lru_key = cache.back().first;\n            hash.erase(lru_key);\n            cache.pop_back();\n        }\n        cache.push_front({key, value});\n        hash[key] = cache.begin();\n    }\n};",
+            "key_concepts": ["Design principles", "Trade-offs", "Scalability patterns"]
+          }
+        },
+        {
+          "id": 40,
+          "title": "Mock Interviews & Problem Solving",
+          "english": "Interview preparation and strategy",
+          "hinglish": "Interview preparation aur strategy",
+          "examples": ["Solve real interview questions", "Time management"],
+          "problems_count": 100,
+          "practice": [
+            {
+              "question": "Technical interview ki tayari kaise karein?",
+              "answer": "1. DSA concepts revise 2. Practice coding 3. Mock interviews 4. Communication skills"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Interview Problem Template\n/*\n1. Clarify the problem\n2. Discuss approach\n3. Write code\n4. Test with examples\n5. Optimize if needed\n*/\n\n// Example: Two Sum\nvector<int> twoSum(vector<int>& nums, int target) {\n    unordered_map<int, int> map;\n    for(int i=0; i<nums.size(); i++) {\n        int complement = target - nums[i];\n        if(map.find(complement) != map.end()) {\n            return {map[complement], i};\n        }\n        map[nums[i]] = i;\n    }\n    return {};\n}",
+            "key_concepts": ["Interview strategy", "Problem solving approach", "Communication"]
+          }
+        }
+      ]
+    }
+  ],
+  "additional_sections": {
+    "projects": [
+      {
+        "id": 1,
+        "title": "Mini Compiler",
+        "description": "Build a simple compiler for arithmetic expressions",
+        "technologies": ["C++", "Lexical Analysis", "Parsing"]
+      },
+      {
+        "id": 2,
+        "title": "Cache Simulator",
+        "description": "Simulate different cache replacement policies",
+        "technologies": ["C++", "Cache Algorithms", "Memory Management"]
+      },
+      {
+        "id": 3,
+        "title": "File System",
+        "description": "Implement a simple file system with directories",
+        "technologies": ["C++", "Data Structures", "File Handling"]
+      }
+    ],
+    "resources": {
+      "books": [
+        "Introduction to Algorithms (CLRS)",
+        "Data Structures and Algorithms in C++ (Goodrich)",
+        "Cracking the Coding Interview"
+      ],
+      "websites": [
+        "LeetCode",
+        "GeeksforGeeks",
+        "Codeforces",
+        "HackerRank"
+      ],
+      "tools": [
+        "Visual Studio Code",
+        "GCC/G++ Compiler",
+        "Valgrind (Memory Leak Checker)",
+        "GDB Debugger"
+      ]
+    },
+    "assessment": {
+      "quizzes_per_level": 5,
+      "coding_problems_per_level": 50,
+      "projects": 3,
+      "final_exam": true
+    }
+  }
+}

@@ -1,0 +1,523 @@
+{
+  "technology": "Data Structures & Algorithms with C",
+  "slug": "dsa-with-c-complete",
+  "description": "Complete Data Structures and Algorithms course implemented in C programming language. Covers all fundamental data structures, algorithms, complexity analysis, and real-world applications.",
+  "levels": [
+    {
+      "level": "Foundation - Algorithm Analysis & Basic Concepts",
+      "order": 1,
+      "description": "Understand algorithm analysis, time-space complexity, and basic algorithmic concepts",
+      "topics": [
+        {
+          "id": 1,
+          "title": "Algorithm Analysis & Complexity",
+          "english": "Understanding time and space complexity using Big O notation",
+          "hinglish": "Big O notation use karke time aur space complexity samjhein",
+          "examples": [
+            "O(1) - Constant time",
+            "O(n) - Linear time",
+            "O(n²) - Quadratic time"
+          ],
+          "practice": [
+            {
+              "question": "Time complexity kya hoti hai?",
+              "answer": "Algorithm kitna time leta hai input size ke basis par"
+            },
+            {
+              "question": "O(1) aur O(n) mein difference?",
+              "answer": "O(1): constant time (same for all n), O(n): linear growth with n"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// O(1) - Constant Time\nint getFirstElement(int arr[], int n) {\n    return arr[0];  // Always 1 operation\n}\n\n// O(n) - Linear Time\nint findElement(int arr[], int n, int key) {\n    for(int i = 0; i < n; i++) {  // n operations\n        if(arr[i] == key) {\n            return i;\n        }\n    }\n    return -1;\n}\n\n// O(n²) - Quadratic Time\nvoid printPairs(int arr[], int n) {\n    for(int i = 0; i < n; i++) {          // n times\n        for(int j = 0; j < n; j++) {      // n times\n            printf(\"(%d, %d) \", arr[i], arr[j]);  // n*n operations\n        }\n    }\n}\n\n// O(log n) - Logarithmic Time (Binary Search)\nint binarySearch(int arr[], int n, int key) {\n    int left = 0, right = n-1;\n    while(left <= right) {  // Each iteration halves search space\n        int mid = left + (right - left)/2;\n        if(arr[mid] == key) return mid;\n        if(arr[mid] < key) left = mid + 1;\n        else right = mid - 1;\n    }\n    return -1;\n}",
+            "components": [
+              {
+                "name": "Big O Notation",
+                "english": "Worst-case time complexity",
+                "hinglish": "Worst-case time complexity",
+                "importance": "High",
+                "tip": "Focus on growth rate, not exact operations",
+                "example": "O(n²) means time grows quadratically with input"
+              },
+              {
+                "name": "Space Complexity",
+                "english": "Memory usage analysis",
+                "hinglish": "Memory usage analysis",
+                "importance": "High",
+                "example": "O(1): constant space, O(n): linear space"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Complexity", "Growth", "Example"],
+              "rows": [
+                ["O(1)", "Constant", "Array access"],
+                ["O(log n)", "Logarithmic", "Binary search"],
+                ["O(n)", "Linear", "Linear search"],
+                ["O(n log n)", "Linearithmic", "Merge sort"],
+                ["O(n²)", "Quadratic", "Bubble sort"],
+                ["O(2ⁿ)", "Exponential", "Fibonacci recursive"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 2,
+          "title": "Arrays & Basic Operations",
+          "english": "Array operations and implementations in C",
+          "hinglish": "Array operations aur C mein implementations",
+          "examples": [
+            "Insertion at position",
+            "Deletion at position",
+            "Searching algorithms"
+          ],
+          "practice": [
+            {
+              "question": "Array mein insertion ka worst-case time complexity?",
+              "answer": "O(n) - jab first position pe insert karna ho"
+            },
+            {
+              "question": "Binary search ke liye array ka condition?",
+              "answer": "Array sorted hona chahiye"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n\n// Array structure\nstruct Array {\n    int arr[100];\n    int size;\n    int length;\n};\n\n// Display array\nvoid display(struct Array arr) {\n    printf(\"Array elements: \");\n    for(int i = 0; i < arr.length; i++) {\n        printf(\"%d \", arr.arr[i]);\n    }\n    printf(\"\\n\");\n}\n\n// Insert at index\nint insert(struct Array *arr, int index, int value) {\n    if(index < 0 || index > arr->length) return -1;\n    if(arr->length >= arr->size) return -1;\n    \n    // Shift elements to right\n    for(int i = arr->length; i > index; i--) {\n        arr->arr[i] = arr->arr[i-1];\n    }\n    \n    arr->arr[index] = value;\n    arr->length++;\n    return 0;\n}\n\n// Delete from index\nint delete(struct Array *arr, int index) {\n    if(index < 0 || index >= arr->length) return -1;\n    \n    int deleted = arr->arr[index];\n    \n    // Shift elements to left\n    for(int i = index; i < arr->length-1; i++) {\n        arr->arr[i] = arr->arr[i+1];\n    }\n    \n    arr->length--;\n    return deleted;\n}\n\n// Linear search\nint linearSearch(struct Array arr, int key) {\n    for(int i = 0; i < arr.length; i++) {\n        if(arr.arr[i] == key) {\n            return i;\n        }\n    }\n    return -1;\n}\n\n// Binary search (iterative)\nint binarySearch(struct Array arr, int key) {\n    int left = 0, right = arr.length - 1;\n    \n    while(left <= right) {\n        int mid = left + (right - left) / 2;\n        \n        if(arr.arr[mid] == key) {\n            return mid;\n        }\n        if(arr.arr[mid] < key) {\n            left = mid + 1;\n        } else {\n            right = mid - 1;\n        }\n    }\n    return -1;\n}\n\n// Reverse array\nvoid reverse(struct Array *arr) {\n    int i = 0, j = arr->length - 1;\n    \n    while(i < j) {\n        // Swap arr[i] and arr[j]\n        int temp = arr->arr[i];\n        arr->arr[i] = arr->arr[j];\n        arr->arr[j] = temp;\n        \n        i++;\n        j--;\n    }\n}\n\nint main() {\n    struct Array arr = {{2, 4, 6, 8, 10}, 100, 5};\n    \n    display(arr);\n    \n    insert(&arr, 2, 5);  // Insert 5 at index 2\n    display(arr);\n    \n    delete(&arr, 3);     // Delete element at index 3\n    display(arr);\n    \n    int index = linearSearch(arr, 8);\n    printf(\"Linear search for 8: %d\\n\", index);\n    \n    reverse(&arr);\n    printf(\"After reversal: \");\n    display(arr);\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Array ADT",
+                "english": "Abstract Data Type for arrays",
+                "hinglish": "Arrays ke liye Abstract Data Type",
+                "importance": "High",
+                "tip": "Encapsulate array with size and length",
+                "pros": "Better structure and operations"
+              },
+              {
+                "name": "Linear vs Binary Search",
+                "english": "Search algorithm comparison",
+                "hinglish": "Search algorithm comparison",
+                "use_case": "Linear: unsorted, Binary: sorted arrays",
+                "time_complexity": "Linear: O(n), Binary: O(log n)"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "level": "Core - Linear Data Structures",
+      "order": 2,
+      "description": "Master linked lists, stacks, queues, and their variations",
+      "topics": [
+        {
+          "id": 3,
+          "title": "Linked Lists",
+          "english": "Singly, doubly, and circular linked lists implementation",
+          "hinglish": "Singly, doubly, aur circular linked lists implementation",
+          "examples": [
+            "Singly linked list operations",
+            "Doubly linked list",
+            "Circular linked list"
+          ],
+          "practice": [
+            {
+              "question": "Linked list ka advantage array se?",
+              "answer": "Dynamic size, efficient insertion/deletion"
+            },
+            {
+              "question": "Doubly linked list ka extra feature?",
+              "answer": "Backward traversal possible"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <stdlib.h>\n\n// Node structure for singly linked list\nstruct Node {\n    int data;\n    struct Node* next;\n};\n\n// Create new node\nstruct Node* createNode(int data) {\n    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = data;\n    newNode->next = NULL;\n    return newNode;\n}\n\n// Insert at beginning\nvoid insertAtBeginning(struct Node** head, int data) {\n    struct Node* newNode = createNode(data);\n    newNode->next = *head;\n    *head = newNode;\n}\n\n// Insert at end\nvoid insertAtEnd(struct Node** head, int data) {\n    struct Node* newNode = createNode(data);\n    \n    if(*head == NULL) {\n        *head = newNode;\n        return;\n    }\n    \n    struct Node* temp = *head;\n    while(temp->next != NULL) {\n        temp = temp->next;\n    }\n    temp->next = newNode;\n}\n\n// Delete node\nvoid deleteNode(struct Node** head, int key) {\n    struct Node* temp = *head;\n    struct Node* prev = NULL;\n    \n    // If head node itself holds the key\n    if(temp != NULL && temp->data == key) {\n        *head = temp->next;\n        free(temp);\n        return;\n    }\n    \n    // Search for the key\n    while(temp != NULL && temp->data != key) {\n        prev = temp;\n        temp = temp->next;\n    }\n    \n    // If key not found\n    if(temp == NULL) return;\n    \n    // Unlink the node\n    prev->next = temp->next;\n    free(temp);\n}\n\n// Display list\nvoid displayList(struct Node* head) {\n    struct Node* temp = head;\n    printf(\"Linked List: \");\n    while(temp != NULL) {\n        printf(\"%d -> \", temp->data);\n        temp = temp->next;\n    }\n    printf(\"NULL\\n\");\n}\n\n// Reverse linked list\nstruct Node* reverseList(struct Node* head) {\n    struct Node* prev = NULL;\n    struct Node* current = head;\n    struct Node* next = NULL;\n    \n    while(current != NULL) {\n        next = current->next;  // Store next\n        current->next = prev;  // Reverse current node's pointer\n        prev = current;        // Move pointers one position ahead\n        current = next;\n    }\n    return prev;\n}\n\n// Doubly linked list node\nstruct DNode {\n    int data;\n    struct DNode* prev;\n    struct DNode* next;\n};\n\n// Circular linked list operations\nstruct Node* insertCircular(struct Node* head, int data) {\n    struct Node* newNode = createNode(data);\n    \n    if(head == NULL) {\n        newNode->next = newNode;\n        return newNode;\n    }\n    \n    struct Node* temp = head;\n    while(temp->next != head) {\n        temp = temp->next;\n    }\n    \n    temp->next = newNode;\n    newNode->next = head;\n    return head;\n}\n\nint main() {\n    struct Node* head = NULL;\n    \n    // Singly linked list operations\n    insertAtEnd(&head, 10);\n    insertAtEnd(&head, 20);\n    insertAtBeginning(&head, 5);\n    insertAtEnd(&head, 30);\n    \n    displayList(head);\n    \n    // Reverse the list\n    head = reverseList(head);\n    printf(\"After reversal: \");\n    displayList(head);\n    \n    // Delete operation\n    deleteNode(&head, 20);\n    printf(\"After deleting 20: \");\n    displayList(head);\n    \n    // Free memory\n    while(head != NULL) {\n        struct Node* temp = head;\n        head = head->next;\n        free(temp);\n    }\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Singly Linked List",
+                "english": "Nodes with data and next pointer",
+                "hinglish": "Data aur next pointer wale nodes",
+                "importance": "High",
+                "pros": "Dynamic size, O(1) insertion/deletion at head",
+                "cons": "Only forward traversal"
+              },
+              {
+                "name": "Doubly Linked List",
+                "english": "Nodes with prev and next pointers",
+                "hinglish": "Prev aur next pointers wale nodes",
+                "importance": "Medium",
+                "pros": "Bidirectional traversal",
+                "cons": "Extra memory for prev pointer"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Operation", "Array", "Linked List"],
+              "rows": [
+                ["Access", "O(1)", "O(n)"],
+                ["Insert at beginning", "O(n)", "O(1)"],
+                ["Delete at beginning", "O(n)", "O(1)"],
+                ["Memory", "Fixed", "Dynamic"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 4,
+          "title": "Stacks",
+          "english": "Stack implementation using arrays and linked lists",
+          "hinglish": "Arrays aur linked lists use karke stack implementation",
+          "examples": [
+            "Array implementation",
+            "Linked list implementation",
+            "Stack applications"
+          ],
+          "practice": [
+            {
+              "question": "Stack LIFO ya FIFO?",
+              "answer": "LIFO - Last In First Out"
+            },
+            {
+              "question": "Stack overflow kab hota hai?",
+              "answer": "Jab stack full ho aur push karna ho"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <stdlib.h>\n#include <stdbool.h>\n#include <string.h>\n\n#define MAX 100\n\n// Stack using array\nstruct ArrayStack {\n    int arr[MAX];\n    int top;\n};\n\nvoid initArrayStack(struct ArrayStack* s) {\n    s->top = -1;\n}\n\nbool isArrayStackEmpty(struct ArrayStack* s) {\n    return s->top == -1;\n}\n\nbool isArrayStackFull(struct ArrayStack* s) {\n    return s->top == MAX - 1;\n}\n\nvoid arrayPush(struct ArrayStack* s, int data) {\n    if(isArrayStackFull(s)) {\n        printf(\"Stack Overflow!\\n\");\n        return;\n    }\n    s->arr[++(s->top)] = data;\n}\n\nint arrayPop(struct ArrayStack* s) {\n    if(isArrayStackEmpty(s)) {\n        printf(\"Stack Underflow!\\n\");\n        return -1;\n    }\n    return s->arr[(s->top)--];\n}\n\nint arrayPeek(struct ArrayStack* s) {\n    if(isArrayStackEmpty(s)) {\n        return -1;\n    }\n    return s->arr[s->top];\n}\n\n// Stack using linked list\nstruct StackNode {\n    int data;\n    struct StackNode* next;\n};\n\nstruct ListStack {\n    struct StackNode* top;\n};\n\nvoid initListStack(struct ListStack* s) {\n    s->top = NULL;\n}\n\nbool isListStackEmpty(struct ListStack* s) {\n    return s->top == NULL;\n}\n\nvoid listPush(struct ListStack* s, int data) {\n    struct StackNode* newNode = (struct StackNode*)malloc(sizeof(struct StackNode));\n    newNode->data = data;\n    newNode->next = s->top;\n    s->top = newNode;\n}\n\nint listPop(struct ListStack* s) {\n    if(isListStackEmpty(s)) {\n        printf(\"Stack Underflow!\\n\");\n        return -1;\n    }\n    \n    struct StackNode* temp = s->top;\n    int data = temp->data;\n    s->top = s->top->next;\n    free(temp);\n    \n    return data;\n}\n\n// Stack Applications\n\n// 1. Parenthesis Matching\nbool isBalanced(char* expression) {\n    struct ArrayStack s;\n    initArrayStack(&s);\n    \n    for(int i = 0; expression[i] != '\\0'; i++) {\n        if(expression[i] == '(' || expression[i] == '{' || expression[i] == '[') {\n            arrayPush(&s, expression[i]);\n        }\n        else if(expression[i] == ')' || expression[i] == '}' || expression[i] == ']') {\n            if(isArrayStackEmpty(&s)) return false;\n            \n            char top = arrayPop(&s);\n            \n            if((expression[i] == ')' && top != '(') ||\n               (expression[i] == '}' && top != '{') ||\n               (expression[i] == ']' && top != '[')) {\n                return false;\n            }\n        }\n    }\n    \n    return isArrayStackEmpty(&s);\n}\n\n// 2. Infix to Postfix Conversion\nint precedence(char op) {\n    if(op == '+' || op == '-') return 1;\n    if(op == '*' || op == '/') return 2;\n    return 0;\n}\n\nvoid infixToPostfix(char* infix, char* postfix) {\n    struct ArrayStack s;\n    initArrayStack(&s);\n    int k = 0;\n    \n    for(int i = 0; infix[i] != '\\0'; i++) {\n        char ch = infix[i];\n        \n        // If operand, add to output\n        if((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9')) {\n            postfix[k++] = ch;\n        }\n        // If '(', push to stack\n        else if(ch == '(') {\n            arrayPush(&s, ch);\n        }\n        // If ')', pop until '('\n        else if(ch == ')') {\n            while(!isArrayStackEmpty(&s) && arrayPeek(&s) != '(') {\n                postfix[k++] = arrayPop(&s);\n            }\n            arrayPop(&s); // Remove '('\n        }\n        // If operator\n        else {\n            while(!isArrayStackEmpty(&s) && precedence(arrayPeek(&s)) >= precedence(ch)) {\n                postfix[k++] = arrayPop(&s);\n            }\n            arrayPush(&s, ch);\n        }\n    }\n    \n    // Pop remaining operators\n    while(!isArrayStackEmpty(&s)) {\n        postfix[k++] = arrayPop(&s);\n    }\n    \n    postfix[k] = '\\0';\n}\n\nint main() {\n    printf(\"=== Stack Implementation ===\\n\\n\");\n    \n    // Array stack demo\n    struct ArrayStack arrayStack;\n    initArrayStack(&arrayStack);\n    \n    arrayPush(&arrayStack, 10);\n    arrayPush(&arrayStack, 20);\n    arrayPush(&arrayStack, 30);\n    \n    printf(\"Array Stack - Peek: %d\\n\", arrayPeek(&arrayStack));\n    printf(\"Popped: %d\\n\", arrayPop(&arrayStack));\n    \n    // Linked list stack demo\n    struct ListStack listStack;\n    initListStack(&listStack);\n    \n    listPush(&listStack, 100);\n    listPush(&listStack, 200);\n    \n    printf(\"List Stack - Popped: %d\\n\", listPop(&listStack));\n    \n    // Parenthesis matching\n    char expr1[] = \"{(a+b)*[c-d]}\";\n    char expr2[] = \"{(a+b)*[c-d})\";\n    \n    printf(\"\\nParenthesis Matching:\\n\");\n    printf(\"%s is %s\\n\", expr1, isBalanced(expr1) ? \"balanced\" : \"not balanced\");\n    printf(\"%s is %s\\n\", expr2, isBalanced(expr2) ? \"balanced\" : \"not balanced\");\n    \n    // Infix to Postfix\n    char infix[] = \"a+b*(c^d-e)^(f+g*h)-i\";\n    char postfix[100];\n    \n    infixToPostfix(infix, postfix);\n    printf(\"\\nInfix: %s\\n\", infix);\n    printf(\"Postfix: %s\\n\", postfix);\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Stack ADT",
+                "english": "Abstract Data Type for stack",
+                "hinglish": "Stack ke liye Abstract Data Type",
+                "importance": "High",
+                "operations": "push(), pop(), peek(), isEmpty()"
+              },
+              {
+                "name": "Stack Applications",
+                "english": "Real-world uses of stack",
+                "hinglish": "Stack ke real-world uses",
+                "examples": "Function calls, undo/redo, expression evaluation"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Implementation", "Pros", "Cons"],
+              "rows": [
+                ["Array", "Simple, cache friendly", "Fixed size"],
+                ["Linked List", "Dynamic size", "Extra memory, overhead"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 5,
+          "title": "Queues",
+          "english": "Queue implementation and variations",
+          "hinglish": "Queue implementation aur variations",
+          "examples": [
+            "Simple queue",
+            "Circular queue",
+            "Priority queue"
+          ],
+          "practice": [
+            {
+              "question": "Queue FIFO ya LIFO?",
+              "answer": "FIFO - First In First Out"
+            },
+            {
+              "question": "Circular queue ka advantage?",
+              "answer": "Memory efficient - reuse empty spaces"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <stdlib.h>\n#include <stdbool.h>\n\n#define MAX 5\n\n// Simple Queue using array\nstruct ArrayQueue {\n    int arr[MAX];\n    int front, rear;\n};\n\nvoid initArrayQueue(struct ArrayQueue* q) {\n    q->front = q->rear = -1;\n}\n\nbool isArrayQueueEmpty(struct ArrayQueue* q) {\n    return q->front == -1;\n}\n\nbool isArrayQueueFull(struct ArrayQueue* q) {\n    return q->rear == MAX - 1;\n}\n\nvoid arrayEnqueue(struct ArrayQueue* q, int data) {\n    if(isArrayQueueFull(q)) {\n        printf(\"Queue Overflow!\\n\");\n        return;\n    }\n    \n    if(isArrayQueueEmpty(q)) {\n        q->front = q->rear = 0;\n    } else {\n        q->rear++;\n    }\n    \n    q->arr[q->rear] = data;\n}\n\nint arrayDequeue(struct ArrayQueue* q) {\n    if(isArrayQueueEmpty(q)) {\n        printf(\"Queue Underflow!\\n\");\n        return -1;\n    }\n    \n    int data = q->arr[q->front];\n    \n    if(q->front == q->rear) {\n        q->front = q->rear = -1;\n    } else {\n        q->front++;\n    }\n    \n    return data;\n}\n\n// Circular Queue\nstruct CircularQueue {\n    int arr[MAX];\n    int front, rear;\n};\n\nvoid initCircularQueue(struct CircularQueue* q) {\n    q->front = q->rear = -1;\n}\n\nbool isCircularQueueEmpty(struct CircularQueue* q) {\n    return q->front == -1;\n}\n\nbool isCircularQueueFull(struct CircularQueue* q) {\n    return (q->rear + 1) % MAX == q->front;\n}\n\nvoid circularEnqueue(struct CircularQueue* q, int data) {\n    if(isCircularQueueFull(q)) {\n        printf(\"Circular Queue Overflow!\\n\");\n        return;\n    }\n    \n    if(isCircularQueueEmpty(q)) {\n        q->front = q->rear = 0;\n    } else {\n        q->rear = (q->rear + 1) % MAX;\n    }\n    \n    q->arr[q->rear] = data;\n}\n\nint circularDequeue(struct CircularQueue* q) {\n    if(isCircularQueueEmpty(q)) {\n        printf(\"Circular Queue Underflow!\\n\");\n        return -1;\n    }\n    \n    int data = q->arr[q->front];\n    \n    if(q->front == q->rear) {\n        q->front = q->rear = -1;\n    } else {\n        q->front = (q->front + 1) % MAX;\n    }\n    \n    return data;\n}\n\n// Priority Queue (Max Heap implementation)\nstruct PriorityQueue {\n    int arr[MAX];\n    int size;\n};\n\nvoid initPriorityQueue(struct PriorityQueue* pq) {\n    pq->size = 0;\n}\n\nvoid swap(int* a, int* b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\nvoid maxHeapify(struct PriorityQueue* pq, int i) {\n    int largest = i;\n    int left = 2*i + 1;\n    int right = 2*i + 2;\n    \n    if(left < pq->size && pq->arr[left] > pq->arr[largest])\n        largest = left;\n    \n    if(right < pq->size && pq->arr[right] > pq->arr[largest])\n        largest = right;\n    \n    if(largest != i) {\n        swap(&pq->arr[i], &pq->arr[largest]);\n        maxHeapify(pq, largest);\n    }\n}\n\nvoid priorityEnqueue(struct PriorityQueue* pq, int data) {\n    if(pq->size >= MAX) {\n        printf(\"Priority Queue Overflow!\\n\");\n        return;\n    }\n    \n    pq->arr[pq->size] = data;\n    int i = pq->size;\n    pq->size++;\n    \n    // Heapify up\n    while(i > 0 && pq->arr[(i-1)/2] < pq->arr[i]) {\n        swap(&pq->arr[i], &pq->arr[(i-1)/2]);\n        i = (i-1)/2;\n    }\n}\n\nint priorityDequeue(struct PriorityQueue* pq) {\n    if(pq->size <= 0) {\n        printf(\"Priority Queue Underflow!\\n\");\n        return -1;\n    }\n    \n    int max = pq->arr[0];\n    pq->arr[0] = pq->arr[pq->size - 1];\n    pq->size--;\n    \n    maxHeapify(pq, 0);\n    \n    return max;\n}\n\n// Queue using linked list\nstruct QueueNode {\n    int data;\n    struct QueueNode* next;\n};\n\nstruct ListQueue {\n    struct QueueNode *front, *rear;\n};\n\nvoid initListQueue(struct ListQueue* q) {\n    q->front = q->rear = NULL;\n}\n\nbool isListQueueEmpty(struct ListQueue* q) {\n    return q->front == NULL;\n}\n\nvoid listEnqueue(struct ListQueue* q, int data) {\n    struct QueueNode* newNode = (struct QueueNode*)malloc(sizeof(struct QueueNode));\n    newNode->data = data;\n    newNode->next = NULL;\n    \n    if(q->rear == NULL) {\n        q->front = q->rear = newNode;\n        return;\n    }\n    \n    q->rear->next = newNode;\n    q->rear = newNode;\n}\n\nint listDequeue(struct ListQueue* q) {\n    if(isListQueueEmpty(q)) {\n        printf(\"List Queue Underflow!\\n\");\n        return -1;\n    }\n    \n    struct QueueNode* temp = q->front;\n    int data = temp->data;\n    \n    q->front = q->front->next;\n    \n    if(q->front == NULL) {\n        q->rear = NULL;\n    }\n    \n    free(temp);\n    return data;\n}\n\nint main() {\n    printf(\"=== Queue Implementations ===\\n\\n\");\n    \n    // Simple queue demo\n    struct ArrayQueue simpleQueue;\n    initArrayQueue(&simpleQueue);\n    \n    arrayEnqueue(&simpleQueue, 10);\n    arrayEnqueue(&simpleQueue, 20);\n    printf(\"Simple Queue - Dequeued: %d\\n\", arrayDequeue(&simpleQueue));\n    \n    // Circular queue demo\n    struct CircularQueue circularQueue;\n    initCircularQueue(&circularQueue);\n    \n    circularEnqueue(&circularQueue, 1);\n    circularEnqueue(&circularQueue, 2);\n    circularEnqueue(&circularQueue, 3);\n    printf(\"Circular Queue - Dequeued: %d\\n\", circularDequeue(&circularQueue));\n    \n    // Priority queue demo\n    struct PriorityQueue priorityQueue;\n    initPriorityQueue(&priorityQueue);\n    \n    priorityEnqueue(&priorityQueue, 30);\n    priorityEnqueue(&priorityQueue, 10);\n    priorityEnqueue(&priorityQueue, 20);\n    printf(\"Priority Queue - Dequeued (max): %d\\n\", priorityDequeue(&priorityQueue));\n    \n    // Linked list queue demo\n    struct ListQueue listQueue;\n    initListQueue(&listQueue);\n    \n    listEnqueue(&listQueue, 100);\n    listEnqueue(&listQueue, 200);\n    printf(\"List Queue - Dequeued: %d\\n\", listDequeue(&listQueue));\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Circular Queue",
+                "english": "Queue with circular array implementation",
+                "hinglish": "Circular array implementation wala queue",
+                "importance": "High",
+                "pros": "Efficient memory usage",
+                "use_case": "CPU scheduling, buffering"
+              },
+              {
+                "name": "Priority Queue",
+                "english": "Highest priority element served first",
+                "hinglish": "Highest priority element pehle serve hota hai",
+                "implementation": "Heap or sorted list",
+                "use_case": "Dijkstra's algorithm, task scheduling"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Queue Type", "Feature", "Use Case"],
+              "rows": [
+                ["Simple Queue", "Basic FIFO", "Order processing"],
+                ["Circular Queue", "Memory efficient", "Circular buffer"],
+                ["Priority Queue", "Priority based", "Emergency systems"],
+                ["Deque", "Double-ended", "Sliding window"]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "level": "Advanced - Trees & Graphs",
+      "order": 3,
+      "description": "Master tree and graph data structures with algorithms",
+      "topics": [
+        {
+          "id": 6,
+          "title": "Trees - Binary Trees & BST",
+          "english": "Binary trees and Binary Search Trees implementation",
+          "hinglish": "Binary trees aur Binary Search Trees implementation",
+          "examples": [
+            "Binary tree traversal",
+            "BST operations",
+            "Tree height and diameter"
+          ],
+          "practice": [
+            {
+              "question": "Binary tree aur BST mein difference?",
+              "answer": "BST mein left < root < right property hoti hai"
+            },
+            {
+              "question": "Tree traversal ke types?",
+              "answer": "Inorder, Preorder, Postorder, Level order"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <stdlib.h>\n#include <stdbool.h>\n\n// Binary Tree Node\nstruct TreeNode {\n    int data;\n    struct TreeNode* left;\n    struct TreeNode* right;\n};\n\n// Create new tree node\nstruct TreeNode* createTreeNode(int data) {\n    struct TreeNode* newNode = (struct TreeNode*)malloc(sizeof(struct TreeNode));\n    newNode->data = data;\n    newNode->left = newNode->right = NULL;\n    return newNode;\n}\n\n// Tree Traversals\nvoid inorderTraversal(struct TreeNode* root) {\n    if(root == NULL) return;\n    inorderTraversal(root->left);\n    printf(\"%d \", root->data);\n    inorderTraversal(root->right);\n}\n\nvoid preorderTraversal(struct TreeNode* root) {\n    if(root == NULL) return;\n    printf(\"%d \", root->data);\n    preorderTraversal(root->left);\n    preorderTraversal(root->right);\n}\n\nvoid postorderTraversal(struct TreeNode* root) {\n    if(root == NULL) return;\n    postorderTraversal(root->left);\n    postorderTraversal(root->right);\n    printf(\"%d \", root->data);\n}\n\n// Level order traversal using queue\nstruct QueueNode {\n    struct TreeNode* treeNode;\n    struct QueueNode* next;\n};\n\nstruct Queue {\n    struct QueueNode *front, *rear;\n};\n\nvoid enqueue(struct Queue* q, struct TreeNode* treeNode) {\n    struct QueueNode* newNode = (struct QueueNode*)malloc(sizeof(struct QueueNode));\n    newNode->treeNode = treeNode;\n    newNode->next = NULL;\n    \n    if(q->rear == NULL) {\n        q->front = q->rear = newNode;\n        return;\n    }\n    \n    q->rear->next = newNode;\n    q->rear = newNode;\n}\n\nstruct TreeNode* dequeue(struct Queue* q) {\n    if(q->front == NULL) return NULL;\n    \n    struct QueueNode* temp = q->front;\n    struct TreeNode* treeNode = temp->treeNode;\n    \n    q->front = q->front->next;\n    \n    if(q->front == NULL) {\n        q->rear = NULL;\n    }\n    \n    free(temp);\n    return treeNode;\n}\n\nvoid levelOrderTraversal(struct TreeNode* root) {\n    if(root == NULL) return;\n    \n    struct Queue q = {NULL, NULL};\n    enqueue(&q, root);\n    \n    printf(\"Level Order: \");\n    while(q.front != NULL) {\n        struct TreeNode* current = dequeue(&q);\n        printf(\"%d \", current->data);\n        \n        if(current->left != NULL) {\n            enqueue(&q, current->left);\n        }\n        if(current->right != NULL) {\n            enqueue(&q, current->right);\n        }\n    }\n    printf(\"\\n\");\n}\n\n// Tree Height\nint treeHeight(struct TreeNode* root) {\n    if(root == NULL) return 0;\n    \n    int leftHeight = treeHeight(root->left);\n    int rightHeight = treeHeight(root->right);\n    \n    return (leftHeight > rightHeight ? leftHeight : rightHeight) + 1;\n}\n\n// Count nodes\nint countNodes(struct TreeNode* root) {\n    if(root == NULL) return 0;\n    return 1 + countNodes(root->left) + countNodes(root->right);\n}\n\n// Binary Search Tree Operations\nstruct TreeNode* insertBST(struct TreeNode* root, int data) {\n    if(root == NULL) {\n        return createTreeNode(data);\n    }\n    \n    if(data < root->data) {\n        root->left = insertBST(root->left, data);\n    } else if(data > root->data) {\n        root->right = insertBST(root->right, data);\n    }\n    \n    return root;\n}\n\nstruct TreeNode* searchBST(struct TreeNode* root, int key) {\n    if(root == NULL || root->data == key) {\n        return root;\n    }\n    \n    if(key < root->data) {\n        return searchBST(root->left, key);\n    }\n    \n    return searchBST(root->right, key);\n}\n\nstruct TreeNode* minValueNode(struct TreeNode* node) {\n    struct TreeNode* current = node;\n    while(current && current->left != NULL) {\n        current = current->left;\n    }\n    return current;\n}\n\nstruct TreeNode* deleteBST(struct TreeNode* root, int key) {\n    if(root == NULL) return root;\n    \n    if(key < root->data) {\n        root->left = deleteBST(root->left, key);\n    } else if(key > root->data) {\n        root->right = deleteBST(root->right, key);\n    } else {\n        // Node with only one child or no child\n        if(root->left == NULL) {\n            struct TreeNode* temp = root->right;\n            free(root);\n            return temp;\n        } else if(root->right == NULL) {\n            struct TreeNode* temp = root->left;\n            free(root);\n            return temp;\n        }\n        \n        // Node with two children\n        struct TreeNode* temp = minValueNode(root->right);\n        root->data = temp->data;\n        root->right = deleteBST(root->right, temp->data);\n    }\n    \n    return root;\n}\n\n// Check if BST\nbool isBSTUtil(struct TreeNode* root, int min, int max) {\n    if(root == NULL) return true;\n    \n    if(root->data <= min || root->data >= max) {\n        return false;\n    }\n    \n    return isBSTUtil(root->left, min, root->data) &&\n           isBSTUtil(root->right, root->data, max);\n}\n\nbool isBST(struct TreeNode* root) {\n    return isBSTUtil(root, INT_MIN, INT_MAX);\n}\n\nint main() {\n    printf(\"=== Binary Trees & BST ===\\n\\n\");\n    \n    // Create a binary tree\n    struct TreeNode* root = createTreeNode(1);\n    root->left = createTreeNode(2);\n    root->right = createTreeNode(3);\n    root->left->left = createTreeNode(4);\n    root->left->right = createTreeNode(5);\n    \n    printf(\"Tree Traversals:\\n\");\n    printf(\"Inorder: \");\n    inorderTraversal(root);\n    printf(\"\\n\");\n    \n    printf(\"Preorder: \");\n    preorderTraversal(root);\n    printf(\"\\n\");\n    \n    printf(\"Postorder: \");\n    postorderTraversal(root);\n    printf(\"\\n\");\n    \n    levelOrderTraversal(root);\n    \n    printf(\"Tree Height: %d\\n\", treeHeight(root));\n    printf(\"Total Nodes: %d\\n\", countNodes(root));\n    \n    // BST operations\n    struct TreeNode* bst = NULL;\n    bst = insertBST(bst, 50);\n    insertBST(bst, 30);\n    insertBST(bst, 20);\n    insertBST(bst, 40);\n    insertBST(bst, 70);\n    insertBST(bst, 60);\n    insertBST(bst, 80);\n    \n    printf(\"\\nBST Inorder (sorted): \");\n    inorderTraversal(bst);\n    printf(\"\\n\");\n    \n    struct TreeNode* found = searchBST(bst, 40);\n    printf(\"Search 40: %s\\n\", found ? \"Found\" : \"Not Found\");\n    \n    printf(\"Is BST? %s\\n\", isBST(bst) ? \"Yes\" : \"No\");\n    \n    bst = deleteBST(bst, 20);\n    printf(\"After deleting 20, BST Inorder: \");\n    inorderTraversal(bst);\n    printf(\"\\n\");\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Binary Tree",
+                "english": "Tree with max 2 children per node",
+                "hinglish": "Tree jisme har node ke max 2 children",
+                "importance": "High",
+                "properties": "Hierarchical, non-linear data structure"
+              },
+              {
+                "name": "Binary Search Tree",
+                "english": "Ordered binary tree",
+                "hinglish": "Ordered binary tree",
+                "properties": "Left < Root < Right",
+                "operations_complexity": "Search/Insert/Delete: O(h) where h = height"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Traversal", "Order", "Use Case"],
+              "rows": [
+                ["Inorder", "Left-Root-Right", "BST sorted output"],
+                ["Preorder", "Root-Left-Right", "Copy tree, prefix"],
+                ["Postorder", "Left-Right-Root", "Delete tree, postfix"],
+                ["Level Order", "Level by level", "BFS, find depth"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 7,
+          "title": "AVL Trees & Heaps",
+          "english": "Balanced trees and heap data structures",
+          "hinglish": "Balanced trees aur heap data structures",
+          "examples": [
+            "AVL tree rotations",
+            "Min-Heap and Max-Heap",
+            "Heap operations"
+          ],
+          "practice": [
+            {
+              "question": "AVL tree kya hai?",
+              "answer": "Self-balancing binary search tree"
+            },
+            {
+              "question": "Heap ko array mein kaise represent karte hain?",
+              "answer": "Root at index 0, left child = 2*i+1, right child = 2*i+2"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <stdlib.h>\n#include <stdbool.h>\n\n// AVL Tree Node\nstruct AVLNode {\n    int data;\n    struct AVLNode* left;\n    struct AVLNode* right;\n    int height;\n};\n\n// Get height\nint height(struct AVLNode* node) {\n    if(node == NULL) return 0;\n    return node->height;\n}\n\n// Get balance factor\nint getBalance(struct AVLNode* node) {\n    if(node == NULL) return 0;\n    return height(node->left) - height(node->right);\n}\n\n// Right rotate\nstruct AVLNode* rightRotate(struct AVLNode* y) {\n    struct AVLNode* x = y->left;\n    struct AVLNode* T2 = x->right;\n    \n    // Perform rotation\n    x->right = y;\n    y->left = T2;\n    \n    // Update heights\n    y->height = (height(y->left) > height(y->right) ? height(y->left) : height(y->right)) + 1;\n    x->height = (height(x->left) > height(x->right) ? height(x->left) : height(x->right)) + 1;\n    \n    return x;\n}\n\n// Left rotate\nstruct AVLNode* leftRotate(struct AVLNode* x) {\n    struct AVLNode* y = x->right;\n    struct AVLNode* T2 = y->left;\n    \n    // Perform rotation\n    y->left = x;\n    x->right = T2;\n    \n    // Update heights\n    x->height = (height(x->left) > height(x->right) ? height(x->left) : height(x->right)) + 1;\n    y->height = (height(y->left) > height(y->right) ? height(y->left) : height(y->right)) + 1;\n    \n    return y;\n}\n\n// Create AVL node\nstruct AVLNode* createAVLNode(int data) {\n    struct AVLNode* node = (struct AVLNode*)malloc(sizeof(struct AVLNode));\n    node->data = data;\n    node->left = node->right = NULL;\n    node->height = 1;\n    return node;\n}\n\n// Insert in AVL tree\nstruct AVLNode* insertAVL(struct AVLNode* node, int data) {\n    // 1. Perform normal BST insertion\n    if(node == NULL) return createAVLNode(data);\n    \n    if(data < node->data) {\n        node->left = insertAVL(node->left, data);\n    } else if(data > node->data) {\n        node->right = insertAVL(node->right, data);\n    } else {\n        return node; // Equal keys not allowed\n    }\n    \n    // 2. Update height\n    node->height = (height(node->left) > height(node->right) ? \n                    height(node->left) : height(node->right)) + 1;\n    \n    // 3. Get balance factor\n    int balance = getBalance(node);\n    \n    // 4. Handle unbalanced cases\n    \n    // Left Left Case\n    if(balance > 1 && data < node->left->data) {\n        return rightRotate(node);\n    }\n    \n    // Right Right Case\n    if(balance < -1 && data > node->right->data) {\n        return leftRotate(node);\n    }\n    \n    // Left Right Case\n    if(balance > 1 && data > node->left->data) {\n        node->left = leftRotate(node->left);\n        return rightRotate(node);\n    }\n    \n    // Right Left Case\n    if(balance < -1 && data < node->right->data) {\n        node->right = rightRotate(node->right);\n        return leftRotate(node);\n    }\n    \n    return node;\n}\n\n// Inorder traversal for AVL\nvoid inorderAVL(struct AVLNode* root) {\n    if(root == NULL) return;\n    inorderAVL(root->left);\n    printf(\"%d \", root->data);\n    inorderAVL(root->right);\n}\n\n// Heap Implementation\n#define HEAP_MAX 100\n\nstruct MaxHeap {\n    int arr[HEAP_MAX];\n    int size;\n};\n\nvoid initMaxHeap(struct MaxHeap* heap) {\n    heap->size = 0;\n}\n\nvoid swap(int* a, int* b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\nvoid maxHeapify(struct MaxHeap* heap, int i) {\n    int largest = i;\n    int left = 2*i + 1;\n    int right = 2*i + 2;\n    \n    if(left < heap->size && heap->arr[left] > heap->arr[largest])\n        largest = left;\n    \n    if(right < heap->size && heap->arr[right] > heap->arr[largest])\n        largest = right;\n    \n    if(largest != i) {\n        swap(&heap->arr[i], &heap->arr[largest]);\n        maxHeapify(heap, largest);\n    }\n}\n\nvoid insertMaxHeap(struct MaxHeap* heap, int data) {\n    if(heap->size >= HEAP_MAX) {\n        printf(\"Heap Overflow!\\n\");\n        return;\n    }\n    \n    // Insert at end\n    int i = heap->size;\n    heap->arr[i] = data;\n    heap->size++;\n    \n    // Heapify up\n    while(i > 0 && heap->arr[(i-1)/2] < heap->arr[i]) {\n        swap(&heap->arr[i], &heap->arr[(i-1)/2]);\n        i = (i-1)/2;\n    }\n}\n\nint extractMax(struct MaxHeap* heap) {\n    if(heap->size <= 0) {\n        printf(\"Heap Underflow!\\n\");\n        return -1;\n    }\n    \n    if(heap->size == 1) {\n        heap->size--;\n        return heap->arr[0];\n    }\n    \n    int root = heap->arr[0];\n    heap->arr[0] = heap->arr[heap->size - 1];\n    heap->size--;\n    \n    maxHeapify(heap, 0);\n    \n    return root;\n}\n\nvoid buildMaxHeap(struct MaxHeap* heap, int arr[], int n) {\n    for(int i = 0; i < n; i++) {\n        heap->arr[i] = arr[i];\n    }\n    heap->size = n;\n    \n    // Heapify from last non-leaf node\n    for(int i = n/2 - 1; i >= 0; i--) {\n        maxHeapify(heap, i);\n    }\n}\n\nvoid printHeap(struct MaxHeap* heap) {\n    printf(\"Heap: \");\n    for(int i = 0; i < heap->size; i++) {\n        printf(\"%d \", heap->arr[i]);\n    }\n    printf(\"\\n\");\n}\n\nint main() {\n    printf(\"=== AVL Trees & Heaps ===\\n\\n\");\n    \n    // AVL Tree Demo\n    struct AVLNode* avlRoot = NULL;\n    \n    avlRoot = insertAVL(avlRoot, 10);\n    avlRoot = insertAVL(avlRoot, 20);\n    avlRoot = insertAVL(avlRoot, 30);\n    avlRoot = insertAVL(avlRoot, 40);\n    avlRoot = insertAVL(avlRoot, 50);\n    avlRoot = insertAVL(avlRoot, 25);\n    \n    printf(\"AVL Tree Inorder: \");\n    inorderAVL(avlRoot);\n    printf(\"\\n\");\n    \n    // Max Heap Demo\n    struct MaxHeap heap;\n    initMaxHeap(&heap);\n    \n    insertMaxHeap(&heap, 10);\n    insertMaxHeap(&heap, 20);\n    insertMaxHeap(&heap, 15);\n    insertMaxHeap(&heap, 30);\n    insertMaxHeap(&heap, 40);\n    \n    printf(\"\\nMax Heap after insertions: \");\n    printHeap(&heap);\n    \n    printf(\"Extract Max: %d\\n\", extractMax(&heap));\n    printf(\"Heap after extraction: \");\n    printHeap(&heap);\n    \n    // Build heap from array\n    int arr[] = {1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17};\n    int n = sizeof(arr)/sizeof(arr[0]);\n    \n    struct MaxHeap heap2;\n    buildMaxHeap(&heap2, arr, n);\n    \n    printf(\"\\nBuilt Max Heap from array: \");\n    printHeap(&heap2);\n    \n    printf(\"Heap Sort (extracting all): \");\n    while(heap2.size > 0) {\n        printf(\"%d \", extractMax(&heap2));\n    }\n    printf(\"\\n\");\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "AVL Tree",
+                "english": "Self-balancing BST",
+                "hinglish": "Self-balancing BST",
+                "importance": "High",
+                "properties": "Balance factor = {-1, 0, 1}, O(log n) operations"
+              },
+              {
+                "name": "Heap",
+                "english": "Complete binary tree with heap property",
+                "hinglish": "Complete binary tree with heap property",
+                "types": "Max-Heap: parent ≥ children, Min-Heap: parent ≤ children",
+                "use_case": "Priority queues, heap sort"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Property", "AVL Tree", "Heap"],
+              "rows": [
+                ["Structure", "Balanced BST", "Complete binary tree"],
+                ["Order", "Sorted order", "Heap order property"],
+                ["Operations", "O(log n) search/insert/delete", "O(log n) insert/delete"],
+                ["Use Case", "Dynamic sorted data", "Priority queue, sorting"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 8,
+          "title": "Graphs - Representation & Algorithms",
+          "english": "Graph representations and basic algorithms",
+          "hinglish": "Graph representations aur basic algorithms",
+          "examples": [
+            "Adjacency matrix",
+            "Adjacency list",
+            "BFS and DFS"
+          ],
+          "practice": [
+            {
+              "question": "Adjacency matrix aur adjacency list mein difference?",
+              "answer": "Matrix: O(V²) space, List: O(V+E) space"
+            },
+            {
+              "question": "BFS aur DFS mein difference?",
+              "answer": "BFS: queue use karta hai, DFS: stack (recursion) use karta hai"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <stdlib.h>\n#include <stdbool.h>\n#include <limits.h>\n\n#define MAX_VERTICES 100\n\n// Graph using adjacency matrix\nstruct GraphMatrix {\n    int vertices;\n    int adjMatrix[MAX_VERTICES][MAX_VERTICES];\n};\n\nvoid initGraphMatrix(struct GraphMatrix* g, int vertices) {\n    g->vertices = vertices;\n    for(int i = 0; i < vertices; i++) {\n        for(int j = 0; j < vertices; j++) {\n            g->adjMatrix[i][j] = 0;\n        }\n    }\n}\n\nvoid addEdgeMatrix(struct GraphMatrix* g, int src, int dest) {\n    g->adjMatrix[src][dest] = 1;\n    g->adjMatrix[dest][src] = 1; // For undirected graph\n}\n\nvoid printGraphMatrix(struct GraphMatrix* g) {\n    printf(\"Adjacency Matrix:\\n   \");\n    for(int i = 0; i < g->vertices; i++) {\n        printf(\"%d \", i);\n    }\n    printf(\"\\n\");\n    \n    for(int i = 0; i < g->vertices; i++) {\n        printf(\"%d: \", i);\n        for(int j = 0; j < g->vertices; j++) {\n            printf(\"%d \", g->adjMatrix[i][j]);\n        }\n        printf(\"\\n\");\n    }\n}\n\n// Graph using adjacency list\nstruct AdjListNode {\n    int dest;\n    struct AdjListNode* next;\n};\n\nstruct AdjList {\n    struct AdjListNode* head;\n};\n\nstruct GraphList {\n    int vertices;\n    struct AdjList* array;\n};\n\nstruct AdjListNode* createAdjListNode(int dest) {\n    struct AdjListNode* newNode = (struct AdjListNode*)malloc(sizeof(struct AdjListNode));\n    newNode->dest = dest;\n    newNode->next = NULL;\n    return newNode;\n}\n\nstruct GraphList* createGraphList(int vertices) {\n    struct GraphList* graph = (struct GraphList*)malloc(sizeof(struct GraphList));\n    graph->vertices = vertices;\n    \n    graph->array = (struct AdjList*)malloc(vertices * sizeof(struct AdjList));\n    \n    for(int i = 0; i < vertices; i++) {\n        graph->array[i].head = NULL;\n    }\n    \n    return graph;\n}\n\nvoid addEdgeList(struct GraphList* graph, int src, int dest) {\n    // Add edge from src to dest\n    struct AdjListNode* newNode = createAdjListNode(dest);\n    newNode->next = graph->array[src].head;\n    graph->array[src].head = newNode;\n    \n    // For undirected graph, add edge from dest to src also\n    newNode = createAdjListNode(src);\n    newNode->next = graph->array[dest].head;\n    graph->array[dest].head = newNode;\n}\n\nvoid printGraphList(struct GraphList* graph) {\n    printf(\"\\nAdjacency List:\\n\");\n    for(int v = 0; v < graph->vertices; v++) {\n        struct AdjListNode* current = graph->array[v].head;\n        printf(\"Vertex %d: \", v);\n        while(current) {\n            printf(\"-> %d \", current->dest);\n            current = current->next;\n        }\n        printf(\"\\n\");\n    }\n}\n\n// Queue for BFS\nstruct Queue {\n    int front, rear;\n    int arr[MAX_VERTICES];\n};\n\nvoid initQueue(struct Queue* q) {\n    q->front = q->rear = -1;\n}\n\nbool isQueueEmpty(struct Queue* q) {\n    return q->front == -1;\n}\n\nvoid enqueue(struct Queue* q, int data) {\n    if(q->rear == MAX_VERTICES - 1) return;\n    \n    if(q->front == -1) q->front = 0;\n    q->arr[++(q->rear)] = data;\n}\n\nint dequeue(struct Queue* q) {\n    if(isQueueEmpty(q)) return -1;\n    \n    int data = q->arr[q->front];\n    if(q->front == q->rear) {\n        q->front = q->rear = -1;\n    } else {\n        q->front++;\n    }\n    \n    return data;\n}\n\n// BFS traversal\nvoid BFS(struct GraphList* graph, int startVertex) {\n    bool visited[MAX_VERTICES] = {false};\n    struct Queue q;\n    initQueue(&q);\n    \n    visited[startVertex] = true;\n    enqueue(&q, startVertex);\n    \n    printf(\"BFS starting from vertex %d: \", startVertex);\n    \n    while(!isQueueEmpty(&q)) {\n        int current = dequeue(&q);\n        printf(\"%d \", current);\n        \n        struct AdjListNode* temp = graph->array[current].head;\n        while(temp) {\n            int adjVertex = temp->dest;\n            if(!visited[adjVertex]) {\n                visited[adjVertex] = true;\n                enqueue(&q, adjVertex);\n            }\n            temp = temp->next;\n        }\n    }\n    printf(\"\\n\");\n}\n\n// DFS utility function\nvoid DFSUtil(struct GraphList* graph, int vertex, bool visited[]) {\n    visited[vertex] = true;\n    printf(\"%d \", vertex);\n    \n    struct AdjListNode* current = graph->array[vertex].head;\n    while(current) {\n        int adjVertex = current->dest;\n        if(!visited[adjVertex]) {\n            DFSUtil(graph, adjVertex, visited);\n        }\n        current = current->next;\n    }\n}\n\n// DFS traversal\nvoid DFS(struct GraphList* graph, int startVertex) {\n    bool visited[MAX_VERTICES] = {false};\n    printf(\"DFS starting from vertex %d: \", startVertex);\n    DFSUtil(graph, startVertex, visited);\n    printf(\"\\n\");\n}\n\n// Check if graph is connected\nbool isConnected(struct GraphList* graph) {\n    bool visited[MAX_VERTICES] = {false};\n    \n    // Start DFS from vertex 0\n    struct Queue q;\n    initQueue(&q);\n    visited[0] = true;\n    enqueue(&q, 0);\n    \n    int count = 0;\n    while(!isQueueEmpty(&q)) {\n        int current = dequeue(&q);\n        count++;\n        \n        struct AdjListNode* temp = graph->array[current].head;\n        while(temp) {\n            int adjVertex = temp->dest;\n            if(!visited[adjVertex]) {\n                visited[adjVertex] = true;\n                enqueue(&q, adjVertex);\n            }\n            temp = temp->next;\n        }\n    }\n    \n    return count == graph->vertices;\n}\n\nint main() {\n    printf(\"=== Graph Algorithms ===\\n\\n\");\n    \n    // Create graph with 5 vertices\n    int vertices = 5;\n    \n    // Adjacency Matrix representation\n    struct GraphMatrix gMatrix;\n    initGraphMatrix(&gMatrix, vertices);\n    \n    addEdgeMatrix(&gMatrix, 0, 1);\n    addEdgeMatrix(&gMatrix, 0, 4);\n    addEdgeMatrix(&gMatrix, 1, 2);\n    addEdgeMatrix(&gMatrix, 1, 3);\n    addEdgeMatrix(&gMatrix, 1, 4);\n    addEdgeMatrix(&gMatrix, 2, 3);\n    addEdgeMatrix(&gMatrix, 3, 4);\n    \n    printGraphMatrix(&gMatrix);\n    \n    // Adjacency List representation\n    struct GraphList* gList = createGraphList(vertices);\n    \n    addEdgeList(gList, 0, 1);\n    addEdgeList(gList, 0, 4);\n    addEdgeList(gList, 1, 2);\n    addEdgeList(gList, 1, 3);\n    addEdgeList(gList, 1, 4);\n    addEdgeList(gList, 2, 3);\n    addEdgeList(gList, 3, 4);\n    \n    printGraphList(gList);\n    \n    // BFS and DFS\n    BFS(gList, 0);\n    DFS(gList, 0);\n    \n    // Check connectivity\n    printf(\"\\nGraph is %sconnected\\n\", isConnected(gList) ? \"\" : \"not \");\n    \n    // Clean up\n    free(gList->array);\n    free(gList);\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Adjacency Matrix",
+                "english": "2D array representation",
+                "hinglish": "2D array representation",
+                "space": "O(V²)",
+                "pros": "Edge check O(1), simple",
+                "cons": "Memory inefficient for sparse graphs"
+              },
+              {
+                "name": "Adjacency List",
+                "english": "Array of linked lists",
+                "hinglish": "Linked lists ka array",
+                "space": "O(V+E)",
+                "pros": "Memory efficient for sparse graphs",
+                "cons": "Edge check O(degree(v))"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Algorithm", "Data Structure", "Time Complexity"],
+              "rows": [
+                ["BFS", "Queue", "O(V+E)"],
+                ["DFS", "Stack (Recursion)", "O(V+E)"],
+                ["Adjacency Check", "Matrix: O(1), List: O(degree(v))", ""]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "level": "Expert - Advanced Algorithms",
+      "order": 4,
+      "description": "Master sorting, searching, and advanced graph algorithms",
+      "topics": [
+        {
+          "id": 9,
+          "title": "Sorting Algorithms",
+          "english": "Implementation and analysis of sorting algorithms",
+          "hinglish": "Sorting algorithms ka implementation aur analysis",
+          "examples": [
+            "Bubble, Selection, Insertion",
+            "Merge, Quick, Heap sort"
+          ],
+          "practice": [
+            {
+              "question": "Quick sort average case time complexity?",
+              "answer": "O(n log n)"
+            },
+            {
+              "question": "Stable sorting algorithm kaun se hain?",
+              "answer": "Bubble, Insertion, Merge sort"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <stdlib.h>\n\n// Utility functions\nvoid printArray(int arr[], int n) {\n    for(int i = 0; i < n; i++) {\n        printf(\"%d \", arr[i]);\n    }\n    printf(\"\\n\");\n}\n\nvoid swap(int* a, int* b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\n// 1. Bubble Sort\nvoid bubbleSort(int arr[], int n) {\n    for(int i = 0; i < n-1; i++) {\n        for(int j = 0; j < n-i-1; j++) {\n            if(arr[j] > arr[j+1]) {\n                swap(&arr[j], &arr[j+1]);\n            }\n        }\n    }\n}\n\n// 2. Selection Sort\nvoid selectionSort(int arr[], int n) {\n    for(int i = 0; i < n-1; i++) {\n        int minIdx = i;\n        for(int j = i+1; j < n; j++) {\n            if(arr[j] < arr[minIdx]) {\n                minIdx = j;\n            }\n        }\n        swap(&arr[i], &arr[minIdx]);\n    }\n}\n\n// 3. Insertion Sort\nvoid insertionSort(int arr[], int n) {\n    for(int i = 1; i < n; i++) {\n        int key = arr[i];\n        int j = i - 1;\n        \n        while(j >= 0 && arr[j] > key) {\n            arr[j+1] = arr[j];\n            j--;\n        }\n        arr[j+1] = key;\n    }\n}\n\n// 4. Merge Sort\nvoid merge(int arr[], int left, int mid, int right) {\n    int n1 = mid - left + 1;\n    int n2 = right - mid;\n    \n    int L[n1], R[n2];\n    \n    for(int i = 0; i < n1; i++) {\n        L[i] = arr[left + i];\n    }\n    for(int j = 0; j < n2; j++) {\n        R[j] = arr[mid + 1 + j];\n    }\n    \n    int i = 0, j = 0, k = left;\n    \n    while(i < n1 && j < n2) {\n        if(L[i] <= R[j]) {\n            arr[k] = L[i];\n            i++;\n        } else {\n            arr[k] = R[j];\n            j++;\n        }\n        k++;\n    }\n    \n    while(i < n1) {\n        arr[k] = L[i];\n        i++;\n        k++;\n    }\n    \n    while(j < n2) {\n        arr[k] = R[j];\n        j++;\n        k++;\n    }\n}\n\nvoid mergeSort(int arr[], int left, int right) {\n    if(left < right) {\n        int mid = left + (right - left) / 2;\n        \n        mergeSort(arr, left, mid);\n        mergeSort(arr, mid + 1, right);\n        \n        merge(arr, left, mid, right);\n    }\n}\n\n// 5. Quick Sort\nint partition(int arr[], int low, int high) {\n    int pivot = arr[high];\n    int i = low - 1;\n    \n    for(int j = low; j < high; j++) {\n        if(arr[j] < pivot) {\n            i++;\n            swap(&arr[i], &arr[j]);\n        }\n    }\n    swap(&arr[i + 1], &arr[high]);\n    return i + 1;\n}\n\nvoid quickSort(int arr[], int low, int high) {\n    if(low < high) {\n        int pi = partition(arr, low, high);\n        \n        quickSort(arr, low, pi - 1);\n        quickSort(arr, pi + 1, high);\n    }\n}\n\n// 6. Heap Sort\nvoid heapify(int arr[], int n, int i) {\n    int largest = i;\n    int left = 2*i + 1;\n    int right = 2*i + 2;\n    \n    if(left < n && arr[left] > arr[largest])\n        largest = left;\n    \n    if(right < n && arr[right] > arr[largest])\n        largest = right;\n    \n    if(largest != i) {\n        swap(&arr[i], &arr[largest]);\n        heapify(arr, n, largest);\n    }\n}\n\nvoid heapSort(int arr[], int n) {\n    // Build max heap\n    for(int i = n/2 - 1; i >= 0; i--) {\n        heapify(arr, n, i);\n    }\n    \n    // Extract elements from heap\n    for(int i = n-1; i > 0; i--) {\n        swap(&arr[0], &arr[i]);\n        heapify(arr, i, 0);\n    }\n}\n\n// 7. Counting Sort (for small range)\nvoid countingSort(int arr[], int n) {\n    // Find max element\n    int max = arr[0];\n    for(int i = 1; i < n; i++) {\n        if(arr[i] > max) {\n            max = arr[i];\n        }\n    }\n    \n    int count[max + 1];\n    for(int i = 0; i <= max; i++) {\n        count[i] = 0;\n    }\n    \n    // Store count of each element\n    for(int i = 0; i < n; i++) {\n        count[arr[i]]++;\n    }\n    \n    // Modify count array\n    for(int i = 1; i <= max; i++) {\n        count[i] += count[i-1];\n    }\n    \n    int output[n];\n    \n    // Build output array\n    for(int i = n-1; i >= 0; i--) {\n        output[count[arr[i]] - 1] = arr[i];\n        count[arr[i]]--;\n    }\n    \n    // Copy to original array\n    for(int i = 0; i < n; i++) {\n        arr[i] = output[i];\n    }\n}\n\nint main() {\n    printf(\"=== Sorting Algorithms ===\\n\\n\");\n    \n    int arr1[] = {64, 34, 25, 12, 22, 11, 90};\n    int n1 = sizeof(arr1)/sizeof(arr1[0]);\n    printf(\"Original array: \");\n    printArray(arr1, n1);\n    \n    // Bubble Sort\n    int bubbleArr[10];\n    for(int i = 0; i < n1; i++) bubbleArr[i] = arr1[i];\n    bubbleSort(bubbleArr, n1);\n    printf(\"Bubble Sort:    \");\n    printArray(bubbleArr, n1);\n    \n    // Selection Sort\n    int selectionArr[10];\n    for(int i = 0; i < n1; i++) selectionArr[i] = arr1[i];\n    selectionSort(selectionArr, n1);\n    printf(\"Selection Sort: \");\n    printArray(selectionArr, n1);\n    \n    // Insertion Sort\n    int insertionArr[10];\n    for(int i = 0; i < n1; i++) insertionArr[i] = arr1[i];\n    insertionSort(insertionArr, n1);\n    printf(\"Insertion Sort: \");\n    printArray(insertionArr, n1);\n    \n    // Merge Sort\n    int mergeArr[] = {38, 27, 43, 3, 9, 82, 10};\n    int n2 = sizeof(mergeArr)/sizeof(mergeArr[0]);\n    mergeSort(mergeArr, 0, n2-1);\n    printf(\"\\nMerge Sort:     \");\n    printArray(mergeArr, n2);\n    \n    // Quick Sort\n    int quickArr[] = {10, 7, 8, 9, 1, 5};\n    int n3 = sizeof(quickArr)/sizeof(quickArr[0]);\n    quickSort(quickArr, 0, n3-1);\n    printf(\"Quick Sort:     \");\n    printArray(quickArr, n3);\n    \n    // Heap Sort\n    int heapArr[] = {12, 11, 13, 5, 6, 7};\n    int n4 = sizeof(heapArr)/sizeof(heapArr[0]);\n    heapSort(heapArr, n4);\n    printf(\"Heap Sort:      \");\n    printArray(heapArr, n4);\n    \n    // Counting Sort\n    int countArr[] = {4, 2, 2, 8, 3, 3, 1};\n    int n5 = sizeof(countArr)/sizeof(countArr[0]);\n    countingSort(countArr, n5);\n    printf(\"Counting Sort:  \");\n    printArray(countArr, n5);\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Comparison Sorts",
+                "english": "Algorithms that compare elements",
+                "hinglish": "Algorithms jo elements ko compare karte hain",
+                "examples": "Bubble, Selection, Insertion, Merge, Quick, Heap",
+                "lower_bound": "Ω(n log n) for comparison-based sorts"
+              },
+              {
+                "name": "Non-Comparison Sorts",
+                "english": "Algorithms that don't compare elements",
+                "hinglish": "Algorithms jo elements ko compare nahi karte",
+                "examples": "Counting, Radix, Bucket sort",
+                "time_complexity": "O(n) for specific cases"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Algorithm", "Best", "Average", "Worst", "Space", "Stable"],
+              "rows": [
+                ["Bubble Sort", "O(n)", "O(n²)", "O(n²)", "O(1)", "Yes"],
+                ["Selection Sort", "O(n²)", "O(n²)", "O(n²)", "O(1)", "No"],
+                ["Insertion Sort", "O(n)", "O(n²)", "O(n²)", "O(1)", "Yes"],
+                ["Merge Sort", "O(n log n)", "O(n log n)", "O(n log n)", "O(n)", "Yes"],
+                ["Quick Sort", "O(n log n)", "O(n log n)", "O(n²)", "O(log n)", "No"],
+                ["Heap Sort", "O(n log n)", "O(n log n)", "O(n log n)", "O(1)", "No"],
+                ["Counting Sort", "O(n+k)", "O(n+k)", "O(n+k)", "O(k)", "Yes"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 10,
+          "title": "Advanced Graph Algorithms",
+          "english": "Shortest path and minimum spanning tree algorithms",
+          "hinglish": "Shortest path aur minimum spanning tree algorithms",
+          "examples": [
+            "Dijkstra's algorithm",
+            "Prim's algorithm",
+            "Kruskal's algorithm"
+          ],
+          "practice": [
+            {
+              "question": "Dijkstra negative weights handle karta hai?",
+              "answer": "Nahi, only non-negative weights"
+            },
+            {
+              "question": "Prim aur Kruskal mein difference?",
+              "answer": "Prim: node-based, Kruskal: edge-based"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <stdio.h>\n#include <stdlib.h>\n#include <stdbool.h>\n#include <limits.h>\n\n#define V 9  // Number of vertices\n#define INF INT_MAX\n\n// Utility function to find vertex with minimum distance\nint minDistance(int dist[], bool sptSet[]) {\n    int min = INF, min_index;\n    \n    for(int v = 0; v < V; v++) {\n        if(!sptSet[v] && dist[v] <= min) {\n            min = dist[v];\n            min_index = v;\n        }\n    }\n    \n    return min_index;\n}\n\n// Print shortest path distances\nvoid printSolution(int dist[]) {\n    printf(\"Vertex \\t Distance from Source\\n\");\n    for(int i = 0; i < V; i++) {\n        printf(\"%d \\t %d\\n\", i, dist[i]);\n    }\n}\n\n// Dijkstra's Algorithm\nvoid dijkstra(int graph[V][V], int src) {\n    int dist[V];      // Shortest distance from src\n    bool sptSet[V];   // Shortest path tree set\n    \n    // Initialize all distances as INF and sptSet as false\n    for(int i = 0; i < V; i++) {\n        dist[i] = INF;\n        sptSet[i] = false;\n    }\n    \n    dist[src] = 0;  // Distance of source from itself is 0\n    \n    // Find shortest path for all vertices\n    for(int count = 0; count < V-1; count++) {\n        // Pick minimum distance vertex\n        int u = minDistance(dist, sptSet);\n        sptSet[u] = true;\n        \n        // Update dist value of adjacent vertices\n        for(int v = 0; v < V; v++) {\n            if(!sptSet[v] && graph[u][v] && dist[u] != INF && \n               dist[u] + graph[u][v] < dist[v]) {\n                dist[v] = dist[u] + graph[u][v];\n            }\n        }\n    }\n    \n    printSolution(dist);\n}\n\n// Prim's Algorithm for MST\nint minKey(int key[], bool mstSet[]) {\n    int min = INF, min_index;\n    \n    for(int v = 0; v < V; v++) {\n        if(!mstSet[v] && key[v] < min) {\n            min = key[v];\n            min_index = v;\n        }\n    }\n    \n    return min_index;\n}\n\nvoid printMST(int parent[], int graph[V][V]) {\n    printf(\"Edge \\tWeight\\n\");\n    int totalWeight = 0;\n    for(int i = 1; i < V; i++) {\n        printf(\"%d - %d \\t%d \\n\", parent[i], i, graph[i][parent[i]]);\n        totalWeight += graph[i][parent[i]];\n    }\n    printf(\"Total MST Weight: %d\\n\", totalWeight);\n}\n\nvoid primMST(int graph[V][V]) {\n    int parent[V];   // Store MST\n    int key[V];      // Key values to pick minimum weight edge\n    bool mstSet[V];  // Vertices included in MST\n    \n    for(int i = 0; i < V; i++) {\n        key[i] = INF;\n        mstSet[i] = false;\n    }\n    \n    key[0] = 0;     // Make key 0 so this vertex is picked first\n    parent[0] = -1; // First node is root of MST\n    \n    for(int count = 0; count < V-1; count++) {\n        int u = minKey(key, mstSet);\n        mstSet[u] = true;\n        \n        for(int v = 0; v < V; v++) {\n            if(graph[u][v] && !mstSet[v] && graph[u][v] < key[v]) {\n                parent[v] = u;\n                key[v] = graph[u][v];\n            }\n        }\n    }\n    \n    printMST(parent, graph);\n}\n\n// Kruskal's Algorithm structures\nstruct Edge {\n    int src, dest, weight;\n};\n\nstruct GraphKruskal {\n    int V, E;\n    struct Edge* edge;\n};\n\n// Create graph for Kruskal\nstruct GraphKruskal* createGraphKruskal(int V, int E) {\n    struct GraphKruskal* graph = (struct GraphKruskal*)malloc(sizeof(struct GraphKruskal));\n    graph->V = V;\n    graph->E = E;\n    graph->edge = (struct Edge*)malloc(E * sizeof(struct Edge));\n    return graph;\n}\n\n// Find set of element i (Union-Find)\nint find(int parent[], int i) {\n    if(parent[i] == i) return i;\n    return find(parent, parent[i]);\n}\n\n// Union of two sets\nvoid Union(int parent[], int rank[], int x, int y) {\n    int xroot = find(parent, x);\n    int yroot = find(parent, y);\n    \n    if(rank[xroot] < rank[yroot]) {\n        parent[xroot] = yroot;\n    } else if(rank[xroot] > rank[yroot]) {\n        parent[yroot] = xroot;\n    } else {\n        parent[yroot] = xroot;\n        rank[xroot]++;\n    }\n}\n\n// Compare function for qsort\nint compare(const void* a, const void* b) {\n    struct Edge* a1 = (struct Edge*)a;\n    struct Edge* b1 = (struct Edge*)b;\n    return a1->weight > b1->weight;\n}\n\n// Kruskal's MST\nvoid KruskalMST(struct GraphKruskal* graph) {\n    int V = graph->V;\n    struct Edge result[V];  // Store resultant MST\n    int e = 0;  // Index for result[]\n    int i = 0;  // Index for sorted edges\n    \n    // Sort edges by weight\n    qsort(graph->edge, graph->E, sizeof(graph->edge[0]), compare);\n    \n    // Allocate memory for Union-Find\n    int* parent = (int*)malloc(V * sizeof(int));\n    int* rank = (int*)malloc(V * sizeof(int));\n    \n    // Initialize Union-Find\n    for(int v = 0; v < V; v++) {\n        parent[v] = v;\n        rank[v] = 0;\n    }\n    \n    // Process edges\n    while(e < V - 1 && i < graph->E) {\n        struct Edge next_edge = graph->edge[i++];\n        \n        int x = find(parent, next_edge.src);\n        int y = find(parent, next_edge.dest);\n        \n        if(x != y) {\n            result[e++] = next_edge;\n            Union(parent, rank, x, y);\n        }\n    }\n    \n    printf(\"\\nKruskal's MST:\\n\");\n    printf(\"Edge \\tWeight\\n\");\n    int totalWeight = 0;\n    for(i = 0; i < e; i++) {\n        printf(\"%d - %d \\t%d\\n\", result[i].src, result[i].dest, result[i].weight);\n        totalWeight += result[i].weight;\n    }\n    printf(\"Total MST Weight: %d\\n\", totalWeight);\n    \n    free(parent);\n    free(rank);\n}\n\nint main() {\n    printf(\"=== Advanced Graph Algorithms ===\\n\\n\");\n    \n    // Graph for Dijkstra and Prim\n    int graph[V][V] = {\n        {0, 4, 0, 0, 0, 0, 0, 8, 0},\n        {4, 0, 8, 0, 0, 0, 0, 11, 0},\n        {0, 8, 0, 7, 0, 4, 0, 0, 2},\n        {0, 0, 7, 0, 9, 14, 0, 0, 0},\n        {0, 0, 0, 9, 0, 10, 0, 0, 0},\n        {0, 0, 4, 14, 10, 0, 2, 0, 0},\n        {0, 0, 0, 0, 0, 2, 0, 1, 6},\n        {8, 11, 0, 0, 0, 0, 1, 0, 7},\n        {0, 0, 2, 0, 0, 0, 6, 7, 0}\n    };\n    \n    printf(\"1. Dijkstra's Algorithm (Source: 0)\\n\");\n    dijkstra(graph, 0);\n    \n    printf(\"\\n2. Prim's Algorithm\\n\");\n    primMST(graph);\n    \n    // Graph for Kruskal\n    int V_kruskal = 4;\n    int E_kruskal = 5;\n    struct GraphKruskal* graphKruskal = createGraphKruskal(V_kruskal, E_kruskal);\n    \n    // Add edges\n    graphKruskal->edge[0].src = 0;\n    graphKruskal->edge[0].dest = 1;\n    graphKruskal->edge[0].weight = 10;\n    \n    graphKruskal->edge[1].src = 0;\n    graphKruskal->edge[1].dest = 2;\n    graphKruskal->edge[1].weight = 6;\n    \n    graphKruskal->edge[2].src = 0;\n    graphKruskal->edge[2].dest = 3;\n    graphKruskal->edge[2].weight = 5;\n    \n    graphKruskal->edge[3].src = 1;\n    graphKruskal->edge[3].dest = 3;\n    graphKruskal->edge[3].weight = 15;\n    \n    graphKruskal->edge[4].src = 2;\n    graphKruskal->edge[4].dest = 3;\n    graphKruskal->edge[4].weight = 4;\n    \n    KruskalMST(graphKruskal);\n    \n    free(graphKruskal->edge);\n    free(graphKruskal);\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Dijkstra's Algorithm",
+                "english": "Single source shortest path",
+                "hinglish": "Single source shortest path",
+                "requirements": "Non-negative weights",
+                "time_complexity": "O(V²) with array, O((V+E)logV) with heap"
+              },
+              {
+                "name": "Prim's Algorithm",
+                "english": "Minimum Spanning Tree",
+                "hinglish": "Minimum Spanning Tree",
+                "approach": "Grow MST from starting vertex",
+                "time_complexity": "O(V²) with array, O(E log V) with heap"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Algorithm", "Type", "Time Complexity", "Use Case"],
+              "rows": [
+                ["Dijkstra", "Shortest Path", "O(V²) or O((V+E)logV)", "GPS navigation"],
+                ["Bellman-Ford", "Shortest Path", "O(VE)", "Negative weights"],
+                ["Prim's", "MST", "O(V²) or O(E log V)", "Network design"],
+                ["Kruskal's", "MST", "O(E log E)", "Network design, clustering"]
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
