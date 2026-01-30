@@ -1,0 +1,2578 @@
+{
+  "technology": "C++",
+  "slug": "cpp-absolute-beginner-phase-1",
+  "description": "Complete beginner course for C++ covering fundamentals, control flow, and functions. Perfect for absolute beginners starting their programming journey.",
+  "levels": [
+    {
+      "level": "Absolute Beginner - Week 1",
+      "order": 1,
+      "description": "Setup and basic programming concepts",
+      "topics": [
+        {
+          "id": 1,
+          "title": "Setting up Development Environment",
+          "english": "Install and configure a C++ development environment to write, compile, and run C++ programs.",
+          "hinglish": "C++ programs likhne, compile karne aur run karne ke liye development environment setup karein.",
+          "examples": [
+            "VS Code with C++ extension",
+            "MinGW/GCC compiler for Windows",
+            "g++ on Linux/Mac"
+          ],
+          "practice": [
+            {
+              "question": "Apne system par C++ compiler install karein aur 'Hello World' program run karein",
+              "answer": "Step 1: MinGW install karein\nStep 2: VS Code mein C++ extension add karein\nStep 3: hello.cpp file banae:\n#include <iostream>\nint main() {\n    std::cout << \"Hello World!\";\n    return 0;\n}\nStep 4: Terminal mein: g++ hello.cpp -o hello\nStep 5: ./hello (Linux/Mac) ya hello.exe (Windows)"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "// Simple program structure\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Setup Successful!\";\n    return 0;\n}",
+            "components": [
+              {
+                "name": "VS Code",
+                "english": "Free, lightweight code editor with great extensions",
+                "hinglish": "Free aur lightweight code editor jo extensions ke saath aata hai",
+                "importance": "High for beginners",
+                "tip": "Install 'C/C++' extension by Microsoft",
+                "role": "Code writing and editing",
+                "pros": "Free, cross-platform, many extensions",
+                "cons": "Need separate compiler",
+                "example": "Write and edit .cpp files",
+                "use_case": "Learning and small projects"
+              },
+              {
+                "name": "MinGW/GCC",
+                "english": "Compiler that converts C++ code to machine code",
+                "hinglish": "Compiler jo C++ code ko machine code mein convert karta hai",
+                "importance": "Essential",
+                "tip": "Add to PATH after installation",
+                "role": "Compilation and building",
+                "pros": "Free, standard compliant",
+                "cons": "Manual setup needed",
+                "example": "g++ program.cpp -o program",
+                "use_case": "Compiling C++ programs"
+              },
+              {
+                "name": "Terminal/Command Prompt",
+                "english": "Command-line interface to run compiler commands",
+                "hinglish": "Command-line interface jahan compiler commands run karte hain",
+                "importance": "Medium",
+                "tip": "Learn basic commands: cd, dir/ls",
+                "role": "Program execution",
+                "pros": "Direct control",
+                "cons": "Text-based interface",
+                "example": "g++ -o output input.cpp",
+                "use_case": "Compiling and running programs"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Tool", "Platform", "Best For", "Difficulty"],
+              "rows": [
+                ["VS Code + MinGW", "All", "Beginners", "Easy"],
+                ["Code::Blocks", "Windows", "Quick setup", "Very Easy"],
+                ["CLion", "All", "Professional", "Medium"],
+                ["Online Compilers", "Web", "Quick testing", "Easiest"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["Criteria", "VS Code", "Code::Blocks", "Online"],
+              "rows": [
+                ["Beginner Friendly", "Yes", "Yes", "Yes"],
+                ["Offline Use", "Yes", "Yes", "No"],
+                ["Professional Use", "Yes", "No", "No"],
+                ["Debugging", "Good", "Basic", "Poor"],
+                ["Setup Time", "10-15 mins", "5 mins", "0 mins"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 2,
+          "title": "Basic Syntax and Program Structure",
+          "english": "Understanding the basic structure of a C++ program including headers, main function, and statements.",
+          "hinglish": "C++ program ki basic structure samjhe - headers, main function, aur statements.",
+          "examples": [
+            "// First C++ Program\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Hello C++!\";\n    return 0;\n}"
+          ],
+          "practice": [
+            {
+              "question": "Ek program likho jo apna naam print kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Mera naam [Apna Naam] hai\";\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>  // Header file for input/output\nusing namespace std; // Use standard namespace\n\n// Main function - program starts here\nint main() {\n    // Statement 1\n    cout << \"Learning C++\";\n    \n    // Statement 2\n    cout << endl;  // New line\n    \n    // Statement 3\n    cout << \"is fun!\";\n    \n    return 0;  // Program ends successfully\n}",
+            "components": [
+              {
+                "name": "#include <iostream>",
+                "english": "Preprocessor directive to include input/output library",
+                "hinglish": "Preprocessor directive jo input/output library include karta hai",
+                "importance": "Essential",
+                "tip": "Almost every C++ program needs this",
+                "role": "Enable cin/cout functionality",
+                "pros": "Standard, reliable",
+                "cons": "None",
+                "example": "#include <iostream>",
+                "use_case": "When using cout or cin"
+              },
+              {
+                "name": "using namespace std;",
+                "english": "Allows using standard library elements without std:: prefix",
+                "hinglish": "Standard library elements ko std:: prefix ke bina use karne deta hai",
+                "importance": "Beginner friendly",
+                "tip": "Good for learning, avoid in large projects",
+                "role": "Simplify code writing",
+                "pros": "Less typing",
+                "cons": "Namespace pollution",
+                "example": "cout instead of std::cout",
+                "use_case": "Small programs and learning"
+              },
+              {
+                "name": "int main()",
+                "english": "Main function where program execution begins",
+                "hinglish": "Main function jahan program execution shuru hota hai",
+                "importance": "Mandatory",
+                "tip": "Every C++ program must have exactly one main()",
+                "role": "Program entry point",
+                "pros": "Standard, required",
+                "cons": "None",
+                "example": "int main() { ... }",
+                "use_case": "Every C++ program"
+              },
+              {
+                "name": "return 0;",
+                "english": "Indicates successful program termination",
+                "hinglish": "Batata hai ki program successfully khatam hua",
+                "importance": "Good practice",
+                "tip": "Return 0 for success, non-zero for errors",
+                "role": "Exit status",
+                "pros": "Standard practice",
+                "cons": "None",
+                "example": "return 0;",
+                "use_case": "End of main() function"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Element", "Required?", "Purpose", "Example"],
+              "rows": [
+                ["#include", "Usually", "Include libraries", "#include <iostream>"],
+                ["main()", "Always", "Program start", "int main()"],
+                ["return", "In main()", "Exit status", "return 0;"],
+                ["Comments", "Optional", "Documentation", "// This is comment"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 3,
+          "title": "Variables and Data Types",
+          "english": "Variables store data in memory. Data types define what kind of data a variable can hold.",
+          "hinglish": "Variables memory mein data store karte hain. Data types define karte hain ki variable kis type ka data rakh sakta hai.",
+          "examples": [
+            "int age = 20;",
+            "float price = 99.99;",
+            "char grade = 'A';",
+            "bool isPass = true;"
+          ],
+          "practice": [
+            {
+              "question": "Student ki information store karne ke liye variables banaye: roll number, name, marks, grade",
+              "answer": "int rollNumber = 101;\nstring name = \"Rahul\";\nfloat marks = 85.5;\nchar grade = 'A';"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    // Different data types\n    int age = 25;           // Integer\n    float salary = 50000.50; // Floating point\n    double pi = 3.14159265; // More precise float\n    char initial = 'R';     // Single character\n    bool isEmployed = true; // Boolean (true/false)\n    string name = \"Rahul\";  // String (text)\n    \n    // Display values\n    cout << \"Name: \" << name << endl;\n    cout << \"Age: \" << age << endl;\n    cout << \"Salary: \" << salary << endl;\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "int",
+                "english": "Integer type for whole numbers",
+                "hinglish": "Pure numbers (bina decimal ke) ke liye",
+                "importance": "Very High",
+                "tip": "Use for counting, age, quantity",
+                "role": "Store whole numbers",
+                "pros": "Fast operations, less memory",
+                "cons": "Cannot store decimals",
+                "example": "int students = 50;",
+                "use_case": "Counters, ages, IDs"
+              },
+              {
+                "name": "float/double",
+                "english": "Floating point numbers with decimals",
+                "hinglish": "Decimal numbers ke liye",
+                "importance": "High",
+                "tip": "Use double for better precision",
+                "role": "Store decimal numbers",
+                "pros": "Precise calculations",
+                "cons": "More memory, slower",
+                "example": "double price = 99.99;",
+                "use_case": "Prices, measurements, percentages"
+              },
+              {
+                "name": "char",
+                "english": "Single character type",
+                "hinglish": "Ek character store karne ke liye",
+                "importance": "Medium",
+                "tip": "Use single quotes for char",
+                "role": "Store single characters",
+                "pros": "Minimal memory",
+                "cons": "Only one character",
+                "example": "char grade = 'A';",
+                "use_case": "Grades, choices, flags"
+              },
+              {
+                "name": "bool",
+                "english": "Boolean type for true/false values",
+                "hinglish": "True/False values ke liye",
+                "importance": "High",
+                "tip": "Use for conditions and flags",
+                "role": "Store logical values",
+                "pros": "Memory efficient",
+                "cons": "Only two values",
+                "example": "bool isRaining = false;",
+                "use_case": "Flags, conditions, switches"
+              },
+              {
+                "name": "string",
+                "english": "Sequence of characters (text)",
+                "hinglish": "Characters ka sequence (text)",
+                "importance": "Very High",
+                "tip": "Need #include <string>",
+                "role": "Store text data",
+                "pros": "Easy to use",
+                "cons": "More memory",
+                "example": "string name = \"John\";",
+                "use_case": "Names, addresses, messages"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Type", "Size", "Range", "Use When"],
+              "rows": [
+                ["int", "4 bytes", "-2B to 2B", "Whole numbers"],
+                ["float", "4 bytes", "±3.4e±38 (7 digits)", "Simple decimals"],
+                ["double", "8 bytes", "±1.7e±308 (15 digits)", "Precise calculations"],
+                ["char", "1 byte", "-128 to 127 or 0-255", "Single characters"],
+                ["bool", "1 byte", "true/false", "Conditions"],
+                ["string", "Variable", "Text", "Names, messages"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["Need to Store", "Use This Type", "Example"],
+              "rows": [
+                ["Person's age", "int", "int age = 25;"],
+                ["Product price", "double", "double price = 299.99;"],
+                ["Yes/No answer", "bool", "bool isMember = true;"],
+                ["Student grade", "char", "char grade = 'A';"],
+                ["Full name", "string", "string name = \"Raj\";"],
+                ["Large number", "long long", "long long bigNum = 1000000;"]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "level": "Absolute Beginner - Week 2",
+      "order": 2,
+      "description": "Input/output, operators, and comments",
+      "topics": [
+        {
+          "id": 4,
+          "title": "Input/Output Operations",
+          "english": "Reading input from user and displaying output using cin and cout.",
+          "hinglish": "User se input lena aur output display karna cin aur cout ka use karke.",
+          "examples": [
+            "cin >> variable;  // Input",
+            "cout << value;    // Output",
+            "cout << \"Enter age: \";\ncin >> age;"
+          ],
+          "practice": [
+            {
+              "question": "Ek program likho jo user se naam aur age le aur \"Hello [name], you are [age] years old\" print kare",
+              "answer": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string name;\n    int age;\n    \n    cout << \"Enter your name: \";\n    cin >> name;\n    \n    cout << \"Enter your age: \";\n    cin >> age;\n    \n    cout << \"Hello \" << name << \", you are \" << age << \" years old\" << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    // Different types of I/O operations\n    \n    // 1. Simple output\n    cout << \"Welcome to C++ I/O\" << endl;\n    \n    // 2. Multiple outputs in one line\n    cout << \"Value 1: \" << 10 << \" Value 2: \" << 20 << endl;\n    \n    // 3. Integer input\n    int num;\n    cout << \"Enter a number: \";\n    cin >> num;\n    cout << \"You entered: \" << num << endl;\n    \n    // 4. String input (single word)\n    string name;\n    cout << \"Enter your first name: \";\n    cin >> name;\n    cout << \"Hello \" << name << endl;\n    \n    // 5. Multiple inputs\n    int a, b;\n    cout << \"Enter two numbers: \";\n    cin >> a >> b;  // Space separated\n    cout << \"Sum: \" << (a + b) << endl;\n    \n    // 6. getline for strings with spaces\n    cin.ignore();  // Clear input buffer\n    string fullName;\n    cout << \"Enter full name: \";\n    getline(cin, fullName);\n    cout << \"Full name: \" << fullName << endl;\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "cout (console output)",
+                "english": "Used to display output to the console",
+                "hinglish": "Console par output display karne ke liye",
+                "importance": "Very High",
+                "tip": "Use << operator to chain outputs",
+                "role": "Display information",
+                "pros": "Easy to use, flexible",
+                "cons": "None for beginners",
+                "example": "cout << \"Hello\" << name << endl;",
+                "use_case": "Displaying results, messages"
+              },
+              {
+                "name": "cin (console input)",
+                "english": "Used to read input from the console",
+                "hinglish": "Console se input lene ke liye",
+                "importance": "Very High",
+                "tip": "Use >> operator, skips whitespace",
+                "role": "Get user input",
+                "pros": "Simple input",
+                "cons": "Cannot handle spaces in strings",
+                "example": "cin >> variable;",
+                "use_case": "Getting numbers, single words"
+              },
+              {
+                "name": "getline()",
+                "english": "Reads entire line including spaces",
+                "hinglish": "Poori line padhta hai, spaces ke saath",
+                "importance": "High",
+                "tip": "Use for strings with spaces",
+                "role": "Read complete lines",
+                "pros": "Handles spaces",
+                "cons": "Need to clear buffer sometimes",
+                "example": "getline(cin, stringVar);",
+                "use_case": "Names with spaces, addresses"
+              },
+              {
+                "name": "endl",
+                "english": "Inserts newline and flushes output",
+                "hinglish": "Newline insert karta hai aur output flush karta hai",
+                "importance": "High",
+                "tip": "Use for line breaks",
+                "role": "Move to next line",
+                "pros": "Readable output",
+                "cons": "Slightly slower than '\\n'",
+                "example": "cout << \"Line 1\" << endl << \"Line 2\";",
+                "use_case": "Formatting output"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Method", "For", "Example", "Note"],
+              "rows": [
+                ["cout <<", "Output", "cout << \"Hello\";", "Most common"],
+                ["cin >>", "Input (no spaces)", "cin >> name;", "Skips whitespace"],
+                ["getline()", "Input (with spaces)", "getline(cin, text);", "Reads full line"],
+                ["cerr <<", "Error output", "cerr << \"Error!\";", "For errors"],
+                ["clog <<", "Log output", "clog << \"Log\";", "For logging"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["You Want To", "Use", "Why"],
+              "rows": [
+                ["Display message", "cout", "Standard output"],
+                ["Get a number", "cin >>", "Simple input"],
+                ["Get single word", "cin >>", "Stops at space"],
+                ["Get full sentence", "getline()", "Reads spaces"],
+                ["Show error", "cerr", "Separate error stream"],
+                ["Add new line", "endl or '\\n'", "endl flushes buffer"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 5,
+          "title": "Operators",
+          "english": "Operators perform operations on variables and values.",
+          "hinglish": "Operators variables aur values par operations perform karte hain.",
+          "examples": [
+            "int sum = a + b;     // Arithmetic",
+            "bool result = a > b; // Relational",
+            "if (a && b) {...}    // Logical"
+          ],
+          "practice": [
+            {
+              "question": "Calculator program likho jo +, -, *, / operations perform kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    double num1, num2;\n    char op;\n    \n    cout << \"Enter first number: \";\n    cin >> num1;\n    cout << \"Enter operator (+, -, *, /): \";\n    cin >> op;\n    cout << \"Enter second number: \";\n    cin >> num2;\n    \n    double result;\n    \n    if (op == '+') result = num1 + num2;\n    else if (op == '-') result = num1 - num2;\n    else if (op == '*') result = num1 * num2;\n    else if (op == '/') result = num1 / num2;\n    else {\n        cout << \"Invalid operator!\";\n        return 1;\n    }\n    \n    cout << \"Result: \" << result << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 10, b = 3;\n    \n    // 1. ARITHMETIC OPERATORS\n    cout << \"Arithmetic Operators:\\n\";\n    cout << \"a + b = \" << (a + b) << endl;  // Addition\n    cout << \"a - b = \" << (a - b) << endl;  // Subtraction\n    cout << \"a * b = \" << (a * b) << endl;  // Multiplication\n    cout << \"a / b = \" << (a / b) << endl;  // Division (integer)\n    cout << \"a % b = \" << (a % b) << endl;  // Modulus (remainder)\n    \n    // 2. RELATIONAL OPERATORS (return true/false)\n    cout << \"\\nRelational Operators:\\n\";\n    cout << \"a > b: \" << (a > b) << endl;   // Greater than\n    cout << \"a < b: \" << (a < b) << endl;   // Less than\n    cout << \"a == b: \" << (a == b) << endl; // Equal to\n    cout << \"a != b: \" << (a != b) << endl; // Not equal\n    cout << \"a >= b: \" << (a >= b) << endl; // Greater or equal\n    cout << \"a <= b: \" << (a <= b) << endl; // Less or equal\n    \n    // 3. LOGICAL OPERATORS\n    bool x = true, y = false;\n    cout << \"\\nLogical Operators:\\n\";\n    cout << \"x && y: \" << (x && y) << endl; // AND (both true)\n    cout << \"x || y: \" << (x || y) << endl; // OR (at least one true)\n    cout << \"!x: \" << (!x) << endl;         // NOT (reverse)\n    \n    // 4. ASSIGNMENT OPERATORS\n    cout << \"\\nAssignment Operators:\\n\";\n    int c = 5;\n    c += 3;  // c = c + 3\n    cout << \"c += 3: \" << c << endl;\n    \n    c -= 2;  // c = c - 2\n    cout << \"c -= 2: \" << c << endl;\n    \n    c *= 2;  // c = c * 2\n    cout << \"c *= 2: \" << c << endl;\n    \n    // 5. INCREMENT/DECREMENT\n    cout << \"\\nIncrement/Decrement:\\n\";\n    int d = 5;\n    cout << \"d++: \" << d++ << endl;  // Post-increment (use then increment)\n    cout << \"d: \" << d << endl;\n    cout << \"++d: \" << ++d << endl;  // Pre-increment (increment then use)\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Arithmetic Operators",
+                "english": "Perform mathematical operations",
+                "hinglish": "Mathematical operations perform karte hain",
+                "importance": "Very High",
+                "tip": "% (modulus) only works with integers",
+                "role": "Calculate values",
+                "pros": "Essential for calculations",
+                "cons": "None",
+                "example": "int sum = a + b;",
+                "use_case": "Calculators, math operations"
+              },
+              {
+                "name": "Relational Operators",
+                "english": "Compare values, return true/false",
+                "hinglish": "Values compare karte hain, true/false return karte hain",
+                "importance": "Very High",
+                "tip": "Use in conditions (if, while)",
+                "role": "Make comparisons",
+                "pros": "Enable decision making",
+                "cons": "None",
+                "example": "bool isGreater = a > b;",
+                "use_case": "Conditions, comparisons"
+              },
+              {
+                "name": "Logical Operators",
+                "english": "Combine multiple conditions",
+                "hinglish": "Multiple conditions combine karte hain",
+                "importance": "Very High",
+                "tip": "&& means AND, || means OR",
+                "role": "Combine boolean expressions",
+                "pros": "Complex conditions",
+                "cons": "None",
+                "example": "if (age > 18 && hasLicense) {...}",
+                "use_case": "Multiple conditions"
+              },
+              {
+                "name": "Assignment Operators",
+                "english": "Assign values with operations",
+                "hinglish": "Operations ke saath values assign karte hain",
+                "importance": "High",
+                "tip": "Shortcut for common operations",
+                "role": "Modify and assign",
+                "pros": "Shorter code",
+                "cons": "None",
+                "example": "count += 1; // count = count + 1",
+                "use_case": "Counters, accumulators"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Operator Type", "Symbols", "Returns", "Example"],
+              "rows": [
+                ["Arithmetic", "+ - * / %", "Number", "5 + 3 = 8"],
+                ["Relational", "> < == != >= <=", "bool", "5 > 3 = true"],
+                ["Logical", "&& || !", "bool", "true && false = false"],
+                ["Assignment", "= += -= *= /=", "Value", "x += 5"],
+                ["Increment", "++ --", "Value", "x++ or ++x"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["You Need To", "Use Operator", "Example"],
+              "rows": [
+                ["Add numbers", "+", "sum = a + b"],
+                ["Compare values", "> < == !=", "if (age >= 18)"],
+                ["Check both conditions", "&&", "if (marks > 33 && attendance > 75)"],
+                ["Check either condition", "||", "if (isMember || hasCoupon)"],
+                ["Increase by 1", "++", "count++"],
+                ["Add and assign", "+=", "total += price"],
+                ["Get remainder", "%", "remainder = num % 2"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 6,
+          "title": "Comments and Documentation",
+          "english": "Comments are used to explain code and make it more readable. They are ignored by the compiler.",
+          "hinglish": "Code ko explain karne aur readable banane ke liye comments use hote hain. Compiler inhe ignore karta hai.",
+          "examples": [
+            "// Single line comment",
+            "/* Multi-line\n   comment */",
+            "/**\n * Documentation comment\n * @param x first number\n */"
+          ],
+          "practice": [
+            {
+              "question": "Ek program likho jisme properly comments use kiye gaye ho - program ka purpose, variables ka explanation, aur logic ka explanation",
+              "answer": "/*\n * Student Grade Calculator\n * Calculates grade based on marks\n * Author: Student\n * Date: 2024\n */\n\n#include <iostream>\nusing namespace std;\n\nint main() {\n    // Variables to store marks and grade\n    float marks;      // Student's marks\n    char grade;       // Calculated grade\n    \n    // Get marks from user\n    cout << \"Enter marks (0-100): \";\n    cin >> marks;\n    \n    // Calculate grade based on marks\n    if (marks >= 90) {\n        grade = 'A';  // 90-100: A grade\n    }\n    else if (marks >= 75) {\n        grade = 'B';  // 75-89: B grade\n    }\n    else if (marks >= 50) {\n        grade = 'C';  // 50-74: C grade\n    }\n    else {\n        grade = 'F';  // Below 50: Fail\n    }\n    \n    // Display result\n    cout << \"Grade: \" << grade << endl;\n    \n    return 0;  // Program ends successfully\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\n/*\n * PROGRAM: CALCULATOR\n * This program performs basic arithmetic operations\n * It demonstrates the use of different types of comments\n */\n\n// Function to add two numbers\nint add(int a, int b) {\n    return a + b;  // Return sum\n}\n\nint main() {\n    // Variable declarations with comments\n    int num1 = 10;     // First number\n    int num2 = 20;     // Second number\n    int result;        // Store result\n    \n    /*\n     * Calculate sum\n     * Using the add function\n     */\n    result = add(num1, num2);\n    \n    // Display result\n    cout << \"Sum: \" << result << endl;  // Output: Sum: 30\n    \n    /* TODO: Add subtraction, multiplication\n       and division functionality */\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Single-line comments (//)",
+                "english": "Comment that spans only one line",
+                "hinglish": "Comment jo sirf ek line tak hota hai",
+                "importance": "High",
+                "tip": "Use for short explanations",
+                "role": "Explain single lines",
+                "pros": "Quick and easy",
+                "cons": "Only one line",
+                "example": "// Calculate average",
+                "use_case": "Variable explanations, short notes"
+              },
+              {
+                "name": "Multi-line comments (/* */)",
+                "english": "Comment that can span multiple lines",
+                "hinglish": "Comment jo multiple lines tak ja sakta hai",
+                "importance": "Medium",
+                "tip": "Use for longer explanations",
+                "role": "Explain blocks of code",
+                "pros": "Can be long",
+                "cons": "Cannot be nested",
+                "example": "/* This function\n   calculates total */",
+                "use_case": "Function descriptions, file headers"
+              },
+              {
+                "name": "Documentation comments",
+                "english": "Special comments for generating documentation",
+                "hinglish": "Documentation generate karne ke liye special comments",
+                "importance": "Medium (for projects)",
+                "tip": "Follow Doxygen/Javadoc style",
+                "role": "Generate API documentation",
+                "pros": "Auto-documentation",
+                "cons": "More verbose",
+                "example": "/**\n * @brief Adds two numbers\n * @param a First number\n * @param b Second number\n */",
+                "use_case": "Library functions, APIs"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Comment Type", "Syntax", "Best For", "Can Nest?"],
+              "rows": [
+                ["Single-line", "// comment", "Short explanations", "No"],
+                ["Multi-line", "/* comment */", "Long explanations", "No"],
+                ["Documentation", "/** comment */", "API documentation", "No"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["When You Want To", "Use", "Example"],
+              "rows": [
+                ["Explain one line", "//", "// Get user input"],
+                ["Explain function", "/* */", "/* Calculate total */"],
+                ["Document function", "/** */", "/** Add function */"],
+                ["Temporarily disable code", "// or /* */", "// cout << \"debug\";"],
+                ["File header", "/* */", "/* Program: Calculator */"],
+                ["TODO notes", "// TODO:", "// TODO: Add validation"]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "level": "Absolute Beginner - Week 3",
+      "order": 3,
+      "description": "Control flow and decision making",
+      "topics": [
+        {
+          "id": 7,
+          "title": "If-Else Statements",
+          "english": "Conditional statements that execute different code blocks based on conditions.",
+          "hinglish": "Conditional statements jo conditions ke basis par different code blocks execute karte hain.",
+          "examples": [
+            "if (age >= 18) {\n    cout << \"Adult\";\n} else {\n    cout << \"Minor\";\n}",
+            "if (marks > 90) grade = 'A';\nelse if (marks > 75) grade = 'B';\nelse grade = 'C';"
+          ],
+          "practice": [
+            {
+              "question": "Ek program likho jo user ki age le aur bataye ki vo vote de sakta hai ya nahi (India: 18+ years)",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int age;\n    \n    cout << \"Enter your age: \";\n    cin >> age;\n    \n    if (age >= 18) {\n        cout << \"You can vote!\" << endl;\n    } else {\n        cout << \"You cannot vote. \" << (18 - age) << \" years to go!\" << endl;\n    }\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int marks;\n    \n    cout << \"Enter marks (0-100): \";\n    cin >> marks;\n    \n    // 1. Simple if statement\n    cout << \"\\n1. Simple if:\\n\";\n    if (marks >= 33) {\n        cout << \"Pass!\\n\";\n    }\n    \n    // 2. if-else statement\n    cout << \"\\n2. if-else:\\n\";\n    if (marks >= 33) {\n        cout << \"Pass\\n\";\n    } else {\n        cout << \"Fail\\n\";\n    }\n    \n    // 3. if-else if ladder\n    cout << \"\\n3. if-else if ladder:\\n\";\n    if (marks >= 90) {\n        cout << \"Grade: A\\n\";\n    }\n    else if (marks >= 75) {\n        cout << \"Grade: B\\n\";\n    }\n    else if (marks >= 50) {\n        cout << \"Grade: C\\n\";\n    }\n    else if (marks >= 33) {\n        cout << \"Grade: D\\n\";\n    }\n    else {\n        cout << \"Grade: F (Fail)\\n\";\n    }\n    \n    // 4. Nested if statements\n    cout << \"\\n4. Nested if (Scholarship check):\\n\";\n    if (marks >= 60) {\n        cout << \"Passed with good marks.\\n\";\n        \n        if (marks >= 90) {\n            cout << \"Eligible for full scholarship!\\n\";\n        }\n        else if (marks >= 75) {\n            cout << \"Eligible for partial scholarship.\\n\";\n        }\n    }\n    \n    // 5. One-line if (without braces)\n    cout << \"\\n5. One-line if:\\n\";\n    if (marks == 100)\n        cout << \"Perfect score!\\n\";\n    \n    // 6. Ternary operator (shorthand if-else)\n    cout << \"\\n6. Ternary operator:\\n\";\n    string result = (marks >= 33) ? \"Pass\" : \"Fail\";\n    cout << \"Result: \" << result << endl;\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "if statement",
+                "english": "Executes code if condition is true",
+                "hinglish": "Code execute karta hai agar condition true hai",
+                "importance": "Very High",
+                "tip": "Condition must be in parentheses",
+                "role": "Conditional execution",
+                "pros": "Simple, essential",
+                "cons": "Only checks true condition",
+                "example": "if (age > 18) {...}",
+                "use_case": "Single condition checks"
+              },
+              {
+                "name": "if-else statement",
+                "english": "Executes one block if true, another if false",
+                "hinglish": "Ek block execute karega agar true, dusra agar false",
+                "importance": "Very High",
+                "tip": "Always have both conditions covered",
+                "role": "Two-way decision",
+                "pros": "Handles both cases",
+                "cons": "Only two outcomes",
+                "example": "if (marks >= 33) {...} else {...}",
+                "use_case": "Pass/fail, yes/no decisions"
+              },
+              {
+                "name": "if-else if ladder",
+                "english": "Checks multiple conditions in sequence",
+                "hinglish": "Sequence mein multiple conditions check karta hai",
+                "importance": "High",
+                "tip": "Order matters - check specific first",
+                "role": "Multiple conditions",
+                "pros": "Handles many cases",
+                "cons": "Can be long",
+                "example": "if (grade == 'A') {...} else if (grade == 'B') {...}",
+                "use_case": "Grade systems, menu selection"
+              },
+              {
+                "name": "Nested if",
+                "english": "if statement inside another if",
+                "hinglish": "Ek if statement ke andar dusra if statement",
+                "importance": "Medium",
+                "tip": "Use when conditions are dependent",
+                "role": "Hierarchical conditions",
+                "pros": "Complex logic",
+                "cons": "Can become confusing",
+                "example": "if (age > 18) { if (hasLicense) {...} }",
+                "use_case": "Multi-step validations"
+              },
+              {
+                "name": "Ternary operator",
+                "english": "Shorthand for simple if-else",
+                "hinglish": "Simple if-else ka shorthand version",
+                "importance": "Medium",
+                "tip": "Use only for very simple conditions",
+                "role": "Compact conditional assignment",
+                "pros": "Concise code",
+                "cons": "Less readable for complex logic",
+                "example": "max = (a > b) ? a : b;",
+                "use_case": "Simple value assignments"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Statement", "Best For", "Readability", "When to Use"],
+              "rows": [
+                ["if", "Single condition", "Good", "Only true case matters"],
+                ["if-else", "Two outcomes", "Very Good", "Both true/false needed"],
+                ["if-else if", "Multiple conditions", "Good", "More than 2 outcomes"],
+                ["Nested if", "Dependent conditions", "Fair", "Complex hierarchical logic"],
+                ["Ternary", "Simple assignments", "Fair", "One-line if-else"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["Situation", "Use", "Example"],
+              "rows": [
+                ["Check one condition", "if", "if (isRaining) takeUmbrella();"],
+                ["Two possible actions", "if-else", "if (age >= 18) vote(); else wait();"],
+                ["Multiple categories", "if-else if", "Grade A/B/C/D/F"],
+                ["Step-by-step check", "Nested if", "if (loggedIn) { if (isAdmin) {...} }"],
+                ["Assign based on condition", "Ternary", "status = (marks > 33) ? \"Pass\" : \"Fail\";"],
+                ["Many conditions", "switch", "Menu options 1,2,3,4"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 8,
+          "title": "Switch-Case Statements",
+          "english": "Multi-way branching statement that selects one of many code blocks to execute.",
+          "hinglish": "Multi-way branching statement jo execute karne ke liye many code blocks mein se ek select karta hai.",
+          "examples": [
+            "switch(choice) {\n    case 1: cout << \"Option 1\"; break;\n    case 2: cout << \"Option 2\"; break;\n    default: cout << \"Invalid\";\n}"
+          ],
+          "practice": [
+            {
+              "question": "Calculator program switch-case ka use karke banaye jisme +, -, *, / operations ho",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    double num1, num2;\n    char op;\n    \n    cout << \"Enter first number: \";\n    cin >> num1;\n    cout << \"Enter operator (+, -, *, /): \";\n    cin >> op;\n    cout << \"Enter second number: \";\n    cin >> num2;\n    \n    double result;\n    \n    switch(op) {\n        case '+':\n            result = num1 + num2;\n            cout << \"Result: \" << result;\n            break;\n            \n        case '-':\n            result = num1 - num2;\n            cout << \"Result: \" << result;\n            break;\n            \n        case '*':\n            result = num1 * num2;\n            cout << \"Result: \" << result;\n            break;\n            \n        case '/':\n            if (num2 != 0) {\n                result = num1 / num2;\n                cout << \"Result: \" << result;\n            } else {\n                cout << \"Error: Division by zero!\";\n            }\n            break;\n            \n        default:\n            cout << \"Invalid operator!\";\n    }\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int dayNumber;\n    \n    cout << \"Enter day number (1-7): \";\n    cin >> dayNumber;\n    \n    cout << \"\\nDay of the week: \";\n    \n    // Basic switch-case\n    switch(dayNumber) {\n        case 1:\n            cout << \"Monday\";\n            break;\n        \n        case 2:\n            cout << \"Tuesday\";\n            break;\n            \n        case 3:\n            cout << \"Wednesday\";\n            break;\n            \n        case 4:\n            cout << \"Thursday\";\n            break;\n            \n        case 5:\n            cout << \"Friday\";\n            break;\n            \n        case 6:\n            cout << \"Saturday\";\n            break;\n            \n        case 7:\n            cout << \"Sunday\";\n            break;\n            \n        default:\n            cout << \"Invalid day number!\";\n    }\n    \n    cout << \"\\n\\n--- More Examples ---\\n\";\n    \n    // Example 2: Calculator\n    char operatorSymbol = '+';\n    int a = 10, b = 5;\n    \n    switch(operatorSymbol) {\n        case '+':\n            cout << a << \" + \" << b << \" = \" << (a + b) << endl;\n            break;\n            \n        case '-':\n            cout << a << \" - \" << b << \" = \" << (a - b) << endl;\n            break;\n            \n        case '*':\n            cout << a << \" * \" << b << \" = \" << (a * b) << endl;\n            break;\n            \n        case '/':\n            cout << a << \" / \" << b << \" = \" << (a / b) << endl;\n            break;\n            \n        default:\n            cout << \"Invalid operator\" << endl;\n    }\n    \n    // Example 3: Multiple cases for same action\n    char grade = 'B';\n    cout << \"\\nGrade Analysis: \";\n    \n    switch(grade) {\n        case 'A':\n        case 'B':\n            cout << \"Well done!\";\n            break;\n            \n        case 'C':\n        case 'D':\n            cout << \"You passed\";\n            break;\n            \n        case 'F':\n            cout << \"Better try again\";\n            break;\n            \n        default:\n            cout << \"Invalid grade\";\n    }\n    \n    // Example 4: switch with enum\n    enum Color {RED, GREEN, BLUE};\n    Color color = GREEN;\n    \n    cout << \"\\n\\nColor: \";\n    switch(color) {\n        case RED: cout << \"Red\"; break;\n        case GREEN: cout << \"Green\"; break;\n        case BLUE: cout << \"Blue\"; break;\n    }\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "switch(expression)",
+                "english": "Evaluates expression once and compares with cases",
+                "hinglish": "Expression ko ek baar evaluate karta hai aur cases se compare karta hai",
+                "importance": "High",
+                "tip": "Expression must be integral type (int, char, enum)",
+                "role": "Multi-way decision",
+                "pros": "Cleaner than if-else ladder",
+                "cons": "Only works with discrete values",
+                "example": "switch(choice) {...}",
+                "use_case": "Menu systems, state machines"
+              },
+              {
+                "name": "case value:",
+                "english": "Code to execute if expression equals value",
+                "hinglish": "Code execute karega agar expression value ke barabar hai",
+                "importance": "High",
+                "tip": "Case values must be constants",
+                "role": "Define execution paths",
+                "pros": "Multiple options",
+                "cons": "No ranges allowed",
+                "example": "case 1: ... break;",
+                "use_case": "Specific value handling"
+              },
+              {
+                "name": "break;",
+                "english": "Exits the switch statement",
+                "hinglish": "Switch statement se bahar nikalta hai",
+                "importance": "Very High",
+                "tip": "Don't forget break or execution will \"fall through\"",
+                "role": "Prevent fall-through",
+                "pros": "Controls flow",
+                "cons": "Forgetting causes bugs",
+                "example": "case 1: cout << \"One\"; break;",
+                "use_case": "After each case (usually)"
+              },
+              {
+                "name": "default:",
+                "english": "Executes if no case matches",
+                "hinglish": "Execute karega agar koi case match nahi karta",
+                "importance": "Medium",
+                "tip": "Always include for error handling",
+                "role": "Handle unexpected values",
+                "pros": "Error handling",
+                "cons": "None",
+                "example": "default: cout << \"Invalid\";",
+                "use_case": "Error cases, invalid input"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Feature", "switch-case", "if-else if ladder"],
+              "rows": [
+                ["Expression Type", "Integral (int, char, enum)", "Any boolean expression"],
+                ["Readability", "Better for many discrete values", "Better for ranges"],
+                ["Performance", "Faster (jump table)", "Slower (sequential checks)"],
+                ["Ranges", "Not allowed", "Allowed (>, <, etc.)"],
+                ["Default Case", "Optional default:", "Optional else"],
+                ["Common Use", "Menus, state machines", "Complex conditions"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["Use switch-case when", "Use if-else when"],
+              "rows": [
+                ["Checking exact values (1, 2, 3)", "Checking ranges (age > 18)"],
+                ["Menu selection", "Multiple conditions (age > 18 && hasLicense)"],
+                ["Character input (+, -, *, /)", "Floating point comparisons"],
+                ["Enumerated types", "Complex boolean expressions"],
+                ["Performance matters", "Readability matters more"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 9,
+          "title": "Loops: for, while, do-while",
+          "english": "Loops execute a block of code repeatedly while a condition is true.",
+          "hinglish": "Loops ek block of code ko repeatedly execute karte hain jab tak condition true hai.",
+          "examples": [
+            "for(int i=0; i<5; i++) {\n    cout << i << endl;\n}",
+            "while(count < 10) {\n    count++;\n}",
+            "do {\n    cout << \"At least once\";\n} while(false);"
+          ],
+          "practice": [
+            {
+              "question": "Multiplication table (1-10) print karne ka program likho (for loop ka use karke)",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int num;\n    \n    cout << \"Enter a number: \";\n    cin >> num;\n    \n    cout << \"\\nMultiplication table of \" << num << \":\\n\";\n    \n    for(int i = 1; i <= 10; i++) {\n        cout << num << \" x \" << i << \" = \" << (num * i) << endl;\n    }\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"=== FOR LOOP EXAMPLES ===\\n\\n\";\n    \n    // 1. Basic for loop\n    cout << \"1. Counting 1 to 5:\\n\";\n    for(int i = 1; i <= 5; i++) {\n        cout << i << \" \";\n    }\n    cout << \"\\n\\n\";\n    \n    // 2. Reverse counting\n    cout << \"2. Reverse counting 5 to 1:\\n\";\n    for(int i = 5; i >= 1; i--) {\n        cout << i << \" \";\n    }\n    cout << \"\\n\\n\";\n    \n    // 3. Step by 2\n    cout << \"3. Even numbers 0 to 10:\\n\";\n    for(int i = 0; i <= 10; i += 2) {\n        cout << i << \" \";\n    }\n    cout << \"\\n\\n\";\n    \n    cout << \"=== WHILE LOOP EXAMPLES ===\\n\\n\";\n    \n    // 4. Basic while loop\n    cout << \"4. While loop (1 to 5):\\n\";\n    int count = 1;\n    while(count <= 5) {\n        cout << count << \" \";\n        count++;\n    }\n    cout << \"\\n\\n\";\n    \n    // 5. User-controlled while loop\n    cout << \"5. User input until negative:\\n\";\n    int number;\n    int sum = 0;\n    \n    cout << \"Enter numbers (negative to stop):\\n\";\n    cin >> number;\n    \n    while(number >= 0) {\n        sum += number;\n        cin >> number;\n    }\n    cout << \"Sum: \" << sum << \"\\n\\n\";\n    \n    cout << \"=== DO-WHILE LOOP EXAMPLES ===\\n\\n\";\n    \n    // 6. Basic do-while (executes at least once)\n    cout << \"6. Do-while (menu example):\\n\";\n    char choice;\n    \n    do {\n        cout << \"\\nMenu:\\n\";\n        cout << \"1. Say Hello\\n\";\n        cout << \"2. Say Goodbye\\n\";\n        cout << \"3. Exit\\n\";\n        cout << \"Enter choice: \";\n        cin >> choice;\n        \n        switch(choice) {\n            case '1': cout << \"Hello!\\n\"; break;\n            case '2': cout << \"Goodbye!\\n\"; break;\n            case '3': cout << \"Exiting...\\n\"; break;\n            default: cout << \"Invalid choice!\\n\";\n        }\n        \n    } while(choice != '3');\n    \n    // 7. Nested loops (pattern printing)\n    cout << \"\\n7. Nested loops (pattern):\\n\";\n    for(int i = 1; i <= 5; i++) {\n        for(int j = 1; j <= i; j++) {\n            cout << \"* \";\n        }\n        cout << endl;\n    }\n    \n    // 8. Infinite loop with break\n    cout << \"\\n8. Infinite loop with break:\\n\";\n    int counter = 0;\n    while(true) {  // Infinite loop\n        counter++;\n        if(counter > 5) {\n            break;  // Exit loop\n        }\n        cout << counter << \" \";\n    }\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "for loop",
+                "english": "Loop with initialization, condition, and increment",
+                "hinglish": "Initialization, condition, aur increment ke saath loop",
+                "importance": "Very High",
+                "tip": "Use when you know how many iterations",
+                "role": "Count-controlled repetition",
+                "pros": "Compact, all loop control in one line",
+                "cons": "Less flexible for unknown iterations",
+                "example": "for(int i=0; i<10; i++)",
+                "use_case": "Arrays, counting, known repetitions"
+              },
+              {
+                "name": "while loop",
+                "english": "Loop that repeats while condition is true",
+                "hinglish": "Loop jo repeat karta hai jab tak condition true hai",
+                "importance": "Very High",
+                "tip": "Check condition before execution",
+                "role": "Condition-controlled repetition",
+                "pros": "More flexible, condition checked first",
+                "cons": "Can be infinite if condition never false",
+                "example": "while(count < 10)",
+                "use_case": "User input, reading files, unknown iterations"
+              },
+              {
+                "name": "do-while loop",
+                "english": "Loop that executes at least once, then checks condition",
+                "hinglish": "Loop jo kam se kam ek baar execute hota hai, phir condition check karta hai",
+                "importance": "Medium",
+                "tip": "Use when code must run at least once",
+                "role": "Post-test loop",
+                "pros": "Guarantees one execution",
+                "cons": "Less common",
+                "example": "do { ... } while(condition);",
+                "use_case": "Menus, input validation"
+              },
+              {
+                "name": "Nested loops",
+                "english": "Loop inside another loop",
+                "hinglish": "Ek loop ke andar dusra loop",
+                "importance": "High",
+                "tip": "Inner loop completes all iterations for each outer iteration",
+                "role": "Multi-dimensional processing",
+                "pros": "Handles 2D data",
+                "cons": "Can be slow for large data",
+                "example": "for(i=0;i<3;i++) { for(j=0;j<3;j++) {...} }",
+                "use_case": "Patterns, matrices, grids"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Loop Type", "When to Use", "Execution", "Example"],
+              "rows": [
+                ["for", "Known iterations", "0 or more times", "for(i=0;i<n;i++)"],
+                ["while", "Unknown iterations", "0 or more times", "while(dataAvailable)"],
+                ["do-while", "At least once", "1 or more times", "do {...} while(choice!=3)"],
+                ["Range-based for", "Collections", "Each element", "for(auto x : array)"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["Situation", "Best Loop", "Reason"],
+              "rows": [
+                ["Count 1 to 100", "for", "Known number of iterations"],
+                ["Read until end of file", "while", "Unknown iterations"],
+                ["Display menu until exit", "do-while", "Must show menu once"],
+                ["Process 2D array", "Nested for", "Need rows and columns"],
+                ["Wait for user input", "while", "Condition-based"],
+                ["Process all elements", "Range-based for", "Simpler syntax"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 10,
+          "title": "Break, Continue, Goto",
+          "english": "Control statements that alter the normal flow of loops and switch statements.",
+          "hinglish": "Control statements jo loops aur switch statements ke normal flow ko alter karte hain.",
+          "examples": [
+            "break;    // Exit loop or switch",
+            "continue; // Skip to next iteration",
+            "goto label; // Jump to label"
+          ],
+          "practice": [
+            {
+              "question": "Ek program likho jo 1 se 20 tak numbers print kare, lekin 5 ke multiples skip kare aur agar number 13 aaye to loop break kar de",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    for(int i = 1; i <= 20; i++) {\n        // Check for unlucky number\n        if(i == 13) {\n            cout << \"\\nUnlucky number 13 found! Breaking loop.\" << endl;\n            break;  // Exit loop completely\n        }\n        \n        // Skip multiples of 5\n        if(i % 5 == 0) {\n            continue;  // Skip to next iteration\n        }\n        \n        cout << i << \" \";\n    }\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"=== BREAK STATEMENT ===\\n\\n\";\n    \n    // 1. break in for loop\n    cout << \"1. Breaking loop at 5:\\n\";\n    for(int i = 1; i <= 10; i++) {\n        if(i == 5) {\n            break;  // Exit loop when i becomes 5\n        }\n        cout << i << \" \";\n    }\n    cout << \"\\n(Loop stopped at 5)\\n\\n\";\n    \n    // 2. break in while loop\n    cout << \"2. Breaking while loop:\\n\";\n    int num = 1;\n    while(true) {  // Infinite loop\n        cout << num << \" \";\n        if(num == 3) {\n            break;  // Exit infinite loop\n        }\n        num++;\n    }\n    cout << \"\\n\\n\";\n    \n    // 3. break in nested loops\n    cout << \"3. Breaking nested loops:\\n\";\n    for(int i = 1; i <= 3; i++) {\n        for(int j = 1; j <= 3; j++) {\n            if(i == 2 && j == 2) {\n                cout << \"\\nBreaking at i=\" << i << \", j=\" << j;\n                break;  // Only breaks inner loop\n            }\n            cout << \"(\" << i << \",\" << j << \") \";\n        }\n    }\n    cout << \"\\n\\n\";\n    \n    cout << \"=== CONTINUE STATEMENT ===\\n\\n\";\n    \n    // 4. continue in for loop\n    cout << \"4. Skipping even numbers:\\n\";\n    for(int i = 1; i <= 10; i++) {\n        if(i % 2 == 0) {\n            continue;  // Skip even numbers\n        }\n        cout << i << \" \";  // Only odd numbers printed\n    }\n    cout << \"\\n\\n\";\n    \n    // 5. continue in while loop\n    cout << \"5. Skipping multiples of 3:\\n\";\n    int counter = 0;\n    while(counter < 10) {\n        counter++;\n        if(counter % 3 == 0) {\n            continue;  // Skip multiples of 3\n        }\n        cout << counter << \" \";\n    }\n    cout << \"\\n\\n\";\n    \n    cout << \"=== GOTO STATEMENT ===\\n\\n\";\n    \n    // 6. goto statement (use sparingly!)\n    cout << \"6. Goto example (emergency exit):\\n\";\n    int value;\n    \n    for(int i = 0; i < 3; i++) {\n        cout << \"Enter a positive number: \";\n        cin >> value;\n        \n        if(value < 0) {\n            cout << \"Negative number! Going to error handler.\\n\";\n            goto error_handler;  // Jump to label\n        }\n        cout << \"Good number: \" << value << \"\\n\";\n    }\n    \n    goto end_program;  // Skip error handler if no error\n    \n    // Label definition\n    error_handler:\n    cout << \"\\nERROR: Negative number entered!\\n\";\n    cout << \"Program terminated.\\n\";\n    return 1;  // Exit with error code\n    \n    end_program:\n    cout << \"\\nProgram completed successfully.\\n\";\n    \n    // 7. Practical use of break (searching)\n    cout << \"\\n7. Practical break (search in array):\\n\";\n    int numbers[] = {10, 20, 30, 40, 50};\n    int search = 30;\n    bool found = false;\n    \n    for(int i = 0; i < 5; i++) {\n        if(numbers[i] == search) {\n            cout << \"Found \" << search << \" at position \" << i << endl;\n            found = true;\n            break;  // Stop searching once found\n        }\n    }\n    \n    if(!found) {\n        cout << search << \" not found in array.\\n\";\n    }\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "break",
+                "english": "Terminates the loop or switch statement",
+                "hinglish": "Loop ya switch statement ko terminate karta hai",
+                "importance": "High",
+                "tip": "Only breaks innermost loop in nested loops",
+                "role": "Early exit from loops/switches",
+                "pros": "Efficient, stops unnecessary iterations",
+                "cons": "Can make code harder to follow",
+                "example": "if(found) break;",
+                "use_case": "Search algorithms, error conditions"
+              },
+              {
+                "name": "continue",
+                "english": "Skips current iteration and continues with next",
+                "hinglish": "Current iteration skip karta hai aur agle iteration se continue karta hai",
+                "importance": "Medium",
+                "tip": "In while/do-while, ensure loop variable updates",
+                "role": "Skip specific iterations",
+                "pros": "Avoids nested if statements",
+                "cons": "Can be confusing if overused",
+                "example": "if(error) continue;",
+                "use_case": "Skipping invalid data, filtering"
+              },
+              {
+                "name": "goto",
+                "english": "Jumps to a labeled statement",
+                "hinglish": "Labeled statement par jump karta hai",
+                "importance": "Low (avoid in modern code)",
+                "tip": "Use only for error handling or breaking nested loops",
+                "role": "Unconditional jump",
+                "pros": "Can break multiple nested loops",
+                "cons": "Makes code hard to read and debug",
+                "example": "goto cleanup;",
+                "use_case": "Error handling, deep nesting exit"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Statement", "Effect", "Where it Works", "Best Use"],
+              "rows": [
+                ["break", "Exits immediately", "Loops & switch", "Found what you're looking for"],
+                ["continue", "Skips to next iteration", "Loops only", "Skip invalid items"],
+                ["goto", "Jumps to label", "Anywhere in function", "Error handling (rare)"],
+                ["return", "Exits function", "Functions", "Return value/exit function"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["You Want To", "Use", "Alternative"],
+              "rows": [
+                ["Exit loop early", "break", "Change loop condition"],
+                ["Skip current item", "continue", "Put code in if statement"],
+                ["Exit nested loops", "goto (or flag)", "Use function with return"],
+                ["Handle errors", "goto or return", "Exception handling"],
+                ["Skip rest of iteration", "continue", "if-else statement"]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "level": "Absolute Beginner - Week 4",
+      "order": 4,
+      "description": "Functions, scope, and recursion",
+      "topics": [
+        {
+          "id": 11,
+          "title": "Function Declaration and Definition",
+          "english": "Functions are reusable blocks of code that perform specific tasks.",
+          "hinglish": "Functions reusable code blocks hain jo specific tasks perform karte hain.",
+          "examples": [
+            "// Declaration\nint add(int a, int b);\n\n// Definition\nint add(int a, int b) {\n    return a + b;\n}"
+          ],
+          "practice": [
+            {
+              "question": "Ek function banaye jo do numbers ka maximum return kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\n// Function declaration\nint findMax(int num1, int num2);\n\nint main() {\n    int a = 10, b = 20;\n    int maxNum = findMax(a, b);\n    cout << \"Maximum is: \" << maxNum << endl;\n    return 0;\n}\n\n// Function definition\nint findMax(int num1, int num2) {\n    if(num1 > num2) {\n        return num1;\n    } else {\n        return num2;\n    }\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\n// 1. FUNCTION DECLARATIONS (Prototypes)\n// These tell compiler about functions before they're defined\nint add(int a, int b);               // Takes 2 ints, returns int\nvoid greet(string name);             // Takes string, returns nothing\nfloat calculateAverage(int x, int y); // Takes 2 ints, returns float\nbool isEven(int number);             // Takes int, returns bool\n\nint main() {\n    cout << \"=== FUNCTION BASICS ===\\n\\n\";\n    \n    // Using functions\n    int sum = add(5, 3);\n    cout << \"5 + 3 = \" << sum << endl;\n    \n    greet(\"Rahul\");\n    \n    float avg = calculateAverage(10, 20);\n    cout << \"Average of 10 and 20: \" << avg << endl;\n    \n    if(isEven(7)) {\n        cout << \"7 is even\\n\";\n    } else {\n        cout << \"7 is odd\\n\";\n    }\n    \n    return 0;\n}\n\n// 2. FUNCTION DEFINITIONS\n// Actual implementation of functions\n\n// Function that returns a value\nint add(int a, int b) {\n    int result = a + b;\n    return result;  // Returns sum\n}\n\n// Void function (no return value)\nvoid greet(string name) {\n    cout << \"Hello, \" << name << \"!\\n\";\n    // No return statement needed for void\n}\n\n// Function with return statement\nfloat calculateAverage(int x, int y) {\n    return (x + y) / 2.0f;  // Direct return\n}\n\n// Function returning boolean\nbool isEven(int number) {\n    if(number % 2 == 0) {\n        return true;\n    } else {\n        return false;\n    }\n}\n\n// 3. MORE FUNCTION EXAMPLES\n\n// Function with default return\nint multiply(int a, int b) {\n    return a * b;\n}\n\n// Function that calls other functions\nint complexOperation(int x, int y) {\n    int sum = add(x, y);\n    int product = multiply(x, y);\n    return sum + product;\n}\n\n// Function without parameters\nvoid printLine() {\n    cout << \"------------------------\\n\";\n}\n\n// Function with multiple return statements\nstring getGrade(int marks) {\n    if(marks >= 90) return \"A\";\n    if(marks >= 75) return \"B\";\n    if(marks >= 50) return \"C\";\n    return \"F\";  // Default return\n}",
+            "components": [
+              {
+                "name": "Function Declaration",
+                "english": "Tells compiler about function name, parameters, and return type",
+                "hinglish": "Compiler ko batata hai function ka naam, parameters, aur return type",
+                "importance": "High",
+                "tip": "Also called function prototype",
+                "role": "Inform compiler about function",
+                "pros": "Allows calling before definition",
+                "cons": "Extra line of code",
+                "example": "int add(int a, int b);",
+                "use_case": "Header files, organizing code"
+              },
+              {
+                "name": "Function Definition",
+                "english": "Actual implementation of the function",
+                "hinglish": "Function ka actual implementation",
+                "importance": "Essential",
+                "tip": "Must match declaration exactly",
+                "role": "Define function behavior",
+                "pros": "Reusable code",
+                "cons": "None",
+                "example": "int add(int a, int b) { return a+b; }",
+                "use_case": "All functions"
+              },
+              {
+                "name": "Return Type",
+                "english": "Type of value function returns",
+                "hinglish": "Function jo value return karega uska type",
+                "importance": "High",
+                "tip": "Use void if function doesn't return anything",
+                "role": "Specify output type",
+                "pros": "Type safety",
+                "cons": "None",
+                "example": "int, float, void, bool",
+                "use_case": "All functions except void"
+              },
+              {
+                "name": "Parameters",
+                "english": "Input values passed to function",
+                "hinglish": "Function ko pass kiye gaye input values",
+                "importance": "High",
+                "tip": "Can have zero or more parameters",
+                "role": "Function inputs",
+                "pros": "Makes functions flexible",
+                "cons": "None",
+                "example": "(int a, int b)",
+                "use_case": "Functions that need input"
+              },
+              {
+                "name": "Return Statement",
+                "english": "Sends value back to caller",
+                "hinglish": "Value ko caller ko wapas bhejta hai",
+                "importance": "Essential for non-void",
+                "tip": "Function ends at return statement",
+                "role": "Provide function output",
+                "pros": "Provides result",
+                "cons": "None",
+                "example": "return result;",
+                "use_case": "End of function with value"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Function Type", "Return Type", "Parameters", "Example"],
+              "rows": [
+                ["Computational", "int, float, etc.", "Input values", "add(x, y)"],
+                ["Action", "void", "May have parameters", "printMessage()"],
+                ["Predicate", "bool", "Input to check", "isValid(email)"],
+                ["Accessor", "Type", "Usually none", "getBalance()"],
+                ["Mutator", "void", "Value to change", "setName(name)"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["When Creating Function", "Return Type", "Parameters"],
+              "rows": [
+                ["Calculate something", "Result type", "Input values needed"],
+                ["Display/output", "void", "What to display"],
+                ["Check condition", "bool", "Value to check"],
+                ["Get information", "Info type", "Usually none"],
+                ["Change something", "void or bool", "New value"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 12,
+          "title": "Parameters and Return Values",
+          "english": "Parameters are function inputs, return values are function outputs.",
+          "hinglish": "Parameters function ke inputs hain, return values function ke outputs hain.",
+          "examples": [
+            "int add(int a, int b) {  // a,b are parameters\n    return a + b;  // return value\n}",
+            "void print(string msg) {  // msg is parameter\n    cout << msg;  // no return value\n}"
+          ],
+          "practice": [
+            {
+              "question": "Ek function banaye jo circle ka area calculate kare (area = πr²). Function radius accept kare aur area return kare",
+              "answer": "#include <iostream>\n#include <cmath>\nusing namespace std;\n\nconst double PI = 3.14159;\n\ndouble circleArea(double radius) {\n    return PI * radius * radius;\n}\n\nint main() {\n    double r = 5.0;\n    double area = circleArea(r);\n    cout << \"Area of circle with radius \" << r << \" = \" << area << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <string>\nusing namespace std;\n\n// 1. Function with parameters and return value\nint multiply(int x, int y) {\n    return x * y;\n}\n\n// 2. Function without return value (void)\nvoid displayInfo(string name, int age) {\n    cout << \"Name: \" << name << endl;\n    cout << \"Age: \" << age << endl;\n}\n\n// 3. Function with default return\nstring getGrade(int marks) {\n    if(marks >= 90) return \"A+\";\n    if(marks >= 80) return \"A\";\n    if(marks >= 70) return \"B\";\n    if(marks >= 60) return \"C\";\n    if(marks >= 50) return \"D\";\n    return \"F\";\n}\n\n// 4. Function returning multiple values (using references)\nvoid getMinMax(int arr[], int size, int &min, int &max) {\n    min = arr[0];\n    max = arr[0];\n    \n    for(int i = 1; i < size; i++) {\n        if(arr[i] < min) min = arr[i];\n        if(arr[i] > max) max = arr[i];\n    }\n}\n\n// 5. Function with no parameters\nstring getCurrentTime() {\n    return \"10:30 AM\";  // Simplified example\n}\n\n// 6. Different parameter types\nfloat calculateBMI(float weight, float height) {\n    return weight / (height * height);\n}\n\n// 7. Function returning boolean\nbool isPrime(int n) {\n    if(n <= 1) return false;\n    for(int i = 2; i <= n/2; i++) {\n        if(n % i == 0) return false;\n    }\n    return true;\n}\n\n// 8. Function returning pointer\nint* createArray(int size) {\n    int* arr = new int[size];\n    for(int i = 0; i < size; i++) {\n        arr[i] = i * 10;\n    }\n    return arr;\n}\n\nint main() {\n    cout << \"=== PARAMETERS AND RETURN VALUES ===\\n\\n\";\n    \n    // Example 1: Basic parameters and return\n    int product = multiply(5, 6);\n    cout << \"1. 5 * 6 = \" << product << endl;\n    \n    // Example 2: Void function with parameters\n    cout << \"\\n2. Display function:\\n\";\n    displayInfo(\"Alice\", 25);\n    \n    // Example 3: String return\n    cout << \"\\n3. Grade for marks 85: \" << getGrade(85) << endl;\n    \n    // Example 4: Multiple return values\n    cout << \"\\n4. Min and Max in array:\\n\";\n    int numbers[] = {5, 2, 8, 1, 9, 3};\n    int minVal, maxVal;\n    getMinMax(numbers, 6, minVal, maxVal);\n    cout << \"Min: \" << minVal << \", Max: \" << maxVal << endl;\n    \n    // Example 5: No parameters\n    cout << \"\\n5. Current time: \" << getCurrentTime() << endl;\n    \n    // Example 6: Float parameters and return\n    cout << \"\\n6. BMI calculation:\\n\";\n    float bmi = calculateBMI(65.5, 1.75);\n    cout << \"BMI: \" << bmi << endl;\n    \n    // Example 7: Boolean return\n    cout << \"\\n7. Prime number check:\\n\";\n    int num = 17;\n    if(isPrime(num)) {\n        cout << num << \" is prime\\n\";\n    } else {\n        cout << num << \" is not prime\\n\";\n    }\n    \n    // Example 8: Pointer return\n    cout << \"\\n8. Array creation function:\\n\";\n    int* dynamicArray = createArray(5);\n    cout << \"Created array: \";\n    for(int i = 0; i < 5; i++) {\n        cout << dynamicArray[i] << \" \";\n    }\n    cout << endl;\n    delete[] dynamicArray;  // Clean up memory\n    \n    // Example 9: Using return value directly\n    cout << \"\\n9. Direct use of return value:\\n\";\n    cout << \"Square of 7: \" << multiply(7, 7) << endl;\n    \n    // Example 10: Conditional based on return\n    cout << \"\\n10. Conditional return usage:\\n\";\n    int score = 75;\n    string result = (score >= 50) ? \"Pass\" : \"Fail\";\n    cout << \"Score \" << score << \": \" << result << endl;\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Parameters",
+                "english": "Variables that receive values passed to function",
+                "hinglish": "Variables jo function ko pass kiye gaye values receive karte hain",
+                "importance": "High",
+                "tip": "Act as local variables inside function",
+                "role": "Function inputs",
+                "pros": "Make functions reusable",
+                "cons": "None",
+                "example": "(int a, int b)",
+                "use_case": "Passing data to functions"
+              },
+              {
+                "name": "Return Value",
+                "english": "Value sent back to function caller",
+                "hinglish": "Value jo function caller ko wapas bheji jati hai",
+                "importance": "High",
+                "tip": "Function ends when return is executed",
+                "role": "Function output",
+                "pros": "Provides results",
+                "cons": "Only one value directly",
+                "example": "return result;",
+                "use_case": "Sending back计算结果"
+              },
+              {
+                "name": "Void Return",
+                "english": "Function doesn't return any value",
+                "hinglish": "Function koi value return nahi karti",
+                "importance": "High",
+                "tip": "Can use return; without value to exit early",
+                "role": "Perform action only",
+                "pros": "For actions, not calculations",
+                "cons": "No result to use",
+                "example": "void print() {...}",
+                "use_case": "Display functions, setters"
+              },
+              {
+                "name": "Multiple Returns",
+                "english": "Function can have multiple return statements",
+                "hinglish": "Function ke multiple return statements ho sakte hain",
+                "importance": "Medium",
+                "tip": "First return encountered ends function",
+                "role": "Early exits",
+                "pros": "Clean code with early returns",
+                "cons": "Can be confusing",
+                "example": "if(error) return false;",
+                "use_case": "Error handling, conditions"
+              },
+              {
+                "name": "Reference Parameters",
+                "english": "Parameters that can modify original variables",
+                "hinglish": "Parameters jo original variables modify kar sakte hain",
+                "importance": "Medium",
+                "tip": "Use & before parameter name",
+                "role": "Return multiple values",
+                "pros": "Can modify arguments",
+                "cons": "Can cause side effects",
+                "example": "void swap(int &a, int &b)",
+                "use_case": "Modifying inputs, multiple outputs"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Parameter Type", "Effect on Argument", "Use When", "Example"],
+              "rows": [
+                ["Value parameter", "No change", "Input only", "int add(int a, int b)"],
+                ["Reference parameter", "Can change", "Output or modify", "void swap(int &a, int &b)"],
+                ["Const reference", "No change", "Large objects", "void print(const string &s)"],
+                ["Pointer parameter", "Can change", "Arrays, optional", "void init(int *arr)"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["You Want Function To", "Use Return Type", "Parameter Type"],
+              "rows": [
+                ["Calculate value", "Value type", "Value parameters"],
+                ["Modify arguments", "void or bool", "Reference parameters"],
+                ["Check condition", "bool", "Value parameters"],
+                ["Return multiple values", "void", "Reference parameters"],
+                ["Handle large data", "void or value", "Const reference"],
+                ["Be optional", "Value type", "Default parameters"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 13,
+          "title": "Function Overloading",
+          "english": "Multiple functions with same name but different parameters.",
+          "hinglish": "Ek hi naam ke multiple functions lekin different parameters ke saath.",
+          "examples": [
+            "int add(int a, int b) { return a+b; }\nfloat add(float a, float b) { return a+b; }\nint add(int a, int b, int c) { return a+b+c; }"
+          ],
+          "practice": [
+            {
+              "question": "Area calculate karne ke liye overloaded functions banaye: ek circle ke liye, ek rectangle ke liye, aur ek triangle ke liye",
+              "answer": "#include <iostream>\n#include <cmath>\nusing namespace std;\n\nconst double PI = 3.14159;\n\n// Circle area\ndouble area(double radius) {\n    return PI * radius * radius;\n}\n\n// Rectangle area\ndouble area(double length, double width) {\n    return length * width;\n}\n\n// Triangle area\ndouble area(double base, double height, string shape) {\n    if(shape == \"triangle\") {\n        return 0.5 * base * height;\n    }\n    return 0;\n}\n\nint main() {\n    cout << \"Circle area (radius 5): \" << area(5.0) << endl;\n    cout << \"Rectangle area (4x6): \" << area(4.0, 6.0) << endl;\n    cout << \"Triangle area (base 3, height 4): \" << area(3.0, 4.0, \"triangle\") << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <string>\nusing namespace std;\n\n// 1. Overloading by number of parameters\nint add(int a, int b) {\n    cout << \"add(int, int) called\\n\";\n    return a + b;\n}\n\nint add(int a, int b, int c) {\n    cout << \"add(int, int, int) called\\n\";\n    return a + b + c;\n}\n\nint add(int a, int b, int c, int d) {\n    cout << \"add(int, int, int, int) called\\n\";\n    return a + b + c + d;\n}\n\n// 2. Overloading by parameter types\nfloat add(float a, float b) {\n    cout << \"add(float, float) called\\n\";\n    return a + b;\n}\n\ndouble add(double a, double b) {\n    cout << \"add(double, double) called\\n\";\n    return a + b;\n}\n\n// 3. Overloading with mixed types\nstring add(string a, string b) {\n    cout << \"add(string, string) called\\n\";\n    return a + b;  // String concatenation\n}\n\n// 4. Overloading display functions\nvoid display(int value) {\n    cout << \"Integer: \" << value << endl;\n}\n\nvoid display(double value) {\n    cout << \"Double: \" << value << endl;\n}\n\nvoid display(string value) {\n    cout << \"String: \" << value << endl;\n}\n\nvoid display(int value1, int value2) {\n    cout << \"Two integers: \" << value1 << \", \" << value2 << endl;\n}\n\n// 5. Practical example: Calculator operations\nint calculate(int a, int b) {\n    return a + b;  // Default: addition\n}\n\nint calculate(int a, int b, char op) {\n    switch(op) {\n        case '+': return a + b;\n        case '-': return a - b;\n        case '*': return a * b;\n        case '/': return a / b;\n        default: return 0;\n    }\n}\n\nfloat calculate(float a, float b, char op) {\n    switch(op) {\n        case '+': return a + b;\n        case '-': return a - b;\n        case '*': return a * b;\n        case '/': return a / b;\n        default: return 0;\n    }\n}\n\n// 6. Constructor-like functions\nvoid initialize(int value) {\n    cout << \"Initialized with int: \" << value << endl;\n}\n\nvoid initialize(string value) {\n    cout << \"Initialized with string: \" << value << endl;\n}\n\nvoid initialize(int value1, string value2) {\n    cout << \"Initialized with int and string: \" << value1 << \", \" << value2 << endl;\n}\n\nint main() {\n    cout << \"=== FUNCTION OVERLOADING ===\\n\\n\";\n    \n    // Example 1: Different number of parameters\n    cout << \"1. Different parameter counts:\\n\";\n    cout << \"add(5, 3) = \" << add(5, 3) << endl;\n    cout << \"add(1, 2, 3) = \" << add(1, 2, 3) << endl;\n    cout << \"add(1, 2, 3, 4) = \" << add(1, 2, 3, 4) << endl;\n    \n    // Example 2: Different parameter types\n    cout << \"\\n2. Different parameter types:\\n\";\n    cout << \"add(5.5f, 3.2f) = \" << add(5.5f, 3.2f) << endl;\n    cout << \"add(5.5, 3.2) = \" << add(5.5, 3.2) << endl;\n    \n    // Example 3: String concatenation\n    cout << \"\\n3. String concatenation:\\n\";\n    cout << \"add(\\\"Hello\\\", \\\" World\\\") = \" << add(\"Hello\", \" World\") << endl;\n    \n    // Example 4: Display function overload\n    cout << \"\\n4. Display function overload:\\n\";\n    display(42);\n    display(3.14159);\n    display(\"Overloading example\");\n    display(10, 20);\n    \n    // Example 5: Calculator operations\n    cout << \"\\n5. Calculator overload:\\n\";\n    cout << \"calculate(10, 5) = \" << calculate(10, 5) << endl;\n    cout << \"calculate(10, 5, '+') = \" << calculate(10, 5, '+') << endl;\n    cout << \"calculate(10.5f, 2.5f, '*') = \" << calculate(10.5f, 2.5f, '*') << endl;\n    \n    // Example 6: Initialization functions\n    cout << \"\\n6. Initialization overload:\\n\";\n    initialize(100);\n    initialize(\"Test\");\n    initialize(50, \"Items\");\n    \n    // Example 7: Automatic type conversion\n    cout << \"\\n7. Type conversion in overloading:\\n\";\n    // int version will be called for char (ASCII value)\n    cout << \"add('A', 'B') = \" << add('A', 'B') << endl;  // 65 + 66 = 131\n    \n    // Example 8: Default arguments vs overloading\n    cout << \"\\n8. Default arguments alternative:\\n\";\n    // Instead of multiple overloads, you could use:\n    // int add(int a, int b, int c = 0, int d = 0) { ... }\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Number of Parameters",
+                "english": "Functions differ in how many parameters they take",
+                "hinglish": "Functions alag hain ki ve kitne parameters lete hain",
+                "importance": "High",
+                "tip": "Most common type of overloading",
+                "role": "Handle different argument counts",
+                "pros": "Flexible API",
+                "cons": "Can be confusing",
+                "example": "add(a,b) vs add(a,b,c)",
+                "use_case": "Default values alternative"
+              },
+              {
+                "name": "Type of Parameters",
+                "english": "Functions differ in parameter data types",
+                "hinglish": "Functions alag hain unke parameter data types mein",
+                "importance": "High",
+                "tip": "Compiler chooses based on argument types",
+                "role": "Handle different data types",
+                "pros": "Type-safe operations",
+                "cons": "Many similar functions",
+                "example": "add(int,int) vs add(float,float)",
+                "use_case": "Generic operations"
+              },
+              {
+                "name": "Order of Parameters",
+                "english": "Functions differ in parameter order",
+                "hinglish": "Functions alag hain unke parameter order mein",
+                "importance": "Low",
+                "tip": "Rarely used intentionally",
+                "role": "Different semantics",
+                "pros": "Can create different meanings",
+                "cons": "Very confusing",
+                "example": "process(int,string) vs process(string,int)",
+                "use_case": "Specialized APIs"
+              },
+              {
+                "name": "Return Type",
+                "english": "NOT used for overloading (must differ in parameters)",
+                "hinglish": "Overloading ke liye use NAHI hota (parameters alag hone chahiye)",
+                "importance": "Important note",
+                "tip": "Can't overload based only on return type",
+                "role": "Not applicable",
+                "pros": "NA",
+                "cons": "Compiler error if tried",
+                "example": "int get() vs float get() // ERROR!",
+                "use_case": "Not allowed"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Overloading Method", "How They Differ", "Example", "Common Use"],
+              "rows": [
+                ["Parameter Count", "Number of parameters", "print(a) vs print(a,b)", "Default values alternative"],
+                ["Parameter Type", "Data types", "add(int,int) vs add(double,double)", "Type-specific operations"],
+                ["Parameter Order", "Sequence of types", "process(int,str) vs process(str,int)", "Rare, specialized"],
+                ["Const-ness", "Const qualifier", "get() vs get() const", "Member functions"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["When to Use Overloading", "When to Use Default Arguments", "When to Use Templates"],
+              "rows": [
+                ["Different logic needed", "Same logic, optional params", "Same logic, any type"],
+                ["Different parameter types", "Missing params have defaults", "Generic algorithms"],
+                ["Different behaviors", "Convenience for caller", "Container classes"],
+                ["Readability important", "Backward compatibility", "Library code"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 14,
+          "title": "Recursion Basics",
+          "english": "Function that calls itself to solve smaller instances of same problem.",
+          "hinglish": "Function jo apne aap ko call karta hai same problem ke chote instances solve karne ke liye.",
+          "examples": [
+            "int factorial(int n) {\n    if(n <= 1) return 1;\n    return n * factorial(n-1);\n}",
+            "void countdown(int n) {\n    if(n == 0) return;\n    cout << n << endl;\n    countdown(n-1);\n}"
+          ],
+          "practice": [
+            {
+              "question": "Fibonacci series ka recursion use karke program likho. Fibonacci: F(0)=0, F(1)=1, F(n)=F(n-1)+F(n-2)",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint fibonacci(int n) {\n    // Base cases\n    if(n == 0) return 0;\n    if(n == 1) return 1;\n    \n    // Recursive case\n    return fibonacci(n-1) + fibonacci(n-2);\n}\n\nint main() {\n    int n;\n    cout << \"Enter n: \";\n    cin >> n;\n    \n    cout << \"Fibonacci series first \" << n << \" terms:\\n\";\n    for(int i = 0; i < n; i++) {\n        cout << fibonacci(i) << \" \";\n    }\n    cout << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\n// 1. FACTORIAL (Classic recursion example)\n// n! = n * (n-1) * (n-2) * ... * 1\nint factorial(int n) {\n    // Base case: stopping condition\n    if(n <= 1) {\n        cout << \"Base case: factorial(1) = 1\\n\";\n        return 1;\n    }\n    \n    // Recursive case: function calls itself\n    cout << \"Calculating factorial(\" << n << \") = \" << n << \" * factorial(\" << n-1 << \")\\n\";\n    int result = n * factorial(n - 1);\n    cout << \"Returning factorial(\" << n << \") = \" << result << \"\\n\";\n    return result;\n}\n\n// 2. POWER CALCULATION\n// x^n = x * x^(n-1)\ndouble power(double x, int n) {\n    // Base cases\n    if(n == 0) return 1;\n    if(n == 1) return x;\n    \n    // Recursive case\n    return x * power(x, n - 1);\n}\n\n// 3. COUNTDOWN\nvoid countdown(int n) {\n    // Base case\n    if(n < 0) {\n        cout << \"Blast off!\\n\";\n        return;\n    }\n    \n    // Action\n    cout << n << \"...\\n\";\n    \n    // Recursive call\n    countdown(n - 1);\n}\n\n// 4. SUM OF DIGITS\nint sumOfDigits(int n) {\n    // Base case: single digit\n    if(n < 10) return n;\n    \n    // Recursive case: last digit + sum of remaining digits\n    return (n % 10) + sumOfDigits(n / 10);\n}\n\n// 5. GCD (Greatest Common Divisor) using Euclid's algorithm\nint gcd(int a, int b) {\n    // Base case\n    if(b == 0) return a;\n    \n    // Recursive case\n    return gcd(b, a % b);\n}\n\n// 6. REVERSE STRING\nvoid reverseString(string &str, int start, int end) {\n    // Base case: reached middle\n    if(start >= end) return;\n    \n    // Swap characters\n    swap(str[start], str[end]);\n    \n    // Recursive call\n    reverseString(str, start + 1, end - 1);\n}\n\n// 7. TOWER OF HANOI\nvoid towerOfHanoi(int n, char from, char to, char aux) {\n    // Base case: only one disk\n    if(n == 1) {\n        cout << \"Move disk 1 from \" << from << \" to \" << to << endl;\n        return;\n    }\n    \n    // Move n-1 disks from 'from' to 'aux' using 'to'\n    towerOfHanoi(n - 1, from, aux, to);\n    \n    // Move remaining disk from 'from' to 'to'\n    cout << \"Move disk \" << n << \" from \" << from << \" to \" << to << endl;\n    \n    // Move n-1 disks from 'aux' to 'to' using 'from'\n    towerOfHanoi(n - 1, aux, to, from);\n}\n\n// 8. BINARY SEARCH (recursive)\nint binarySearch(int arr[], int low, int high, int target) {\n    // Base case: element not found\n    if(low > high) return -1;\n    \n    int mid = low + (high - low) / 2;\n    \n    // Base case: element found\n    if(arr[mid] == target) return mid;\n    \n    // Recursive cases\n    if(arr[mid] > target) {\n        return binarySearch(arr, low, mid - 1, target);\n    } else {\n        return binarySearch(arr, mid + 1, high, target);\n    }\n}\n\nint main() {\n    cout << \"=== RECURSION BASICS ===\\n\\n\";\n    \n    // Example 1: Factorial\n    cout << \"1. Factorial of 5:\\n\";\n    int fact = factorial(5);\n    cout << \"Result: \" << fact << \"\\n\\n\";\n    \n    // Example 2: Power\n    cout << \"2. 2^5 = \" << power(2, 5) << \"\\n\\n\";\n    \n    // Example 3: Countdown\n    cout << \"3. Countdown from 5:\\n\";\n    countdown(5);\n    cout << endl;\n    \n    // Example 4: Sum of digits\n    cout << \"4. Sum of digits of 12345 = \" << sumOfDigits(12345) << \"\\n\\n\";\n    \n    // Example 5: GCD\n    cout << \"5. GCD of 48 and 18 = \" << gcd(48, 18) << \"\\n\\n\";\n    \n    // Example 6: Reverse string\n    string text = \"Hello\";\n    cout << \"6. Reverse string:\\n\";\n    cout << \"Original: \" << text << endl;\n    reverseString(text, 0, text.length() - 1);\n    cout << \"Reversed: \" << text << \"\\n\\n\";\n    \n    // Example 7: Tower of Hanoi\n    cout << \"7. Tower of Hanoi (3 disks):\\n\";\n    towerOfHanoi(3, 'A', 'C', 'B');\n    cout << endl;\n    \n    // Example 8: Binary search\n    cout << \"8. Binary search:\\n\";\n    int sortedArray[] = {2, 5, 8, 12, 16, 23, 38, 56, 72, 91};\n    int target = 23;\n    int index = binarySearch(sortedArray, 0, 9, target);\n    if(index != -1) {\n        cout << \"Found \" << target << \" at index \" << index << endl;\n    } else {\n        cout << target << \" not found\\n\";\n    }\n    \n    // Example 9: Recursion vs Iteration\n    cout << \"\\n9. Recursion Characteristics:\\n\";\n    cout << \"- Must have base case(s)\\n\";\n    cout << \"- Must progress toward base case\\n\";\n    cout << \"- Function calls itself\\n\";\n    \n    return 0;\n}",
+            "components": [
+              {
+                "name": "Base Case",
+                "english": "Condition that stops recursion",
+                "hinglish": "Condition jo recursion ko rokta hai",
+                "importance": "Critical",
+                "tip": "Without base case, infinite recursion occurs",
+                "role": "Stop recursion",
+                "pros": "Prevents infinite loops",
+                "cons": "Must be correctly defined",
+                "example": "if(n == 0) return 1;",
+                "use_case": "All recursive functions"
+              },
+              {
+                "name": "Recursive Case",
+                "english": "Part where function calls itself",
+                "hinglish": "Wo part jahan function apne aap ko call karta hai",
+                "importance": "Critical",
+                "tip": "Must progress toward base case",
+                "role": "Solve smaller subproblem",
+                "pros": "Elegant solution",
+                "cons": "Can be inefficient",
+                "example": "return n * factorial(n-1);",
+                "use_case": "All recursive functions"
+              },
+              {
+                "name": "Call Stack",
+                "english": "Memory area storing function calls",
+                "hinglish": "Memory area jo function calls store karta hai",
+                "importance": "High",
+                "tip": "Deep recursion can cause stack overflow",
+                "role": "Track recursion depth",
+                "pros": "Automatic management",
+                "cons": "Limited size",
+                "example": "Each call adds to stack",
+                "use_case": "All function calls"
+              },
+              {
+                "name": "Tail Recursion",
+                "english": "Recursive call is last operation",
+                "hinglish": "Recursive call last operation hai",
+                "importance": "Medium",
+                "tip": "Can be optimized by compiler",
+                "role": "Efficient recursion",
+                "pros": "Less stack usage",
+                "cons": "Not always possible",
+                "example": "return func(n-1);",
+                "use_case": "Optimized recursion"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Recursion Type", "Characteristics", "Example", "When to Use"],
+              "rows": [
+                ["Direct", "Calls itself directly", "factorial(n)", "Simple problems"],
+                ["Indirect", "A calls B, B calls A", "mutual recursion", "Complex relationships"],
+                ["Tail", "Last operation is recursive", "gcd(a,b)", "Optimization needed"],
+                ["Tree", "Multiple recursive calls", "fibonacci(n)", "Divide and conquer"],
+                ["Nested", "Recursive within recursive", "complex algorithms", "Advanced problems"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["Use Recursion When", "Use Iteration When", "Consider Both"],
+              "rows": [
+                ["Problem naturally recursive", "Performance critical", "Problem can be both"],
+                ["Tree/graph traversal", "Simple looping", "Code clarity matters"],
+                ["Divide and conquer", "Memory limited", "Team preference"],
+                ["Backtracking", "Deep recursion risk", "Maintainability"]
+              ]
+            }
+          }
+        },
+        {
+          "id": 15,
+          "title": "Scope and Lifetime of Variables",
+          "english": "Scope determines where a variable can be accessed. Lifetime determines how long it exists in memory.",
+          "hinglish": "Scope determine karta hai ki variable kahan access ho sakta hai. Lifetime determine karta hai ki memory mein kitni der tak exist karega.",
+          "examples": [
+            "int global;  // Global scope\n\nvoid func() {\n    int local;  // Local scope\n    static int persistent;  // Static lifetime\n}"
+          ],
+          "practice": [
+            {
+              "question": "Ek program likho jo different scopes ke variables demonstrate kare: global, local, function parameters, aur static variables",
+              "answer": "#include <iostream>\nusing namespace std;\n\n// Global variable - accessible everywhere\nint globalCounter = 0;\n\nvoid demonstrateScope(int param) {  // param is function parameter scope\n    // Local variable - accessible only in this function\n    int localVar = 10;\n    \n    // Static variable - persists between function calls\n    static int staticVar = 0;\n    staticVar++;\n    \n    // Block scope (inside {})\n    {\n        int blockVar = 20;  // Only accessible in this block\n        cout << \"Inside block: blockVar = \" << blockVar << endl;\n    }\n    // blockVar is not accessible here\n    \n    cout << \"In function: localVar = \" << localVar << endl;\n    cout << \"In function: param = \" << param << endl;\n    cout << \"In function: staticVar = \" << staticVar << endl;\n    cout << \"In function: globalCounter = \" << globalCounter << endl;\n    \n    globalCounter++;  // Can modify global variable\n}\n\nint main() {\n    // Can access global variable\n    cout << \"Global in main: \" << globalCounter << endl;\n    \n    // Call function multiple times\n    demonstrateScope(5);\n    demonstrateScope(10);\n    demonstrateScope(15);\n    \n    // Check global after function calls\n    cout << \"Global after calls: \" << globalCounter << endl;\n    \n    // localVar and param are NOT accessible here\n    // cout << localVar;  // ERROR!\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\n// ====================\n// GLOBAL SCOPE\n// ====================\nint globalVar = 100;           // Global variable\nconst int MAX_SIZE = 100;      // Global constant\nvoid demoFunction();           // Function declaration (global scope)\n\n// ====================\n// NAMESPACE SCOPE\n// ====================\nnamespace MyNamespace {\n    int nsVar = 200;           // Namespace variable\n}\n\nint main() {\n    cout << \"=== SCOPE AND LIFETIME ===\\n\\n\";\n    \n    // ====================\n    // LOCAL SCOPE (function)\n    // ====================\n    int localMain = 10;        // Local to main()\n    \n    cout << \"1. Local variable in main: \" << localMain << endl;\n    cout << \"2. Global variable: \" << globalVar << endl;\n    cout << \"3. Namespace variable: \" << MyNamespace::nsVar << \"\\n\\n\";\n    \n    // ====================\n    // BLOCK SCOPE\n    // ====================\n    {\n        int blockVar = 50;     // Only in this block\n        cout << \"4. Inside block: \" << blockVar << endl;\n        \n        // Can access outer scope variables\n        localMain = 20;        // Modify main's local\n        globalVar = 150;       // Modify global\n    }\n    // blockVar is destroyed here\n    // cout << blockVar; // ERROR! Not accessible\n    \n    cout << \"5. After block, localMain: \" << localMain << endl;\n    cout << \"6. After block, globalVar: \" << globalVar << \"\\n\\n\";\n    \n    // ====================\n    // FUNCTION PARAMETER SCOPE\n    // ====================\n    demoFunction();            // Call demo function\n    demoFunction();            // Call again\n    \n    // ====================\n    // LOOP SCOPE\n    // ====================\n    cout << \"\\n7. Loop scope example:\\n\";\n    for(int i = 0; i < 3; i++) {  // i is in loop scope\n        int loopLocal = i * 10;   // Created each iteration\n        cout << \"   Iteration \" << i << \": loopLocal = \" << loopLocal << endl;\n    }\n    // i and loopLocal are destroyed here\n    \n    // ====================\n    // SAME NAME DIFFERENT SCOPES\n    // ====================\n    cout << \"\\n8. Variable shadowing:\\n\";\n    int value = 5;\n    cout << \"   Outer value: \" << value << endl;\n    \n    {   // Inner block\n        int value = 10;        // Shadows outer value\n        cout << \"   Inner value: \" << value << endl;\n    }\n    cout << \"   Outer value still: \" << value << \"\\n\\n\";\n    \n    // ====================\n    // LIFETIME EXAMPLES\n    // ====================\n    cout << \"9. Lifetime examples:\\n\";\n    \n    // Automatic (default) - destroyed when out of scope\n    auto int autoVar = 30;     // Same as: int autoVar = 30;\n    cout << \"   Automatic variable: \" << autoVar << endl;\n    \n    // Register (suggestion to store in register)\n    register int regVar = 40;  // Compiler may ignore\n    cout << \"   Register variable: \" << regVar << endl;\n    \n    // ====================\n    // CONSTANTS\n    // ====================\n    cout << \"\\n10. Constants:\\n\";\n    const int localConst = 99;\n    cout << \"   Local constant: \" << localConst << endl;\n    cout << \"   Global constant: \" << MAX_SIZE << endl;\n    \n    // ====================\n    // SCOPE RESOLUTION\n    // ====================\n    cout << \"\\n11. Scope resolution operator (::):\\n\";\n    int globalVar = 999;       // Shadows global globalVar\n    cout << \"   Local globalVar: \" << globalVar << endl;\n    cout << \"   Global globalVar: \" << ::globalVar << endl;\n    \n    return 0;\n}\n\n// ====================\n// FUNCTION SCOPE\n// ====================\nvoid demoFunction() {\n    // Function parameters and local variables\n    static int staticCounter = 0;  // Static lifetime\n    int localCounter = 0;          // Automatic lifetime\n    \n    staticCounter++;   // Persists between calls\n    localCounter++;    // Reset each call\n    \n    cout << \"   Static counter: \" << staticCounter;\n    cout << \", Local counter: \" << localCounter << endl;\n    \n    // Can access global variables\n    globalVar += 10;\n    cout << \"   GlobalVar in function: \" << globalVar << endl;\n}\n\n// ====================\n// CLASS SCOPE\n// ====================\nclass MyClass {\nprivate:\n    int privateVar;    // Class scope, private\n    \npublic:\n    static int classVar;  // Static class variable\n    void setVar(int v) {  // Member function\n        privateVar = v;   // Can access privateVar\n    }\n    int getVar() {\n        return privateVar;\n    }\n};\n\n// Initialize static class variable\nint MyClass::classVar = 0;",
+            "components": [
+              {
+                "name": "Global Scope",
+                "english": "Variable accessible from anywhere in program",
+                "hinglish": "Variable program mein kahin se bhi accessible",
+                "importance": "Medium",
+                "tip": "Avoid overuse - can lead to spaghetti code",
+                "role": "Share data across modules",
+                "pros": "Easy access",
+                "cons": "Hard to debug, testing issues",
+                "example": "int globalVar;",
+                "use_case": "Constants, configuration"
+              },
+              {
+                "name": "Local/Function Scope",
+                "english": "Variable accessible only within function",
+                "hinglish": "Variable sirf function ke andar accessible",
+                "importance": "Very High",
+                "tip": "Default scope - use for most variables",
+                "role": "Temporary storage",
+                "pros": "Encapsulation, easier debugging",
+                "cons": "Limited lifetime",
+                "example": "void func() { int local; }",
+                "use_case": "Most function variables"
+              },
+              {
+                "name": "Block Scope",
+                "english": "Variable accessible only within { } block",
+                "hinglish": "Variable sirf { } block ke andar accessible",
+                "importance": "High",
+                "tip": "Use to limit variable visibility",
+                "role": "Limit variable lifetime",
+                "pros": "Memory efficiency",
+                "cons": "None",
+                "example": "{ int blockVar; }",
+                "use_case": "Loops, conditionals"
+              },
+              {
+                "name": "Static Lifetime",
+                "english": "Variable persists for program duration",
+                "hinglish": "Variable pure program ke duration tak exist karta hai",
+                "importance": "Medium",
+                "tip": "Initialized only once",
+                "role": "Persistent data",
+                "pros": "Maintains value",
+                "cons": "Memory always occupied",
+                "example": "static int counter;",
+                "use_case": "Counters, caches"
+              },
+              {
+                "name": "Automatic Lifetime",
+                "english": "Variable created/destroyed automatically",
+                "hinglish": "Variable automatically create/destroy hota hai",
+                "importance": "Very High",
+                "tip": "Default lifetime for local variables",
+                "role": "Temporary storage",
+                "pros": "Memory efficient",
+                "cons": "Lost when out of scope",
+                "example": "int autoVar;",
+                "use_case": "Most variables"
+              }
+            ],
+            "comparison_table": {
+              "headers": ["Scope Type", "Where Accessible", "Lifetime", "Example"],
+              "rows": [
+                ["Global", "Entire program", "Program duration", "int global;"],
+                ["Local/Function", "Within function", "Function execution", "void f() { int x; }"],
+                ["Block", "Within { }", "Block execution", "{ int y; }"],
+                ["Class", "Class members", "Object lifetime", "class C { int z; };"],
+                ["Namespace", "Namespace", "Program duration", "namespace N { int a; }"]
+              ]
+            },
+            "decision_table": {
+              "headers": ["You Need Variable That", "Use Scope", "Lifetime"],
+              "rows": [
+                ["Many functions use", "Global (avoid if possible)", "Static"],
+                ["Only one function uses", "Local/Function", "Automatic"],
+                ["Only loop/block uses", "Block", "Automatic"],
+                ["Keep value between calls", "Local with static", "Static"],
+                ["Shared by class objects", "Class static", "Static"],
+                ["Only current object uses", "Class member", "Object lifetime"]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "level": "Core Concepts - Week 5",
+      "order": 5,
+      "description": "Arrays and strings fundamentals",
+      "topics": [
+        {
+          "id": 16,
+          "title": "One-dimensional Arrays",
+          "english": "Arrays are collections of elements of the same type stored in contiguous memory locations.",
+          "hinglish": "Arrays ek hi type ke elements ka collection hai jo contiguous memory locations mein store hote hain.",
+          "examples": [
+            "int marks[5] = {85, 90, 78, 92, 88};",
+            "float prices[3] = {99.99, 49.50, 199.00};",
+            "char vowels[5] = {'a', 'e', 'i', 'o', 'u'};"
+          ],
+          "practice": [
+            {
+              "question": "Ek array banaye jo 5 students ke marks store kare. Phir average marks calculate kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int marks[5] = {85, 90, 78, 92, 88};\n    int total = 0;\n    \n    for(int i = 0; i < 5; i++) {\n        total += marks[i];\n    }\n    \n    float average = total / 5.0;\n    cout << \"Total marks: \" << total << endl;\n    cout << \"Average marks: \" << average << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[3] = {10, 20, 30};\n    \n    cout << \"First: \" << arr[0] << endl;\n    cout << \"Second: \" << arr[1] << endl;\n    \n    arr[2] = 40;\n    cout << \"Modified: \" << arr[2] << endl;\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 17,
+          "title": "Multi-dimensional Arrays",
+          "english": "Arrays with multiple indices, commonly used for matrices and tables.",
+          "hinglish": "Multiple indices wale arrays, commonly matrices aur tables ke liye use hote hain.",
+          "examples": [
+            "int matrix[2][3] = {{1,2,3}, {4,5,6}};",
+            "char tictactoe[3][3];",
+            "float temp[7][24]; // 7 days x 24 hours"
+          ],
+          "practice": [
+            {
+              "question": "2x3 matrix ka sum calculate kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int matrix[2][3] = {{1,2,3}, {4,5,6}};\n    int sum = 0;\n    \n    for(int i=0; i<2; i++) {\n        for(int j=0; j<3; j++) {\n            sum += matrix[i][j];\n        }\n    }\n    \n    cout << \"Total sum: \" << sum << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int matrix[2][2] = {{1,2}, {3,4}};\n    \n    cout << \"Element [0][1]: \" << matrix[0][1] << endl;\n    \n    matrix[1][0] = 9;\n    cout << \"Modified: \" << matrix[1][0] << endl;\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 18,
+          "title": "C-style Strings",
+          "english": "Character arrays terminated by null character '\\0'.",
+          "hinglish": "Character arrays jo null character '\\0' se terminate hote hain.",
+          "examples": [
+            "char name[] = \"John\";",
+            "char greeting[6] = {'H','e','l','l','o','\\0'};",
+            "char message[50];"
+          ],
+          "practice": [
+            {
+              "question": "C-style string input le aur uska length calculate kare",
+              "answer": "#include <iostream>\n#include <cstring>\nusing namespace std;\n\nint main() {\n    char name[50];\n    cout << \"Enter name: \";\n    cin.getline(name, 50);\n    \n    int length = strlen(name);\n    cout << \"Length: \" << length << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    char name[] = \"Hello\";\n    cout << name << endl;\n    \n    name[0] = 'J';\n    cout << name << endl;\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Core Concepts - Week 6",
+      "order": 6,
+      "description": "String manipulation and basic algorithms",
+      "topics": [
+        {
+          "id": 19,
+          "title": "String Manipulation Functions",
+          "english": "Built-in functions for string operations from <cstring> library.",
+          "hinglish": "<cstring> library ke built-in functions string operations ke liye.",
+          "examples": [
+            "strlen(s) - string length",
+            "strcpy(dest, src) - copy string",
+            "strcat(s1, s2) - concatenate strings",
+            "strcmp(s1, s2) - compare strings"
+          ],
+          "practice": [
+            {
+              "question": "Do strings ko concatenate kare aur result display kare",
+              "answer": "#include <iostream>\n#include <cstring>\nusing namespace std;\n\nint main() {\n    char str1[50] = \"Hello \";\n    char str2[] = \"World!\";\n    \n    strcat(str1, str2);\n    cout << \"Result: \" << str1 << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <cstring>\nusing namespace std;\n\nint main() {\n    char s1[20] = \"Hello\";\n    char s2[20] = \"World\";\n    \n    strcat(s1, \" \");\n    strcat(s1, s2);\n    cout << s1 << endl;\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 20,
+          "title": "Basic Algorithms",
+          "english": "Fundamental searching and sorting algorithms.",
+          "hinglish": "Basic searching aur sorting algorithms.",
+          "examples": [
+            "Linear search - element ko sequentially search karna",
+            "Bubble sort - adjacent elements ko swap karna"
+          ],
+          "practice": [
+            {
+              "question": "Linear search ka program likhe",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[5] = {10, 20, 30, 40, 50};\n    int target = 30;\n    \n    for(int i=0; i<5; i++) {\n        if(arr[i] == target) {\n            cout << \"Found at index: \" << i << endl;\n            return 0;\n        }\n    }\n    \n    cout << \"Not found\" << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[5] = {5, 3, 4, 1, 2};\n    \n    // Bubble sort\n    for(int i=0; i<4; i++) {\n        for(int j=0; j<4-i; j++) {\n            if(arr[j] > arr[j+1]) {\n                int temp = arr[j];\n                arr[j] = arr[j+1];\n                arr[j+1] = temp;\n            }\n        }\n    }\n    \n    cout << \"Sorted: \";\n    for(int i=0; i<5; i++) {\n        cout << arr[i] << \" \";\n    }\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Core Concepts - Week 7",
+      "order": 7,
+      "description": "Pointers and memory management",
+      "topics": [
+        {
+          "id": 21,
+          "title": "Pointer Basics",
+          "english": "Variables that store memory addresses.",
+          "hinglish": "Variables jo memory addresses store karte hain.",
+          "examples": [
+            "int* ptr; // pointer declaration",
+            "&var // address of operator",
+            "*ptr // dereference operator"
+          ],
+          "practice": [
+            {
+              "question": "Pointer ka use karke variable ki value change kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int x = 10;\n    int* ptr = &x;\n    \n    cout << \"Original: \" << x << endl;\n    *ptr = 20;\n    cout << \"Modified: \" << x << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int x = 10;\n    int* ptr = &x;\n    \n    cout << \"Value: \" << *ptr << endl;\n    cout << \"Address: \" << ptr << endl;\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 22,
+          "title": "Pointer Arithmetic",
+          "english": "Performing arithmetic operations on pointers.",
+          "hinglish": "Pointers par arithmetic operations perform karna.",
+          "examples": [
+            "ptr++ // next memory location",
+            "ptr-- // previous memory location",
+            "ptr + n // nth location ahead"
+          ],
+          "practice": [
+            {
+              "question": "Pointer arithmetic ka use karke array traverse kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[3] = {10, 20, 30};\n    int* ptr = arr;\n    \n    for(int i=0; i<3; i++) {\n        cout << *(ptr + i) << \" \";\n    }\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[3] = {10, 20, 30};\n    int* ptr = arr;\n    \n    cout << *(ptr + 1) << endl;  // 20\n    ptr++;\n    cout << *ptr << endl;        // 20\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 23,
+          "title": "Pointers and Arrays",
+          "english": "Relationship between pointers and arrays.",
+          "hinglish": "Pointers aur arrays ke beech ka relationship.",
+          "examples": [
+            "arr[i] is same as *(arr + i)",
+            "&arr[0] is same as arr",
+            "Array name is a constant pointer"
+          ],
+          "practice": [
+            {
+              "question": "Pointer notation use karke array ka sum calculate kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[3] = {10, 20, 30};\n    int sum = 0;\n    \n    for(int i=0; i<3; i++) {\n        sum += *(arr + i);\n    }\n    \n    cout << \"Sum: \" << sum << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[3] = {1, 2, 3};\n    \n    cout << arr[1] << endl;      // 2\n    cout << *(arr + 1) << endl;  // 2\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Core Concepts - Week 8",
+      "order": 8,
+      "description": "Dynamic memory and OOP basics",
+      "topics": [
+        {
+          "id": 24,
+          "title": "Dynamic Memory Allocation",
+          "english": "Allocating memory at runtime using new and delete.",
+          "hinglish": "Runtime par memory allocate karna new aur delete ka use karke.",
+          "examples": [
+            "int* ptr = new int;",
+            "int* arr = new int[5];",
+            "delete ptr;",
+            "delete[] arr;"
+          ],
+          "practice": [
+            {
+              "question": "Dynamic array create kare aur usme values store kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int* arr = new int[3];\n    \n    for(int i=0; i<3; i++) {\n        arr[i] = (i+1)*10;\n    }\n    \n    for(int i=0; i<3; i++) {\n        cout << arr[i] << \" \";\n    }\n    \n    delete[] arr;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int* ptr = new int;\n    *ptr = 100;\n    \n    cout << *ptr << endl;\n    \n    delete ptr;\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 25,
+          "title": "Memory Management",
+          "english": "Managing memory to prevent leaks and errors.",
+          "hinglish": "Memory leaks aur errors se bachne ke liye memory manage karna.",
+          "examples": [
+            "Always delete what you new",
+            "Set pointer to nullptr after delete",
+            "Avoid double deletion"
+          ],
+          "practice": [
+            {
+              "question": "Memory leak wala program thik kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int* ptr = new int[5];\n    \n    for(int i=0; i<5; i++) {\n        ptr[i] = i+1;\n    }\n    \n    delete[] ptr;  // Fixed: Added delete\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int* ptr = new int;\n    *ptr = 50;\n    \n    delete ptr;  // Free memory\n    ptr = nullptr;  // Good practice\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Core Concepts - Week 9",
+      "order": 9,
+      "description": "Object-Oriented Programming fundamentals",
+      "topics": [
+        {
+          "id": 26,
+          "title": "Classes and Objects",
+          "english": "Blueprint for objects and instances of classes.",
+          "hinglish": "Objects ke liye blueprint aur classes ke instances.",
+          "examples": [
+            "class Student { ... };",
+            "Student s1; // object creation",
+            "s1.memberFunction();"
+          ],
+          "practice": [
+            {
+              "question": "Simple Student class banaye aur uska object create kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Student {\npublic:\n    string name;\n    int roll;\n    \n    void display() {\n        cout << \"Name: \" << name << endl;\n        cout << \"Roll: \" << roll << endl;\n    }\n};\n\nint main() {\n    Student s1;\n    s1.name = \"John\";\n    s1.roll = 101;\n    s1.display();\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Student {\npublic:\n    string name;\n    int age;\n};\n\nint main() {\n    Student s1;\n    s1.name = \"Alice\";\n    s1.age = 20;\n    \n    cout << s1.name << endl;\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 27,
+          "title": "Constructors and Destructors",
+          "english": "Special functions for object initialization and cleanup.",
+          "hinglish": "Object initialization aur cleanup ke liye special functions.",
+          "examples": [
+            "ClassName() {...} // constructor",
+            "~ClassName() {...} // destructor",
+            "ClassName(obj) {...} // copy constructor"
+          ],
+          "practice": [
+            {
+              "question": "Constructor aur destructor wali class banaye",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Demo {\npublic:\n    Demo() {\n        cout << \"Constructor called\" << endl;\n    }\n    \n    ~Demo() {\n        cout << \"Destructor called\" << endl;\n    }\n};\n\nint main() {\n    Demo d1;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Demo {\npublic:\n    Demo() {\n        cout << \"Created\" << endl;\n    }\n    \n    ~Demo() {\n        cout << \"Destroyed\" << endl;\n    }\n};\n\nint main() {\n    Demo d;\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 28,
+          "title": "Access Specifiers",
+          "english": "Control access to class members (public, private, protected).",
+          "hinglish": "Class members ka access control (public, private, protected).",
+          "examples": [
+            "public: accessible from anywhere",
+            "private: accessible only within class",
+            "protected: accessible within class and derived classes"
+          ],
+          "practice": [
+            {
+              "question": "Public aur private members wali class banaye",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass BankAccount {\nprivate:\n    int balance;\n    \npublic:\n    void setBalance(int b) {\n        balance = b;\n    }\n    \n    int getBalance() {\n        return balance;\n    }\n};\n\nint main() {\n    BankAccount acc;\n    acc.setBalance(1000);\n    cout << \"Balance: \" << acc.getBalance() << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Test {\nprivate:\n    int secret;\n    \npublic:\n    void set(int x) {\n        secret = x;\n    }\n    \n    int get() {\n        return secret;\n    }\n};\n\nint main() {\n    Test t;\n    t.set(42);\n    cout << t.get() << endl;\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 29,
+          "title": "Member Functions",
+          "english": "Functions defined inside or outside a class.",
+          "hinglish": "Functions jo class ke andar ya bahar define kiye jaate hain.",
+          "examples": [
+            "void display() {...} // inside class",
+            "void ClassName::function() {...} // outside class",
+            "Getter and setter functions"
+          ],
+          "practice": [
+            {
+              "question": "Member function inside aur outside class define kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Calculator {\npublic:\n    int add(int a, int b) {\n        return a + b;\n    }\n    \n    int multiply(int a, int b);\n};\n\nint Calculator::multiply(int a, int b) {\n    return a * b;\n}\n\nint main() {\n    Calculator calc;\n    cout << \"Sum: \" << calc.add(5,3) << endl;\n    cout << \"Product: \" << calc.multiply(5,3) << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Math {\npublic:\n    // Inside class\n    int square(int x) {\n        return x * x;\n    }\n    \n    // Outside class\n    int cube(int x);\n};\n\nint Math::cube(int x) {\n    return x * x * x;\n}\n\nint main() {\n    Math m;\n    cout << m.square(4) << endl;\n    cout << m.cube(3) << endl;\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 30,
+          "title": "The 'this' Pointer",
+          "english": "Pointer to the current object instance.",
+          "hinglish": "Current object instance ka pointer.",
+          "examples": [
+            "this->member",
+            "return *this;",
+            "To avoid name conflicts"
+          ],
+          "practice": [
+            {
+              "question": "'this' pointer ka use karke setter function banaye",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Person {\nprivate:\n    string name;\n    \npublic:\n    void setName(string name) {\n        this->name = name;  // Use this to avoid conflict\n    }\n    \n    string getName() {\n        return this->name;\n    }\n};\n\nint main() {\n    Person p;\n    p.setName(\"John\");\n    cout << p.getName() << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Test {\nprivate:\n    int value;\n    \npublic:\n    void setValue(int value) {\n        this->value = value;\n    }\n    \n    void show() {\n        cout << this->value << endl;\n    }\n};\n\nint main() {\n    Test t;\n    t.setValue(42);\n    t.show();\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Intermediate Level - Week 9",
+      "order": 9,
+      "description": "Advanced OOP concepts",
+      "topics": [
+        {
+          "id": 31,
+          "title": "Inheritance",
+          "english": "Creating new classes from existing classes (single, multiple, multilevel).",
+          "hinglish": "Existing classes se nayi classes create karna (single, multiple, multilevel).",
+          "examples": [
+            "class Child : public Parent {}",
+            "class Derived : public Base1, public Base2 {}",
+            "class A -> class B -> class C"
+          ],
+          "practice": [
+            {
+              "question": "Single inheritance ka example banaye",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Animal {\npublic:\n    void eat() { cout << \"Eating...\" << endl; }\n};\n\nclass Dog : public Animal {\npublic:\n    void bark() { cout << \"Barking...\" << endl; }\n};\n\nint main() {\n    Dog d;\n    d.eat();\n    d.bark();\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Base {\npublic:\n    void show() { cout << \"Base class\" << endl; }\n};\n\nclass Derived : public Base {\npublic:\n    void display() { cout << \"Derived class\" << endl; }\n};\n\nint main() {\n    Derived d;\n    d.show();     // Inherited\n    d.display();  // Own function\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 32,
+          "title": "Polymorphism",
+          "english": "Ability to take many forms - function overriding.",
+          "hinglish": "Multiple forms lene ki ability - function overriding.",
+          "examples": [
+            "Base class pointer to derived object",
+            "Function with same name in derived class",
+            "Runtime binding"
+          ],
+          "practice": [
+            {
+              "question": "Function overriding ka example banaye",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Shape {\npublic:\n    virtual void draw() { cout << \"Drawing shape\" << endl; }\n};\n\nclass Circle : public Shape {\npublic:\n    void draw() override { cout << \"Drawing circle\" << endl; }\n};\n\nint main() {\n    Circle c;\n    c.draw();\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Animal {\npublic:\n    virtual void sound() { cout << \"Animal sound\" << endl; }\n};\n\nclass Dog : public Animal {\npublic:\n    void sound() override { cout << \"Bark\" << endl; }\n};\n\nint main() {\n    Dog d;\n    d.sound();\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 33,
+          "title": "Virtual Functions",
+          "english": "Functions that support runtime polymorphism.",
+          "hinglish": "Functions jo runtime polymorphism support karte hain.",
+          "examples": [
+            "virtual void function() = 0; // pure virtual",
+            "override keyword",
+            "Abstract classes"
+          ],
+          "practice": [
+            {
+              "question": "Abstract class aur pure virtual function ka example",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Shape {\npublic:\n    virtual void area() = 0; // pure virtual\n};\n\nclass Circle : public Shape {\npublic:\n    void area() override { cout << \"Circle area\" << endl; }\n};\n\nint main() {\n    Circle c;\n    c.area();\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Base {\npublic:\n    virtual void show() { cout << \"Base show\" << endl; }\n};\n\nclass Derived : public Base {\npublic:\n    void show() override { cout << \"Derived show\" << endl; }\n};\n\nint main() {\n    Base* ptr = new Derived();\n    ptr->show();  // Calls Derived's show\n    delete ptr;\n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Intermediate Level - Week 10",
+      "order": 10,
+      "description": "More OOP and operator overloading",
+      "topics": [
+        {
+          "id": 34,
+          "title": "Friend Functions and Classes",
+          "english": "Non-member functions/classes with access to private members.",
+          "hinglish": "Non-member functions/classes jo private members access kar sakte hain.",
+          "examples": [
+            "friend void func(ClassName);",
+            "friend class FriendClass;",
+            "Operator overloading with friend"
+          ],
+          "practice": [
+            {
+              "question": "Friend function ka example banaye",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Box {\nprivate:\n    int length;\npublic:\n    Box() : length(0) {}\n    \n    friend void printLength(Box b);  // friend function\n};\n\nvoid printLength(Box b) {\n    cout << \"Length: \" << b.length << endl;\n}\n\nint main() {\n    Box b;\n    printLength(b);\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Test {\nprivate:\n    int data;\npublic:\n    Test(int d) : data(d) {}\n    \n    friend void show(Test t);\n};\n\nvoid show(Test t) {\n    cout << \"Data: \" << t.data << endl;\n}\n\nint main() {\n    Test t(42);\n    show(t);\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 35,
+          "title": "Static Members",
+          "english": "Members shared by all objects of a class.",
+          "hinglish": "Class ke sabhi objects ke liye shared members.",
+          "examples": [
+            "static int count;",
+            "static void function();",
+            "Classname::staticMember"
+          ],
+          "practice": [
+            {
+              "question": "Static variable se object count kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Test {\npublic:\n    static int count;\n    \n    Test() { count++; }\n};\n\nint Test::count = 0;\n\nint main() {\n    Test t1, t2, t3;\n    cout << \"Total objects: \" << Test::count << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Counter {\npublic:\n    static int count;\n    \n    Counter() { count++; }\n};\n\nint Counter::count = 0;\n\nint main() {\n    Counter c1, c2;\n    cout << Counter::count << endl;  // 2\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 36,
+          "title": "Operator Overloading Basics",
+          "english": "Giving new meaning to operators for user-defined types.",
+          "hinglish": "User-defined types ke liye operators ko naya meaning dena.",
+          "examples": [
+            "ClassName operator+(ClassName)",
+            "returnType operator symbol()",
+            "Unary and binary operators"
+          ],
+          "practice": [
+            {
+              "question": "+ operator overload karke do objects add kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Complex {\n    int real, imag;\npublic:\n    Complex(int r=0, int i=0) : real(r), imag(i) {}\n    \n    Complex operator+(Complex const& obj) {\n        return Complex(real+obj.real, imag+obj.imag);\n    }\n    \n    void print() { cout << real << \" + i\" << imag << endl; }\n};\n\nint main() {\n    Complex c1(3,4), c2(1,2);\n    Complex c3 = c1 + c2;\n    c3.print();\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Number {\n    int value;\npublic:\n    Number(int v=0) : value(v) {}\n    \n    Number operator+(Number n) {\n        return Number(value + n.value);\n    }\n    \n    void show() { cout << value << endl; }\n};\n\nint main() {\n    Number n1(5), n2(3);\n    Number n3 = n1 + n2;\n    n3.show();  // 8\n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Intermediate Level - Week 11",
+      "order": 11,
+      "description": "Advanced operator overloading and templates",
+      "topics": [
+        {
+          "id": 37,
+          "title": "Advanced Operator Overloading",
+          "english": "Overloading with friend functions and type conversion.",
+          "hinglish": "Friend functions aur type conversion ke saath operator overloading.",
+          "examples": [
+            "friend Complex operator+(Complex, Complex);",
+            "operator int() { return value; }",
+            "Conversion operators"
+          ],
+          "practice": [
+            {
+              "question": "Friend function se operator overload kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Complex {\n    int real, imag;\npublic:\n    Complex(int r=0, int i=0) : real(r), imag(i) {}\n    \n    friend Complex operator+(Complex, Complex);\n    \n    void print() { cout << real << \" + i\" << imag << endl; }\n};\n\nComplex operator+(Complex a, Complex b) {\n    return Complex(a.real + b.real, a.imag + b.imag);\n}\n\nint main() {\n    Complex c1(2,3), c2(4,5);\n    Complex c3 = c1 + c2;\n    c3.print();\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Distance {\n    int meters;\npublic:\n    Distance(int m=0) : meters(m) {}\n    \n    operator int() { return meters; }  // Conversion operator\n};\n\nint main() {\n    Distance d(100);\n    int x = d;  // Converts to int\n    cout << x << endl;  // 100\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 38,
+          "title": "Function Templates",
+          "english": "Generic functions that work with multiple data types.",
+          "hinglish": "Generic functions jo multiple data types ke saath kaam karte hain.",
+          "examples": [
+            "template <typename T>",
+            "T max(T a, T b)",
+            "Type parameters"
+          ],
+          "practice": [
+            {
+              "question": "Template function banaye jo do values mein se maximum return kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\ntemplate <typename T>\nT myMax(T x, T y) {\n    return (x > y) ? x : y;\n}\n\nint main() {\n    cout << myMax<int>(3,7) << endl;\n    cout << myMax<double>(3.5,7.2) << endl;\n    cout << myMax<char>('a','z') << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\ntemplate <typename T>\nT add(T a, T b) {\n    return a + b;\n}\n\nint main() {\n    cout << add<int>(5,3) << endl;      // 8\n    cout << add<double>(2.5,3.5) << endl; // 6.0\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 39,
+          "title": "Class Templates",
+          "english": "Generic classes that work with multiple data types.",
+          "hinglish": "Generic classes jo multiple data types ke saath kaam karte hain.",
+          "examples": [
+            "template <class T> class ClassName",
+            "ClassName<int> obj;",
+            "Template parameters"
+          ],
+          "practice": [
+            {
+              "question": "Template class banaye jo array store kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\ntemplate <typename T>\nclass Array {\n    T arr[5];\npublic:\n    void set(int index, T value) { arr[index] = value; }\n    T get(int index) { return arr[index]; }\n};\n\nint main() {\n    Array<int> intArr;\n    intArr.set(0, 10);\n    cout << intArr.get(0) << endl;\n    \n    Array<string> strArr;\n    strArr.set(0, \"Hello\");\n    cout << strArr.get(0) << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\ntemplate <class T>\nclass Pair {\n    T first, second;\npublic:\n    Pair(T a, T b) : first(a), second(b) {}\n    \n    T getMax() {\n        return (first > second) ? first : second;\n    }\n};\n\nint main() {\n    Pair<int> p1(5, 9);\n    cout << p1.getMax() << endl;  // 9\n    \n    Pair<double> p2(3.14, 2.71);\n    cout << p2.getMax() << endl;  // 3.14\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Intermediate Level - Week 12",
+      "order": 12,
+      "description": "Template specialization and review",
+      "topics": [
+        {
+          "id": 40,
+          "title": "Template Specialization",
+          "english": "Special implementation for specific data types.",
+          "hinglish": "Specific data types ke liye special implementation.",
+          "examples": [
+            "template<> class ClassName<int>",
+            "Specialized behavior",
+            "Partial specialization"
+          ],
+          "practice": [
+            {
+              "question": "Template specialization ka example banaye",
+              "answer": "#include <iostream>\nusing namespace std;\n\ntemplate <typename T>\nclass Printer {\npublic:\n    void print(T value) {\n        cout << \"Value: \" << value << endl;\n    }\n};\n\n// Specialization for string\ntemplate<>\nclass Printer<string> {\npublic:\n    void print(string value) {\n        cout << \"String: \\\"\" << value << \"\\\"\" << endl;\n    }\n};\n\nint main() {\n    Printer<int> p1;\n    p1.print(42);\n    \n    Printer<string> p2;\n    p2.print(\"Hello\");\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\ntemplate <typename T>\nT add(T a, T b) {\n    return a + b;\n}\n\n// Specialization for string\ntemplate<>\nstring add<string>(string a, string b) {\n    return a + \" \" + b;\n}\n\nint main() {\n    cout << add(5, 3) << endl;        // 8\n    cout << add(string(\"Hello\"), string(\"World\")) << endl;  // Hello World\n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Advanced Concepts - Week 13",
+      "order": 13,
+      "description": "STL Containers",
+      "topics": [
+        {
+          "id": 41,
+          "title": "STL Vector",
+          "english": "Dynamic array container from STL.",
+          "hinglish": "STL ka dynamic array container.",
+          "examples": [
+            "vector<int> v;",
+            "v.push_back(10);",
+            "v.size(), v.at(0)"
+          ],
+          "practice": [
+            {
+              "question": "Vector create kare aur usme elements add kare",
+              "answer": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v;\n    \n    v.push_back(10);\n    v.push_back(20);\n    v.push_back(30);\n    \n    for(int i=0; i<v.size(); i++) {\n        cout << v[i] << \" \";\n    }\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {1,2,3};\n    \n    v.push_back(4);\n    cout << \"Size: \" << v.size() << endl;\n    cout << \"First: \" << v[0] << endl;\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 42,
+          "title": "STL List and Deque",
+          "english": "Doubly linked list and double-ended queue.",
+          "hinglish": "Doubly linked list aur double-ended queue.",
+          "examples": [
+            "list<int> lst;",
+            "deque<int> dq;",
+            "push_front(), pop_back()"
+          ],
+          "practice": [
+            {
+              "question": "List aur deque ka basic use dikhaye",
+              "answer": "#include <iostream>\n#include <list>\n#include <deque>\nusing namespace std;\n\nint main() {\n    // List\n    list<int> lst;\n    lst.push_back(10);\n    lst.push_front(5);\n    \n    // Deque\n    deque<int> dq;\n    dq.push_back(20);\n    dq.push_front(10);\n    \n    cout << \"List front: \" << lst.front() << endl;\n    cout << \"Deque back: \" << dq.back() << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <list>\nusing namespace std;\n\nint main() {\n    list<int> lst = {1,2,3};\n    \n    lst.push_back(4);\n    lst.push_front(0);\n    \n    for(int n : lst) {\n        cout << n << \" \";\n    }\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Advanced Concepts - Week 14",
+      "order": 14,
+      "description": "More STL and algorithms",
+      "topics": [
+        {
+          "id": 43,
+          "title": "STL Set and Map",
+          "english": "Associative containers for unique and key-value pairs.",
+          "hinglish": "Unique elements aur key-value pairs ke liye associative containers.",
+          "examples": [
+            "set<int> s;",
+            "map<string, int> m;",
+            "insert(), find()"
+          ],
+          "practice": [
+            {
+              "question": "Set aur Map ka basic example",
+              "answer": "#include <iostream>\n#include <set>\n#include <map>\nusing namespace std;\n\nint main() {\n    // Set\n    set<int> s;\n    s.insert(10);\n    s.insert(20);\n    s.insert(10);  // Duplicate ignored\n    \n    // Map\n    map<string, int> ages;\n    ages[\"John\"] = 25;\n    ages[\"Alice\"] = 30;\n    \n    cout << \"Set size: \" << s.size() << endl;\n    cout << \"John's age: \" << ages[\"John\"] << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <map>\nusing namespace std;\n\nint main() {\n    map<string, int> scores;\n    \n    scores[\"Alice\"] = 95;\n    scores[\"Bob\"] = 85;\n    \n    cout << scores[\"Alice\"] << endl;  // 95\n    cout << scores[\"Bob\"] << endl;    // 85\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 44,
+          "title": "STL Stack and Queue",
+          "english": "Container adapters for LIFO and FIFO operations.",
+          "hinglish": "LIFO aur FIFO operations ke liye container adapters.",
+          "examples": [
+            "stack<int> st;",
+            "queue<int> q;",
+            "push(), pop(), top(), front()"
+          ],
+          "practice": [
+            {
+              "question": "Stack aur Queue operations dikhaye",
+              "answer": "#include <iostream>\n#include <stack>\n#include <queue>\nusing namespace std;\n\nint main() {\n    // Stack\n    stack<int> st;\n    st.push(10);\n    st.push(20);\n    cout << \"Stack top: \" << st.top() << endl;\n    st.pop();\n    \n    // Queue\n    queue<int> q;\n    q.push(1);\n    q.push(2);\n    cout << \"Queue front: \" << q.front() << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <stack>\nusing namespace std;\n\nint main() {\n    stack<int> st;\n    \n    st.push(10);\n    st.push(20);\n    st.push(30);\n    \n    while(!st.empty()) {\n        cout << st.top() << \" \";\n        st.pop();\n    }\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 45,
+          "title": "STL Algorithms",
+          "english": "Common algorithms like sort, find, transform.",
+          "hinglish": "Common algorithms jaise sort, find, transform.",
+          "examples": [
+            "sort(v.begin(), v.end());",
+            "find(v.begin(), v.end(), value);",
+            "transform()"
+          ],
+          "practice": [
+            {
+              "question": "Vector ko sort kare aur element find kare",
+              "answer": "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    vector<int> v = {5,2,8,1,9};\n    \n    // Sort\n    sort(v.begin(), v.end());\n    \n    // Find\n    auto it = find(v.begin(), v.end(), 8);\n    if(it != v.end()) {\n        cout << \"Found at position: \" << (it - v.begin()) << endl;\n    }\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    vector<int> v = {3,1,4,1,5};\n    \n    sort(v.begin(), v.end());\n    \n    for(int n : v) {\n        cout << n << \" \";\n    }\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Advanced Concepts - Week 15",
+      "order": 15,
+      "description": "Exception handling",
+      "topics": [
+        {
+          "id": 46,
+          "title": "Exception Handling Basics",
+          "english": "Handling runtime errors using try, catch, throw.",
+          "hinglish": "Try, catch, throw ka use karke runtime errors handle karna.",
+          "examples": [
+            "try { throw exception; }",
+            "catch(exception& e) { }",
+            "Multiple catch blocks"
+          ],
+          "practice": [
+            {
+              "question": "Divide by zero exception handle kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 10, b = 0;\n    \n    try {\n        if(b == 0) {\n            throw \"Division by zero!\";\n        }\n        int result = a / b;\n        cout << \"Result: \" << result << endl;\n    }\n    catch(const char* msg) {\n        cout << \"Error: \" << msg << endl;\n    }\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    try {\n        throw 42;\n    }\n    catch(int e) {\n        cout << \"Caught: \" << e << endl;\n    }\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 47,
+          "title": "Standard and Custom Exceptions",
+          "english": "Using standard exceptions and creating custom ones.",
+          "hinglish": "Standard exceptions ka use karna aur custom exceptions banana.",
+          "examples": [
+            "std::runtime_error",
+            "class MyException : public exception",
+            "what() function"
+          ],
+          "practice": [
+            {
+              "question": "Custom exception class banaye",
+              "answer": "#include <iostream>\n#include <exception>\nusing namespace std;\n\nclass MyException : public exception {\npublic:\n    const char* what() const noexcept override {\n        return \"My custom exception\";\n    }\n};\n\nint main() {\n    try {\n        throw MyException();\n    }\n    catch(exception& e) {\n        cout << e.what() << endl;\n    }\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <stdexcept>\nusing namespace std;\n\nint main() {\n    try {\n        throw runtime_error(\"Something went wrong\");\n    }\n    catch(runtime_error& e) {\n        cout << e.what() << endl;\n    }\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Advanced Concepts - Week 16",
+      "order": 16,
+      "description": "File handling",
+      "topics": [
+        {
+          "id": 48,
+          "title": "File Handling Basics",
+          "english": "Reading and writing files using file streams.",
+          "hinglish": "File streams ka use karke files read/write karna.",
+          "examples": [
+            "ofstream outfile;",
+            "ifstream infile;",
+            "fstream file;",
+            "open(), close()"
+          ],
+          "practice": [
+            {
+              "question": "File mein text write kare aur phir read kare",
+              "answer": "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main() {\n    // Write\n    ofstream out(\"test.txt\");\n    out << \"Hello, World!\" << endl;\n    out.close();\n    \n    // Read\n    ifstream in(\"test.txt\");\n    string line;\n    getline(in, line);\n    cout << \"Read: \" << line << endl;\n    in.close();\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main() {\n    ofstream file(\"data.txt\");\n    file << \"Hello File!\" << endl;\n    file.close();\n    \n    cout << \"File written successfully\" << endl;\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 49,
+          "title": "Binary File Operations",
+          "english": "Working with binary files and file positioning.",
+          "hinglish": "Binary files ke saath kaam karna aur file positioning.",
+          "examples": [
+            "read(), write()",
+            "seekg(), seekp()",
+            "tellg(), tellp()"
+          ],
+          "practice": [
+            {
+              "question": "Binary file mein data write aur read kare",
+              "answer": "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main() {\n    // Write binary\n    ofstream out(\"data.bin\", ios::binary);\n    int num = 42;\n    out.write((char*)&num, sizeof(num));\n    out.close();\n    \n    // Read binary\n    ifstream in(\"data.bin\", ios::binary);\n    int readNum;\n    in.read((char*)&readNum, sizeof(readNum));\n    cout << \"Read: \" << readNum << endl;\n    in.close();\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main() {\n    fstream file(\"test.bin\", ios::binary | ios::out);\n    \n    int data = 100;\n    file.write((char*)&data, sizeof(data));\n    file.close();\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 50,
+          "title": "Functors and Lambdas",
+          "english": "Function objects and inline anonymous functions.",
+          "hinglish": "Function objects aur inline anonymous functions.",
+          "examples": [
+            "class Functor { int operator()() { ... } };",
+            "auto lambda = []() { ... };",
+            "Capture clauses"
+          ],
+          "practice": [
+            {
+              "question": "Simple lambda function create kare",
+              "answer": "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    vector<int> v = {1,2,3,4,5};\n    \n    // Lambda to print vector\n    auto print = [](int n) { cout << n << \" \"; };\n    \n    for_each(v.begin(), v.end(), print);\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    // Lambda function\n    auto greet = []() {\n        cout << \"Hello from lambda!\" << endl;\n    };\n    \n    greet();\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Expert Level - Week 17",
+      "order": 17,
+      "description": "Advanced memory management",
+      "topics": [
+        {
+          "id": 51,
+          "title": "Smart Pointers",
+          "english": "Automatic memory management using unique_ptr, shared_ptr, weak_ptr.",
+          "hinglish": "Automatic memory management unique_ptr, shared_ptr, weak_ptr ka use karke.",
+          "examples": [
+            "unique_ptr<int> ptr = make_unique<int>(42);",
+            "shared_ptr<int> sptr = make_shared<int>(100);",
+            "weak_ptr<int> wptr = sptr;"
+          ],
+          "practice": [
+            {
+              "question": "unique_ptr ka use karke dynamic memory manage kare",
+              "answer": "#include <iostream>\n#include <memory>\nusing namespace std;\n\nint main() {\n    unique_ptr<int> ptr = make_unique<int>(42);\n    cout << *ptr << endl;\n    // Automatically deleted\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <memory>\nusing namespace std;\n\nint main() {\n    auto ptr = make_unique<int>(100);\n    cout << *ptr << endl;\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 52,
+          "title": "Move Semantics",
+          "english": "Efficient transfer of resources using rvalue references.",
+          "hinglish": "Rvalue references ka use karke resources ka efficient transfer.",
+          "examples": [
+            "std::move()",
+            "T&& rvalue reference",
+            "Move constructor: Class(Class&&)"
+          ],
+          "practice": [
+            {
+              "question": "Move constructor banaye",
+              "answer": "#include <iostream>\n#include <cstring>\nusing namespace std;\n\nclass String {\n    char* data;\npublic:\n    String(const char* s) {\n        data = new char[strlen(s)+1];\n        strcpy(data, s);\n    }\n    \n    // Move constructor\n    String(String&& other) noexcept {\n        data = other.data;\n        other.data = nullptr;\n    }\n    \n    ~String() { delete[] data; }\n};\n\nint main() {\n    String s1(\"Hello\");\n    String s2 = move(s1);  // Move\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v1 = {1,2,3};\n    vector<int> v2 = move(v1);  // Move\n    \n    cout << \"v1 size: \" << v1.size() << endl;  // 0\n    cout << \"v2 size: \" << v2.size() << endl;  // 3\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Expert Level - Week 18",
+      "order": 18,
+      "description": "Modern C++ features",
+      "topics": [
+        {
+          "id": 53,
+          "title": "Modern C++ Features",
+          "english": "C++11/14/17/20 features like auto, range-based for, nullptr.",
+          "hinglish": "C++11/14/17/20 features jaise auto, range-based for, nullptr.",
+          "examples": [
+            "auto x = 10;",
+            "for(auto& item : container)",
+            "int* ptr = nullptr;"
+          ],
+          "practice": [
+            {
+              "question": "Modern features ka use kare: auto aur range-based for",
+              "answer": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> numbers = {1,2,3,4,5};\n    \n    // Modern C++\n    auto sum = 0;\n    for(const auto& num : numbers) {\n        sum += num;\n    }\n    \n    cout << \"Sum: \" << sum << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {1,2,3};\n    \n    auto x = 42;  // auto\n    int* ptr = nullptr;  // nullptr\n    \n    for(auto n : v) {  // range-based for\n        cout << n << \" \";\n    }\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 54,
+          "title": "Lambda Expressions",
+          "english": "Anonymous functions with capture lists.",
+          "hinglish": "Capture lists ke saath anonymous functions.",
+          "examples": [
+            "auto lambda = [](){ };",
+            "[capture](params) -> ret { body }",
+            "mutable lambdas"
+          ],
+          "practice": [
+            {
+              "question": "Lambda expressions ka use kare sorting mein",
+              "answer": "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    vector<int> v = {5,2,8,1,9};\n    \n    // Lambda for descending sort\n    sort(v.begin(), v.end(), [](int a, int b) {\n        return a > b;\n    });\n    \n    for(int n : v) {\n        cout << n << \" \";\n    }\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int x = 10;\n    \n    auto add = [x](int y) {\n        return x + y;\n    };\n    \n    cout << add(5) << endl;  // 15\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Expert Level - Week 19",
+      "order": 19,
+      "description": "Multithreading basics",
+      "topics": [
+        {
+          "id": 55,
+          "title": "Thread Management",
+          "english": "Creating and managing threads in C++.",
+          "hinglish": "C++ mein threads create aur manage karna.",
+          "examples": [
+            "thread t(func);",
+            "t.join()",
+            "t.detach()"
+          ],
+          "practice": [
+            {
+              "question": "Do parallel threads create kare",
+              "answer": "#include <iostream>\n#include <thread>\nusing namespace std;\n\nvoid printHello() {\n    cout << \"Hello from thread!\" << endl;\n}\n\nint main() {\n    thread t1(printHello);\n    thread t2(printHello);\n    \n    t1.join();\n    t2.join();\n    \n    cout << \"Main thread done\" << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <thread>\nusing namespace std;\n\nvoid task() {\n    cout << \"Thread executing\" << endl;\n}\n\nint main() {\n    thread t(task);\n    t.join();  // Wait for thread\n    \n    return 0;\n}"
+          }
+        },
+        {
+          "id": 56,
+          "title": "Mutexes and Locks",
+          "english": "Synchronization mechanisms for thread safety.",
+          "hinglish": "Thread safety ke liye synchronization mechanisms.",
+          "examples": [
+            "mutex m;",
+            "lock_guard<mutex> lock(m);",
+            "unique_lock<mutex>"
+          ],
+          "practice": [
+            {
+              "question": "Mutex ka use karke shared resource protect kare",
+              "answer": "#include <iostream>\n#include <thread>\n#include <mutex>\nusing namespace std;\n\nmutex mtx;\nint counter = 0;\n\nvoid increment() {\n    lock_guard<mutex> lock(mtx);\n    counter++;\n}\n\nint main() {\n    thread t1(increment);\n    thread t2(increment);\n    \n    t1.join();\n    t2.join();\n    \n    cout << \"Counter: \" << counter << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <thread>\n#include <mutex>\nusing namespace std;\n\nmutex mtx;\n\nvoid safePrint() {\n    lock_guard<mutex> guard(mtx);\n    cout << \"Thread safe\" << endl;\n}\n\nint main() {\n    thread t(safePrint);\n    t.join();\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Expert Level - Week 20",
+      "order": 20,
+      "description": "More concurrency and modern features",
+      "topics": [
+        {
+          "id": 57,
+          "title": "Atomic Operations",
+          "english": "Thread-safe operations without locks.",
+          "hinglish": "Locks ke bina thread-safe operations.",
+          "examples": [
+            "atomic<int> counter;",
+            "counter++ (atomic)",
+            "compare_exchange_strong()"
+          ],
+          "practice": [
+            {
+              "question": "Atomic variable ka use kare",
+              "answer": "#include <iostream>\n#include <thread>\n#include <atomic>\nusing namespace std;\n\natomic<int> counter(0);\n\nvoid increment() {\n    for(int i=0; i<1000; i++) {\n        counter++;\n    }\n}\n\nint main() {\n    thread t1(increment);\n    thread t2(increment);\n    \n    t1.join();\n    t2.join();\n    \n    cout << \"Final: \" << counter << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <atomic>\nusing namespace std;\n\nint main() {\n    atomic<int> value(0);\n    \n    value = 42;\n    int x = value.load();\n    \n    cout << x << endl;\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 58,
+          "title": "Futures and Promises",
+          "english": "Asynchronous programming with futures.",
+          "hinglish": "Futures ke saath asynchronous programming.",
+          "examples": [
+            "future<int> fut = async(func);",
+            "promise<int> p;",
+            "fut.get()"
+          ],
+          "practice": [
+            {
+              "question": "Async task ka result future se get kare",
+              "answer": "#include <iostream>\n#include <future>\nusing namespace std;\n\nint compute() {\n    return 42;\n}\n\nint main() {\n    future<int> result = async(compute);\n    \n    int value = result.get();\n    cout << \"Result: \" << value << endl;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\n#include <future>\nusing namespace std;\n\nint main() {\n    auto fut = async([](){ return 100; });\n    \n    cout << fut.get() << endl;\n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Specialized Topics - Week 21",
+      "order": 21,
+      "description": "Design patterns",
+      "topics": [
+        {
+          "id": 59,
+          "title": "Singleton Pattern",
+          "english": "Ensuring only one instance of a class exists.",
+          "hinglish": "Class ka sirf ek hi instance ensure karna.",
+          "examples": [
+            "static ClassName& getInstance()",
+            "private constructor",
+            "Deleted copy constructor"
+          ],
+          "practice": [
+            {
+              "question": "Singleton pattern implement kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Singleton {\nprivate:\n    static Singleton* instance;\n    Singleton() {}  // private\n    \npublic:\n    static Singleton* getInstance() {\n        if(!instance) {\n            instance = new Singleton();\n        }\n        return instance;\n    }\n    \n    void show() { cout << \"Singleton\" << endl; }\n};\n\nSingleton* Singleton::instance = nullptr;\n\nint main() {\n    Singleton* s = Singleton::getInstance();\n    s->show();\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Singleton {\nprivate:\n    Singleton() {}\n    \npublic:\n    static Singleton& get() {\n        static Singleton instance;\n        return instance;\n    }\n    \n    void log() { cout << \"Singleton\" << endl; }\n};\n\nint main() {\n    Singleton::get().log();\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 60,
+          "title": "Factory Pattern",
+          "english": "Creating objects without specifying exact class.",
+          "hinglish": "Exact class specify kiye bina objects create karna.",
+          "examples": [
+            "virtual create() method",
+            "Factory class",
+            "Product interface"
+          ],
+          "practice": [
+            {
+              "question": "Simple factory pattern implement kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\nclass Product {\npublic:\n    virtual void use() = 0;\n};\n\nclass ConcreteProduct : public Product {\npublic:\n    void use() override { cout << \"Using product\" << endl; }\n};\n\nclass Factory {\npublic:\n    static Product* create() {\n        return new ConcreteProduct();\n    }\n};\n\nint main() {\n    Product* p = Factory::create();\n    p->use();\n    delete p;\n    \n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Shape {\npublic:\n    virtual void draw() = 0;\n};\n\nclass Circle : public Shape {\npublic:\n    void draw() override { cout << \"Circle\" << endl; }\n};\n\nclass Factory {\npublic:\n    static Shape* createCircle() {\n        return new Circle();\n    }\n};\n\nint main() {\n    Shape* s = Factory::createCircle();\n    s->draw();\n    delete s;\n    \n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Specialized Topics - Week 22",
+      "order": 22,
+      "description": "Advanced templates",
+      "topics": [
+        {
+          "id": 61,
+          "title": "Variadic Templates",
+          "english": "Templates with variable number of arguments.",
+          "hinglish": "Variable number of arguments wale templates.",
+          "examples": [
+            "template<typename... Args>",
+            "parameter packs",
+            "recursive expansion"
+          ],
+          "practice": [
+            {
+              "question": "Variadic template ka use karke sum function banaye",
+              "answer": "#include <iostream>\nusing namespace std;\n\ntemplate<typename T>\nT sum(T value) {\n    return value;\n}\n\ntemplate<typename T, typename... Args>\nT sum(T first, Args... args) {\n    return first + sum(args...);\n}\n\nint main() {\n    cout << sum(1,2,3,4,5) << endl;  // 15\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nvoid print() {\n    cout << endl;\n}\n\ntemplate<typename T, typename... Args>\nvoid print(T first, Args... args) {\n    cout << first << \" \";\n    print(args...);\n}\n\nint main() {\n    print(1, 2.5, \"hello\");\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 62,
+          "title": "Template Metaprogramming",
+          "english": "Compile-time computations using templates.",
+          "hinglish": "Templates ka use karke compile-time computations.",
+          "examples": [
+            "template<int N>",
+            "Factorial at compile time",
+            "Type traits"
+          ],
+          "practice": [
+            {
+              "question": "Compile-time factorial calculate kare",
+              "answer": "#include <iostream>\nusing namespace std;\n\ntemplate<int N>\nstruct Factorial {\n    static const int value = N * Factorial<N-1>::value;\n};\n\ntemplate<>\nstruct Factorial<0> {\n    static const int value = 1;\n};\n\nint main() {\n    cout << Factorial<5>::value << endl;  // 120\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\ntemplate<int N>\nstruct Square {\n    static const int value = N * N;\n};\n\nint main() {\n    cout << Square<5>::value << endl;  // 25\n    return 0;\n}"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Professional Development - Week 23",
+      "order": 23,
+      "description": "Build systems and tools",
+      "topics": [
+        {
+          "id": 63,
+          "title": "CMake Basics",
+          "english": "Cross-platform build system for C++.",
+          "hinglish": "C++ ke liye cross-platform build system.",
+          "examples": [
+            "cmake_minimum_required()",
+            "add_executable()",
+            "target_link_libraries()"
+          ],
+          "practice": [
+            {
+              "question": "Simple CMakeLists.txt file banaye",
+              "answer": "# CMakeLists.txt\ncmake_minimum_required(VERSION 3.10)\nproject(MyProject)\n\nset(CMAKE_CXX_STANDARD 17)\n\nadd_executable(myapp main.cpp)\n\n# Build with: cmake . && make"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# CMakeLists.txt example\ncmake_minimum_required(VERSION 3.10)\nproject(HelloWorld)\n\nadd_executable(hello main.cpp)"
+          }
+        },
+        {
+          "id": 64,
+          "title": "Debugging with GDB",
+          "english": "Using GNU Debugger for debugging C++ programs.",
+          "hinglish": "C++ programs debug karne ke liye GNU Debugger ka use.",
+          "examples": [
+            "g++ -g program.cpp",
+            "gdb ./a.out",
+            "break, run, print, next"
+          ],
+          "practice": [
+            {
+              "question": "GDB commands ka basic use dikhaye",
+              "answer": "# Compile with debug info\ng++ -g -o program program.cpp\n\n# Run GDB\ngdb ./program\n\n# Inside GDB:\n# break main  # Set breakpoint\n# run        # Run program\n# print x    # Print variable\n# next       # Next line\n# quit       # Exit"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# Basic GDB workflow:\n# g++ -g test.cpp -o test\n# gdb ./test\n# (gdb) break main\n# (gdb) run\n# (gdb) print variable_name\n# (gdb) continue"
+          }
+        }
+      ]
+    },
+    {
+      "level": "Professional Development - Week 24",
+      "order": 24,
+      "description": "Best practices and projects",
+      "topics": [
+        {
+          "id": 65,
+          "title": "RAII Pattern",
+          "english": "Resource Acquisition Is Initialization.",
+          "hinglish": "Resource initialization ke time hi acquisition.",
+          "examples": [
+            "Constructor acquires resource",
+            "Destructor releases resource",
+            "Smart pointers use RAII"
+          ],
+          "practice": [
+            {
+              "question": "RAII pattern ka simple example",
+              "answer": "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nclass FileHandler {\n    ofstream file;\npublic:\n    FileHandler(const string& filename) {\n        file.open(filename);  // Acquire\n    }\n    \n    ~FileHandler() {\n        if(file.is_open()) {\n            file.close();  // Release\n        }\n    }\n    \n    void write(const string& data) {\n        file << data;\n    }\n};\n\nint main() {\n    FileHandler f(\"data.txt\");\n    f.write(\"Hello RAII\");\n    // File automatically closes\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "#include <iostream>\nusing namespace std;\n\nclass Resource {\npublic:\n    Resource() { cout << \"Acquired\" << endl; }\n    ~Resource() { cout << \"Released\" << endl; }\n};\n\nint main() {\n    Resource r;  // RAII\n    return 0;\n}"
+          }
+        },
+        {
+          "id": 66,
+          "title": "Unit Testing",
+          "english": "Writing and running tests for C++ code.",
+          "hinglish": "C++ code ke liye tests likhna aur run karna.",
+          "examples": [
+            "Google Test framework",
+            "TEST() macro",
+            "ASSERT_EQ()"
+          ],
+          "practice": [
+            {
+              "question": "Simple unit test likhe",
+              "answer": "#include <gtest/gtest.h>\n\nint add(int a, int b) {\n    return a + b;\n}\n\nTEST(MathTest, Addition) {\n    EXPECT_EQ(add(2, 3), 5);\n    EXPECT_EQ(add(-1, 1), 0);\n}\n\nint main(int argc, char** argv) {\n    testing::InitGoogleTest(&argc, argv);\n    return RUN_ALL_TESTS();\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# Simple test example\nTEST(MyTest, Basic) {\n    EXPECT_TRUE(1 + 1 == 2);\n}"
+          }
+        },
+        {
+          "id": 67,
+          "title": "Real-World Project Ideas",
+          "english": "Practical projects to apply C++ skills.",
+          "hinglish": "C++ skills apply karne ke liye practical projects.",
+          "examples": [
+            "Custom container library",
+            "Simple HTTP server",
+            "Mini database system",
+            "Game engine basics"
+          ],
+          "practice": [
+            {
+              "question": "Custom vector class banaye STL vector jaise",
+              "answer": "#include <iostream>\nusing namespace std;\n\ntemplate<typename T>\nclass MyVector {\n    T* data;\n    size_t size;\n    \npublic:\n    MyVector() : data(nullptr), size(0) {}\n    \n    void push_back(T value) {\n        // Implementation\n    }\n    \n    T& operator[](size_t index) {\n        return data[index];\n    }\n};\n\nint main() {\n    MyVector<int> v;\n    v.push_back(10);\n    cout << v[0] << endl;\n    return 0;\n}"
+            }
+          ],
+          "detailed_explanation": {
+            "example_code": "# Project structure example\n// main.cpp - Entry point\n// vector.h - Custom vector class\n// tests.cpp - Unit tests\n// README.md - Documentation"
+          }
+        }
+      ]
+    }
+  ]
+}

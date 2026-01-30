@@ -17,6 +17,7 @@ import wordpress from '../api/languages/wordpress.json';
 import nextjs from '../api/languages/nextjs.json';
 import softwareFundamentles from '../api/softwareFundamentles.json';
 import C from '../api/languages/c.json';
+import Cpp from '../api/languages/cpp.json';
 import dsaC from '../api/languages/dsaC.json';
 import dsaCpp from '../api/languages/dsaCpp.json';
 import "./ContentPage.css";
@@ -60,6 +61,8 @@ const ContentPage = () => {
       ? nextjs
       : techSlug === "c"
       ? C
+      : techSlug === "cpp"
+      ? Cpp
       : stackSlug === "c-programming" && techSlug === "dsa"
       ? dsaC
       : stackSlug === "cpp-dsa" && techSlug === "dsa"
