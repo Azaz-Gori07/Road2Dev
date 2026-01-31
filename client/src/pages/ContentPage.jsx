@@ -20,6 +20,7 @@ import C from '../api/languages/c.json';
 import Cpp from '../api/languages/cpp.json';
 import dsaC from '../api/languages/dsaC.json';
 import dsaCpp from '../api/languages/dsaCpp.json';
+import java from '../api/languages/java.json';
 import "./ContentPage.css";
 
 const ContentPage = () => {
@@ -67,6 +68,8 @@ const ContentPage = () => {
       ? dsaC
       : stackSlug === "cpp-dsa" && techSlug === "dsa"
       ? dsaCpp
+      : techSlug === "java"
+      ? java
       : null;
 
   const handleBack = () => {
