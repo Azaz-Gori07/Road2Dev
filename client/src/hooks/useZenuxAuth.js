@@ -8,12 +8,19 @@ export default function useZenuxAuth() {
   const [tokens, setTokens] = useState(null);
   const oauthRef = useRef(null);
 
+  const getRedirectUri = useCallback(() => {
+    const baseUrl = window.location.origin;
+    // Remove trailing slash if present
+    const cleaned = baseUrl.replace(/\/+$/, '');
+    return cleaned + '/callback.html';
+  }, []);
+
   useEffect(() => {
     // Explicitly pass fetch to avoid constructor context issues
     const oauth = new ZenuxOAuth({
       clientId: "f3b01e0825dd896d",
-      redirectUri: window.location.origin + "/callback.html",
-      scopes: "openid profile email",
+      redirectUri: getRedirectUri(),
+      scopes: "openid profile email github:repo",
       storage: "sessionStorage",
       usePKCE: true,
       useCSRF: true,

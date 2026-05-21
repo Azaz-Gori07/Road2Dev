@@ -13,7 +13,7 @@ function AppLayout() {
         <Sidebar />
       <main className='main-content'>
         {
-          window.innerWidth > 801 && <TopBar/>
+          window.innerWidth > 801 && <TopBar />
         }
         <Outlet />
       </main>

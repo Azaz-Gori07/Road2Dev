@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Auth.module.css";
 import useZenuxAuth from "../hooks/useZenuxAuth";
+import useAuth from "../hooks/useAuth";
 
 // ── Input component ──
 function Field({ label, id, type = "text", placeholder, value, onChange }) {
@@ -264,7 +265,7 @@ function EnvelopeSVG() {
    PAGE PANELS
    ═══════════════════════════════════════════════ */
 
-function LoginPanel({ go, onGoogleLogin, onGitHubLogin, onLinkedInLogin, authLoading }) {
+function LoginPanel({ go, onGoogleLogin, onGitHubLogin, onLinkedInLogin, authLoading, onLogin }) {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
 
@@ -293,7 +294,7 @@ function LoginPanel({ go, onGoogleLogin, onGitHubLogin, onLinkedInLogin, authLoa
             Forgot Password?
           </button>
         </div>
-        <GradBtn onClick={() => console.log("Login clicked")}>LOGIN</GradBtn>
+        <GradBtn onClick={() => onLogin(email, pass)}>LOGIN</GradBtn>
         <Divider/>
         <Socials
           onGoogle={onGoogleLogin}
@@ -306,7 +307,7 @@ function LoginPanel({ go, onGoogleLogin, onGitHubLogin, onLinkedInLogin, authLoa
   );
 }
 
-function SignupPanel({ go, onGoogleLogin, onGitHubLogin, onLinkedInLogin, authLoading }) {
+function SignupPanel({ go, onGoogleLogin, onGitHubLogin, onLinkedInLogin, authLoading, onRegister }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -348,7 +349,7 @@ function SignupPanel({ go, onGoogleLogin, onGitHubLogin, onLinkedInLogin, authLo
           </span>
         </label>
         
-        <GradBtn onClick={() => console.log("Signup clicked")}>SIGN UP</GradBtn>
+        <GradBtn onClick={() => onRegister(name, email, pass)}>SIGN UP</GradBtn>
         <Divider/>
         <Socials
           onGoogle={onGoogleLogin}
@@ -393,6 +394,150 @@ function ForgotPanel({ go }) {
   );
 }
 
+function OtpPanel({ email, onVerify, onResend, authLoading, onBack }) {
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const inputRefs = useRef([]);
+
+  const handleChange = (index, value) => {
+    if (value && !/^\d$/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // Auto-focus next input
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index, e) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text/plain").replace(/\D/g, "").slice(0, 6);
+    const newOtp = [...otp];
+    for (let i = 0; i < pastedData.length; i++) {
+      newOtp[i] = pastedData[i];
+    }
+    setOtp(newOtp);
+    if (pastedData.length < 6) {
+      inputRefs.current[pastedData.length]?.focus();
+    } else {
+      inputRefs.current[5]?.focus();
+    }
+  };
+
+  return (
+    <div className={styles.panelContainer}>
+      <div className={styles.authLeftReset}>
+        <Logo />
+        <h1 className={styles.authHeadline}>Verify Email</h1>
+        <p className={styles.authSubheadlineReset}>
+          We've sent a 6-digit OTP to <strong style={{ color: "#40c8e0", background: "transparent" }}>{email}</strong>.
+          Enter it below to complete your registration.
+        </p>
+        <div style={{ textAlign: "center", marginTop: 40 }}>
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#40c8e0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <polyline points="22,6 12,13 2,6" />
+          </svg>
+        </div>
+      </div>
+      <div className={styles.authRight}>
+        <h2 className={styles.formTitle}>Enter OTP</h2>
+        <p className={styles.formSubtitle} style={{ marginBottom: 32 }}>
+          Check your email for the verification code
+        </p>
+
+        {/* OTP Input Boxes */}
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 28 }}>
+          {otp.map((digit, i) => (
+            <input
+              key={i}
+              ref={el => inputRefs.current[i] = el}
+              type="text"
+              inputMode="numeric"
+              maxLength={1}
+              value={digit}
+              onChange={e => handleChange(i, e.target.value)}
+              onKeyDown={e => handleKeyDown(i, e)}
+              onPaste={i === 0 ? handlePaste : undefined}
+              style={{
+                width: 48,
+                height: 56,
+                background: "#1f1f1f",
+                border: `2px solid ${digit ? "rgba(64,200,224,0.5)" : "rgba(255,255,255,0.1)"}`,
+                borderRadius: 10,
+                color: "#f0f0f0",
+                fontSize: 22,
+                fontWeight: 700,
+                textAlign: "center",
+                fontFamily: "'DM Sans', sans-serif",
+                outline: "none",
+                transition: "border-color 0.2s",
+                caretColor: "#40c8e0",
+              }}
+              onFocus={e => e.target.style.borderColor = "rgba(64,200,224,0.6)"}
+              onBlur={e => e.target.style.borderColor = digit ? "rgba(64,200,224,0.5)" : "rgba(255,255,255,0.1)"}
+            />
+          ))}
+        </div>
+
+        <GradBtn
+          onClick={() => onVerify(otp.join(""))}
+          disabled={otp.some(d => !d) || authLoading}
+        >
+          VERIFY OTP
+        </GradBtn>
+
+        <div style={{ textAlign: "center", marginTop: 20 }}>
+          <p style={{ fontSize: 13, color: "#888", fontFamily: "'DM Sans', sans-serif" }}>
+            Didn't receive the code?{" "}
+            <button
+              onClick={onResend}
+              disabled={authLoading}
+              style={{
+                background: "none",
+                border: "none",
+                color: "#40c8e0",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: "pointer",
+                padding: 0,
+              }}
+            >
+              Resend OTP
+            </button>
+          </p>
+        </div>
+
+        <div style={{ textAlign: "center", marginTop: 12 }}>
+          <button
+            onClick={onBack}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#888",
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 12,
+              cursor: "pointer",
+              padding: 0,
+            }}
+          >
+            ← Back to sign up
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ═══════════════════════════════════════════════
    3D TRANSITION ENGINE
    ═══════════════════════════════════════════════ */
@@ -406,18 +551,34 @@ const TRANSITIONS = {
   "forgot→signup": { exitY: 0,   enterY: 0,    exitX: 90,  enterX: -90 },
 };
 
-const PAGES = { login: LoginPanel, signup: SignupPanel, forgot: ForgotPanel };
+const PAGES = { login: LoginPanel, signup: SignupPanel, forgot: ForgotPanel, otp: OtpPanel };
 
 export default function Auth() {
   const navigate = useNavigate();
+
+  // Custom backend auth (email/password + OAuth token exchange)
   const {
-    isAuthenticated,
-    user,
-    loading,
+    isAuthenticated: isAuthLocal,
+    loading: loadingLocal,
+    loginWithEmail: localLogin,
+    loginWithZenuxs,
+    sendOtp,
+    verifyOtp,
+    resendOtp,
+  } = useAuth();
+
+  // Zenuxs OAuth (popup-based social login)
+  const {
+    isAuthenticated: isAuthZenuxs,
+    loading: loadingZenuxs,
     loginWithGoogle,
     loginWithGitHub,
     loginWithLinkedIn,
   } = useZenuxAuth();
+
+  // Combine auth states
+  const isAuthenticated = isAuthLocal || isAuthZenuxs;
+  const loading = loadingLocal || loadingZenuxs;
 
   const [current, setCurrent] = useState("login");
   const [next, setNext] = useState(null);
@@ -425,6 +586,7 @@ export default function Auth() {
   const [tKey, setTKey] = useState(null);
   const [authLoading, setAuthLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [pendingReg, setPendingReg] = useState(null); // { name, email, password }
   const timerRef = useRef(null);
 
   // If already authenticated, redirect to home
@@ -449,17 +611,90 @@ export default function Auth() {
     }, 680);
   };
 
+  // ── Send OTP for registration ──
+  const handleSendOtp = async (name, email, password) => {
+    setAuthLoading(true);
+    setError(null);
+    try {
+      await sendOtp(name, email, password);
+      setPendingReg({ name, email, password });
+      go("otp");
+    } catch (err) {
+      setError(err.message || 'Failed to send OTP');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  // ── Verify OTP and create account ──
+  const handleVerifyOtp = async (otp) => {
+    if (!pendingReg) return;
+    setAuthLoading(true);
+    setError(null);
+    try {
+      await verifyOtp(pendingReg.email, otp);
+      // Redirect new users to onboarding
+      navigate('/onboarding', { replace: true });
+    } catch (err) {
+      setError(err.message || 'Verification failed');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+
+  // ── Resend OTP ──
+  const handleResendOtp = async () => {
+    if (!pendingReg) return;
+    setAuthLoading(true);
+    setError(null);
+    try {
+      await resendOtp(pendingReg.email);
+    } catch (err) {
+      setError(err.message || 'Failed to resend OTP');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  // ── Back to signup from OTP ──
+  const handleBackToSignup = () => {
+    setPendingReg(null);
+    go("signup");
+  };
+
+  // ── Email/Password Login ──
+  const handleLogin = async (email, password) => {
+    setAuthLoading(true);
+    setError(null);
+    try {
+      await localLogin(email, password);
+      navigate('/', { replace: true });
+    } catch (err) {
+      setError(err.message || 'Login failed. Please try again.');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  // ── Social Login (Zenuxs OAuth → exchange token on our backend) ──
   const handleSocialLogin = async (provider) => {
     setAuthLoading(true);
     setError(null);
     try {
+      let zenuxsToken;
       if (provider === 'google') {
-        await loginWithGoogle();
+        zenuxsToken = await loginWithGoogle();
       } else if (provider === 'github') {
-        await loginWithGitHub();
+        zenuxsToken = await loginWithGitHub();
       } else if (provider === 'linkedin') {
-        await loginWithLinkedIn();
+        zenuxsToken = await loginWithLinkedIn();
       }
+      // Exchange Zenuxs token for our own JWT
+      if (zenuxsToken) {
+        await loginWithZenuxs(zenuxsToken.access_token || zenuxsToken);
+      }
+      navigate('/', { replace: true });
     } catch (err) {
       setError(err.message || 'Login failed. Please try again.');
     } finally {
@@ -493,10 +728,16 @@ export default function Auth() {
           >
             <CurrentPage
               go={go}
+              onLogin={handleLogin}
+              onRegister={handleSendOtp}
               onGoogleLogin={() => handleSocialLogin('google')}
               onGitHubLogin={() => handleSocialLogin('github')}
               onLinkedInLogin={() => handleSocialLogin('linkedin')}
               authLoading={authLoading}
+              email={pendingReg?.email}
+              onVerify={handleVerifyOtp}
+              onResend={handleResendOtp}
+              onBack={handleBackToSignup}
             />
           </div>
 
@@ -512,10 +753,16 @@ export default function Auth() {
             >
               <NextPage
                 go={go}
+                onLogin={handleLogin}
+                onRegister={handleSendOtp}
                 onGoogleLogin={() => handleSocialLogin('google')}
                 onGitHubLogin={() => handleSocialLogin('github')}
                 onLinkedInLogin={() => handleSocialLogin('linkedin')}
                 authLoading={authLoading}
+                email={pendingReg?.email}
+                onVerify={handleVerifyOtp}
+                onResend={handleResendOtp}
+                onBack={handleBackToSignup}
               />
             </div>
           )}

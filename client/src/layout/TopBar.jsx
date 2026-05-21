@@ -3,10 +3,8 @@ import './TopBar.css';
 
 function TopBar({ onToggle }) {
   return (
-    <div className="topbar">
-      <BiFoodMenu className="menubtn" onClick={onToggle} />
-      <h3 className="topbar-title">Road2Dev</h3>
-    </div>
+    <section className="topbar">
+    </section>
   );
 }
 

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import useZenuxAuth from "../hooks/useZenuxAuth";
+import useAuth from "../hooks/useAuth";
 
 /* ─── TINY HOOKS ─────────────────────────────────── */
 function useHover() {
@@ -378,7 +379,11 @@ function EditProfile({ data, onSave, onCancel, onLogout }) {
    ═══════════════════════════════════════════════════ */
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const { isAuthenticated, user, loading, logout } = useZenuxAuth();
+  const zenuxAuth = useZenuxAuth();
+  const customAuth = useAuth();
+  const isAuthenticated = zenuxAuth.isAuthenticated || customAuth.isAuthenticated;
+  const loading = zenuxAuth.loading || customAuth.loading;
+  const user = zenuxAuth.user || customAuth.user;
   const [view, setView] = useState("profile");
   const [data, setData] = useState({
     name:     "Alex Developer",
@@ -405,8 +410,8 @@ export default function ProfilePage() {
     }
   }, [user]);
 
-  const handleLogout = async () => {
-    await logout();
+  const handleLogout = () => {
+    localStorage.clear();
     navigate("/auth", { replace: true });
   };
 

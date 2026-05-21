@@ -16,16 +16,20 @@ import {
 } from "react-icons/bi";
 import { useState } from 'react'
 import useZenuxAuth from '../hooks/useZenuxAuth';
+import useAuth from '../hooks/useAuth';
 
 function Sidebar() {
     const [activeLink, setActiveLink] = useState('home');
     const [close, setClose] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
-    const { isAuthenticated, logout } = useZenuxAuth();
+    const zenuxAuth = useZenuxAuth();
+    const customAuth = useAuth();
+    const isAuthenticated = zenuxAuth.isAuthenticated || customAuth.isAuthenticated;
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-        await logout();
+        // Clear both auth systems
+        localStorage.clear();
         navigate('/auth', { replace: true });
     };
 
