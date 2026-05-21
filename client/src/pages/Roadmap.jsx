@@ -11,7 +11,7 @@ const Roadmap = () => {
 
   const completed = [ "html", "css", "javascript", "react", "nodejs", "express", "mongodb", "projects", "sql", 
     "php", "mysql", "laravel", "python", "django", "nextjs", "wordpress", "c", "dsa", "cpp",
-  "java"]; // Example completed modules
+  "java "]; // Example completed modules
 
   const handleClick = (slug, index) => {
     const isUnlocked = index === 0 || completed.includes(slug);

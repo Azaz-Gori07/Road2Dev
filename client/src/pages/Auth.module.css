@@ -1,0 +1,531 @@
+/* Auth.module.css - Scoped styles for Auth component */
+
+/* Global reset - only applies within this component */
+.globalContainer {
+  all: initial;
+}
+
+.globalContainer,
+.globalContainer *,
+.globalContainer *::before,
+.globalContainer *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Main container */
+.globalContainer {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Outer stage */
+.outerStage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0c0c0c;
+  padding: 20px;
+  font-family: 'DM Sans', sans-serif;
+  perspective: 1200px;
+}
+
+/* Card wrapper */
+.cardWrapper {
+  width: 100%;
+  max-width: 920px;
+  position: relative;
+  animation: cardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Card base */
+.card {
+  display: flex;
+  width: 100%;
+  min-height: 600px;
+  background: #141414;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* Exit animation */
+.cardExit {
+  position: relative;
+  animation-duration: 0.65s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: forwards;
+}
+
+/* Enter animation */
+.cardEnter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation-duration: 0.65s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: forwards;
+}
+
+/* Animation keyframes */
+@keyframes slideExitY {
+  from { transform: rotateY(0deg); opacity: 1; }
+  to { transform: rotateY(var(--exitY)); opacity: 0; }
+}
+
+@keyframes slideEnterY {
+  from { transform: rotateY(var(--enterY)); opacity: 0; }
+  to { transform: rotateY(0deg); opacity: 1; }
+}
+
+@keyframes slideExitX {
+  from { transform: rotateX(0deg); opacity: 1; }
+  to { transform: rotateX(var(--exitX)); opacity: 0; }
+}
+
+@keyframes slideEnterX {
+  from { transform: rotateX(var(--enterX)); opacity: 0; }
+  to { transform: rotateX(0deg); opacity: 1; }
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Panel container */
+.panelContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* Left panel */
+.authLeft {
+  flex: 1;
+  background: #0f0f0f;
+  padding: 44px 40px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255, 255, 255, 0.016) 39px, rgba(255, 255, 255, 0.016) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255, 255, 255, 0.016) 39px, rgba(255, 255, 255, 0.016) 40px);
+}
+
+/* Left panel for reset page */
+.authLeftReset {
+  flex: 1;
+  background: #0f0f0f;
+  padding: 44px 40px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255, 255, 255, 0.016) 39px, rgba(255, 255, 255, 0.016) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255, 255, 255, 0.016) 39px, rgba(255, 255, 255, 0.016) 40px);
+}
+
+/* Right panel */
+.authRight {
+  flex: 1.1;
+  background: #181818;
+  padding: 50px 46px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Logo styles */
+.logoWrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 48px;
+}
+
+.logoIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 11px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #1e8a4a 0%, #1a6fc4 50%, #0e3a7a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoName {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #40c8e0;
+}
+
+/* Typography */
+.authHeadline {
+  font-family: 'Syne', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  color: #f0f0f0;
+  margin-bottom: 12px;
+}
+
+.authSubheadline {
+  font-size: 15px;
+  color: #888;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.55;
+  margin-bottom: 36px;
+}
+
+.authSubheadlineReset {
+  font-size: 15px;
+  color: #888;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.formTitle {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #f0f0f0;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.formSubtitle {
+  font-size: 13.5px;
+  color: #888;
+  text-align: center;
+  margin-bottom: 30px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.formSubtitleForgot {
+  font-size: 13.5px;
+  color: #888;
+  text-align: center;
+  margin-bottom: 32px;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.6;
+}
+
+/* Features */
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.featureIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featureLabel {
+  font-size: 14.5px;
+  color: #ccc;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Signup link */
+.authSignup {
+  margin-top: 40px;
+}
+
+.authSignup p {
+  font-size: 14px;
+  color: #888;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.signupLink {
+  background: none;
+  border: none;
+  color: #40c8e0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.signupLink:hover {
+  color: #3de8a0;
+}
+
+/* Form fields */
+.fieldGroup {
+  margin-bottom: 18px;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #f0f0f0;
+  margin-bottom: 7px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.fieldWrap {
+  position: relative;
+}
+
+.fieldInput {
+  width: 100%;
+  background: #1f1f1f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #f0f0f0;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  caret-color: #40c8e0;
+  box-sizing: border-box;
+}
+
+.fieldInput::-webkit-input-placeholder {
+  color: #444;
+}
+
+.fieldInputFocused {
+  border-color: rgba(64, 200, 224, 0.45);
+  box-shadow: 0 0 0 3px rgba(64, 200, 224, 0.08);
+}
+
+/* Password toggle */
+.passwordToggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #444;
+  display: flex;
+  padding: 4px;
+}
+
+.passwordToggle:hover {
+  color: #888;
+}
+
+.passwordToggle svg {
+  stroke: currentColor;
+}
+
+/* Forgot row */
+.forgotRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 22px;
+}
+
+.forgotLink {
+  background: none;
+  border: none;
+  color: #40c8e0;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.forgotLink:hover {
+  color: #3de8a0;
+}
+
+/* Gradient button */
+.gradBtn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #5b8dee 0%, #3de8a0 100%);
+  border: none;
+  border-radius: 10px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+
+.gradBtnHover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(91, 141, 238, 0.35);
+}
+
+.gradBtnPressed {
+  transform: scale(0.98);
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 22px 0 18px;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.dividerText {
+  font-size: 12.5px;
+  color: #444;
+  white-space: nowrap;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Social buttons */
+.socialRow {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.socialBtn {
+  width: 52px;
+  height: 52px;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.socialBtnHover {
+  background: #252525;
+  border-color: rgba(255, 255, 255, 0.13);
+  transform: translateY(-2px);
+}
+
+/* Terms */
+.termsLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  cursor: pointer;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.checkboxChecked {
+  background: #40c8e0;
+  border-color: #40c8e0;
+}
+
+.termsText {
+  font-size: 13px;
+  color: #888;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.termsLink {
+  color: #40c8e0;
+  cursor: pointer;
+}
+
+.termsLink:hover {
+  color: #3de8a0;
+}
+
+/* Back to login */
+.backToLogin {
+  text-align: center;
+  margin-top: 28px;
+}
+
+.backToLogin p {
+  font-size: 13.5px;
+  color: #888;
+  font-family: 'DM Sans', sans-serif;
+  margin-bottom: 8px;
+}
+
+.backLink {
+  background: none;
+  border: none;
+  color: #40c8e0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.backLink:hover {
+  color: #3de8a0;
+}
+
+/* Envelope container */
+.envelopeContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+/* Auto-fill fix */
+.fieldInput:-webkit-autofill,
+.fieldInput:-webkit-autofill:hover,
+.fieldInput:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #1f1f1f inset !important;
+  -webkit-text-fill-color: #f0f0f0 !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
