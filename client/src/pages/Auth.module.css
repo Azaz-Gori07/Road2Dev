@@ -1,6 +1,4 @@
-/* Auth.module.css - Scoped styles for Auth component */
 
-/* Global reset - only applies within this component */
 .globalContainer {
   all: initial;
 }
@@ -12,6 +10,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  background-color: transparent;
 }
 
 /* Main container */
@@ -32,7 +31,7 @@
   perspective: 1200px;
 }
 
-/* Card wrapper */
+
 .cardWrapper {
   width: 100%;
   max-width: 920px;
@@ -40,7 +39,7 @@
   animation: cardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Card base */
+
 .card {
   display: flex;
   width: 100%;
@@ -145,6 +144,7 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 48px;
+  background-color: transparent;
 }
 
 .logoIcon {
@@ -156,6 +156,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: transparent;
 }
 
 .logoName {
@@ -163,6 +164,7 @@
   font-size: 22px;
   font-weight: 700;
   color: #40c8e0;
+  background-color: transparent;
 }
 
 /* Typography */
@@ -171,12 +173,14 @@
   font-size: 30px;
   font-weight: 800;
   color: #f0f0f0;
+  background-color: transparent;
   margin-bottom: 12px;
 }
 
 .authSubheadline {
   font-size: 15px;
   color: #888;
+  background-color: transparent;
   font-family: 'DM Sans', sans-serif;
   line-height: 1.55;
   margin-bottom: 36px;
@@ -185,6 +189,7 @@
 .authSubheadlineReset {
   font-size: 15px;
   color: #888;
+  background-color: transparent;
   font-family: 'DM Sans', sans-serif;
   line-height: 1.6;
   margin-bottom: 24px;
@@ -195,6 +200,7 @@
   font-size: 22px;
   font-weight: 700;
   color: #f0f0f0;
+  background-color: transparent;
   text-align: center;
   margin-bottom: 6px;
 }
@@ -202,6 +208,7 @@
 .formSubtitle {
   font-size: 13.5px;
   color: #888;
+  background-color: transparent;
   text-align: center;
   margin-bottom: 30px;
   font-family: 'DM Sans', sans-serif;
@@ -210,6 +217,7 @@
 .formSubtitleForgot {
   font-size: 13.5px;
   color: #888;
+  background-color: transparent;
   text-align: center;
   margin-bottom: 32px;
   font-family: 'DM Sans', sans-serif;
@@ -222,12 +230,14 @@
   flex-direction: column;
   gap: 18px;
   flex: 1;
+  background-color: transparent;
 }
 
 .featureItem {
   display: flex;
   align-items: center;
   gap: 16px;
+  background-color: transparent;
 }
 
 .featureIcon {
@@ -238,22 +248,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: transparent;
 }
 
 .featureLabel {
   font-size: 14.5px;
   color: #ccc;
   font-family: 'DM Sans', sans-serif;
+  background-color: transparent;
 }
 
 /* Signup link */
 .authSignup {
   margin-top: 40px;
+  background-color: transparent;
 }
 
 .authSignup p {
   font-size: 14px;
   color: #888;
+  background-color: transparent;
   font-family: 'DM Sans', sans-serif;
 }
 
@@ -275,6 +289,7 @@
 /* Form fields */
 .fieldGroup {
   margin-bottom: 18px;
+  background-color: transparent;
 }
 
 .fieldLabel {
@@ -284,10 +299,12 @@
   color: #f0f0f0;
   margin-bottom: 7px;
   font-family: 'DM Sans', sans-serif;
+  background-color: transparent;
 }
 
 .fieldWrap {
   position: relative;
+  background-color: transparent;
 }
 
 .fieldInput {
@@ -334,6 +351,7 @@
 
 .passwordToggle svg {
   stroke: currentColor;
+  background-color: transparent;
 }
 
 /* Forgot row */
@@ -341,6 +359,7 @@
   display: flex;
   justify-content: flex-end;
   margin-bottom: 22px;
+  background-color: transparent;
 }
 
 .forgotLink {
@@ -389,6 +408,7 @@
   align-items: center;
   gap: 12px;
   margin: 22px 0 18px;
+  background-color: transparent;
 }
 
 .dividerLine {
@@ -402,6 +422,7 @@
   color: #444;
   white-space: nowrap;
   font-family: 'DM Sans', sans-serif;
+  background-color: transparent;
 }
 
 /* Social buttons */
@@ -409,6 +430,7 @@
   display: flex;
   justify-content: center;
   gap: 14px;
+  background-color: transparent;
 }
 
 .socialBtn {
@@ -437,6 +459,7 @@
   gap: 10px;
   margin-bottom: 22px;
   cursor: pointer;
+  background-color: transparent;
 }
 
 .checkbox {
@@ -450,6 +473,7 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
+  background-color: transparent;
 }
 
 .checkboxChecked {

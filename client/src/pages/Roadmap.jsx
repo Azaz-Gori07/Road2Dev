@@ -122,7 +122,7 @@ const Roadmap = () => {
       </div>
 
       <div className="roadmap-navigation">
-        <button className="button" onClick={handleBack}>
+        <button className="roadmap-nav-button main-action-btn" onClick={handleBack}>
           ← Go Back
         </button>
       </div>

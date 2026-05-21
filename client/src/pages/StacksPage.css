@@ -65,7 +65,7 @@
     line-height: 1.40;
 }
 
-.stacks-container .buttons {
+.stacks-container .stacks-buttons {
     margin-bottom: 100px;
     display: flex;
     gap: 20px;
@@ -119,7 +119,7 @@
         max-width: 100%;
     }
 
-    .stacks-container .buttons .button {
+    .stacks-container .stacks-buttons .stacks-button {
         padding: 14px 18px;
     }
 }

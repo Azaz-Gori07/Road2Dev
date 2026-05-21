@@ -189,12 +189,12 @@
     border-top: 1px solid #333;
 }
 
-.content-container .button {
+.content-back-button {
     position: fixed;
     top: 15px;
     left: 15px;
     background-color: #111;
-    color: #fff;
+    color: #2c9caf;
     border: 1px solid #333;
     border-radius: 6px;
     padding: 8px 10px;
@@ -202,11 +202,28 @@
     font-size: 0.9rem;
     transition: all 0.3s ease;
     z-index: 100;
+
+    
 }
 
-.back-button:hover {
-    background-color: #1a1a1a;
-    border-color: #4a9eff;
+  .content-back-button:hover {
+  color: #ffffff;
+  transform: scale(1.1);
+  outline: 2px solid #70bdca;
+  box-shadow: 4px 5px 17px -4px #268391;
+}
+
+.content-back-button::before {
+  content: "";
+  position: absolute;
+  left: -50px;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background-color: #2c9caf;
+  transform: skewX(45deg);
+  z-index: -1;
+  transition: width 1000ms;
 }
 
 .levels-container::-webkit-scrollbar {
@@ -292,7 +309,7 @@
         font-size: 1.1rem;
     }
     
-    .back-button {
+    .content-back-button {
         top: 12px;
         left: 12px;
         padding: 6px 14px;

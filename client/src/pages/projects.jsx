@@ -61,7 +61,7 @@ const ProjectsContent = () => {
   return (
     <div className="projects-page-23">
       <div className="back-btn-23">
-        <button className="button" onClick={handleBack}>
+        <button className="projects-back-button main-action-btn" onClick={handleBack}>
           ← Back
         </button>
       </div>

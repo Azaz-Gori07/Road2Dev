@@ -142,13 +142,13 @@
   50% { opacity: 0; }
 }
 
-.buttons {
+.home .home-buttons {
   margin-top: 2.5rem;
   display: flex;
   gap: 1.5rem;
   z-index: 1;
 }
-.button {
+.home .home-button {
   padding: .7em 1.7em;
   border: none;
   border-radius: 5px;
@@ -168,7 +168,7 @@
 }
 
 @media (min-width:550px) and (max-width:800px) {
-  .button {
+  .home .home-button {
   padding: .7em 1em;
   border: none;
   border-radius: 5px;
@@ -186,11 +186,11 @@
 }
 
 @media (min-width:300px) and (max-width:550px) {
-  .buttons{
+  .home .home-buttons{
     flex-direction: column;
     gap: 1rem;
   }
-  .button {
+  .home .home-button {
   padding: 1em 1em;
   border: none;
   border-radius: 5px;
@@ -208,14 +208,14 @@
 
 }
 
-button:hover {
+.home .home-button:hover {
   color: #ffffff;
   transform: scale(1.1);
   outline: 2px solid #70bdca;
   box-shadow: 4px 5px 17px -4px #268391;
 }
 
-button::before {
+.home .home-button::before {
   content: "";
   position: absolute;
   left: -50px;
@@ -228,7 +228,7 @@ button::before {
   transition: width 1000ms;
 }
 
-button:hover::before {
+.home .home-button:hover::before {
   width: 250%;
 }
 

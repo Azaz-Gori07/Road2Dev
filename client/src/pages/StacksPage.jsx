@@ -35,9 +35,9 @@ function StacksPage() {
                 fieldData.type === "linear" ? (
                     <>
                         <p className='sub-title'>{fieldData.note}</p>
-                        <div className="buttons">
-                            <button className='button'>Start {fieldData.field}</button>
-                            <button className='button' onClick={handleGoBack}>Go back</button>
+                        <div className="stacks-buttons">
+                            <button className='stacks-button main-action-btn'>Start {fieldData.field}</button>
+                            <button className='stacks-button main-action-btn' onClick={handleGoBack}>Go back</button>
                         </div>
                     </>
 

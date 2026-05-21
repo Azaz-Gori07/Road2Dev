@@ -249,7 +249,7 @@
     flex-shrink: 0; 
 }
 
-.nav-button {
+.roadmap-nav-button {
     padding: 14px 28px;
     background-color: #111;
     color: #fff;
@@ -263,7 +263,7 @@
     flex-shrink: 0; 
 }
 
-.nav-button:hover {
+.roadmap-nav-button:hover {
     background-color: #1a1a1a;
     border-color: #4a9eff;
     transform: translateY(-2px);
@@ -418,7 +418,7 @@
         top: 20px;
     }
     
-    .nav-button {
+    .roadmap-nav-button {
         padding: 10px 20px;
         font-size: 0.9rem;
     }
