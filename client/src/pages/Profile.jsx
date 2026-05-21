@@ -1,5 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Profile.css";
+import useZenuxAuth from "../hooks/useZenuxAuth";
 
 /* ─── TINY HOOKS ─────────────────────────────────── */
 function useHover() {
@@ -256,7 +258,7 @@ function ProfileView({ data, onEdit }) {
 /* ═══════════════════════════════════════════════════
    EDIT PROFILE VIEW
    ═══════════════════════════════════════════════════ */
-function EditProfile({ data, onSave, onCancel }) {
+function EditProfile({ data, onSave, onCancel, onLogout }) {
   const [form, setForm] = useState({ ...data });
   const [emailNotif, setEmailNotif] = useState(true);
   const [publicProf, setPublicProf] = useState(true);
@@ -362,7 +364,7 @@ function EditProfile({ data, onSave, onCancel }) {
           </div>
           
           {/* Log Out button */}
-          <button className="logout-btn">
+          <button onClick={onLogout} className="logout-btn">
             LOG OUT
           </button>
         </div>
@@ -375,6 +377,8 @@ function EditProfile({ data, onSave, onCancel }) {
    ROOT EXPORT
    ═══════════════════════════════════════════════════ */
 export default function ProfilePage() {
+  const navigate = useNavigate();
+  const { isAuthenticated, user, loading, logout } = useZenuxAuth();
   const [view, setView] = useState("profile");
   const [data, setData] = useState({
     name:     "Alex Developer",
@@ -389,6 +393,41 @@ export default function ProfilePage() {
     language: "English",
   });
 
+  // Update profile data from OAuth user info
+  useEffect(() => {
+    if (user) {
+      setData(prev => ({
+        ...prev,
+        name: user.name || user.preferred_username || prev.name,
+        email: user.email || prev.email,
+        headline: user.headline || prev.headline,
+      }));
+    }
+  }, [user]);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/auth", { replace: true });
+  };
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      navigate('/auth', { replace: true });
+    }
+  }, [loading, isAuthenticated, navigate]);
+
+  if (loading) {
+    return (
+      <div className="profile-page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <div style={{ color: '#888', fontSize: 14, fontFamily: 'DM Sans, sans-serif' }}>Loading...</div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className="profile-page">
       {view === "profile"
@@ -396,8 +435,33 @@ export default function ProfilePage() {
         : <EditProfile data={data}
             onSave={updated => { setData(updated); setView("profile"); }}
             onCancel={() => setView("profile")}
+            onLogout={handleLogout}
           />
       }
+      {isAuthenticated && view === "profile" && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
+          <button
+            onClick={handleLogout}
+            style={{
+              background: 'rgba(255,60,60,0.1)',
+              border: '1px solid rgba(255,60,60,0.2)',
+              borderRadius: 10,
+              padding: '10px 28px',
+              color: '#ff6b6b',
+              fontFamily: 'Syne, sans-serif',
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => { e.target.style.background = 'rgba(255,60,60,0.2)'; }}
+            onMouseLeave={e => { e.target.style.background = 'rgba(255,60,60,0.1)'; }}
+          >
+            LOG OUT
+          </button>
+        </div>
+      )}
     </div>
   );
 }

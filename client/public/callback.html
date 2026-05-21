@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redirecting...</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0c0c0c;
+      color: #f0f0f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .loader {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(64,200,224,0.15);
+      border-top: 3px solid #40c8e0;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    p { margin-top: 16px; font-size: 14px; color: #888; }
+  </style>
+</head>
+<body>
+  <div style="text-align:center">
+    <div class="loader"></div>
+    <p>Completing authentication...</p>
+  </div>
+  <script src="https://unpkg.com/zenuxs-oauth@4.2.0/dist/zenux-oauth.min.js"></script>
+  <script>
+    // Extract the full callback URL including query params / hash
+    var currentUrl = window.location.href;
+
+    // Use the ZenuxsOAuth static callback handler
+    if (window.ZenuxOAuth && window.ZenuxOAuth.createCallbackHandler) {
+      var handler = window.ZenuxOAuth.createCallbackHandler({
+        clientId: "f3b01e0825dd896d"
+      });
+      handler.handleCallback(currentUrl);
+    } else {
+      // Fallback: pass the URL back via postMessage to the opener (popup)
+      if (window.opener) {
+        window.opener.postMessage({
+          type: 'oauth_callback',
+          url: currentUrl
+        }, window.location.origin);
+      }
+      window.close();
+    }
+  </script>
+</body>
+</html>
