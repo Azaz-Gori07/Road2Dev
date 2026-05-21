@@ -9,17 +9,8 @@ const Roadmap = () => {
   const roadmapKey = stackSlug || fieldSlug;
   const roadmap = stackFlow[roadmapKey];
 
-  const completed = [ "html", "css", "javascript", "react", "nodejs", "express", "mongodb", "projects", "sql", 
-    "php", "mysql", "laravel", "python", "django", "nextjs", "wordpress", "c", "dsa", "cpp",
-  "java "]; // Example completed modules
-
-  const handleClick = (slug, index) => {
-    const isUnlocked = index === 0 || completed.includes(slug);
-    if (isUnlocked) {
-      navigate(`/learning/${fieldSlug}/${stackSlug}/${slug}`);
-    } else {
-      alert("Complete previous module to unlock this one");
-    }
+  const handleClick = (slug) => {
+    navigate(`/learning/${fieldSlug}/${stackSlug}/${slug}`);
   };
 
   const getModuleTitle = (slug) => {
@@ -75,20 +66,17 @@ const Roadmap = () => {
 
       <div className="roadmap-progress">
         <p className="progress-text">
-          Progress: {completed.length} of {roadmap.length} modules completed
+          Available modules: {roadmap.length}
         </p>
       </div>
 
       <div className="roadmap-list">
         {roadmap.map((slug, index) => {
-          const isUnlocked = index === 0 || completed.includes(slug);
-          const isCompleted = completed.includes(slug);
-
           return (
             <div
               key={slug}
-              onClick={() => handleClick(slug, index)}
-              className={`roadmap-item ${isUnlocked ? 'unlocked' : 'locked'} ${isCompleted ? 'completed' : ''}`}
+              onClick={() => handleClick(slug)}
+              className="roadmap-item unlocked"
             >
               <div className="progress-line"></div>
               <div className="item-index">{index + 1}</div>
@@ -98,22 +86,8 @@ const Roadmap = () => {
                   <p className="module-desc">{getModuleDescription(slug)}</p>
                 </div>
                 <div className="module-status">
-                  {isCompleted ? (
-                    <>
-                      <span className="status-badge badge-completed">Completed</span>
-                      <span className="status-icon">✅</span>
-                    </>
-                  ) : isUnlocked ? (
-                    <>
-                      <span className="status-badge badge-unlocked">Start Learning</span>
-                      <span className="status-icon">🔓</span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="status-badge badge-locked">Locked</span>
-                      <span className="status-icon">🔒</span>
-                    </>
-                  )}
+                  <span className="status-badge badge-unlocked">Start Learning</span>
+                  <span className="status-icon">▶️</span>
                 </div>
               </div>
             </div>
