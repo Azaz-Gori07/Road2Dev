@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/index.js"
+    }
+  ],
+  "env": {
+    "MONGODB_URL": "@mongodb_url",
+    "JWT_SECRET": "@jwt_secret",
+    "PORT": "5500",
+    "ZENUXS_CLIENT_ID": "@zenuxs_client_id",
+    "ZENUXS_CLIENT_SECRET": "@zenuxs_client_secret",
+    "ZENUXS_AUTH_SERVER": "@zenuxs_auth_server",
+    "EMAIL_USER": "@email_user",
+    "EMAIL_PASS": "@email_pass",
+    "AI_API_KEY": "@ai_api_key"
+  }
+}

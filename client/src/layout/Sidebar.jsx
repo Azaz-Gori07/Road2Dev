@@ -28,8 +28,8 @@ function Sidebar() {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-        // Clear both auth systems
-        localStorage.clear();
+        await Promise.all([customAuth.logout?.(), zenuxAuth.logout?.()]);
+        sessionStorage.clear();
         navigate('/auth', { replace: true });
     };
 

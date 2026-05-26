@@ -419,8 +419,9 @@ export default function ProfilePage() {
     }
   }, [authUser]);
 
-  const handleLogout = () => {
-    localStorage.clear();
+  const handleLogout = async () => {
+    await Promise.all([customAuth.logout?.(), zenuxAuth.logout?.()]);
+    sessionStorage.clear();
     navigate("/auth", { replace: true });
   };
 

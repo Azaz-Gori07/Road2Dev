@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { FiMic, FiSend, FiRefreshCw, FiSkipForward, FiSave, FiPlay, FiClock, FiMessageCircle, FiDownload } from 'react-icons/fi';
 import './InterviewPrep.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
@@ -303,6 +305,120 @@ const INTERVIEW_TYPES = [
   { id: "mixed", label: "Mixed", desc: "Balanced technical, HR and behavioral preparation." },
 ];
 
+const formatTimer = (seconds) => {
+  const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+  const secs = (seconds % 60).toString().padStart(2, '0');
+  return `${mins}:${secs}`;
+};
+
+const simpleMarkdown = (text = '') => {
+  const parts = text.split(/(```[\s\S]*?```|`[^`]+`)/g);
+  return parts.map((part, index) => {
+    if (!part) return null;
+    if (part.startsWith('```') && part.endsWith('```')) {
+      const code = part.slice(3, -3).trim();
+      return (
+        <pre className="code-block" key={index}>
+          {code}
+        </pre>
+      );
+    }
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return (
+        <code className="inline-code" key={index}>
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return <span key={index}>{part}</span>;
+  });
+};
+
+const buildFeedback = (answer, question, index) => {
+  const trimmed = answer.trim();
+  const baseScore = Math.min(92, Math.max(55, Math.round(trimmed.length / 1.4)));
+  const accuracy = Math.max(60, Math.min(95, baseScore));
+  const communication = Math.max(55, Math.min(95, Math.round(baseScore * 0.92)));
+  const technical = Math.max(50, Math.min(95, Math.round(baseScore * 0.88)));
+  const confidence = Math.round((accuracy + communication + technical) / 3);
+  const weaknesses = [];
+  if (trimmed.length < 90) weaknesses.push('Add more technical depth and specific examples.');
+  if (!/performance|scalability|security|database|architecture|API|algorithm/i.test(trimmed)) weaknesses.push('Include architecture or design terms to strengthen your answer.');
+  if (!/first|next|then|finally|because/i.test(trimmed)) weaknesses.push('Use clear structure and transition language for better flow.');
+  const missingPoints = weaknesses.length ? weaknesses.join(' ') : 'Good coverage with a professional tone.';
+  const improvedAnswer = trimmed
+    ? `A polished professional response: ${trimmed.charAt(0).toUpperCase() + trimmed.slice(1)}.`
+    : 'A strong answer should include a concise explanation, a technical example, and a structured outcome.';
+  const tips = [
+    'Keep your answers structured with situation, action, result.',
+    'Mention specific tools or frameworks when relevant.',
+    'Clarify the trade-offs behind your choices.',
+  ];
+
+  return {
+    id: `ai-feedback-${index}-${Date.now()}`,
+    role: 'ai',
+    type: 'feedback',
+    analysis: {
+      correctness: accuracy >= 85 ? 'Strong' : accuracy >= 70 ? 'Good' : 'Needs improvement',
+      technicalDepth: technical >= 78 ? 'Deep' : technical >= 65 ? 'Moderate' : 'Basic',
+      communication: communication >= 80 ? 'Clear' : communication >= 65 ? 'Solid' : 'Could improve',
+      missingPoints,
+      confidence: `${confidence}%`,
+    },
+    improvedAnswer,
+    tips,
+    score: {
+      accuracy,
+      confidence,
+      technical,
+      communication,
+    },
+    timestamp: new Date().toISOString(),
+  };
+};
+
+const buildInterviewSummary = (messages, totalQuestions) => {
+  const feedbackMessages = messages.filter((message) => message.type === 'feedback');
+  const scores = feedbackMessages.reduce(
+    (acc, message) => {
+      acc.accuracy += message.score.accuracy;
+      acc.technical += message.score.technical;
+      acc.communication += message.score.communication;
+      acc.confidence += message.score.confidence;
+      return acc;
+    },
+    { accuracy: 0, technical: 0, communication: 0, confidence: 0 }
+  );
+  const count = Math.max(1, feedbackMessages.length);
+  const overall = Math.round((scores.accuracy + scores.technical + scores.communication + scores.confidence) / (count * 4));
+
+  return {
+    overallScore: overall,
+    completed: feedbackMessages.length,
+    totalQuestions,
+    strengths: [
+      'Clear professional tone',
+      'Helpful action-oriented structure',
+      'Relevant technical examples',
+    ],
+    weaknesses: [
+      'Improve depth on edge cases',
+      'Add more architecture reasoning',
+      'Be more explicit about trade-offs',
+    ],
+    recommendedTopics: ['System design', 'API best practices', 'Performance optimization'],
+    readiness:
+      overall >= 85
+        ? 'Interview-ready'
+        : overall >= 70
+        ? 'Strong candidate with room to polish'
+        : 'Needs more focused practice',
+  };
+};
+
+const buildMessageId = (prefix) => `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+
 // --- Helper Components ---
 const HistoryButton = () => (
   <button className="btn-history">
@@ -350,27 +466,77 @@ const InterviewPrep = () => {
   const [selectedField, setSelectedField] = useState(null);
   const [selectedStack, setSelectedStack] = useState(null);
   const [selectedExp, setSelectedExp] = useState(null);
-  const [selectedInterviewType, setSelectedInterviewType] = useState("technical");
+  const [selectedInterviewType, setSelectedInterviewType] = useState('technical');
   const [interviewSession, setInterviewSession] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
+  const [interviewStarted, setInterviewStarted] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [messageInput, setMessageInput] = useState('');
+  const [isAiTyping, setIsAiTyping] = useState(false);
+  const [timerSeconds, setTimerSeconds] = useState(0);
+  const [interviewCompleted, setInterviewCompleted] = useState(false);
+  const [savedInterview, setSavedInterview] = useState(null);
   const abortControllerRef = useRef(null);
+  const chatEndRef = useRef(null);
 
-  const selectedFieldData = FIELDS.find(f => f.id === selectedField);
-  const selectedStackData = selectedFieldData?.stacks.find(s => s.id === selectedStack);
-  const selectedExpData = EXP.find(e => e.id === selectedExp);
-  const selectedTypeData = INTERVIEW_TYPES.find(type => type.id === selectedInterviewType);
+  const selectedFieldData = FIELDS.find((f) => f.id === selectedField);
+  const selectedStackData = selectedFieldData?.stacks.find((s) => s.id === selectedStack);
+  const selectedExpData = EXP.find((e) => e.id === selectedExp);
+  const selectedTypeData = INTERVIEW_TYPES.find((type) => type.id === selectedInterviewType);
   const hasStacks = selectedFieldData && selectedFieldData.stacks.length > 0;
+  const totalQuestions = interviewSession?.questions?.length || 0;
 
   useEffect(() => {
+    abortControllerRef.current?.abort();
     return () => {
       abortControllerRef.current?.abort();
     };
   }, []);
 
+  useEffect(() => {
+    const saved = localStorage.getItem('road2dev-interview');
+    if (saved) {
+      try {
+        setSavedInterview(JSON.parse(saved));
+      } catch (e) {
+        console.warn('Unable to parse saved interview', e);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!interviewStarted) return;
+
+    const timer = setInterval(() => {
+      setTimerSeconds((value) => value + 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [interviewStarted]);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, [chatMessages, isAiTyping]);
+
   const resetGeneratedInterview = () => {
     setInterviewSession(null);
-    setError("");
+    setInterviewStarted(false);
+    setChatMessages([]);
+    setCurrentQuestionIndex(0);
+    setTimerSeconds(0);
+    setInterviewCompleted(false);
+    setError('');
+  };
+
+  const resetSetup = () => {
+    setCurrentStep(1);
+    setSelectedField(null);
+    setSelectedStack(null);
+    setSelectedExp(null);
+    setSelectedInterviewType('technical');
+    resetGeneratedInterview();
   };
 
   const handleSelectField = (id) => {
@@ -400,19 +566,23 @@ const InterviewPrep = () => {
     }
 
     setIsGenerating(true);
-    setError("");
+    setError('');
     setInterviewSession(null);
+    setInterviewStarted(false);
+    setChatMessages([]);
+    setInterviewCompleted(false);
+    setTimerSeconds(0);
 
     abortControllerRef.current?.abort();
     abortControllerRef.current = new AbortController();
 
     try {
       const response = await fetch(`${API_BASE}/interview/generate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           field: selectedFieldData.name,
-          stack: selectedStackData?.name || "",
+          stack: selectedStackData?.name || '',
           experienceLevel: selectedExp,
           interviewType: selectedInterviewType,
         }),
@@ -422,18 +592,243 @@ const InterviewPrep = () => {
       const result = await response.json().catch(() => null);
 
       if (!response.ok || !result?.success) {
-        throw new Error(result?.message || "Unable to generate interview questions.");
+        throw new Error(result?.message || 'Unable to generate interview questions.');
       }
 
       setInterviewSession(result.data);
       setCurrentStep(5);
     } catch (requestError) {
-      if (requestError.name !== "AbortError") {
-        setError(requestError.message || "Unable to generate interview questions.");
+      if (requestError.name !== 'AbortError') {
+        setError(requestError.message || 'Unable to generate interview questions.');
       }
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const handleStartInterview = () => {
+    if (!interviewSession) return;
+    setInterviewStarted(true);
+    setCurrentQuestionIndex(0);
+    setTimerSeconds(0);
+    setInterviewCompleted(false);
+    setChatMessages([
+      {
+        id: buildMessageId('ai-welcome'),
+        role: 'ai',
+        type: 'system',
+        text: `Welcome to your ${selectedTypeData?.label ?? 'AI'} interview. Answer each question with clarity, confidence, and detail.`,
+        timestamp: new Date().toISOString(),
+      },
+      {
+        id: buildMessageId('ai-question-0'),
+        role: 'ai',
+        type: 'question',
+        question: interviewSession.questions[0],
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+  };
+
+  const handleSendMessage = () => {
+    const trimmed = messageInput.trim();
+    if (!trimmed || !interviewSession || interviewCompleted) return;
+
+    const question = interviewSession.questions[currentQuestionIndex];
+    const userMessage = {
+      id: buildMessageId('user'),
+      role: 'user',
+      type: 'user',
+      text: trimmed,
+      timestamp: new Date().toISOString(),
+    };
+
+    setChatMessages((prev) => [...prev, userMessage]);
+    setMessageInput('');
+    setIsAiTyping(true);
+
+    const feedback = buildFeedback(trimmed, question, currentQuestionIndex);
+    const nextIndex = currentQuestionIndex + 1;
+
+    setTimeout(() => {
+      setChatMessages((prev) => {
+        const afterFeedback = [...prev, feedback];
+
+        if (nextIndex < totalQuestions) {
+          setTimeout(() => {
+            const nextQuestion = interviewSession.questions[nextIndex];
+            setChatMessages((prevNext) => [
+              ...prevNext,
+              {
+                id: buildMessageId('ai-question'),
+                role: 'ai',
+                type: 'question',
+                question: nextQuestion,
+                timestamp: new Date().toISOString(),
+              },
+            ]);
+            setCurrentQuestionIndex(nextIndex);
+            setIsAiTyping(false);
+          }, 900);
+        } else {
+          setTimeout(() => {
+            const summary = buildInterviewSummary([...afterFeedback], totalQuestions);
+            setChatMessages((prevNext) => [
+              ...prevNext,
+              {
+                id: buildMessageId('ai-summary'),
+                role: 'ai',
+                type: 'summary',
+                summary,
+                timestamp: new Date().toISOString(),
+              },
+            ]);
+            setInterviewCompleted(true);
+            setIsAiTyping(false);
+          }, 900);
+        }
+
+        return afterFeedback;
+      });
+    }, 1000);
+  };
+
+  const handleRetryAnswer = () => {
+    const lastUser = [...chatMessages].reverse().find((message) => message.role === 'user');
+    if (!lastUser) return;
+    setMessageInput(lastUser.text);
+    setChatMessages((prev) => prev.filter((message) => message.type !== 'feedback'));
+    setInterviewCompleted(false);
+  };
+
+  const handleRegenerateFeedback = () => {
+    const lastUser = [...chatMessages].reverse().find((message) => message.role === 'user');
+    const answeredIndex = Math.max(0, currentQuestionIndex - 1);
+    if (!lastUser || !interviewSession) return;
+
+    const question = interviewSession.questions[answeredIndex];
+    const regenerated = buildFeedback(lastUser.text, question, answeredIndex);
+    setIsAiTyping(true);
+
+    setTimeout(() => {
+      setChatMessages((prev) => {
+        const cleaned = prev.filter((message) => message.type !== 'feedback');
+        return [...cleaned, regenerated];
+      });
+      setIsAiTyping(false);
+    }, 900);
+  };
+
+  const handleSkipQuestion = () => {
+    if (!interviewSession || interviewCompleted) return;
+
+    const nextIndex = currentQuestionIndex + 1;
+    setChatMessages((prev) => [
+      ...prev,
+      {
+        id: buildMessageId('system'),
+        role: 'system',
+        type: 'note',
+        text: 'Skipping this question. We will continue with the next interview prompt.',
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+
+    if (nextIndex < totalQuestions) {
+      setTimeout(() => {
+        const nextQuestion = interviewSession.questions[nextIndex];
+        setChatMessages((prev) => [
+          ...prev,
+          {
+            id: buildMessageId('ai-question'),
+            role: 'ai',
+            type: 'question',
+            question: nextQuestion,
+            timestamp: new Date().toISOString(),
+          },
+        ]);
+        setCurrentQuestionIndex(nextIndex);
+      }, 850);
+    } else {
+      setTimeout(() => {
+        const summary = buildInterviewSummary(chatMessages, totalQuestions);
+        setChatMessages((prev) => [
+          ...prev,
+          {
+            id: buildMessageId('ai-summary'),
+            role: 'ai',
+            type: 'summary',
+            summary,
+            timestamp: new Date().toISOString(),
+          },
+        ]);
+        setInterviewCompleted(true);
+      }, 850);
+    }
+  };
+
+  const handleSaveInterview = () => {
+    if (!interviewSession) return;
+    const saved = {
+      interviewSession,
+      chatMessages,
+      currentQuestionIndex,
+      timerSeconds,
+      interviewStarted,
+      interviewCompleted,
+      savedAt: new Date().toISOString(),
+    };
+    localStorage.setItem('road2dev-interview', JSON.stringify(saved));
+    setSavedInterview(saved);
+  };
+
+  const handleResumeInterview = () => {
+    if (!savedInterview) return;
+    setInterviewSession(savedInterview.interviewSession);
+    setChatMessages(savedInterview.chatMessages || []);
+    setCurrentQuestionIndex(savedInterview.currentQuestionIndex || 0);
+    setTimerSeconds(savedInterview.timerSeconds || 0);
+    setInterviewStarted(savedInterview.interviewStarted ?? true);
+    setInterviewCompleted(savedInterview.interviewCompleted ?? false);
+  };
+
+  const handleEndInterview = () => {
+    if (!interviewSession) return;
+    const summary = buildInterviewSummary(chatMessages, totalQuestions);
+    setChatMessages((prev) => [
+      ...prev,
+      {
+        id: buildMessageId('ai-summary'),
+        role: 'ai',
+        type: 'summary',
+        summary,
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+    setInterviewCompleted(true);
+    setIsAiTyping(false);
+  };
+
+  const handleDownloadReport = () => {
+    const report = [`Interview Summary - ${new Date().toLocaleDateString()}`];
+    const summaryMessage = chatMessages.find((msg) => msg.type === 'summary');
+    if (summaryMessage?.summary) {
+      report.push(`Overall score: ${summaryMessage.summary.overallScore}%`);
+      report.push(`Readiness: ${summaryMessage.summary.readiness}`);
+      report.push('Strengths:');
+      summaryMessage.summary.strengths.forEach((item) => report.push(`- ${item}`));
+      report.push('Weaknesses:');
+      summaryMessage.summary.weaknesses.forEach((item) => report.push(`- ${item}`));
+      report.push('Recommended topics:');
+      summaryMessage.summary.recommendedTopics.forEach((item) => report.push(`- ${item}`));
+    }
+    const blob = new Blob([report.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'interview-report.txt';
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const goNext = () => {
@@ -474,13 +869,12 @@ const InterviewPrep = () => {
     return 'Next';
   };
 
-  // --- Screen Rendering Functions ---
   const renderFieldScreen = () => (
     <div className={`screen ${currentStep === 1 ? 'active' : ''}`}>
       <h2>1. Choose Your Field</h2>
       <p className="sub">Select the field you want to prepare for</p>
       <div className="field-grid">
-        {FIELDS.map(field => (
+        {FIELDS.map((field) => (
           <div
             key={field.id}
             className={`field-card ${selectedField === field.id ? 'selected' : ''}`}
@@ -505,7 +899,7 @@ const InterviewPrep = () => {
       <h2>2. Choose Your Stack</h2>
       <p className="sub">Select the technology stack you work with</p>
       <div className="stack-grid">
-        {selectedFieldData?.stacks.map(stack => (
+        {selectedFieldData?.stacks.map((stack) => (
           <div
             key={stack.id}
             className={`stack-card ${selectedStack === stack.id ? 'selected' : ''}`}
@@ -526,7 +920,7 @@ const InterviewPrep = () => {
       <h2>3. Select Experience Level</h2>
       <p className="sub">How much professional experience do you have?</p>
       <div className="exp-grid">
-        {EXP.map(exp => (
+        {EXP.map((exp) => (
           <div
             key={exp.id}
             className={`exp-card ${selectedExp === exp.id ? 'selected' : ''}`}
@@ -546,7 +940,7 @@ const InterviewPrep = () => {
       <h2>4. Select Interview Type</h2>
       <p className="sub">Choose the kind of interview session you want AI to generate</p>
       <div className="type-grid">
-        {INTERVIEW_TYPES.map(type => (
+        {INTERVIEW_TYPES.map((type) => (
           <div
             key={type.id}
             className={`type-card ${selectedInterviewType === type.id ? 'selected' : ''}`}
@@ -564,75 +958,280 @@ const InterviewPrep = () => {
 
   const renderStartScreen = () => {
     const field = selectedFieldData;
-    const exp = EXP.find(e => e.id === selectedExp);
-    const stack = field?.stacks.find(s => s.id === selectedStack);
+    const exp = EXP.find((e) => e.id === selectedExp);
+    const stack = field?.stacks.find((s) => s.id === selectedStack);
     const tags = [field?.name, stack?.name, exp?.label].filter(Boolean);
 
     return (
-      <div className={`screen ${currentStep === 5 && !interviewSession ? 'active' : ''}`}>
+      <div className={`screen ${currentStep === 5 ? 'active' : ''}`}>
         <div className="start-summary">
           <div className="start-icon">{field?.icon}</div>
-          <h3>Ready to Begin!</h3>
+          <h3>Ready to Begin</h3>
           <p>
-            Your AI interviewer is configured for <strong style={{ color: "#f0f2ff" }}>{field?.name}</strong>
-            {stack && ` – <strong style={{ color: "#f0f2ff" }}>${stack.name}</strong>`}. You'll be asked questions suited for a <strong style={{ color: "#f0f2ff" }}>{exp?.label}</strong> level candidate.
+            Your AI interviewer is ready for <strong>{field?.name}</strong>
+            {stack && ` — ${stack.name}`}. This session is tuned for <strong>{exp?.label}</strong> candidates.
           </p>
           <div className="tags">
-            {tags.map(tag => <div key={tag} className="tag">{tag}</div>)}
+            {tags.map((tag) => (
+              <div key={tag} className="tag">
+                {tag}
+              </div>
+            ))}
           </div>
+          <div className="start-actions">
+            <button className="btn-next" onClick={handleStartInterview} disabled={!interviewSession}>
+              Start Interview
+            </button>
+            <button className="btn-back" onClick={generateInterview} disabled={isGenerating}>
+              {isGenerating ? 'Regenerating...' : 'Refresh Session'}
+            </button>
+          </div>
+          {savedInterview && (
+            <div className="resume-panel">
+              <span>Saved interview found.</span>
+              <button className="btn-small" onClick={handleResumeInterview}>
+                Resume Interview
+              </button>
+            </div>
+          )}
         </div>
       </div>
     );
   };
 
-  const renderGeneratedScreen = () => (
-    <div className={`screen ${currentStep === 5 && interviewSession ? 'active' : ''}`}>
-      {interviewSession && (
-        <div className="interview-result">
-          <div className="result-header">
-            <div>
-              <h2>{interviewSession.title}</h2>
-              <p className="sub">{interviewSession.summary}</p>
+  const renderChatMessage = (message) => {
+    const time = new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    if (message.type === 'question') {
+      return (
+        <div className="chat-message ai" key={message.id}>
+          <div className="message-card ai-question">
+            <div className="message-header">
+              <div>
+                <span className="message-role">AI Interviewer</span>
+                <span className="message-time">{time}</span>
+              </div>
+              <span className="message-badge">{message.question.difficulty || 'Medium'}</span>
             </div>
-            <button className="btn-back" onClick={generateInterview} disabled={isGenerating}>
-              Regenerate
+            <div className="message-bubble ai-bubble">{simpleMarkdown(message.question.question)}</div>
+            {message.question.followUps?.length > 0 && (
+              <div className="follow-ups">
+                <strong>Follow-up prompts:</strong>
+                {message.question.followUps.map((followUp) => (
+                  <span key={followUp}>{followUp}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    if (message.type === 'feedback') {
+      return (
+        <div className="chat-message ai" key={message.id}>
+          <div className="message-card ai-feedback">
+            <div className="message-header">
+              <div>
+                <span className="message-role">Analysis & Feedback</span>
+                <span className="message-time">{time}</span>
+              </div>
+            </div>
+            <div className="feedback-grid">
+              <div className="feedback-pill">
+                <strong>Correctness</strong>
+                <span>{message.analysis.correctness}</span>
+              </div>
+              <div className="feedback-pill">
+                <strong>Technical</strong>
+                <span>{message.analysis.technicalDepth}</span>
+              </div>
+              <div className="feedback-pill">
+                <strong>Communication</strong>
+                <span>{message.analysis.communication}</span>
+              </div>
+              <div className="feedback-pill">
+                <strong>Confidence</strong>
+                <span>{message.analysis.confidence}</span>
+              </div>
+            </div>
+            <div className="feedback-section">
+              <strong>Missing / improvement points</strong>
+              <p>{message.analysis.missingPoints}</p>
+            </div>
+            <div className="feedback-section">
+              <strong>Polished answer</strong>
+              <div className="message-bubble ai-bubble">{simpleMarkdown(message.improvedAnswer)}</div>
+            </div>
+            <div className="feedback-section">
+              <strong>Tips</strong>
+              <ul>
+                {message.tips.map((tip) => (
+                  <li key={tip}>{tip}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="score-grid">
+              <div>
+                <strong>Accuracy</strong>
+                <span>{message.score.accuracy}%</span>
+              </div>
+              <div>
+                <strong>Technical</strong>
+                <span>{message.score.technical}%</span>
+              </div>
+              <div>
+                <strong>Comm</strong>
+                <span>{message.score.communication}%</span>
+              </div>
+              <div>
+                <strong>Confidence</strong>
+                <span>{message.score.confidence}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (message.type === 'summary') {
+      return (
+        <div className="chat-message ai" key={message.id}>
+          <div className="message-card ai-summary">
+            <div className="summary-header">
+              <div>
+                <span className="message-role">Interview Summary</span>
+                <span className="message-time">{time}</span>
+              </div>
+              <span className="summary-score">{message.summary.overallScore}%</span>
+            </div>
+            <div className="summary-grid">
+              <div>
+                <strong>Readiness</strong>
+                <p>{message.summary.readiness}</p>
+              </div>
+              <div>
+                <strong>Completed</strong>
+                <p>{message.summary.completed} / {message.summary.totalQuestions}</p>
+              </div>
+            </div>
+            <div className="summary-section">
+              <strong>Strengths</strong>
+              <ul>{message.summary.strengths.map((item) => <li key={item}>{item}</li>)}</ul>
+            </div>
+            <div className="summary-section">
+              <strong>Weaknesses</strong>
+              <ul>{message.summary.weaknesses.map((item) => <li key={item}>{item}</li>)}</ul>
+            </div>
+            <div className="summary-section">
+              <strong>Recommended topics</strong>
+              <ul>{message.summary.recommendedTopics.map((item) => <li key={item}>{item}</li>)}</ul>
+            </div>
+            <button className="btn-save" onClick={handleDownloadReport}>
+              <FiDownload size={16} /> Download report
             </button>
           </div>
-          <div className="tags">
-            {[selectedFieldData?.name, selectedStackData?.name, selectedExpData?.label, selectedTypeData?.label]
-              .filter(Boolean)
-              .map(tag => <div key={tag} className="tag">{tag}</div>)}
-          </div>
-          <div className="question-list">
-            {interviewSession.questions?.map((item, index) => (
-              <div className="question-card" key={`${item.question}-${index}`}>
-                <div className="question-top">
-                  <span className="question-number">Q{index + 1}</span>
-                  <span className="difficulty">{item.difficulty || "medium"}</span>
-                </div>
-                <h3>{item.question}</h3>
-                {item.expectedFocus && <p>{item.expectedFocus}</p>}
-                {item.followUps?.length > 0 && (
-                  <div className="follow-ups">
-                    <strong>Follow-ups</strong>
-                    {item.followUps.map(followUp => (
-                      <span key={followUp}>{followUp}</span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          {interviewSession.tips?.length > 0 && (
-            <div className="tips-box">
-              <strong>Tips</strong>
-              {interviewSession.tips.map(tip => <span key={tip}>{tip}</span>)}
-            </div>
-          )}
         </div>
-      )}
-    </div>
-  );
+      );
+    }
+
+    return (
+      <div className="chat-message system" key={message.id}>
+        <div className="system-note">{message.text}</div>
+      </div>
+    );
+  };
+
+  const renderChatScreen = () => {
+    const activeIndex = Math.min(currentQuestionIndex, Math.max(0, totalQuestions - 1));
+    const progress = totalQuestions ? Math.round(((activeIndex + 1) / totalQuestions) * 100) : 0;
+
+    return (
+      <div className="chat-shell">
+        <div className="chat-panel">
+          <div className="chat-topbar">
+            <div className="interviewer-card">
+              <div className="interviewer-avatar">AI</div>
+              <div>
+                <span className="subtitle">AI Interviewer</span>
+                <h3>{selectedTypeData?.label || 'Technical'} Interview</h3>
+              </div>
+            </div>
+            <div className="session-summary">
+              <span className="session-pill">Q {Math.min(activeIndex + 1, totalQuestions)} / {totalQuestions}</span>
+              <span className="session-pill">{formatTimer(timerSeconds)}</span>
+              <span className="session-pill">{interviewSession?.questions?.[activeIndex]?.difficulty || 'Medium'}</span>
+            </div>
+          </div>
+
+          <div className="progress-bar-wrap">
+            <div className="progress-bar">
+              <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+            </div>
+            <span>{progress}% complete</span>
+          </div>
+
+          <div className="chat-messages">
+            <AnimatePresence initial={false}>
+              {chatMessages.map((message) => (
+                <motion.div
+                  key={message.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  {renderChatMessage(message)}
+                </motion.div>
+              ))}
+            </AnimatePresence>
+            {isAiTyping && (
+              <div className="chat-message ai typing">
+                <div className="typing-bubble">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            )}
+            <div ref={chatEndRef} />
+          </div>
+
+          <div className="chat-input-panel">
+            <div className="chat-input-row">
+              <button className="icon-button" type="button">
+                <FiMic size={18} />
+              </button>
+              <textarea
+                className="chat-input"
+                rows={2}
+                value={messageInput}
+                onChange={(e) => setMessageInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }
+                }}
+                placeholder="Type your answer here and press Enter to submit..."
+                disabled={interviewCompleted}
+              />
+              <button className="btn-send" onClick={handleSendMessage} disabled={!messageInput.trim() || interviewCompleted}>
+                <FiSend size={18} /> Send
+              </button>
+            </div>
+            <div className="chat-actions">
+              <button className="action-pill" onClick={handleRetryAnswer} disabled={interviewCompleted}>Retry Answer</button>
+              <button className="action-pill" onClick={handleRegenerateFeedback} disabled={interviewCompleted}>Regenerate Feedback</button>
+              <button className="action-pill" onClick={handleSkipQuestion} disabled={interviewCompleted}>Skip Question</button>
+              <button className="action-pill" onClick={handleSaveInterview}>Save History</button>
+              <button className="action-pill end" onClick={handleEndInterview}>End Session</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const showBackButton = currentStep > 1;
   const showInfoNote = currentStep !== 5;
@@ -640,84 +1239,95 @@ const InterviewPrep = () => {
   const showActionButton = currentStep < 5;
 
   return (
-    <div className="page">
-      <div className="header">
-        <div className="header-left">
-          <h1>Interview Prep</h1>
-          <p>AI will conduct a personalized interview based on your profile and preferences.</p>
-        </div>
-        <HistoryButton />
-      </div>
-
-      <div className="stepper-wrap">
-        <div className="stepper">
-          <Step number={1} isActive={currentStep === 1} isDone={currentStep > 1} label="Field" detail="Choose your field" />
-          <StepLine isDone={currentStep > 1} />
-          <Step number={2} isActive={currentStep === 2} isDone={currentStep > 2} label="Stack" detail="Choose your stack" />
-          <StepLine isDone={currentStep > 2} />
-          <Step number={3} isActive={currentStep === 3} isDone={currentStep > 3} label="Experience" detail="Select experience level" />
-          <StepLine isDone={currentStep > 3} />
-          <Step number={4} isActive={currentStep === 4} isDone={currentStep > 4} label="Type" detail="Interview type" />
-          <StepLine isDone={currentStep > 4} />
-          <Step number={5} isActive={currentStep === 5} isDone={false} label="Questions" detail="AI generated" />
-        </div>
-      </div>
-
-      <div className="content-card">
-        {renderFieldScreen()}
-        {renderStackScreen()}
-        {renderExpScreen()}
-        {renderInterviewTypeScreen()}
-        {renderStartScreen()}
-        {renderGeneratedScreen()}
-      </div>
-
-      <div className="footer-bar">
-        {showBackButton && (
-          <button className="btn-back" onClick={goBack}>
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-            Back
-          </button>
-        )}
-        {showInfoNote && <InfoNote />}
-        {showActionButton && (
-          <button className="btn-next" onClick={goNext} disabled={isNextDisabled()}>
-            {getNextButtonText()}
-          </button>
-        )}
-      </div>
-
-      {showHowSection && (
-        <div className="how-section">
-          <h3>How AI Interview Works</h3>
-          <div className="how-grid">
-            <div className="how-item">
-              <div className="how-icon-wrap" style={{ background: "#2d2350" }}>💬</div>
-              <strong>Answer AI Questions</strong>
-              <p>AI will ask role-specific questions.</p>
+    <div className={`page ${interviewStarted ? 'interview-mode' : ''}`}>
+      {!interviewStarted && (
+        <>
+          <div className="header">
+            <div className="header-left">
+              <h1>Interview Prep</h1>
+              <p>AI will conduct a personalized interview based on your profile and preferences.</p>
             </div>
-            <div className="how-arrow">→</div>
-            <div className="how-item">
-              <div className="how-icon-wrap" style={{ background: "#1a2a40" }}>⚡</div>
-              <strong>Real-time Interaction</strong>
-              <p>Experience a real interview environment.</p>
-            </div>
-            <div className="how-arrow">→</div>
-            <div className="how-item">
-              <div className="how-icon-wrap" style={{ background: "#1a2f20" }}>📊</div>
-              <strong>Instant Evaluation</strong>
-              <p>Get AI feedback and performance analysis.</p>
-            </div>
-            <div className="how-arrow">→</div>
-            <div className="how-item">
-              <div className="how-icon-wrap" style={{ background: "#2d2040" }}>⭐</div>
-              <strong>Improve &amp; Grow</strong>
-              <p>Practice again and improve your skills.</p>
+            <HistoryButton />
+          </div>
+
+          <div className="stepper-wrap">
+            <div className="stepper">
+              <Step number={1} isActive={currentStep === 1} isDone={currentStep > 1} label="Field" detail="Choose your field" />
+              <StepLine isDone={currentStep > 1} />
+              <Step number={2} isActive={currentStep === 2} isDone={currentStep > 2} label="Stack" detail="Choose your stack" />
+              <StepLine isDone={currentStep > 2} />
+              <Step number={3} isActive={currentStep === 3} isDone={currentStep > 3} label="Experience" detail="Select experience level" />
+              <StepLine isDone={currentStep > 3} />
+              <Step number={4} isActive={currentStep === 4} isDone={currentStep > 4} label="Type" detail="Interview type" />
+              <StepLine isDone={currentStep > 4} />
+              <Step number={5} isActive={currentStep === 5} isDone={false} label="Questions" detail="AI generated" />
             </div>
           </div>
-        </div>
+        </>
+      )}
+
+      <div className={`content-card ${interviewStarted ? 'chat-content' : ''}`}>
+        {interviewStarted ? renderChatScreen() : (
+          <>
+            {renderFieldScreen()}
+            {renderStackScreen()}
+            {renderExpScreen()}
+            {renderInterviewTypeScreen()}
+            {renderStartScreen()}
+          </>
+        )}
+      </div>
+
+      {!interviewStarted && (
+        <>
+          <div className="footer-bar">
+            {showBackButton && (
+              <button className="btn-back" onClick={goBack}>
+                <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+                Back
+              </button>
+            )}
+            {showInfoNote && <InfoNote />}
+            {showActionButton && (
+              <button className="btn-next" onClick={goNext} disabled={isNextDisabled()}>
+                {getNextButtonText()}
+              </button>
+            )}
+          </div>
+
+          {showHowSection && (
+            <div className="how-section">
+              <h3>How AI Interview Works</h3>
+              <div className="how-grid">
+                <div className="how-item">
+                  <div className="how-icon-wrap" style={{ background: '#2d2350' }}>💬</div>
+                  <strong>Answer AI Questions</strong>
+                  <p>AI will ask role-specific questions.</p>
+                </div>
+                <div className="how-arrow">→</div>
+                <div className="how-item">
+                  <div className="how-icon-wrap" style={{ background: '#1a2a40' }}>⚡</div>
+                  <strong>Real-time Interaction</strong>
+                  <p>Experience a real interview environment.</p>
+                </div>
+                <div className="how-arrow">→</div>
+                <div className="how-item">
+                  <div className="how-icon-wrap" style={{ background: '#1a2f20' }}>📊</div>
+                  <strong>Instant Evaluation</strong>
+                  <p>Get AI feedback and performance analysis.</p>
+                </div>
+                <div className="how-arrow">→</div>
+                <div className="how-item">
+                  <div className="how-icon-wrap" style={{ background: '#2d2040' }}>⭐</div>
+                  <strong>Improve &amp; Grow</strong>
+                  <p>Practice again and improve your skills.</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
