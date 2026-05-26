@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './InterviewPrep.css';
+
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
 
 // --- Icon Components (Real SVG Icons) ---
 const MongoDBIcon = () => (
@@ -294,6 +296,13 @@ const EXP = [
   { id: "senior", emoji: "🏆", label: "Senior", years: "3+ years" },
 ];
 
+const INTERVIEW_TYPES = [
+  { id: "technical", label: "Technical", desc: "Core concepts, coding, debugging and system thinking." },
+  { id: "hr", label: "HR", desc: "Communication, motivation, goals and workplace readiness." },
+  { id: "behavioral", label: "Behavioral", desc: "Past projects, ownership, conflict and collaboration." },
+  { id: "mixed", label: "Mixed", desc: "Balanced technical, HR and behavioral preparation." },
+];
+
 // --- Helper Components ---
 const HistoryButton = () => (
   <button className="btn-history">
@@ -341,26 +350,95 @@ const InterviewPrep = () => {
   const [selectedField, setSelectedField] = useState(null);
   const [selectedStack, setSelectedStack] = useState(null);
   const [selectedExp, setSelectedExp] = useState(null);
+  const [selectedInterviewType, setSelectedInterviewType] = useState("technical");
+  const [interviewSession, setInterviewSession] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState("");
+  const abortControllerRef = useRef(null);
 
   const selectedFieldData = FIELDS.find(f => f.id === selectedField);
+  const selectedStackData = selectedFieldData?.stacks.find(s => s.id === selectedStack);
+  const selectedExpData = EXP.find(e => e.id === selectedExp);
+  const selectedTypeData = INTERVIEW_TYPES.find(type => type.id === selectedInterviewType);
   const hasStacks = selectedFieldData && selectedFieldData.stacks.length > 0;
+
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
+
+  const resetGeneratedInterview = () => {
+    setInterviewSession(null);
+    setError("");
+  };
 
   const handleSelectField = (id) => {
     setSelectedField(id);
     setSelectedStack(null);
+    resetGeneratedInterview();
   };
 
   const handleSelectStack = (id) => {
     setSelectedStack(id);
+    resetGeneratedInterview();
   };
 
   const handleSelectExp = (id) => {
     setSelectedExp(id);
+    resetGeneratedInterview();
+  };
+
+  const handleSelectInterviewType = (id) => {
+    setSelectedInterviewType(id);
+    resetGeneratedInterview();
+  };
+
+  const generateInterview = async () => {
+    if (isGenerating || !selectedFieldData || !selectedExpData || !selectedTypeData) {
+      return;
+    }
+
+    setIsGenerating(true);
+    setError("");
+    setInterviewSession(null);
+
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = new AbortController();
+
+    try {
+      const response = await fetch(`${API_BASE}/interview/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          field: selectedFieldData.name,
+          stack: selectedStackData?.name || "",
+          experienceLevel: selectedExp,
+          interviewType: selectedInterviewType,
+        }),
+        signal: abortControllerRef.current.signal,
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok || !result?.success) {
+        throw new Error(result?.message || "Unable to generate interview questions.");
+      }
+
+      setInterviewSession(result.data);
+      setCurrentStep(5);
+    } catch (requestError) {
+      if (requestError.name !== "AbortError") {
+        setError(requestError.message || "Unable to generate interview questions.");
+      }
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const goNext = () => {
     if (currentStep === 4) {
-      alert('Interview Starting! (Integrate your AI here)');
+      generateInterview();
       return;
     }
 
@@ -372,6 +450,8 @@ const InterviewPrep = () => {
   };
 
   const goBack = () => {
+    if (isGenerating) return;
+
     let prevStep = currentStep - 1;
     if (currentStep === 3 && !hasStacks) {
       prevStep = 1;
@@ -380,15 +460,18 @@ const InterviewPrep = () => {
   };
 
   const isNextDisabled = () => {
+    if (isGenerating) return true;
     if (currentStep === 1) return !selectedField;
     if (currentStep === 2) return !selectedStack;
     if (currentStep === 3) return !selectedExp;
-    return false;
+    if (currentStep === 4) return !selectedInterviewType;
+    return true;
   };
 
   const getNextButtonText = () => {
-    if (currentStep === 4) return '🎤  Start Interview';
-    return 'Next →';
+    if (isGenerating) return 'Generating...';
+    if (currentStep === 4) return 'Generate Interview';
+    return 'Next';
   };
 
   // --- Screen Rendering Functions ---
@@ -458,6 +541,27 @@ const InterviewPrep = () => {
     </div>
   );
 
+  const renderInterviewTypeScreen = () => (
+    <div className={`screen ${currentStep === 4 ? 'active' : ''}`}>
+      <h2>4. Select Interview Type</h2>
+      <p className="sub">Choose the kind of interview session you want AI to generate</p>
+      <div className="type-grid">
+        {INTERVIEW_TYPES.map(type => (
+          <div
+            key={type.id}
+            className={`type-card ${selectedInterviewType === type.id ? 'selected' : ''}`}
+            onClick={() => handleSelectInterviewType(type.id)}
+          >
+            <div className="type-radio"></div>
+            <strong>{type.label}</strong>
+            <p>{type.desc}</p>
+          </div>
+        ))}
+      </div>
+      {error && <div className="error-box">{error}</div>}
+    </div>
+  );
+
   const renderStartScreen = () => {
     const field = selectedFieldData;
     const exp = EXP.find(e => e.id === selectedExp);
@@ -465,7 +569,7 @@ const InterviewPrep = () => {
     const tags = [field?.name, stack?.name, exp?.label].filter(Boolean);
 
     return (
-      <div className={`screen ${currentStep === 4 ? 'active' : ''}`}>
+      <div className={`screen ${currentStep === 5 && !interviewSession ? 'active' : ''}`}>
         <div className="start-summary">
           <div className="start-icon">{field?.icon}</div>
           <h3>Ready to Begin!</h3>
@@ -481,9 +585,59 @@ const InterviewPrep = () => {
     );
   };
 
+  const renderGeneratedScreen = () => (
+    <div className={`screen ${currentStep === 5 && interviewSession ? 'active' : ''}`}>
+      {interviewSession && (
+        <div className="interview-result">
+          <div className="result-header">
+            <div>
+              <h2>{interviewSession.title}</h2>
+              <p className="sub">{interviewSession.summary}</p>
+            </div>
+            <button className="btn-back" onClick={generateInterview} disabled={isGenerating}>
+              Regenerate
+            </button>
+          </div>
+          <div className="tags">
+            {[selectedFieldData?.name, selectedStackData?.name, selectedExpData?.label, selectedTypeData?.label]
+              .filter(Boolean)
+              .map(tag => <div key={tag} className="tag">{tag}</div>)}
+          </div>
+          <div className="question-list">
+            {interviewSession.questions?.map((item, index) => (
+              <div className="question-card" key={`${item.question}-${index}`}>
+                <div className="question-top">
+                  <span className="question-number">Q{index + 1}</span>
+                  <span className="difficulty">{item.difficulty || "medium"}</span>
+                </div>
+                <h3>{item.question}</h3>
+                {item.expectedFocus && <p>{item.expectedFocus}</p>}
+                {item.followUps?.length > 0 && (
+                  <div className="follow-ups">
+                    <strong>Follow-ups</strong>
+                    {item.followUps.map(followUp => (
+                      <span key={followUp}>{followUp}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          {interviewSession.tips?.length > 0 && (
+            <div className="tips-box">
+              <strong>Tips</strong>
+              {interviewSession.tips.map(tip => <span key={tip}>{tip}</span>)}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+
   const showBackButton = currentStep > 1;
-  const showInfoNote = currentStep !== 4;
+  const showInfoNote = currentStep !== 5;
   const showHowSection = currentStep <= 1;
+  const showActionButton = currentStep < 5;
 
   return (
     <div className="page">
@@ -503,7 +657,9 @@ const InterviewPrep = () => {
           <StepLine isDone={currentStep > 2} />
           <Step number={3} isActive={currentStep === 3} isDone={currentStep > 3} label="Experience" detail="Select experience level" />
           <StepLine isDone={currentStep > 3} />
-          <Step number={4} isActive={currentStep === 4} isDone={currentStep > 4} label="Start" detail="Start your interview" />
+          <Step number={4} isActive={currentStep === 4} isDone={currentStep > 4} label="Type" detail="Interview type" />
+          <StepLine isDone={currentStep > 4} />
+          <Step number={5} isActive={currentStep === 5} isDone={false} label="Questions" detail="AI generated" />
         </div>
       </div>
 
@@ -511,7 +667,9 @@ const InterviewPrep = () => {
         {renderFieldScreen()}
         {renderStackScreen()}
         {renderExpScreen()}
+        {renderInterviewTypeScreen()}
         {renderStartScreen()}
+        {renderGeneratedScreen()}
       </div>
 
       <div className="footer-bar">
@@ -524,9 +682,11 @@ const InterviewPrep = () => {
           </button>
         )}
         {showInfoNote && <InfoNote />}
-        <button className="btn-next" onClick={goNext} disabled={isNextDisabled()}>
-          {getNextButtonText()}
-        </button>
+        {showActionButton && (
+          <button className="btn-next" onClick={goNext} disabled={isNextDisabled()}>
+            {getNextButtonText()}
+          </button>
+        )}
       </div>
 
       {showHowSection && (

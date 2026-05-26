@@ -38,13 +38,30 @@ function Onboarding() {
     stack: [],
   });
 
+  // Use user defaults if available
+  useEffect(() => {
+    if (!loading && user) {
+      setForm(prev => ({
+        headline: user.headline || prev.headline,
+        bio: user.bio || prev.bio,
+        expLevel: user.expLevel || prev.expLevel,
+        focus: user.focus || prev.focus,
+        location: user.location || prev.location,
+        stack: Array.isArray(user.stack) && user.stack.length > 0 ? user.stack : prev.stack,
+      }));
+    }
+  }, [loading, user]);
+
   // Detect location on mount
   useEffect(() => {
     (async () => {
       const loc = await detectLocation();
       if (loc) {
         const parts = [loc.city, loc.region, loc.country].filter(Boolean);
-        setForm(prev => ({ ...prev, location: parts.join(", ") }));
+        setForm(prev => ({
+          ...prev,
+          location: prev.location || parts.join(", "),
+        }));
       }
       setLocating(false);
     })();

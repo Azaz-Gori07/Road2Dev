@@ -383,36 +383,75 @@ export default function ProfilePage() {
   const customAuth = useAuth();
   const isAuthenticated = zenuxAuth.isAuthenticated || customAuth.isAuthenticated;
   const loading = zenuxAuth.loading || customAuth.loading;
-  const user = zenuxAuth.user || customAuth.user;
+  const authUser = customAuth.user || zenuxAuth.user;
   const [view, setView] = useState("profile");
+  const [saving, setSaving] = useState(false);
   const [data, setData] = useState({
-    name:     "Alex Developer",
+    name:     "Road2Dev User",
     headline: "Full Stack Developer",
-    location: "Bangalore, India",
-    email:    "alex@example.com",
-    joined:   "Joined May 2024",
-    bio:      "Passionate full stack developer with a love for building scalable web applications and solving complex problems.",
-    stack:    ["JavaScript", "React", "Node.js", "Python", "MongoDB", "TypeScript"],
-    expLevel: "Mid Level",
+    location: "Unknown Location",
+    email:    "user@example.com",
+    joined:   "Joined",
+    bio:      "Write a short bio to introduce yourself to the Road2Dev community.",
+    stack:    ["JavaScript", "React", "Node.js"],
+    expLevel: "Beginner",
     focus:    "Full Stack Development",
     language: "English",
   });
 
-  // Update profile data from OAuth user info
   useEffect(() => {
-    if (user) {
+    if (authUser) {
       setData(prev => ({
         ...prev,
-        name: user.name || user.preferred_username || prev.name,
-        email: user.email || prev.email,
-        headline: user.headline || prev.headline,
+        name: authUser.name || authUser.preferred_username || prev.name,
+        email: authUser.email || prev.email,
+        headline: authUser.headline || prev.headline,
+        location: authUser.location || prev.location,
+        bio: authUser.bio || prev.bio,
+        expLevel: authUser.expLevel || prev.expLevel,
+        focus: authUser.focus || prev.focus,
+        language: authUser.language || prev.language,
+        stack: Array.isArray(authUser.stack) && authUser.stack.length > 0 ? authUser.stack : prev.stack,
+        joined: authUser.createdAt
+          ? `Joined ${new Date(authUser.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`
+          : prev.joined,
       }));
     }
-  }, [user]);
+  }, [authUser]);
 
   const handleLogout = () => {
     localStorage.clear();
     navigate("/auth", { replace: true });
+  };
+
+  const handleSaveProfile = async (updated) => {
+    setSaving(true);
+    try {
+      if (customAuth.isAuthenticated && customAuth.updateProfile) {
+        const updatedUser = await customAuth.updateProfile(updated);
+        setData(prev => ({
+          ...prev,
+          name: updatedUser.name || prev.name,
+          headline: updatedUser.headline || prev.headline,
+          location: updatedUser.location || prev.location,
+          bio: updatedUser.bio || prev.bio,
+          expLevel: updatedUser.expLevel || prev.expLevel,
+          focus: updatedUser.focus || prev.focus,
+          language: updatedUser.language || prev.language,
+          stack: Array.isArray(updatedUser.stack) && updatedUser.stack.length > 0 ? updatedUser.stack : prev.stack,
+          joined: updatedUser.createdAt
+            ? `Joined ${new Date(updatedUser.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`
+            : prev.joined,
+        }));
+      } else {
+        setData(updated);
+      }
+      setView("profile");
+    } catch (error) {
+      console.error("Profile save failed:", error);
+    } finally {
+      setSaving(false);
+    }
   };
 
   useEffect(() => {
@@ -438,7 +477,7 @@ export default function ProfilePage() {
       {view === "profile"
         ? <ProfileView data={data} onEdit={() => setView("edit")} />
         : <EditProfile data={data}
-            onSave={updated => { setData(updated); setView("profile"); }}
+            onSave={handleSaveProfile}
             onCancel={() => setView("profile")}
             onLogout={handleLogout}
           />

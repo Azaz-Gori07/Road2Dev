@@ -11,11 +11,13 @@ import StacksPage from "./pages/StacksPage";
 import RoadMap from "./pages/Roadmap";
 import ContentPage from "./pages/ContentPage";
 import Auth from "./pages/Auth";
+import Onboarding from "./pages/Onboarding";
 
 function App() {
   return (
     <Routes>
       <Route path="/auth" element={<Auth />} />
+      <Route path="/onboarding" element={<Onboarding />} />
       <Route element={<AppLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/learning" element={<Learning />} />
