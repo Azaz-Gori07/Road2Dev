@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./Auth.module.css";
 import useZenuxAuth from "../hooks/useZenuxAuth";
 import useAuth from "../hooks/useAuth";
@@ -555,6 +555,11 @@ const PAGES = { login: LoginPanel, signup: SignupPanel, forgot: ForgotPanel, otp
 
 export default function Auth() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectPath = location.state?.from || '/';
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const toastTimer = useRef(null);
 
   // Custom backend auth (email/password + OAuth token exchange)
   const {
@@ -589,12 +594,20 @@ export default function Auth() {
   const [pendingReg, setPendingReg] = useState(null); // { name, email, password }
   const timerRef = useRef(null);
 
-  // If already authenticated, redirect to home
+  // If already authenticated, redirect to requested path or home
   useEffect(() => {
-    if (!loading && isAuthenticated) {
-      navigate("/", { replace: true });
+    if (!loading && isAuthenticated && !showToast) {
+      navigate(redirectPath, { replace: true });
     }
-  }, [loading, isAuthenticated, navigate]);
+  }, [loading, isAuthenticated, navigate, redirectPath, showToast]);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimer.current) {
+        clearTimeout(toastTimer.current);
+      }
+    };
+  }, []);
 
   const go = (target) => {
     if (phase !== "idle" || target === current) return;
@@ -669,7 +682,12 @@ export default function Auth() {
     setError(null);
     try {
       await localLogin(email, password);
-      navigate('/', { replace: true });
+      setToastMessage('Thank You for Logging In! You now have access to all premium interview tracking and score-sharing features.');
+      setShowToast(true);
+      toastTimer.current = setTimeout(() => {
+        setShowToast(false);
+        navigate(redirectPath, { replace: true });
+      }, 2500);
     } catch (err) {
       setError(err.message || 'Login failed. Please try again.');
     } finally {
@@ -694,7 +712,12 @@ export default function Auth() {
       if (zenuxsToken) {
         await loginWithZenuxs(zenuxsToken.access_token || zenuxsToken);
       }
-      navigate('/', { replace: true });
+      setToastMessage('Thank You for Logging In! You now have access to all premium interview tracking and score-sharing features.');
+      setShowToast(true);
+      toastTimer.current = setTimeout(() => {
+        setShowToast(false);
+        navigate(redirectPath, { replace: true });
+      }, 2500);
     } catch (err) {
       setError(err.message || 'Login failed. Please try again.');
     } finally {
@@ -712,6 +735,13 @@ export default function Auth() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
       `}</style>
+
+      {showToast && (
+        <div className={styles.toastMessage}>
+          {toastMessage}
+          <span>Redirecting you back to your saved path shortly...</span>
+        </div>
+      )}
 
       <div className={styles.outerStage}>
         <div className={styles.cardWrapper}>

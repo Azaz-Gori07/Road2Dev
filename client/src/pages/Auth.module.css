@@ -55,6 +55,30 @@
   will-change: transform;
 }
 
+.toastMessage {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1500;
+  background: rgba(12, 32, 52, 0.96);
+  border: 1px solid rgba(64, 200, 224, 0.3);
+  color: #e8faff;
+  padding: 14px 18px;
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  backdrop-filter: blur(10px);
+}
+
+.toastMessage span {
+  display: block;
+  color: #d7f7ff;
+  font-weight: 500;
+  margin-top: 6px;
+}
+
 /* Exit animation */
 .cardExit {
   position: relative;

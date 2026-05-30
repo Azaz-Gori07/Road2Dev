@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { FiMic, FiSend, FiRefreshCw, FiSkipForward, FiSave, FiPlay, FiClock, FiMessageCircle, FiDownload } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+import { FiMic, FiSend, FiRefreshCw, FiSkipForward, FiSave, FiPlay, FiClock, FiMessageCircle, FiDownload, FiCheckCircle } from 'react-icons/fi';
+import useZenuxAuth from '../hooks/useZenuxAuth';
+import useAuth from '../hooks/useAuth';
 import './InterviewPrep.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
@@ -460,6 +463,68 @@ const InfoNote = () => (
   </div>
 );
 
+const InterviewAccessModal = ({ isOpen, onClose, onContinueGuest, onLogin }) => (
+  <AnimatePresence>
+    {isOpen && (
+      <div className="access-modal-overlay">
+        <motion.div
+          className="access-modal"
+          initial={{ opacity: 0, y: 24, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 24, scale: 0.96 }}
+          transition={{ duration: 0.28, ease: 'easeOut' }}
+        >
+          <button className="access-modal-close" onClick={onClose} aria-label="Close modal">×</button>
+          <div className="access-modal-header">
+            <div className="access-modal-badge">Premium Access</div>
+            <h2>Unlock the Full SAAS Experience</h2>
+            <p>
+              Dear User, if you want to get the complete experience of our platform and maximize your interview preparation journey,
+              please log in to your account.
+            </p>
+          </div>
+
+          <div className="access-benefits">
+            <div className="benefit-item">
+              <FiCheckCircle size={18} />
+              <span>Your interview chats and sessions will be automatically saved.</span>
+            </div>
+            <div className="benefit-item">
+              <FiCheckCircle size={18} />
+              <span>View your interview performance and scores on the Score Page.</span>
+            </div>
+            <div className="benefit-item">
+              <FiCheckCircle size={18} />
+              <span>Track your progress over time.</span>
+            </div>
+            <div className="benefit-item">
+              <FiCheckCircle size={18} />
+              <span>Share your achievements directly on LinkedIn, Twitter/X, or any social platform.</span>
+            </div>
+            <div className="benefit-item">
+              <FiCheckCircle size={18} />
+              <span>Generate a public scorecard link.</span>
+            </div>
+            <div className="benefit-item">
+              <FiCheckCircle size={18} />
+              <span>Embed your scorecard directly into your portfolio website or personal site.</span>
+            </div>
+            <div className="benefit-item">
+              <FiCheckCircle size={18} />
+              <span>Access your complete interview history anytime.</span>
+            </div>
+          </div>
+
+          <div className="access-actions">
+            <button className="btn-ghost" onClick={onContinueGuest}>Continue as Guest</button>
+            <button className="btn-primary" onClick={onLogin}>Login</button>
+          </div>
+        </motion.div>
+      </div>
+    )}
+  </AnimatePresence>
+);
+
 // --- Main Component ---
 const InterviewPrep = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -478,8 +543,17 @@ const InterviewPrep = () => {
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [interviewCompleted, setInterviewCompleted] = useState(false);
   const [savedInterview, setSavedInterview] = useState(null);
+  const [sessionId, setSessionId] = useState(null);
   const abortControllerRef = useRef(null);
   const chatEndRef = useRef(null);
+  const [showAccessModal, setShowAccessModal] = useState(false);
+  const [hasSeenAccessModal, setHasSeenAccessModal] = useState(false);
+  const [guestAccessConfirmed, setGuestAccessConfirmed] = useState(false);
+  const navigate = useNavigate();
+  const customAuth = useAuth();
+  const zenuxAuth = useZenuxAuth();
+  const isAuthenticated = customAuth.isAuthenticated || zenuxAuth.isAuthenticated;
+  const loadingAuth = customAuth.loading || zenuxAuth.loading;
 
   const selectedFieldData = FIELDS.find((f) => f.id === selectedField);
   const selectedStackData = selectedFieldData?.stacks.find((s) => s.id === selectedStack);
@@ -487,6 +561,92 @@ const InterviewPrep = () => {
   const selectedTypeData = INTERVIEW_TYPES.find((type) => type.id === selectedInterviewType);
   const hasStacks = selectedFieldData && selectedFieldData.stacks.length > 0;
   const totalQuestions = interviewSession?.questions?.length || 0;
+
+  const getAuthToken = () => {
+    return localStorage.getItem('auth_token');
+  };
+
+  const computeSessionScore = (messages = []) => {
+    if (!messages.length) return 0;
+    const feedbackMessages = messages.filter((msg) => msg.type === 'feedback');
+    if (!feedbackMessages.length) return 0;
+
+    const totals = feedbackMessages.reduce(
+      (acc, message) => {
+        acc.accuracy += message.score?.accuracy || 0;
+        acc.technical += message.score?.technical || 0;
+        acc.communication += message.score?.communication || 0;
+        acc.confidence += message.score?.confidence || 0;
+        return acc;
+      },
+      { accuracy: 0, technical: 0, communication: 0, confidence: 0 }
+    );
+
+    const count = feedbackMessages.length;
+    return Math.round((totals.accuracy + totals.technical + totals.communication + totals.confidence) / (count * 4));
+  };
+
+  const buildSessionPayload = ({ messages = chatMessages, statusOverride, scoreOverride, feedbackOverride } = {}) => {
+    const payloadScore =
+      typeof scoreOverride === 'number'
+        ? scoreOverride
+        : interviewCompleted
+        ? buildInterviewSummary(messages, totalQuestions).overallScore
+        : computeSessionScore(messages);
+    const summary = interviewCompleted ? buildInterviewSummary(messages, totalQuestions) : null;
+
+    return {
+      title: interviewSession?.title || 'Interview Session',
+      field: selectedFieldData?.name || '',
+      stack: selectedStackData?.name || '',
+      experience: selectedExp || '',
+      type: selectedInterviewType || '',
+      status:
+        statusOverride ||
+        (interviewCompleted ? 'completed' : interviewStarted ? 'active' : 'draft'),
+      score: payloadScore,
+      messages,
+      feedback: feedbackOverride ?? (summary ? summary.readiness : ''),
+    };
+  };
+
+  const saveInterviewSessionToServer = async (overrides = {}) => {
+    if (!isAuthenticated) return;
+    const authToken = getAuthToken();
+    if (!authToken) return;
+
+    const payload = buildSessionPayload(overrides);
+    const url = sessionId
+      ? `${API_BASE}/interview-sessions/${sessionId}`
+      : `${API_BASE}/interview-sessions`;
+    const method = sessionId ? 'PUT' : 'POST';
+
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.success) {
+        console.warn('Interview session autosave failed:', data?.message || res.statusText);
+        return;
+      }
+
+      if (!sessionId && data?.data?._id) {
+        setSessionId(data.data._id);
+        localStorage.setItem('road2dev-interview-session-id', data.data._id);
+      } else if (!sessionId && data?.data?.id) {
+        setSessionId(data.data.id);
+        localStorage.setItem('road2dev-interview-session-id', data.data.id);
+      }
+    } catch (saveError) {
+      console.warn('Interview session autosave error:', saveError);
+    }
+  };
 
   useEffect(() => {
     abortControllerRef.current?.abort();
@@ -504,6 +664,11 @@ const InterviewPrep = () => {
         console.warn('Unable to parse saved interview', e);
       }
     }
+
+    const storedSessionId = localStorage.getItem('road2dev-interview-session-id');
+    if (storedSessionId) {
+      setSessionId(storedSessionId);
+    }
   }, []);
 
   useEffect(() => {
@@ -517,11 +682,20 @@ const InterviewPrep = () => {
   }, [interviewStarted]);
 
   useEffect(() => {
+    if (!loadingAuth && !isAuthenticated && !hasSeenAccessModal && !guestAccessConfirmed) {
+      setShowAccessModal(true);
+      setHasSeenAccessModal(true);
+    }
+  }, [loadingAuth, isAuthenticated, hasSeenAccessModal, guestAccessConfirmed]);
+
+  useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [chatMessages, isAiTyping]);
 
   const resetGeneratedInterview = () => {
     setInterviewSession(null);
+    setSessionId(null);
+    localStorage.removeItem('road2dev-interview-session-id');
     setInterviewStarted(false);
     setChatMessages([]);
     setCurrentQuestionIndex(0);
@@ -597,6 +771,12 @@ const InterviewPrep = () => {
 
       setInterviewSession(result.data);
       setCurrentStep(5);
+      saveInterviewSessionToServer({
+        statusOverride: 'draft',
+        messages: [],
+        scoreOverride: 0,
+        feedbackOverride: '',
+      });
     } catch (requestError) {
       if (requestError.name !== 'AbortError') {
         setError(requestError.message || 'Unable to generate interview questions.');
@@ -608,11 +788,7 @@ const InterviewPrep = () => {
 
   const handleStartInterview = () => {
     if (!interviewSession) return;
-    setInterviewStarted(true);
-    setCurrentQuestionIndex(0);
-    setTimerSeconds(0);
-    setInterviewCompleted(false);
-    setChatMessages([
+    const startingMessages = [
       {
         id: buildMessageId('ai-welcome'),
         role: 'ai',
@@ -627,7 +803,17 @@ const InterviewPrep = () => {
         question: interviewSession.questions[0],
         timestamp: new Date().toISOString(),
       },
-    ]);
+    ];
+
+    setInterviewStarted(true);
+    setCurrentQuestionIndex(0);
+    setTimerSeconds(0);
+    setInterviewCompleted(false);
+    setChatMessages(startingMessages);
+    saveInterviewSessionToServer({
+      statusOverride: 'active',
+      messages: startingMessages,
+    });
   };
 
   const handleSendMessage = () => {
@@ -643,9 +829,14 @@ const InterviewPrep = () => {
       timestamp: new Date().toISOString(),
     };
 
-    setChatMessages((prev) => [...prev, userMessage]);
+    const afterUserMessage = [...chatMessages, userMessage];
+    setChatMessages(afterUserMessage);
     setMessageInput('');
     setIsAiTyping(true);
+    saveInterviewSessionToServer({
+      statusOverride: 'active',
+      messages: afterUserMessage,
+    });
 
     const feedback = buildFeedback(trimmed, question, currentQuestionIndex);
     const nextIndex = currentQuestionIndex + 1;
@@ -653,12 +844,16 @@ const InterviewPrep = () => {
     setTimeout(() => {
       setChatMessages((prev) => {
         const afterFeedback = [...prev, feedback];
+        saveInterviewSessionToServer({
+          statusOverride: 'active',
+          messages: afterFeedback,
+        });
 
         if (nextIndex < totalQuestions) {
           setTimeout(() => {
             const nextQuestion = interviewSession.questions[nextIndex];
-            setChatMessages((prevNext) => [
-              ...prevNext,
+            const nextMessages = [
+              ...afterFeedback,
               {
                 id: buildMessageId('ai-question'),
                 role: 'ai',
@@ -666,25 +861,35 @@ const InterviewPrep = () => {
                 question: nextQuestion,
                 timestamp: new Date().toISOString(),
               },
-            ]);
+            ];
+            setChatMessages(nextMessages);
             setCurrentQuestionIndex(nextIndex);
             setIsAiTyping(false);
+            saveInterviewSessionToServer({
+              statusOverride: 'active',
+              messages: nextMessages,
+            });
           }, 900);
         } else {
           setTimeout(() => {
             const summary = buildInterviewSummary([...afterFeedback], totalQuestions);
-            setChatMessages((prevNext) => [
-              ...prevNext,
-              {
-                id: buildMessageId('ai-summary'),
-                role: 'ai',
-                type: 'summary',
-                summary,
-                timestamp: new Date().toISOString(),
-              },
-            ]);
+            const summaryMessage = {
+              id: buildMessageId('ai-summary'),
+              role: 'ai',
+              type: 'summary',
+              summary,
+              timestamp: new Date().toISOString(),
+            };
+            const completedMessages = [...afterFeedback, summaryMessage];
+            setChatMessages((prevNext) => [...prevNext, summaryMessage]);
             setInterviewCompleted(true);
             setIsAiTyping(false);
+            saveInterviewSessionToServer({
+              statusOverride: 'completed',
+              messages: completedMessages,
+              scoreOverride: summary.overallScore,
+              feedbackOverride: summary.readiness,
+            });
           }, 900);
         }
 
@@ -722,23 +927,23 @@ const InterviewPrep = () => {
   const handleSkipQuestion = () => {
     if (!interviewSession || interviewCompleted) return;
 
-    const nextIndex = currentQuestionIndex + 1;
-    setChatMessages((prev) => [
-      ...prev,
-      {
-        id: buildMessageId('system'),
-        role: 'system',
-        type: 'note',
-        text: 'Skipping this question. We will continue with the next interview prompt.',
-        timestamp: new Date().toISOString(),
-      },
-    ]);
+    const noteMessage = {
+      id: buildMessageId('system'),
+      role: 'system',
+      type: 'note',
+      text: 'Skipping this question. We will continue with the next interview prompt.',
+      timestamp: new Date().toISOString(),
+    };
 
-    if (nextIndex < totalQuestions) {
-      setTimeout(() => {
+    const nextIndex = currentQuestionIndex + 1;
+    const baseMessages = [...chatMessages, noteMessage];
+    setChatMessages(baseMessages);
+
+    setTimeout(() => {
+      if (nextIndex < totalQuestions) {
         const nextQuestion = interviewSession.questions[nextIndex];
-        setChatMessages((prev) => [
-          ...prev,
+        const nextMessages = [
+          ...baseMessages,
           {
             id: buildMessageId('ai-question'),
             role: 'ai',
@@ -746,14 +951,18 @@ const InterviewPrep = () => {
             question: nextQuestion,
             timestamp: new Date().toISOString(),
           },
-        ]);
+        ];
+
+        setChatMessages(nextMessages);
         setCurrentQuestionIndex(nextIndex);
-      }, 850);
-    } else {
-      setTimeout(() => {
-        const summary = buildInterviewSummary(chatMessages, totalQuestions);
-        setChatMessages((prev) => [
-          ...prev,
+        saveInterviewSessionToServer({
+          statusOverride: 'active',
+          messages: nextMessages,
+        });
+      } else {
+        const summary = buildInterviewSummary(baseMessages, totalQuestions);
+        const completedMessages = [
+          ...baseMessages,
           {
             id: buildMessageId('ai-summary'),
             role: 'ai',
@@ -761,10 +970,17 @@ const InterviewPrep = () => {
             summary,
             timestamp: new Date().toISOString(),
           },
-        ]);
+        ];
+        setChatMessages(completedMessages);
         setInterviewCompleted(true);
-      }, 850);
-    }
+        saveInterviewSessionToServer({
+          statusOverride: 'completed',
+          messages: completedMessages,
+          scoreOverride: summary.overallScore,
+          feedbackOverride: summary.readiness,
+        });
+      }
+    }, 850);
   };
 
   const handleSaveInterview = () => {
@@ -782,6 +998,19 @@ const InterviewPrep = () => {
     setSavedInterview(saved);
   };
 
+  const handleContinueAsGuest = () => {
+    setGuestAccessConfirmed(true);
+    setShowAccessModal(false);
+  };
+
+  const handleOpenLogin = () => {
+    navigate('/auth', { state: { from: '/interview' } });
+  };
+
+  const handleCloseAccessModal = () => {
+    setShowAccessModal(false);
+  };
+
   const handleResumeInterview = () => {
     if (!savedInterview) return;
     setInterviewSession(savedInterview.interviewSession);
@@ -795,8 +1024,8 @@ const InterviewPrep = () => {
   const handleEndInterview = () => {
     if (!interviewSession) return;
     const summary = buildInterviewSummary(chatMessages, totalQuestions);
-    setChatMessages((prev) => [
-      ...prev,
+    const completedMessages = [
+      ...chatMessages,
       {
         id: buildMessageId('ai-summary'),
         role: 'ai',
@@ -804,9 +1033,16 @@ const InterviewPrep = () => {
         summary,
         timestamp: new Date().toISOString(),
       },
-    ]);
+    ];
+    setChatMessages(completedMessages);
     setInterviewCompleted(true);
     setIsAiTyping(false);
+    saveInterviewSessionToServer({
+      statusOverride: 'completed',
+      messages: completedMessages,
+      scoreOverride: summary.overallScore,
+      feedbackOverride: summary.readiness,
+    });
   };
 
   const handleDownloadReport = () => {
@@ -1240,6 +1476,12 @@ const InterviewPrep = () => {
 
   return (
     <div className={`page ${interviewStarted ? 'interview-mode' : ''}`}>
+      <InterviewAccessModal
+        isOpen={showAccessModal}
+        onClose={handleCloseAccessModal}
+        onContinueGuest={handleContinueAsGuest}
+        onLogin={handleOpenLogin}
+      />
       {!interviewStarted && (
         <>
           <div className="header">

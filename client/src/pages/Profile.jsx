@@ -457,7 +457,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      navigate('/auth', { replace: true });
+      navigate('/auth', { replace: true, state: { from: '/profile' } });
     }
   }, [loading, isAuthenticated, navigate]);
 

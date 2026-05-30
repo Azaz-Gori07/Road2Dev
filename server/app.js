@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import connectDb, { isConnected } from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import interviewRoutes from './routes/interviewRoutes.js';
+import interviewSessionRoutes from './routes/interviewSessionRoutes.js';
 
 dotenv.config({ quiet: true });
 
@@ -46,5 +47,6 @@ app.get("/", (req, res) => {
 // Auth routes
 app.use('/api/auth', authRoutes);
 app.use('/api/interview', interviewRoutes);
+app.use('/api/interview-sessions', interviewSessionRoutes);
 
 export default app;

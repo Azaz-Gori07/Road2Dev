@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useZenuxAuth from "../hooks/useZenuxAuth";
+import useAuth from "../hooks/useAuth";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
@@ -335,7 +338,19 @@ function PerfChart() {
 
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 export default function MyScore() {
+  const navigate = useNavigate();
+  const customAuth = useAuth();
+  const zenuxAuth = useZenuxAuth();
+  const isAuthenticated = customAuth.isAuthenticated || zenuxAuth.isAuthenticated;
+  const loading = customAuth.loading || zenuxAuth.loading;
   const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      navigate('/auth', { replace: true, state: { from: '/score' } });
+    }
+  }, [loading, isAuthenticated, navigate]);
+
   useEffect(() => setMounted(true), []);
 
   return (
@@ -354,7 +369,7 @@ export default function MyScore() {
             <h1>My Score</h1>
             <p>Track your interview performance and improve every day.</p>
           </div>
-          <button className="view-btn">
+          <button className="view-btn" onClick={() => navigate('/interview/history')}>
             <i className="ti ti-calendar" /> View All History
           </button>
         </div>
@@ -426,7 +441,7 @@ export default function MyScore() {
             <div className="bottom-card">
               <div className="card-header">
                 <span className="card-title">Recent Interviews</span>
-                <button className="view-all">View All</button>
+                <button className="view-all" onClick={() => navigate('/interview/history')}>View All</button>
               </div>
               {INTERVIEWS.map((iv) => (
                 <div className="interview-row" key={iv.name}>
