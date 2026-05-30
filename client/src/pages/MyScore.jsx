@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import useZenuxAuth from "../hooks/useZenuxAuth";
 import useAuth from "../hooks/useAuth";
+
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
@@ -10,32 +12,44 @@ const styles = `
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg0: #08080e;
-    --bg1: #0e0e18;
-    --bg2: #13131f;
-    --bg3: #191927;
-    --brd: #1f1f32;
-    --brd2: #252538;
-    --t1: #eeeef8;
-    --t2: #8888aa;
-    --t3: #4a4a6e;
-    --blue: #3b8cff;
-    --green: #22d37e;
-    --cyan: #00d4ff;
-    --purple: #9b6dff;
-    --orange: #ff8c42;
-    --yellow: #ffd166;
-    --red: #ff4f5e;
-  }
+  --bg0: #000000;
+  --bg1: #050505;
+  --bg2: #0A0A0A;
+  --bg3: #111111;
+
+  --brd: #1A1A1A;
+  --brd2: #242424;
+
+  --t1: #FFFFFF;
+  --t2: #A1A1AA;
+  --t3: #71717A;
+
+  --blue: #3B82F6;
+  --green: #22C55E;
+  --cyan: #06B6D4;
+  --purple: #8B5CF6;
+  --orange: #F97316;
+  --yellow: #FACC15;
+  --red: #EF4444;
+}
 
   html, body, #root {
-    width: 100%; height: 100%;
-    overflow: hidden;
-    background: var(--bg0);
-    color: var(--t1);
-    font-family: 'Outfit', sans-serif;
-    font-size: 13px;
-  }
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(139,92,246,.08),
+      transparent 30%
+    ),
+    #000;
+
+  color: var(--t1);
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+}
 
   .dash {
     display: grid;
@@ -47,10 +61,10 @@ const styles = `
 
   /* TOPBAR */
   .topbar {
-    background: var(--bg1);
-    border-bottom: 1px solid var(--brd);
     padding: 0 24px;
     display: flex;
+    background: #050505;
+  border-bottom: 1px solid #151515;
     align-items: center;
     justify-content: space-between;
   }
@@ -81,12 +95,27 @@ const styles = `
   /* ROW 1 */
   .row1 { display: grid; grid-template-columns: 220px 1fr 1fr 1fr 1fr; gap: 10px; }
 
-  .card {
-    background: var(--bg2);
-    border: 1px solid var(--brd);
-    border-radius: 12px;
-    padding: 14px;
-  }
+  .card,
+.chart-card,
+.bottom-card {
+  background: #0A0A0A;
+  border: 1px solid #1A1A1A;
+  border-radius: 14px;
+  padding: 14px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 8px 30px rgba(0,0,0,.45);
+
+  transition: all .25s ease;
+}
+
+.card:hover,
+.chart-card:hover,
+.bottom-card:hover {
+  transform: translateY(-2px);
+  border-color: #2A2A2A;
+}
 
   .overall-card { padding: 16px 18px; display: flex; flex-direction: column; align-items: flex-start; }
   .overall-label { font-size: 12px; font-weight: 600; margin-bottom: 10px; }
@@ -121,13 +150,15 @@ const styles = `
   .card-title { font-size: 13px; font-weight: 600; }
   .dropdown {
     display: flex; align-items: center; gap: 5px;
-    background: var(--bg3); border: 1px solid var(--brd2);
+    background: #111111;
+  border: 1px solid #222222;
     border-radius: 7px; padding: 5px 10px;
     font-size: 11.5px; color: var(--t2); cursor: pointer;
     font-family: 'Outfit', sans-serif;
   }
   .dropdown i { font-size: 12px; }
   .chart-area { position: relative; height: 140px; }
+  
 
   /* SKILL BARS */
   .skill-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
@@ -176,50 +207,37 @@ const styles = `
   .ai-rec-sub { font-size: 10px; color: var(--t3); margin-top: 1px; }
   .ai-rec-arr { color: var(--t3); font-size: 14px; margin-top: 4px; }
   .start-btn {
-    width: 100%; margin-top: 10px; padding: 9px;
-    background: linear-gradient(90deg, var(--blue), var(--cyan));
-    border: none; border-radius: 9px;
-    color: #fff; font-size: 12.5px; font-weight: 600;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    font-family: 'Outfit', sans-serif;
-  }
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+
+  background: linear-gradient(
+    135deg,
+    #8B5CF6,
+    #6D28D9
+  );
+
+  border: none;
+  border-radius: 10px;
+
+  color: white;
+  font-weight: 600;
+
+  box-shadow:
+    0 0 25px rgba(139,92,246,.25);
+
+  transition: all .25s ease;
+}
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 35px rgba(139,92,246,.4);
+}
   .start-btn i { font-size: 14px; }
 `;
 
-const SKILLS = [
-  { name: "HTML & CSS",    pct: 90, color: "#3b8cff", icon: "ti-brand-html5",    bg: "rgba(59,140,255,.2)"  },
-  { name: "JavaScript",   pct: 75, color: "#ffd166", icon: "ti-brand-javascript",bg: "rgba(255,209,102,.2)" },
-  { name: "React",        pct: 80, color: "#00d4ff", icon: "ti-brand-react",     bg: "rgba(0,212,255,.2)"   },
-  { name: "Node.js",      pct: 70, color: "#22d37e", icon: "ti-brand-nodejs",    bg: "rgba(34,211,126,.2)"  },
-  { name: "MongoDB",      pct: 65, color: "#9b6dff", icon: "ti-leaf",            bg: "rgba(155,109,255,.2)" },
-  { name: "System Design",pct: 55, color: "#ff8c42", icon: "ti-layout",          bg: "rgba(255,140,66,.2)"  },
-];
-
-const INTERVIEWS = [
-  { name: "Frontend Developer Interview", sub: "React Stack · Mid Level",   score: 78, scoreColor: "#22d37e", time: "32 min", ago: "2 hours ago",  icon: "ti-brand-react",      iconBg: "rgba(59,140,255,.15)",   iconColor: "#3b8cff"  },
-  { name: "Backend Developer Interview",  sub: "Node.js · Junior Level",    score: 72, scoreColor: "#ffd166", time: "28 min", ago: "1 day ago",    icon: "ti-hexagon",          iconBg: "rgba(34,211,126,.15)",   iconColor: "#22d37e"  },
-  { name: "JavaScript Interview",         sub: "JavaScript · Mid Level",    score: 65, scoreColor: "#ff8c42", time: "25 min", ago: "3 days ago",   icon: "ti-brand-javascript", iconBg: "rgba(255,209,102,.15)",  iconColor: "#ffd166"  },
-  { name: "System Design Interview",      sub: "System Design · Senior Level",score:60, scoreColor: "#ff4f5e", time: "45 min", ago: "5 days ago",   icon: "ti-layout",           iconBg: "rgba(255,140,66,.15)",   iconColor: "#ff8c42"  },
-];
-
-const STRENGTHS = [
-  { name: "HTML & CSS",   sub: "Strong fundamentals"    },
-  { name: "React",        sub: "Good component handling" },
-  { name: "JavaScript",  sub: "Good problem solving"    },
-];
-
-const IMPROVE = [
-  { name: "System Design", sub: "Needs more practice",        color: "#ff4f5e" },
-  { name: "MongoDB",       sub: "Work on queries & indexing",  color: "#9b6dff" },
-  { name: "Node.js",       sub: "Improve backend logic",       color: "#ff8c42" },
-];
-
-const AI_RECS = [
-  { title: "Practice more System Design", sub: "Concepts like scalability & architecture need more focus.", icon: "ti-server"     },
-  { title: "Solve more MongoDB queries",  sub: "Practice aggregations and advanced queries.",              icon: "ti-database"   },
-  { title: "Take more mock interviews",   sub: "Consistent practice will boost your confidence.",          icon: "ti-microphone" },
-];
+// Live data containers - replaced static mocks
 
 // ─── Gauge ───────────────────────────────────────────────────────────────────
 function Gauge({ pct = 78 }) {
@@ -263,14 +281,28 @@ function StatCard({ icon, iconBg, iconColor, value, title, sub }) {
 }
 
 // ─── Performance Chart (Canvas) ───────────────────────────────────────────────
-function PerfChart() {
+function PerfChart({ sessions = [] }) {
   const canvasRef = useRef(null);
-  const chartRef  = useRef(null);
+  const chartRef = useRef(null);
 
   useEffect(() => {
     const loadChart = () => {
       if (!window.Chart || !canvasRef.current) return;
       if (chartRef.current) chartRef.current.destroy();
+
+      // Sort sessions chronologically (oldest to newest) to show progress over time
+      const sorted = [...sessions].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      const lastSix = sorted.slice(-6);
+      
+      let labels = lastSix.map(s => 
+        new Date(s.updatedAt || s.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+      );
+      let dataPoints = lastSix.map(s => typeof s.score === 'number' ? s.score : 0);
+
+      if (labels.length === 0) {
+        labels = ["Start practicing"];
+        dataPoints = [0];
+      }
 
       const ctx = canvasRef.current.getContext("2d");
       const grad = ctx.createLinearGradient(0, 0, 0, 140);
@@ -280,9 +312,9 @@ function PerfChart() {
       chartRef.current = new window.Chart(ctx, {
         type: "line",
         data: {
-          labels: ["May 10","May 17","May 24","May 31","Jun 07","Jun 14"],
+          labels,
           datasets: [{
-            data: [45, 60, 72, 65, 78, 78],
+            data: dataPoints,
             borderColor: "#22d37e",
             borderWidth: 2,
             pointBackgroundColor: "#22d37e",
@@ -322,12 +354,12 @@ function PerfChart() {
       loadChart();
     } else {
       const script = document.createElement("script");
-      script.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";
+      script.src = "https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js";
       script.onload = loadChart;
       document.head.appendChild(script);
     }
     return () => { if (chartRef.current) chartRef.current.destroy(); };
-  }, []);
+  }, [sessions]);
 
   return (
     <div className="chart-area">
@@ -344,6 +376,13 @@ export default function MyScore() {
   const isAuthenticated = customAuth.isAuthenticated || zenuxAuth.isAuthenticated;
   const loading = customAuth.loading || zenuxAuth.loading;
   const [mounted, setMounted] = useState(false);
+  const [sessions, setSessions] = useState([]);
+  const [sessionsLoading, setSessionsLoading] = useState(true);
+  const [sessionsError, setSessionsError] = useState('');
+  const [avgScore, setAvgScore] = useState(0);
+  const [bestScore, setBestScore] = useState(0);
+  const [totalCompleted, setTotalCompleted] = useState(0);
+  const [recentScores, setRecentScores] = useState([]);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -352,6 +391,157 @@ export default function MyScore() {
   }, [loading, isAuthenticated, navigate]);
 
   useEffect(() => setMounted(true), []);
+
+  const fetchSessions = useCallback(async () => {
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      setSessionsError('Authentication required');
+      setSessionsLoading(false);
+      return;
+    }
+
+    setSessionsLoading(true);
+    setSessionsError('');
+    try {
+      const res = await fetch(`${API_BASE}/interview-sessions`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.success) {
+        setSessionsError(data?.message || 'Unable to load sessions');
+        setSessions([]);
+      } else {
+        // Keep only completed interviews for My Score
+        const completed = Array.isArray(data.data) ? data.data.filter(s => s.status === 'completed') : [];
+        setSessions(completed);
+
+        const scores = completed.map(s => (typeof s.score === 'number' ? s.score : 0));
+        const total = scores.length;
+        const avg = total ? Math.round(scores.reduce((a,b) => a+b, 0) / total) : 0;
+        const best = total ? Math.max(...scores) : 0;
+
+        setAvgScore(avg);
+        setBestScore(best);
+        setTotalCompleted(total);
+        setRecentScores(scores.slice(-6));
+      }
+    } catch (err) {
+      setSessionsError('Unable to load sessions');
+      setSessions([]);
+    } finally {
+      setSessionsLoading(false);
+    }
+  }, [loading, isAuthenticated]);
+
+  useEffect(() => {
+    if (!loading && isAuthenticated) fetchSessions();
+  }, [loading, isAuthenticated, fetchSessions]);
+
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      window.addEventListener('interview-sessions-updated', fetchSessions);
+      return () => {
+        window.removeEventListener('interview-sessions-updated', fetchSessions);
+      };
+    }
+  }, [loading, isAuthenticated, fetchSessions]);
+
+  const computeSkills = () => {
+    let totals = { accuracy: 0, technical: 0, communication: 0, confidence: 0 };
+    let count = 0;
+
+    sessions.forEach(session => {
+      const feedbackMsgs = session.messages?.filter(m => m.type === 'feedback') || [];
+      feedbackMsgs.forEach(msg => {
+        if (msg.score) {
+          totals.accuracy += msg.score.accuracy || 0;
+          totals.technical += msg.score.technical || 0;
+          totals.communication += msg.score.communication || 0;
+          totals.confidence += msg.score.confidence || 0;
+          count++;
+        }
+      });
+    });
+
+    const avg = (field) => count ? Math.round(totals[field] / count) : 0;
+
+    return [
+      { name: 'Accuracy', icon: 'ti-target', bg: 'rgba(34,211,126,.12)', color: '#22d37e', pct: avg('accuracy') },
+      { name: 'Technical', icon: 'ti-code', bg: 'rgba(59,140,255,.12)', color: '#3b8cff', pct: avg('technical') },
+      { name: 'Communication', icon: 'ti-message-dots', bg: 'rgba(155,109,255,.12)', color: '#9b6dff', pct: avg('communication') },
+      { name: 'Confidence', icon: 'ti-award', bg: 'rgba(255,209,102,.12)', color: '#ffd166', pct: avg('confidence') },
+    ];
+  };
+
+  const getStrengths = () => {
+    const strengthsList = [];
+    sessions.forEach(session => {
+      const summaryMsg = session.messages?.find(m => m.type === 'summary');
+      if (summaryMsg?.summary?.strengths) {
+        summaryMsg.summary.strengths.forEach(str => {
+          if (!strengthsList.some(item => item.name === str)) {
+            strengthsList.push({ name: str, sub: `Demonstrated in ${session.title || 'interview'}` });
+          }
+        });
+      }
+    });
+
+    if (strengthsList.length === 0) {
+      return [
+        { name: 'Complete an Interview', sub: 'Complete your first AI prep session to discover your strengths.' },
+        { name: 'Clear Communication', sub: 'Try to speak clearly and structure your answers during prep.' }
+      ];
+    }
+    return strengthsList.slice(0, 4);
+  };
+
+  const getImprove = () => {
+    const weaknessesList = [];
+    sessions.forEach(session => {
+      const summaryMsg = session.messages?.find(m => m.type === 'summary');
+      if (summaryMsg?.summary?.weaknesses) {
+        summaryMsg.summary.weaknesses.forEach(weak => {
+          if (!weaknessesList.some(item => item.name === weak)) {
+            weaknessesList.push({ name: weak, sub: `Identified in ${session.title || 'interview'}`, color: 'var(--red)' });
+          }
+        });
+      }
+    });
+
+    if (weaknessesList.length === 0) {
+      return [
+        { name: 'No Weaknesses Yet', sub: 'Keep practice sessions going to pinpoint topics to refine.', color: 'var(--cyan)' },
+      ];
+    }
+    return weaknessesList.slice(0, 3);
+  };
+
+  const getAiRecs = () => {
+    const recsList = [];
+    sessions.forEach(session => {
+      const summaryMsg = session.messages?.find(m => m.type === 'summary');
+      if (summaryMsg?.summary?.recommendedTopics) {
+        summaryMsg.summary.recommendedTopics.forEach(topic => {
+          if (!recsList.some(item => item.title === topic)) {
+            recsList.push({ title: topic, sub: 'Study and practice questions on this topic.', icon: 'ti-book-open' });
+          }
+        });
+      }
+    });
+
+    if (recsList.length === 0) {
+      return [
+        { title: 'Core Tech Fundamentals', sub: 'Revise syntax, loops, memory, and runtime concepts.', icon: 'ti-sparkles' },
+        { title: 'System Design Basics', sub: 'Learn APIs, cache, database indexing, and scaling.', icon: 'ti-target' }
+      ];
+    }
+    return recsList.slice(0, 3);
+  };
+
+  const SKILLS = computeSkills();
+  const STRENGTHS = getStrengths();
+  const IMPROVE = getImprove();
+  const AI_RECS = getAiRecs();
 
   return (
     <>
@@ -380,21 +570,20 @@ export default function MyScore() {
             {/* Overall Score */}
             <div className="card overall-card">
               <div className="overall-label">Overall Score</div>
-              <Gauge pct={78} />
-              <div className="perf-label">Good Performance</div>
+              <Gauge pct={avgScore} />
+              <div className="perf-label">{avgScore >= 85 ? 'Interview-ready' : avgScore >= 70 ? 'Strong' : 'Needs practice'}</div>
               <div className="trend">
-                <i className="ti ti-trending-up" /> 12% from last 7 interviews
+                <i className="ti ti-trending-up" /> {recentScores.length ? `${recentScores[recentScores.length-1] - (recentScores[0] || recentScores[recentScores.length-1])}% change` : 'No recent data'}
               </div>
             </div>
-
             <StatCard icon="ti-message-dots" iconBg="rgba(59,140,255,.12)" iconColor="#3b8cff"
-              value="20" title="Total Interviews" sub="This includes all practice sessions" />
+              value={totalCompleted} title="Total Interviews" sub="Completed interviews only" />
             <StatCard icon="ti-circle-check" iconBg="rgba(34,211,126,.12)" iconColor="#22d37e"
-              value="16" title="Completed" sub="80% of total interviews" />
+              value={bestScore} title="Best Score" sub="Highest recorded score" />
             <StatCard icon="ti-clock" iconBg="rgba(255,209,102,.12)" iconColor="#ffd166"
-              value="32m" title="Avg. Time" sub="Average time per interview" />
+              value="—" title="Avg. Time" sub="Unavailable" />
             <StatCard icon="ti-chart-line" iconBg="rgba(155,109,255,.12)" iconColor="#9b6dff"
-              value="78%" title="Accuracy" sub="Average accuracy across interviews" />
+              value={`${avgScore}%`} title="Average Score" sub="Average across completed interviews" />
           </div>
 
           {/* ── ROW 2: CHARTS ── */}
@@ -408,7 +597,7 @@ export default function MyScore() {
                   <i className="ti ti-chevron-down" />
                 </button>
               </div>
-              {mounted && <PerfChart />}
+              {mounted && <PerfChart sessions={sessions} />}
             </div>
 
             {/* Section Wise Performance */}
@@ -443,21 +632,20 @@ export default function MyScore() {
                 <span className="card-title">Recent Interviews</span>
                 <button className="view-all" onClick={() => navigate('/interview/history')}>View All</button>
               </div>
-              {INTERVIEWS.map((iv) => (
-                <div className="interview-row" key={iv.name}>
-                  <div className="int-icon" style={{ background: iv.iconBg, color: iv.iconColor }}>
-                    <i className={`ti ${iv.icon}`} />
+              {sessionsLoading && <div>Loading recent interviews…</div>}
+              {!sessionsLoading && sessions.length === 0 && <div className="history-empty">No completed interviews found.</div>}
+              {!sessionsLoading && sessions.map((session) => (
+                <div className="interview-row" key={session._id || session.id}>
+                  <div className="int-icon" style={{ background: 'rgba(0,0,0,.06)', color: '#9b6dff' }}>
+                    <i className={`ti ti-clipboard`} />
                   </div>
                   <div className="int-info">
-                    <div className="int-name">{iv.name}</div>
-                    <div className="int-sub">{iv.sub}</div>
+                    <div className="int-name">{session.title || 'Interview Session'}</div>
+                    <div className="int-sub">{(session.field || 'Unknown field') + ' · ' + (session.experience || session.type || '')}</div>
                   </div>
                   <div className="int-right">
-                    <div className="int-score" style={{ color: iv.scoreColor }}>
-                      {iv.score}%{" "}
-                      <span style={{ color: "var(--t2)", fontWeight: 400, fontSize: 11 }}>{iv.time}</span>
-                    </div>
-                    <div className="int-ago">{iv.ago}</div>
+                    <div className="int-score" style={{ color: '#22d37e' }}>{session.score ?? 0}%</div>
+                    <div className="int-ago">{new Date(session.updatedAt || session.createdAt).toLocaleDateString()}</div>
                   </div>
                 </div>
               ))}
@@ -525,7 +713,7 @@ export default function MyScore() {
                   <i className="ti ti-chevron-right ai-rec-arr" />
                 </div>
               ))}
-              <button className="start-btn">
+              <button className="start-btn" onClick={() => navigate('/interview')}>
                 <i className="ti ti-bolt" /> Start New Interview
               </button>
             </div>

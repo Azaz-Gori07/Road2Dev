@@ -363,8 +363,8 @@ function Onboarding() {
               <input
                 value={stackInput}
                 onChange={e => { setStackInput(e.target.value); setShowStackSuggestions(true); }}
-                onFocus={() => setShowStackSuggestions(true)}
-                onBlur={() => setTimeout(() => setShowStackSuggestions(false), 200)}
+                onFocus={e => { setShowStackSuggestions(true); e.target.style.borderColor = "rgba(64,200,224,0.45)"; }}
+                onBlur={e => { setTimeout(() => setShowStackSuggestions(false), 200); e.target.style.borderColor = "rgba(255,255,255,0.1)"; }}
                 onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); addCustomStack(); } }}
                 placeholder="Search or type a technology..."
                 style={{
@@ -373,8 +373,6 @@ function Onboarding() {
                   color: "#f0f0f0", fontSize: 14, outline: "none",
                   fontFamily: "'DM Sans', sans-serif", boxSizing: "border-box",
                 }}
-                onFocus={e => e.target.style.borderColor = "rgba(64,200,224,0.45)"}
-                onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}
               />
 
               {/* Suggestions dropdown */}

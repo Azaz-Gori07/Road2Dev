@@ -9,7 +9,7 @@
 
 /* Design Tokens as CSS Variables */
 :root {
-  --bg: #111111;
+  --bg: #000;
   --bg-card: #191919;
   --bg-card-alt: #161616;
   --bg-input: #1e1e1e;

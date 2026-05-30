@@ -385,10 +385,12 @@ const buildInterviewSummary = (messages, totalQuestions) => {
   const feedbackMessages = messages.filter((message) => message.type === 'feedback');
   const scores = feedbackMessages.reduce(
     (acc, message) => {
-      acc.accuracy += message.score.accuracy;
-      acc.technical += message.score.technical;
-      acc.communication += message.score.communication;
-      acc.confidence += message.score.confidence;
+      if (message.score) {
+        acc.accuracy += message.score.accuracy || 0;
+        acc.technical += message.score.technical || 0;
+        acc.communication += message.score.communication || 0;
+        acc.confidence += message.score.confidence || 0;
+      }
       return acc;
     },
     { accuracy: 0, technical: 0, communication: 0, confidence: 0 }
@@ -527,28 +529,134 @@ const InterviewAccessModal = ({ isOpen, onClose, onContinueGuest, onLogin }) => 
 
 // --- Main Component ---
 const InterviewPrep = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [selectedField, setSelectedField] = useState(null);
-  const [selectedStack, setSelectedStack] = useState(null);
-  const [selectedExp, setSelectedExp] = useState(null);
-  const [selectedInterviewType, setSelectedInterviewType] = useState('technical');
-  const [interviewSession, setInterviewSession] = useState(null);
+  const getInitialValue = (key, defaultValue) => {
+    try {
+      const storedSessionId = localStorage.getItem('road2dev-interview-session-id');
+      const savedLocalRaw = localStorage.getItem('road2dev-interview');
+      if (storedSessionId && savedLocalRaw) {
+        const parsed = JSON.parse(savedLocalRaw);
+        const parsedId = parsed?.interviewSession?._id || parsed?.interviewSession?.id;
+        if (parsedId === storedSessionId) {
+          switch (key) {
+            case 'chatMessages':
+              return parsed.chatMessages || defaultValue;
+            case 'interviewStarted':
+              return parsed.interviewStarted ?? defaultValue;
+            case 'currentQuestionIndex':
+              return parsed.currentQuestionIndex ?? defaultValue;
+            case 'timerSeconds':
+              return parsed.timerSeconds ?? defaultValue;
+            case 'interviewCompleted':
+              return parsed.interviewCompleted ?? defaultValue;
+            case 'savedInterview':
+              return parsed;
+            case 'sessionId':
+              return parsedId;
+            case 'interviewSession':
+              return parsed.interviewSession || null;
+            case 'currentStep':
+              return parsed.interviewSession?.status === 'draft' ? 5 : defaultValue;
+            default:
+              return defaultValue;
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Error reading initial value from local storage:', e);
+    }
+    return defaultValue;
+  };
+
+  const [sessionId, setSessionId] = useState(() => getInitialValue('sessionId', null));
+  const [rawInterviewSession, setRawInterviewSession] = useState(() => getInitialValue('interviewSession', null));
+  
+  const setInterviewSession = (session) => {
+    if (session) {
+      if (!Array.isArray(session.questions) || session.questions.length === 0) {
+        session.questions = [
+          {
+            question: 'Walk me through a recent technical problem you solved and the tradeoffs you considered.',
+            difficulty: 'Medium',
+            expectedFocus: 'Technical tradeoffs and problem-solving.',
+            followUps: [],
+          },
+          {
+            question: 'Explain a core concept from your selected domain as if you were mentoring a junior developer.',
+            difficulty: 'Medium',
+            expectedFocus: 'Clear conceptual explanation.',
+            followUps: [],
+          },
+          {
+            question: 'Describe how you debug a production issue under time pressure.',
+            difficulty: 'Medium',
+            expectedFocus: 'Debugging process and mitigation.',
+            followUps: [],
+          }
+        ];
+      }
+    }
+    setRawInterviewSession(session);
+  };
+  const interviewSession = rawInterviewSession;
+
+  const [currentStep, setCurrentStep] = useState(() => getInitialValue('currentStep', 1));
+  const [selectedField, setSelectedField] = useState(() => {
+    const session = getInitialValue('interviewSession', null);
+    if (session?.field) {
+      const foundField = FIELDS.find((f) => f.name === session.field);
+      return foundField ? foundField.id : null;
+    }
+    return null;
+  });
+  
+  const [selectedStack, setSelectedStack] = useState(() => {
+    const session = getInitialValue('interviewSession', null);
+    if (session?.field && session?.stack) {
+      const foundField = FIELDS.find((f) => f.name === session.field);
+      if (foundField) {
+        const foundStack = foundField.stacks.find((s) => s.name === session.stack);
+        return foundStack ? foundStack.id : null;
+      }
+    }
+    return null;
+  });
+
+  const [selectedExp, setSelectedExp] = useState(() => {
+    const session = getInitialValue('interviewSession', null);
+    if (session?.experience) {
+      const matchedExp = EXP.find(e => e.id.toLowerCase() === session.experience.toLowerCase() || e.label.toLowerCase() === session.experience.toLowerCase());
+      return matchedExp ? matchedExp.id : null;
+    }
+    return null;
+  });
+
+  const [selectedInterviewType, setSelectedInterviewType] = useState(() => {
+    const session = getInitialValue('interviewSession', null);
+    if (session?.type) {
+      const matchedType = INTERVIEW_TYPES.find(t => t.id.toLowerCase() === session.type.toLowerCase() || t.label.toLowerCase() === session.type.toLowerCase());
+      return matchedType ? matchedType.id : 'technical';
+    }
+    return 'technical';
+  });
+
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState('');
-  const [interviewStarted, setInterviewStarted] = useState(false);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [chatMessages, setChatMessages] = useState([]);
+  const [interviewStarted, setInterviewStarted] = useState(() => getInitialValue('interviewStarted', false));
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(() => getInitialValue('currentQuestionIndex', 0));
+  const [chatMessages, setChatMessages] = useState(() => getInitialValue('chatMessages', []));
   const [messageInput, setMessageInput] = useState('');
   const [isAiTyping, setIsAiTyping] = useState(false);
-  const [timerSeconds, setTimerSeconds] = useState(0);
-  const [interviewCompleted, setInterviewCompleted] = useState(false);
-  const [savedInterview, setSavedInterview] = useState(null);
-  const [sessionId, setSessionId] = useState(null);
+  const [timerSeconds, setTimerSeconds] = useState(() => getInitialValue('timerSeconds', 0));
+  const [interviewCompleted, setInterviewCompleted] = useState(() => getInitialValue('interviewCompleted', false));
+  const [savedInterview, setSavedInterview] = useState(() => getInitialValue('savedInterview', null));
   const abortControllerRef = useRef(null);
   const chatEndRef = useRef(null);
   const [showAccessModal, setShowAccessModal] = useState(false);
   const [hasSeenAccessModal, setHasSeenAccessModal] = useState(false);
   const [guestAccessConfirmed, setGuestAccessConfirmed] = useState(false);
+  const [showEndConfirmModal, setShowEndConfirmModal] = useState(false);
+  const [showAbandonConfirmModal, setShowAbandonConfirmModal] = useState(false);
+  const [saveStatus, setSaveStatus] = useState('idle');
   const navigate = useNavigate();
   const customAuth = useAuth();
   const zenuxAuth = useZenuxAuth();
@@ -586,7 +694,7 @@ const InterviewPrep = () => {
     return Math.round((totals.accuracy + totals.technical + totals.communication + totals.confidence) / (count * 4));
   };
 
-  const buildSessionPayload = ({ messages = chatMessages, statusOverride, scoreOverride, feedbackOverride } = {}) => {
+  const buildSessionPayload = ({ messages = chatMessages, statusOverride, scoreOverride, feedbackOverride, currentQuestionIndexOverride, questionsOverride, tipsOverride } = {}) => {
     const payloadScore =
       typeof scoreOverride === 'number'
         ? scoreOverride
@@ -594,6 +702,10 @@ const InterviewPrep = () => {
         ? buildInterviewSummary(messages, totalQuestions).overallScore
         : computeSessionScore(messages);
     const summary = interviewCompleted ? buildInterviewSummary(messages, totalQuestions) : null;
+
+    const indexToSave = typeof currentQuestionIndexOverride === 'number' ? currentQuestionIndexOverride : currentQuestionIndex;
+    const questionsToSave = questionsOverride || interviewSession?.questions || [];
+    const tipsToSave = tipsOverride || interviewSession?.tips || [];
 
     return {
       title: interviewSession?.title || 'Interview Session',
@@ -607,11 +719,18 @@ const InterviewPrep = () => {
       score: payloadScore,
       messages,
       feedback: feedbackOverride ?? (summary ? summary.readiness : ''),
+      questions: questionsToSave,
+      tips: tipsToSave,
+      currentQuestionIndex: indexToSave,
+      totalQuestions: questionsToSave.length,
+      completedQuestions: messages.filter((m) => m.type === 'feedback').length,
+      skippedQuestions: messages.filter((m) => m.type === 'note' && m.text.includes('Skipping')).length,
+      timerState: timerSeconds,
+      difficulty: questionsToSave[indexToSave]?.difficulty || 'Medium',
     };
   };
 
   const saveInterviewSessionToServer = async (overrides = {}) => {
-    if (!isAuthenticated) return;
     const authToken = getAuthToken();
     if (!authToken) return;
 
@@ -620,6 +739,30 @@ const InterviewPrep = () => {
       ? `${API_BASE}/interview-sessions/${sessionId}`
       : `${API_BASE}/interview-sessions`;
     const method = sessionId ? 'PUT' : 'POST';
+
+    // Synchronize to localStorage in real-time
+    try {
+      const activeId = sessionId || rawInterviewSession?._id || rawInterviewSession?.id;
+      if (activeId) {
+        const syncedLocal = {
+          interviewSession: {
+            ...rawInterviewSession,
+            ...payload,
+            _id: activeId,
+          },
+          chatMessages: payload.messages,
+          currentQuestionIndex: payload.currentQuestionIndex,
+          timerSeconds: payload.timerState,
+          interviewStarted: payload.status === 'active' || payload.status === 'incomplete' || payload.status === 'in_progress',
+          interviewCompleted: payload.status === 'completed',
+          savedAt: new Date().toISOString(),
+        };
+        localStorage.setItem('road2dev-interview', JSON.stringify(syncedLocal));
+        setSavedInterview(syncedLocal);
+      }
+    } catch (e) {
+      console.warn('Failed to sync to local storage during autosave:', e);
+    }
 
     try {
       const res = await fetch(url, {
@@ -636,13 +779,29 @@ const InterviewPrep = () => {
         return;
       }
 
-      if (!sessionId && data?.data?._id) {
-        setSessionId(data.data._id);
-        localStorage.setItem('road2dev-interview-session-id', data.data._id);
-      } else if (!sessionId && data?.data?.id) {
-        setSessionId(data.data.id);
-        localStorage.setItem('road2dev-interview-session-id', data.data.id);
+      if (data?.data) {
+        setInterviewSession(data.data);
+        if (!sessionId) {
+          const newId = data.data._id || data.data.id;
+          setSessionId(newId);
+          localStorage.setItem('road2dev-interview-session-id', newId);
+
+          // Write to road2dev-interview cache with the newly created ID
+          const syncedLocal = {
+            interviewSession: data.data,
+            chatMessages: payload.messages,
+            currentQuestionIndex: payload.currentQuestionIndex,
+            timerSeconds: payload.timerState,
+            interviewStarted: payload.status === 'active' || payload.status === 'incomplete' || payload.status === 'in_progress',
+            interviewCompleted: payload.status === 'completed',
+            savedAt: new Date().toISOString(),
+          };
+          localStorage.setItem('road2dev-interview', JSON.stringify(syncedLocal));
+          setSavedInterview(syncedLocal);
+        }
       }
+
+      window.dispatchEvent(new Event('interview-sessions-updated'));
     } catch (saveError) {
       console.warn('Interview session autosave error:', saveError);
     }
@@ -656,20 +815,179 @@ const InterviewPrep = () => {
   }, []);
 
   useEffect(() => {
-    const saved = localStorage.getItem('road2dev-interview');
-    if (saved) {
+    const authToken = getAuthToken();
+    const storedSessionId = localStorage.getItem('road2dev-interview-session-id');
+    const savedLocalRaw = localStorage.getItem('road2dev-interview');
+    
+    let targetSessionId = storedSessionId;
+    if (!targetSessionId && savedLocalRaw) {
       try {
-        setSavedInterview(JSON.parse(saved));
-      } catch (e) {
-        console.warn('Unable to parse saved interview', e);
-      }
+        const parsed = JSON.parse(savedLocalRaw);
+        targetSessionId = parsed?.interviewSession?._id || parsed?.interviewSession?.id;
+      } catch (e) {}
     }
 
-    const storedSessionId = localStorage.getItem('road2dev-interview-session-id');
-    if (storedSessionId) {
-      setSessionId(storedSessionId);
+    if (!targetSessionId) {
+      setSessionId('');
+      setInterviewSession(null);
+      setSavedInterview(null);
+      return;
     }
-  }, []);
+
+    if (!authToken) {
+      return;
+    }
+
+    const restoreSavedSession = async () => {
+      try {
+        const response = await fetch(`${API_BASE}/interview-sessions/${targetSessionId}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok || !data?.success || !data?.data) {
+          console.warn('Session recovery failed or session deleted from backend. Cleaning up stale cache.');
+          localStorage.removeItem('road2dev-interview-session-id');
+          localStorage.removeItem('road2dev-interview');
+          setSessionId('');
+          setInterviewSession(null);
+          setSavedInterview(null);
+          setChatMessages([]);
+          setTimerSeconds(0);
+          setInterviewStarted(false);
+          setInterviewCompleted(false);
+          setCurrentQuestionIndex(0);
+          setCurrentStep(1);
+          return;
+        }
+
+        const serverSession = data.data;
+
+        if (serverSession.status === 'completed' || serverSession.status === 'abandoned') {
+          console.warn('Recovered session is finalized. Cleaning up active session indicators.');
+          localStorage.removeItem('road2dev-interview-session-id');
+          localStorage.removeItem('road2dev-interview');
+          setSessionId('');
+          setInterviewSession(null);
+          setSavedInterview(null);
+          return;
+        }
+
+        setInterviewSession(serverSession);
+        setSessionId(serverSession._id || serverSession.id);
+        const restoredMessages = Array.isArray(serverSession.messages) ? serverSession.messages : [];
+        setChatMessages(restoredMessages);
+
+        const syncedLocal = {
+          interviewSession: serverSession,
+          chatMessages: restoredMessages,
+          currentQuestionIndex: serverSession.currentQuestionIndex || 0,
+          timerSeconds: serverSession.timerState || 0,
+          interviewStarted: serverSession.status === 'active' || serverSession.status === 'incomplete' || serverSession.status === 'in_progress',
+          interviewCompleted: false,
+          savedAt: new Date().toISOString(),
+        };
+        localStorage.setItem('road2dev-interview', JSON.stringify(syncedLocal));
+        localStorage.setItem('road2dev-interview-session-id', serverSession._id || serverSession.id);
+        setSavedInterview(syncedLocal);
+
+        const foundField = FIELDS.find((f) => f.name === serverSession.field);
+        if (foundField) {
+          setSelectedField(foundField.id);
+          const foundStack = foundField.stacks.find((s) => s.name === serverSession.stack);
+          if (foundStack) {
+            setSelectedStack(foundStack.id);
+          }
+        }
+        if (serverSession.experience) {
+          const matchedExp = EXP.find(e => e.id.toLowerCase() === serverSession.experience.toLowerCase() || e.label.toLowerCase() === serverSession.experience.toLowerCase());
+          if (matchedExp) setSelectedExp(matchedExp.id);
+        }
+        if (serverSession.type) {
+          const matchedType = INTERVIEW_TYPES.find(t => t.id.toLowerCase() === serverSession.type.toLowerCase() || t.label.toLowerCase() === serverSession.type.toLowerCase());
+          if (matchedType) setSelectedInterviewType(matchedType.id);
+        }
+
+        if (serverSession.status === 'draft') {
+          setCurrentStep(5);
+        }
+
+        const questionMessages = restoredMessages.filter((message) => message.type === 'question');
+        const feedbackMessages = restoredMessages.filter((message) => message.type === 'feedback');
+        
+        let restoredIndex = Math.max(0, questionMessages.length - 1);
+        let shouldAutoAsk = false;
+        if (restoredMessages.length > 0 && restoredMessages[restoredMessages.length - 1].type === 'feedback') {
+          restoredIndex = feedbackMessages.length;
+          shouldAutoAsk = true;
+        }
+
+        const savedIndex = typeof serverSession.currentQuestionIndex === 'number' ? serverSession.currentQuestionIndex : restoredIndex;
+        setCurrentQuestionIndex(savedIndex);
+        setTimerSeconds(serverSession.timerState || 0);
+
+        setInterviewStarted(serverSession.status === 'active' || serverSession.status === 'incomplete' || serverSession.status === 'in_progress');
+        setInterviewCompleted(false);
+
+        if (shouldAutoAsk && savedIndex < serverSession.questions.length) {
+          setIsAiTyping(true);
+          setTimeout(() => {
+            const nextQuestion = serverSession.questions[savedIndex];
+            const nextMessages = [
+              ...restoredMessages,
+              {
+                id: buildMessageId('ai-question'),
+                role: 'ai',
+                type: 'question',
+                question: nextQuestion,
+                timestamp: new Date().toISOString(),
+              },
+            ];
+            setChatMessages(nextMessages);
+            setIsAiTyping(false);
+            
+            const token = getAuthToken();
+            if (token) {
+              const payload = {
+                title: serverSession.title || 'Interview Session',
+                field: serverSession.field,
+                stack: serverSession.stack,
+                experience: serverSession.experience,
+                type: serverSession.type,
+                status: 'active',
+                score: serverSession.score || 0,
+                messages: nextMessages,
+                feedback: serverSession.feedback || '',
+                questions: serverSession.questions || [],
+                tips: serverSession.tips || [],
+                currentQuestionIndex: savedIndex,
+                totalQuestions: serverSession.questions.length,
+                completedQuestions: nextMessages.filter((m) => m.type === 'feedback').length,
+                skippedQuestions: nextMessages.filter((m) => m.type === 'note' && m.text.includes('Skipping')).length,
+                timerState: serverSession.timerState || 0,
+                difficulty: serverSession.questions[savedIndex]?.difficulty || 'Medium',
+              };
+              
+              fetch(`${API_BASE}/interview-sessions/${serverSession._id || serverSession.id}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(payload),
+              }).catch(err => console.warn('Restore-autosave failed:', err));
+            }
+          }, 900);
+        }
+      } catch (restoreError) {
+        console.warn('Unable to restore interview session from server:', restoreError);
+      }
+    };
+
+    restoreSavedSession();
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (!interviewStarted) return;
@@ -692,10 +1010,56 @@ const InterviewPrep = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [chatMessages, isAiTyping]);
 
+  // Persist incomplete sessions when the user closes or reloads the page.
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      try {
+        const authToken = getAuthToken();
+        if (!authToken) return;
+        if (!interviewStarted || interviewCompleted) return;
+
+        const payload = buildSessionPayload({ messages: chatMessages, statusOverride: 'incomplete' });
+        const url = sessionId ? `${API_BASE}/interview-sessions/${sessionId}` : `${API_BASE}/interview-sessions`;
+        const method = sessionId ? 'PUT' : 'POST';
+
+        // Try a keepalive fetch; fall back to navigator.sendBeacon when possible.
+        const opts = {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify(payload),
+          keepalive: true,
+        };
+
+        try {
+          fetch(url, opts);
+        } catch {
+          try {
+            if (navigator.sendBeacon) {
+              const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+              navigator.sendBeacon(url, blob);
+            }
+          } catch (err) {
+            // silent fallback - best effort
+          }
+        }
+      } catch (err) {
+        // best-effort only
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [interviewStarted, interviewCompleted, chatMessages, sessionId]);
+
   const resetGeneratedInterview = () => {
     setInterviewSession(null);
     setSessionId(null);
     localStorage.removeItem('road2dev-interview-session-id');
+    localStorage.removeItem('road2dev-interview');
+    setSavedInterview(null);
     setInterviewStarted(false);
     setChatMessages([]);
     setCurrentQuestionIndex(0);
@@ -776,6 +1140,8 @@ const InterviewPrep = () => {
         messages: [],
         scoreOverride: 0,
         feedbackOverride: '',
+        questionsOverride: result.data.questions,
+        tipsOverride: result.data.tips || [],
       });
     } catch (requestError) {
       if (requestError.name !== 'AbortError') {
@@ -813,6 +1179,7 @@ const InterviewPrep = () => {
     saveInterviewSessionToServer({
       statusOverride: 'active',
       messages: startingMessages,
+      currentQuestionIndexOverride: 0,
     });
   };
 
@@ -836,6 +1203,7 @@ const InterviewPrep = () => {
     saveInterviewSessionToServer({
       statusOverride: 'active',
       messages: afterUserMessage,
+      currentQuestionIndexOverride: currentQuestionIndex,
     });
 
     const feedback = buildFeedback(trimmed, question, currentQuestionIndex);
@@ -847,6 +1215,7 @@ const InterviewPrep = () => {
         saveInterviewSessionToServer({
           statusOverride: 'active',
           messages: afterFeedback,
+          currentQuestionIndexOverride: currentQuestionIndex,
         });
 
         if (nextIndex < totalQuestions) {
@@ -868,6 +1237,7 @@ const InterviewPrep = () => {
             saveInterviewSessionToServer({
               statusOverride: 'active',
               messages: nextMessages,
+              currentQuestionIndexOverride: nextIndex,
             });
           }, 900);
         } else {
@@ -889,6 +1259,7 @@ const InterviewPrep = () => {
               messages: completedMessages,
               scoreOverride: summary.overallScore,
               feedbackOverride: summary.readiness,
+              currentQuestionIndexOverride: nextIndex,
             });
           }, 900);
         }
@@ -899,26 +1270,55 @@ const InterviewPrep = () => {
   };
 
   const handleRetryAnswer = () => {
-    const lastUser = [...chatMessages].reverse().find((message) => message.role === 'user');
-    if (!lastUser) return;
-    setMessageInput(lastUser.text);
-    setChatMessages((prev) => prev.filter((message) => message.type !== 'feedback'));
+    if (chatMessages.length === 0) return;
+    
+    // Find the last user message index
+    const lastUserIndex = chatMessages.map(m => m.role).lastIndexOf('user');
+    if (lastUserIndex === -1) return;
+
+    const lastUserMsg = chatMessages[lastUserIndex];
+    
+    // Filter out the last user message and any messages after it
+    const newChatMessages = chatMessages.slice(0, lastUserIndex);
+    
+    setChatMessages(newChatMessages);
+    setMessageInput(lastUserMsg.text);
     setInterviewCompleted(false);
+    
+    saveInterviewSessionToServer({
+      messages: newChatMessages,
+      statusOverride: 'active',
+      currentQuestionIndexOverride: currentQuestionIndex,
+    });
   };
 
   const handleRegenerateFeedback = () => {
     const lastUser = [...chatMessages].reverse().find((message) => message.role === 'user');
-    const answeredIndex = Math.max(0, currentQuestionIndex - 1);
-    if (!lastUser || !interviewSession) return;
+    const lastUserIndex = chatMessages.map(m => m.role).lastIndexOf('user');
+    if (!lastUser || lastUserIndex === -1 || !interviewSession) return;
 
+    const answeredIndex = Math.max(0, currentQuestionIndex - 1);
     const question = interviewSession.questions[answeredIndex];
     const regenerated = buildFeedback(lastUser.text, question, answeredIndex);
     setIsAiTyping(true);
 
     setTimeout(() => {
       setChatMessages((prev) => {
-        const cleaned = prev.filter((message) => message.type !== 'feedback');
-        return [...cleaned, regenerated];
+        const lastFeedbackIndex = prev.map(m => m.type).lastIndexOf('feedback');
+        let newMessages = [...prev];
+        if (lastFeedbackIndex !== -1 && lastFeedbackIndex > lastUserIndex) {
+          newMessages.splice(lastFeedbackIndex, 1, regenerated);
+        } else {
+          newMessages.push(regenerated);
+        }
+        
+        saveInterviewSessionToServer({
+          statusOverride: 'active',
+          messages: newMessages,
+          currentQuestionIndexOverride: currentQuestionIndex,
+        });
+        
+        return newMessages;
       });
       setIsAiTyping(false);
     }, 900);
@@ -958,6 +1358,7 @@ const InterviewPrep = () => {
         saveInterviewSessionToServer({
           statusOverride: 'active',
           messages: nextMessages,
+          currentQuestionIndexOverride: nextIndex,
         });
       } else {
         const summary = buildInterviewSummary(baseMessages, totalQuestions);
@@ -978,13 +1379,16 @@ const InterviewPrep = () => {
           messages: completedMessages,
           scoreOverride: summary.overallScore,
           feedbackOverride: summary.readiness,
+          currentQuestionIndexOverride: nextIndex,
         });
       }
     }, 850);
   };
 
-  const handleSaveInterview = () => {
+  const handleSaveInterview = async () => {
     if (!interviewSession) return;
+    setSaveStatus('saving');
+
     const saved = {
       interviewSession,
       chatMessages,
@@ -996,6 +1400,13 @@ const InterviewPrep = () => {
     };
     localStorage.setItem('road2dev-interview', JSON.stringify(saved));
     setSavedInterview(saved);
+
+    await saveInterviewSessionToServer();
+    
+    setSaveStatus('saved');
+    setTimeout(() => {
+      setSaveStatus('idle');
+    }, 2000);
   };
 
   const handleContinueAsGuest = () => {
@@ -1021,8 +1432,15 @@ const InterviewPrep = () => {
     setInterviewCompleted(savedInterview.interviewCompleted ?? false);
   };
 
-  const handleEndInterview = () => {
+  const handleEndInterview = (confirmed = false) => {
     if (!interviewSession) return;
+
+    if (!confirmed && !interviewCompleted && currentQuestionIndex < totalQuestions - 1) {
+      setShowEndConfirmModal(true);
+      return;
+    }
+
+    setShowEndConfirmModal(false);
     const summary = buildInterviewSummary(chatMessages, totalQuestions);
     const completedMessages = [
       ...chatMessages,
@@ -1042,7 +1460,39 @@ const InterviewPrep = () => {
       messages: completedMessages,
       scoreOverride: summary.overallScore,
       feedbackOverride: summary.readiness,
+      currentQuestionIndexOverride: currentQuestionIndex,
     });
+  };
+
+  const handleLeaveSession = () => {
+    saveInterviewSessionToServer({
+      statusOverride: 'active'
+    });
+    setInterviewStarted(false);
+  };
+
+  const handleAbandonInterview = async (confirmed = false) => {
+    if (!confirmed) {
+      setShowAbandonConfirmModal(true);
+      return;
+    }
+    setShowAbandonConfirmModal(false);
+
+    await saveInterviewSessionToServer({
+      statusOverride: 'abandoned',
+    });
+
+    localStorage.removeItem('road2dev-interview-session-id');
+    localStorage.removeItem('road2dev-interview');
+    setSessionId('');
+    setInterviewSession(null);
+    setSavedInterview(null);
+    setChatMessages([]);
+    setTimerSeconds(0);
+    setInterviewStarted(false);
+    setInterviewCompleted(false);
+    setCurrentQuestionIndex(0);
+    setCurrentStep(1);
   };
 
   const handleDownloadReport = () => {
@@ -1310,19 +1760,19 @@ const InterviewPrep = () => {
             <div className="score-grid">
               <div>
                 <strong>Accuracy</strong>
-                <span>{message.score.accuracy}%</span>
+                <span>{message.score?.accuracy ?? 0}%</span>
               </div>
               <div>
                 <strong>Technical</strong>
-                <span>{message.score.technical}%</span>
+                <span>{message.score?.technical ?? 0}%</span>
               </div>
               <div>
                 <strong>Comm</strong>
-                <span>{message.score.communication}%</span>
+                <span>{message.score?.communication ?? 0}%</span>
               </div>
               <div>
                 <strong>Confidence</strong>
-                <span>{message.score.confidence}%</span>
+                <span>{message.score?.confidence ?? 0}%</span>
               </div>
             </div>
           </div>
@@ -1331,6 +1781,7 @@ const InterviewPrep = () => {
     }
 
     if (message.type === 'summary') {
+      if (!message.summary) return null;
       return (
         <div className="chat-message ai" key={message.id}>
           <div className="message-card ai-summary">
@@ -1374,6 +1825,58 @@ const InterviewPrep = () => {
     return (
       <div className="chat-message system" key={message.id}>
         <div className="system-note">{message.text}</div>
+      </div>
+    );
+  };
+
+  const renderActiveSessionPanel = () => {
+    if (!interviewSession) return null;
+    const activeIndex = currentQuestionIndex;
+    
+    return (
+      <div className="active-session-control-panel" style={{ padding: '24px', background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: '16px', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.03), 0 8px 30px rgba(0,0,0,.45)', width: '100%', maxWidth: '600px', margin: '40px auto 0', transition: 'all 0.3s ease' }}>
+        <div className="start-summary" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+          <div className="start-icon" style={{ background: 'rgba(139,92,246,0.15)', color: '#8B5CF6', fontSize: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '16px', marginBottom: '16px' }}>💬</div>
+          <h3 style={{ fontSize: '20px', fontWeight: '700', letterSpacing: '-0.3px', margin: '0 0 8px' }}>Active Session in Progress</h3>
+          <p style={{ color: '#a1a1aa', fontSize: '13px', margin: '0 0 20px', maxWidth: '440px' }}>
+            You have an unfinished interview session for <strong>{interviewSession.field}</strong>
+            {interviewSession.stack && ` — ${interviewSession.stack}`}.
+          </p>
+          
+          <div className="tags" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', margin: '8px 0 24px' }}>
+            <div className="tag" style={{ background: '#111', border: '1px solid #222', padding: '6px 12px', borderRadius: '8px', fontSize: '11.5px', color: '#a1a1aa' }}>{interviewSession.experience}</div>
+            <div className="tag" style={{ background: '#111', border: '1px solid #222', padding: '6px 12px', borderRadius: '8px', fontSize: '11.5px', color: '#a1a1aa' }}>{(interviewSession.type || 'Behavioral').toUpperCase()}</div>
+            <div className="tag" style={{ background: '#111', border: '1px solid #222', padding: '6px 12px', borderRadius: '8px', fontSize: '11.5px', color: '#a1a1aa' }}>{interviewSession.difficulty || 'Medium'}</div>
+            <div className="tag" style={{ background: '#111', border: '1px solid #222', padding: '6px 12px', borderRadius: '8px', fontSize: '11.5px', color: '#a1a1aa' }}>Progress: Q {Math.min(activeIndex + 1, totalQuestions)} / {totalQuestions}</div>
+            <div className="tag" style={{ background: '#111', border: '1px solid #222', padding: '6px 12px', borderRadius: '8px', fontSize: '11.5px', color: '#a1a1aa' }}>Time: {formatTimer(timerSeconds)}</div>
+          </div>
+
+          <div className="start-actions" style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', maxWidth: '320px', margin: '0 auto' }}>
+            <button className="btn-next" style={{ width: '100%', padding: '12px', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', background: 'linear-gradient(135deg, #8B5CF6, #6D28D9)', border: 'none', color: 'white', boxShadow: '0 0 25px rgba(139,92,246,0.25)', transition: 'all 0.2s' }} onClick={() => {
+              setInterviewStarted(true);
+            }}>
+              Resume Interview
+            </button>
+            <button className="btn-back" style={{ width: '100%', padding: '12px', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', background: '#0a0a0a', border: '1px solid #1a1a1a', color: 'white', transition: 'all 0.2s' }} onClick={() => handleEndInterview(false)}>
+              End & View Summary
+            </button>
+            <button className="btn-back" style={{ width: '100%', padding: '12px', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', background: '#0a0a0a', border: '1px solid rgba(255,107,107,0.2)', color: '#ff6b6b', transition: 'all 0.2s' }} onClick={() => {
+              localStorage.removeItem('road2dev-interview-session-id');
+              localStorage.removeItem('road2dev-interview');
+              setSessionId('');
+              setInterviewSession(null);
+              setSavedInterview(null);
+              setChatMessages([]);
+              setTimerSeconds(0);
+              setInterviewStarted(false);
+              setInterviewCompleted(false);
+              setCurrentQuestionIndex(0);
+              setCurrentStep(1);
+            }}>
+              Start New Interview
+            </button>
+          </div>
+        </div>
       </div>
     );
   };
@@ -1460,8 +1963,12 @@ const InterviewPrep = () => {
               <button className="action-pill" onClick={handleRetryAnswer} disabled={interviewCompleted}>Retry Answer</button>
               <button className="action-pill" onClick={handleRegenerateFeedback} disabled={interviewCompleted}>Regenerate Feedback</button>
               <button className="action-pill" onClick={handleSkipQuestion} disabled={interviewCompleted}>Skip Question</button>
-              <button className="action-pill" onClick={handleSaveInterview}>Save History</button>
-              <button className="action-pill end" onClick={handleEndInterview}>End Session</button>
+              <button className="action-pill" onClick={handleSaveInterview}>
+                {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'saved' ? 'Saved ✓' : 'Save History'}
+              </button>
+              <button className="action-pill" onClick={handleLeaveSession} disabled={interviewCompleted}>Leave & Keep Later</button>
+              <button className="action-pill end" style={{ background: 'rgba(239, 68, 68, 0.12)', color: '#fca5a5' }} onClick={() => handleAbandonInterview(false)} disabled={interviewCompleted}>Abandon Interview</button>
+              <button className="action-pill end" onClick={() => handleEndInterview(false)}>End Session</button>
             </div>
           </div>
         </div>
@@ -1474,6 +1981,8 @@ const InterviewPrep = () => {
   const showHowSection = currentStep <= 1;
   const showActionButton = currentStep < 5;
 
+  const hasActiveSession = sessionId && interviewSession && (interviewSession.status === 'active' || interviewSession.status === 'incomplete' || interviewSession.status === 'in_progress');
+
   return (
     <div className={`page ${interviewStarted ? 'interview-mode' : ''}`}>
       <InterviewAccessModal
@@ -1482,7 +1991,45 @@ const InterviewPrep = () => {
         onContinueGuest={handleContinueAsGuest}
         onLogin={handleOpenLogin}
       />
-      {!interviewStarted && (
+      {showEndConfirmModal && (
+        <div className="modal-overlay">
+          <div className="modal-card">
+            <h3>End interview session early?</h3>
+            <p>
+              You have answered <strong>{chatMessages.filter(m => m.type === 'feedback').length}</strong> of{' '}
+              <strong>{totalQuestions}</strong> questions. Ending now will calculate your final score based only on completed questions.
+            </p>
+            <div className="modal-actions">
+              <button className="btn-secondary" onClick={() => setShowEndConfirmModal(false)}>
+                Cancel & Continue
+              </button>
+              <button className="btn-danger" onClick={() => handleEndInterview(true)}>
+                Yes, End Session
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showAbandonConfirmModal && (
+        <div className="modal-overlay">
+          <div className="modal-card">
+            <h3>Abandon interview session?</h3>
+            <p>
+              This session will be saved in your history under <strong>Abandoned</strong> status. 
+              You will not be able to resume it, but you will be able to review your progress so far.
+            </p>
+            <div className="modal-actions">
+              <button className="btn-secondary" onClick={() => setShowAbandonConfirmModal(false)}>
+                Cancel & Continue
+              </button>
+              <button className="btn-danger" onClick={() => handleAbandonInterview(true)}>
+                Yes, Abandon
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {!interviewStarted && !hasActiveSession && (
         <>
           <div className="header">
             <div className="header-left">
@@ -1507,9 +2054,22 @@ const InterviewPrep = () => {
           </div>
         </>
       )}
+      {!interviewStarted && hasActiveSession && (
+        <div className="header">
+          <div className="header-left">
+            <h1>Active Interview Found</h1>
+            <p>You have an unfinished interview session in progress.</p>
+          </div>
+          <HistoryButton />
+        </div>
+      )}
 
       <div className={`content-card ${interviewStarted ? 'chat-content' : ''}`}>
-        {interviewStarted ? renderChatScreen() : (
+        {interviewStarted ? (
+          renderChatScreen()
+        ) : hasActiveSession ? (
+          renderActiveSessionPanel()
+        ) : (
           <>
             {renderFieldScreen()}
             {renderStackScreen()}
@@ -1520,7 +2080,7 @@ const InterviewPrep = () => {
         )}
       </div>
 
-      {!interviewStarted && (
+      {!interviewStarted && !hasActiveSession && (
         <>
           <div className="footer-bar">
             {showBackButton && (

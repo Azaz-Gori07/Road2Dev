@@ -88,11 +88,23 @@ const InterviewSession = () => {
         },
       });
       const data = await res.json().catch(() => null);
-      if (!res.ok || !data?.success) {
-        setError(data?.message || 'Unable to delete interview session.');
-        setIsDeleting(false);
-        return;
+      const deletedId = session._id || session.id;
+      if (localStorage.getItem('road2dev-interview-session-id') === deletedId) {
+        localStorage.removeItem('road2dev-interview-session-id');
       }
+      const savedRaw = localStorage.getItem('road2dev-interview');
+      if (savedRaw) {
+        try {
+          const savedObj = JSON.parse(savedRaw);
+          const savedId = savedObj?.interviewSession?._id || savedObj?.interviewSession?.id;
+          if (savedId === deletedId) {
+            localStorage.removeItem('road2dev-interview');
+          }
+        } catch (e) {
+          console.warn('Parsing local storage error in details delete:', e);
+        }
+      }
+
       window.dispatchEvent(new Event('interview-sessions-updated'));
       navigate('/interview/history');
     } catch (deleteError) {
@@ -243,6 +255,24 @@ const InterviewSession = () => {
           <p className="session-subtitle">Restored from your saved interview history.</p>
         </div>
         <div className="session-actions">
+          {session.status !== 'completed' && session.status !== 'abandoned' && (
+            <button className="btn-primary" style={{ marginRight: '10px' }} onClick={() => {
+              const syncedLocal = {
+                interviewSession: session,
+                chatMessages: Array.isArray(session.messages) ? session.messages : [],
+                currentQuestionIndex: session.currentQuestionIndex || 0,
+                timerSeconds: session.timerState || 0,
+                interviewStarted: session.status === 'active' || session.status === 'incomplete' || session.status === 'in_progress',
+                interviewCompleted: false,
+                savedAt: new Date().toISOString(),
+              };
+              localStorage.setItem('road2dev-interview', JSON.stringify(syncedLocal));
+              localStorage.setItem('road2dev-interview-session-id', session._id || session.id);
+              navigate('/interview');
+            }}>
+              Resume Interview
+            </button>
+          )}
           <button className="btn-secondary" onClick={() => navigate('/interview/history')}>
             Back to History
           </button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import './Sidebar.css'
 import { Link, useNavigate } from 'react-router-dom'
 import {
@@ -31,8 +31,8 @@ function Sidebar() {
     const isAuthenticated = zenuxAuth.isAuthenticated || customAuth.isAuthenticated;
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!customAuth.isAuthenticated) return;
+    const fetchRecentSessions = useCallback(() => {
+        if (!isAuthenticated) return;
         const token = localStorage.getItem('auth_token');
         if (!token) return;
 
@@ -47,7 +47,7 @@ function Sidebar() {
             .then((res) => res.json())
             .then((data) => {
                 if (data.success && Array.isArray(data.data)) {
-                    setRecentSessions(data.data.slice(0, 3));
+                    setRecentSessions(data.data.slice(0, 4));
                 } else {
                     setRecentSessions([]);
                     setRecentError(data.message || 'Unable to load recent interviews.');
@@ -58,11 +58,23 @@ function Sidebar() {
                 setRecentError('Unable to load recent interviews.');
             })
             .finally(() => setRecentLoading(false));
-    }, [customAuth.isAuthenticated]);
+    }, [isAuthenticated]);
+
+    useEffect(() => {
+        fetchRecentSessions();
+    }, [fetchRecentSessions]);
+
+    useEffect(() => {
+        window.addEventListener('interview-sessions-updated', fetchRecentSessions);
+        return () => window.removeEventListener('interview-sessions-updated', fetchRecentSessions);
+    }, [fetchRecentSessions]);
 
     const handleLogout = async () => {
         await Promise.all([customAuth.logout?.(), zenuxAuth.logout?.()]);
         sessionStorage.clear();
+        localStorage.removeItem('road2dev-interview-session-id');
+        localStorage.removeItem('road2dev-interview');
+        if (window.innerWidth <= 800) setMobileOpen(false);
         navigate('/auth', { replace: true });
     };
 
@@ -71,9 +83,9 @@ function Sidebar() {
             navigate('/auth', { replace: true, state: { from: '/profile' } });
         } else {
             setActiveLink("profile");
-            if (window.innerWidth <= 800) setMobileOpen(false);
             navigate('/profile');
         }
+        if (window.innerWidth <= 800) setMobileOpen(false);
     };
 
     return (
@@ -99,30 +111,30 @@ function Sidebar() {
                 </div>
                 <ul className="sidebar-links">
                     <Link to="/"><li onClick={() => {setActiveLink("home"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'home' ? 'isActive' : 'sidebar-link'} data-title='Home'><Home size={20} /> <span className='link-text'>Home</span></li></Link>
-                    <Link to="/learning"><li onClick={() => setActiveLink("learning")} className={activeLink === 'learning' ? 'isActive' : 'sidebar-link'} data-title='Learning'><BookOpen size={20} /> <span className='link-text'>Learning</span></li></Link>
-                    <Link to="/interview"><li onClick={() => setActiveLink("interview")} className={activeLink === 'interview' ? 'isActive' : 'sidebar-link'} data-title='Interview Prep'><Mic size={20} /> <span className='link-text'>Interview Prep</span></li></Link>
+                    <Link to="/learning"><li onClick={() => {setActiveLink("learning"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'learning' ? 'isActive' : 'sidebar-link'} data-title='Learning'><BookOpen size={20} /> <span className='link-text'>Learning</span></li></Link>
+                    <Link to="/interview"><li onClick={() => {setActiveLink("interview"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'interview' ? 'isActive' : 'sidebar-link'} data-title='Interview Prep'><Mic size={20} /> <span className='link-text'>Interview Prep</span></li></Link>
                     <li onClick={() => {
                         if (!isAuthenticated) {
                             navigate('/auth', { replace: true, state: { from: '/score' } });
                         } else {
                             setActiveLink('score');
-                            if (window.innerWidth <= 800) setMobileOpen(false);
                             navigate('/score');
                         }
+                        if (window.innerWidth <= 800) setMobileOpen(false);
                     }} className={activeLink === 'score' ? 'isActive' : 'sidebar-link'} data-title='My Score' style={{ cursor: 'pointer' }}><BarChart3 size={20} /> <span className='link-text'>My Score</span></li>
                     {isAuthenticated ? (
                         <Link to="/profile"><li onClick={() => { setActiveLink("profile"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'profile' ? 'isActive' : 'sidebar-link'} data-title='Profile'><User size={20} /> <span className='link-text'>Profile</span></li></Link>
                     ) : (
                         <li onClick={handleProfileClick} className={activeLink === 'profile' ? 'isActive' : 'sidebar-link'} data-title='Profile' style={{ cursor: 'pointer' }}><User size={20} /> <span className='link-text'>Profile</span></li>
                     )}
-                    <Link to="/about"><li onClick={() => setActiveLink("about")} className={activeLink === 'about' ? 'isActive' : 'sidebar-link'} data-title='About'><Info size={20} /> <span className='link-text'>About</span></li></Link>
+                    <Link to="/about"><li onClick={() => {setActiveLink("about"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'about' ? 'isActive' : 'sidebar-link'} data-title='About'><Info size={20} /> <span className='link-text'>About</span></li></Link>
                 </ul>
 
-                {customAuth.isAuthenticated && (
+                {isAuthenticated && (
                     <div className="recent-sessions">
                         <div className="recent-header">
                             <span>Recent Interviews</span>
-                            <button className="recent-view-all" onClick={() => navigate('/interview/history')}>
+                            <button className="recent-view-all" onClick={() => { navigate('/interview/history'); if (window.innerWidth <= 800) setMobileOpen(false); }}>
                                 View All
                             </button>
                         </div>
@@ -142,8 +154,8 @@ function Sidebar() {
                                         if (window.innerWidth <= 800) setMobileOpen(false);
                                     }}
                                 >
-                                    <span className="recent-item-title">{session.title || 'Interview Session'}</span>
-                                    <span className="recent-item-meta">{session.field || 'Unknown field'} • {session.type || 'N/A'}</span>
+                                    <span className="recent-item-title" style={{marginRight: "5px"}}>{session.title || 'Interview Session'}</span>
+                                    <span className="recent-item-meta">{session.field || 'Unknown field'} • {(session.type || 'N/A').toUpperCase()}</span>
                                 </button>
                             ))}
                         </div>
@@ -153,9 +165,9 @@ function Sidebar() {
 
             <div className="logoutdiv">
                 {isAuthenticated ? (
-                    <button className="logoutbtn" data-title='SignOut' onClick={handleLogout}><LogOut size={22} /> <span className='logout-text'>Log Out</span></button>
+                    <button className="logoutbtn" data-title='SignOut' onClick={() => { handleLogout(); if (window.innerWidth <= 800) setMobileOpen(false); }}><LogOut size={22} /> <span className='logout-text'>Log Out</span></button>
                 ) : (
-                    <Link to="/auth" className="logoutbtn" data-title='Login' style={{ textDecoration: 'none' }}><LogIn size={22} /> <span className='logout-text'>Login</span></Link>
+                    <Link to="/auth" className="logoutbtn" data-title='Login' style={{ textDecoration: 'none' }} onClick={() => { if (window.innerWidth <= 800) setMobileOpen(false); }}><LogIn size={22} /> <span className='logout-text'>Login</span></Link>
                 )}
             </div>
         </section>

@@ -1378,24 +1378,25 @@ html, body {
     transform: translateY(-1px);
   }
 
-  .question-list,
-  .feedback-grid,
-  .score-grid,
-  .summary-grid {
-    grid-template-columns: 1fr;
-  }
+  @media (max-width: 1024px) {
+    .question-list,
+    .feedback-grid,
+    .score-grid,
+    .summary-grid {
+      grid-template-columns: 1fr;
+    }
 
-  .chat-shell {
-    padding: 16px;
-  }
+    .chat-shell {
+      padding: 16px;
+    }
 
-  .chat-topbar,
-  .progress-bar-wrap,
-  .chat-input-panel {
-    padding-left: 16px;
-    padding-right: 16px;
+    .chat-topbar,
+    .progress-bar-wrap,
+    .chat-input-panel {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
   }
-}
 
 @media (max-width: 680px) {
   .page {

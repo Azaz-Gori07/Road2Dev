@@ -38,13 +38,13 @@
 .summary-card.mini {
   padding: 1rem 1.2rem;
   border-radius: 18px;
-  border: 1px solid #e8edf5;
-  background: #fff;
+  border: 1px solid #262626;
+  background: #161616;
 }
 
 .summary-card.mini span {
   display: block;
-  color: #6b7280;
+  color: #9ca3af;
   font-size: 0.85rem;
   margin-bottom: 0.45rem;
 }
@@ -52,15 +52,15 @@
 .summary-card.mini strong {
   display: block;
   font-size: 1.1rem;
-  color: #111827;
+  color: #f5f5f5;
 }
 
 .session-progress-card {
   margin-bottom: 1.75rem;
   padding: 1.25rem 1.3rem;
   border-radius: 20px;
-  background: #f8fbff;
-  border: 1px solid #d9e7fb;
+  background: #161616;
+  border: 1px solid #262626;
 }
 
 .progress-row {
@@ -78,13 +78,13 @@
 
 .progress-row p {
   margin: 0.3rem 0 0;
-  color: #6b7280;
+  color: #9ca3af;
 }
 
 .progress-bar {
   height: 10px;
   border-radius: 999px;
-  background: #e5effa;
+  background: #262626;
   overflow: hidden;
 }
 
@@ -119,9 +119,9 @@
 .message-card {
   max-width: 900px;
   width: 100%;
-  background: #ffffff;
+  background: #161616;
   border-radius: 22px;
-  border: 1px solid #edf1f7;
+  border: 1px solid #262626;
   box-shadow: 0 15px 33px rgba(24, 40, 80, 0.06);
   padding: 1.25rem;
 }
@@ -137,21 +137,22 @@
 .message-role {
   font-size: 0.8rem;
   letter-spacing: 0.02em;
-  color: #2563eb;
+  color: #2c9caf;
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .message-time {
   font-size: 0.8rem;
-  color: #6b7280;
+  color: #9ca3af;
 }
 
 .message-type {
   border-radius: 999px;
-  border: 1px solid #d6d9e6;
   padding: 0.35rem 0.75rem;
-  color: #475569;
+  border: 1px solid #262626;
+  background: #111111;
+  color: #9ca3af;
   font-size: 0.75rem;
   text-transform: capitalize;
 }
@@ -159,26 +160,28 @@
 .message-bubble {
   font-size: 0.95rem;
   line-height: 1.8;
-  color: #111827;
+  color: #f5f5f5;
   white-space: pre-wrap;
 }
 
 .ai-bubble {
-  background: #f8fbff;
+  background: #111111;
+  border: 1px solid #262626;
   border-radius: 18px;
   padding: 1rem;
 }
 
 .user-bubble {
-  background: #eef8ff;
+  background: rgba(44, 156, 175, 0.12);
+  border: 1px solid rgba(44, 156, 175, 0.2);
   border-radius: 18px;
   padding: 1rem;
 }
 
 .feedback-card,
 .summary-card {
-  background: #f8fbff;
-  border: 1px solid #d7e7ff;
+  background: #161616;
+  border: 1px solid #262626;
   border-radius: 18px;
   padding: 1rem;
 }
@@ -194,7 +197,7 @@
 
 .feedback-header span,
 .summary-header span {
-  color: #2563eb;
+  color: #2c9caf;
   font-weight: 700;
 }
 
@@ -207,21 +210,20 @@
 }
 
 .feedback-detail {
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid #262626;
   padding-top: 0.9rem;
 }
 
 .feedback-detail strong {
   display: block;
   margin-bottom: 0.35rem;
-  font-size: 0.9rem;
-  color: #0f172a;
+  color: #f5f5f5;
 }
 
 .feedback-detail p,
 .feedback-detail ul {
   margin: 0;
-  color: #334155;
+  color: #9ca3af;
   font-size: 0.92rem;
 }
 
@@ -232,17 +234,18 @@
 .session-feedback-panel {
   padding: 1.3rem 1.4rem;
   border-radius: 20px;
-  border: 1px solid #e8edf5;
-  background: #fff;
+  border: 1px solid #262626;
+  background: #161616;
 }
 
 .session-feedback-panel h2 {
   margin: 0 0 0.75rem;
+  color: #f5f5f5;
 }
 
 .session-feedback-panel p {
   margin: 0;
-  color: #334155;
+  color: #9ca3af;
 }
 
 .session-loading,
@@ -250,15 +253,17 @@
 .session-empty {
   padding: 2rem;
   border-radius: 20px;
-  background: #f8fafc;
-  color: #334155;
+  background: #161616;
+  border: 1px solid #262626;
+  color: #9ca3af;
   text-align: center;
 }
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
   display: grid;
   place-items: center;
   padding: 1.5rem;
@@ -267,20 +272,22 @@
 
 .modal-card {
   width: min(460px, 100%);
-  background: #fff;
+  background: #111111;
+  border: 1px solid #262626;
   border-radius: 22px;
-  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
   padding: 1.75rem;
 }
 
 .modal-card h3 {
   margin: 0 0 0.75rem;
   font-size: 1.2rem;
+  color: #f5f5f5;
 }
 
 .modal-card p {
   margin: 0 0 1.3rem;
-  color: #475569;
+  color: #9ca3af;
   line-height: 1.7;
 }
 
@@ -307,14 +314,14 @@
 }
 
 .btn-danger {
-  background: #f66a6a;
+  background: #dc2626;
   color: #fff;
 }
 
 .btn-ghost {
   background: transparent;
-  color: #2563eb;
-  border: 1px solid #cfd8e7;
+  color: #2c9caf;
+  border: 1px solid #2c9caf;
 }
 
 .btn-secondary:hover,
@@ -324,6 +331,7 @@
 }
 
 @media (max-width: 720px) {
+
   .session-header,
   .session-actions {
     flex-direction: column;

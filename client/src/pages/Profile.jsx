@@ -1,8 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import useZenuxAuth from "../hooks/useZenuxAuth";
 import useAuth from "../hooks/useAuth";
+
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
 
 /* ─── TINY HOOKS ─────────────────────────────────── */
 function useHover() {
@@ -161,9 +163,39 @@ function AvatarSVG({ size = 80 }) {
 /* ═══════════════════════════════════════════════════
    PROFILE VIEW
    ═══════════════════════════════════════════════════ */
-function ProfileView({ data, onEdit }) {
+function ProfileView({ data, sessions = [], onEdit }) {
   const [hBtn, hBtnP] = useHover();
   
+  const completedSessions = sessions.filter(s => s.status === 'completed');
+  const totalCompleted = completedSessions.length;
+  const avgScore = totalCompleted ? Math.round(completedSessions.reduce((sum, s) => sum + (s.score || 0), 0) / totalCompleted) : 0;
+  const totalInterviews = sessions.length;
+
+  const getRecentActivities = () => {
+    if (!sessions || sessions.length === 0) {
+      return [
+        { type: 'interview', title: 'Welcome to Road2Dev! Start your first interview.', time: 'Just now', last: true }
+      ];
+    }
+
+    const sorted = [...sessions].sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+    return sorted.slice(0, 4).map((session, index) => {
+      const dateText = new Date(session.updatedAt || session.createdAt).toLocaleDateString(undefined, {
+        month: 'short',
+        day: 'numeric'
+      });
+      const statusLabel = session.status === 'completed' ? `Completed (${session.score}%)` : `Started (${session.status})`;
+      return {
+        type: 'interview',
+        title: `${statusLabel} - ${session.title || 'Interview Practice'}`,
+        time: dateText,
+        last: index === Math.min(3, sorted.length - 1)
+      };
+    });
+  };
+
+  const activities = getRecentActivities();
+
   return (
     <div className="profile-view">
       {/* Hero card */}
@@ -225,8 +257,8 @@ function ProfileView({ data, onEdit }) {
       <div className="stats-row">
         <StatCard value="12" label="Roadmaps Completed" color="#40c8e0" />
         <StatCard value="45" label="Quizzes Taken" color="#3de8a0" />
-        <StatCard value="78%" label="Average Score" color="#3de8a0" />
-        <StatCard value="15" label="Mock Interviews" color="#9b6dff" />
+        <StatCard value={`${avgScore}%`} label="Average Score" color="#3de8a0" />
+        <StatCard value={totalInterviews} label="Mock Interviews" color="#9b6dff" />
       </div>
 
       {/* Bottom row */}
@@ -245,10 +277,9 @@ function ProfileView({ data, onEdit }) {
         <div className="activity-section">
           <h3 className="section-title">Recent Activity</h3>
           <div className="activity-list">
-            <ActivityItem type="roadmap" title="Completed React Roadmap" time="2 days ago" />
-            <ActivityItem type="quiz" title="Scored 85% in JavaScript Quiz" time="3 days ago" />
-            <ActivityItem type="interview" title="Completed Mock Interview" time="1 week ago" />
-            <ActivityItem type="course" title="Started System Design Course" time="1 week ago" last />
+            {activities.map((act, index) => (
+              <ActivityItem key={index} type={act.type} title={act.title} time={act.time} last={act.last} />
+            ))}
           </div>
         </div>
       </div>
@@ -386,6 +417,8 @@ export default function ProfilePage() {
   const authUser = customAuth.user || zenuxAuth.user;
   const [view, setView] = useState("profile");
   const [saving, setSaving] = useState(false);
+  const [sessions, setSessions] = useState([]);
+  const [sessionsLoading, setSessionsLoading] = useState(true);
   const [data, setData] = useState({
     name:     "Road2Dev User",
     headline: "Full Stack Developer",
@@ -398,6 +431,40 @@ export default function ProfilePage() {
     focus:    "Full Stack Development",
     language: "English",
   });
+
+  const fetchSessions = useCallback(async () => {
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      setSessionsLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE}/interview-sessions`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.success && Array.isArray(data.data)) {
+        setSessions(data.data);
+      }
+    } catch (err) {
+      console.warn('Unable to load sessions for profile:', err);
+    } finally {
+      setSessionsLoading(false);
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (isAuthenticated) fetchSessions();
+  }, [isAuthenticated, fetchSessions]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      window.addEventListener('interview-sessions-updated', fetchSessions);
+      return () => {
+        window.removeEventListener('interview-sessions-updated', fetchSessions);
+      };
+    }
+  }, [isAuthenticated, fetchSessions]);
 
   useEffect(() => {
     if (authUser) {
@@ -476,7 +543,7 @@ export default function ProfilePage() {
   return (
     <div className="profile-page">
       {view === "profile"
-        ? <ProfileView data={data} onEdit={() => setView("edit")} />
+        ? <ProfileView data={data} sessions={sessions} onEdit={() => setView("edit")} />
         : <EditProfile data={data}
             onSave={handleSaveProfile}
             onCancel={() => setView("profile")}

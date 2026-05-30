@@ -108,6 +108,25 @@ const InterviewHistory = () => {
       if (!response.ok || !data?.success) {
         setError(data?.message || 'Unable to delete session.');
       } else {
+        const deletedId = deleteCandidate._id || deleteCandidate.id;
+        
+        // Remove from localStorage if it matches
+        if (localStorage.getItem('road2dev-interview-session-id') === deletedId) {
+          localStorage.removeItem('road2dev-interview-session-id');
+        }
+        const savedRaw = localStorage.getItem('road2dev-interview');
+        if (savedRaw) {
+          try {
+            const savedObj = JSON.parse(savedRaw);
+            const savedId = savedObj?.interviewSession?._id || savedObj?.interviewSession?.id;
+            if (savedId === deletedId) {
+              localStorage.removeItem('road2dev-interview');
+            }
+          } catch (e) {
+            console.warn('Parsing local storage error in delete:', e);
+          }
+        }
+
         setSessions((prev) => prev.filter((session) => session._id !== (deleteCandidate._id || deleteCandidate.id)));
         setDeleteCandidate(null);
         window.dispatchEvent(new Event('interview-sessions-updated'));
@@ -183,6 +202,24 @@ const InterviewHistory = () => {
               <button className="btn-secondary" onClick={() => navigate(`/interview/session/${session._id || session.id}`)}>
                 Open
               </button>
+              {session.status !== 'completed' && session.status !== 'abandoned' && (
+                <button className="btn-primary" onClick={() => {
+                  const syncedLocal = {
+                    interviewSession: session,
+                    chatMessages: Array.isArray(session.messages) ? session.messages : [],
+                    currentQuestionIndex: session.currentQuestionIndex || 0,
+                    timerSeconds: session.timerState || 0,
+                    interviewStarted: session.status === 'active' || session.status === 'incomplete' || session.status === 'in_progress',
+                    interviewCompleted: false,
+                    savedAt: new Date().toISOString(),
+                  };
+                  localStorage.setItem('road2dev-interview', JSON.stringify(syncedLocal));
+                  localStorage.setItem('road2dev-interview-session-id', session._id || session.id);
+                  navigate('/interview');
+                }}>
+                  Resume
+                </button>
+              )}
               <button className="btn-danger" onClick={() => setDeleteCandidate(session)}>
                 Delete
               </button>

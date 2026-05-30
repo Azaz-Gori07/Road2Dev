@@ -6,7 +6,7 @@ import {
   deleteSession,
 } from '../services/interviewSessionService.js';
 
-const VALID_STATUS = new Set(['draft', 'active', 'completed', 'archived']);
+const VALID_STATUS = new Set(['draft', 'incomplete', 'active', 'completed', 'archived', 'in_progress', 'abandoned']);
 
 const cleanText = (value) => (typeof value === 'string' ? value.trim() : '');
 
@@ -29,6 +29,30 @@ const sanitizePayload = (payload = {}) => {
   }
   if (payload.feedback !== undefined) {
     updates.feedback = cleanText(payload.feedback);
+  }
+  if (payload.questions !== undefined && Array.isArray(payload.questions)) {
+    updates.questions = payload.questions;
+  }
+  if (payload.tips !== undefined && Array.isArray(payload.tips)) {
+    updates.tips = payload.tips;
+  }
+  if (payload.currentQuestionIndex !== undefined && typeof payload.currentQuestionIndex === 'number') {
+    updates.currentQuestionIndex = payload.currentQuestionIndex;
+  }
+  if (payload.totalQuestions !== undefined && typeof payload.totalQuestions === 'number') {
+    updates.totalQuestions = payload.totalQuestions;
+  }
+  if (payload.completedQuestions !== undefined && typeof payload.completedQuestions === 'number') {
+    updates.completedQuestions = payload.completedQuestions;
+  }
+  if (payload.skippedQuestions !== undefined && typeof payload.skippedQuestions === 'number') {
+    updates.skippedQuestions = payload.skippedQuestions;
+  }
+  if (payload.timerState !== undefined && typeof payload.timerState === 'number') {
+    updates.timerState = payload.timerState;
+  }
+  if (payload.difficulty !== undefined) {
+    updates.difficulty = cleanText(payload.difficulty);
   }
 
   return updates;
@@ -63,6 +87,14 @@ const validateCreatePayload = (payload = {}) => {
       score: typeof payload.score === 'number' ? payload.score : 0,
       messages: Array.isArray(payload.messages) ? payload.messages : [],
       feedback: cleanText(payload.feedback),
+      questions: Array.isArray(payload.questions) ? payload.questions : [],
+      tips: Array.isArray(payload.tips) ? payload.tips : [],
+      currentQuestionIndex: typeof payload.currentQuestionIndex === 'number' ? payload.currentQuestionIndex : 0,
+      totalQuestions: typeof payload.totalQuestions === 'number' ? payload.totalQuestions : 0,
+      completedQuestions: typeof payload.completedQuestions === 'number' ? payload.completedQuestions : 0,
+      skippedQuestions: typeof payload.skippedQuestions === 'number' ? payload.skippedQuestions : 0,
+      timerState: typeof payload.timerState === 'number' ? payload.timerState : 0,
+      difficulty: payload.difficulty ? cleanText(payload.difficulty) : 'Medium',
     },
   };
 };
