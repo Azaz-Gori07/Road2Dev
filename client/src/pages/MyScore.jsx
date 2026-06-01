@@ -235,9 +235,290 @@ const styles = `
     0 0 35px rgba(139,92,246,.4);
 }
   .start-btn i { font-size: 14px; }
-`;
 
-// Live data containers - replaced static mocks
+  /* ══════════════════════════════════════════════════════
+     RESPONSIVE — MOBILE & TABLET ONLY
+     Desktop styles above are completely untouched.
+     ══════════════════════════════════════════════════════ */
+
+  /* ── row1-stats: transparent to desktop grid, becomes real div on mobile ── */
+  .row1-stats {
+    display: contents; /* grid sees through this wrapper on desktop */
+  }
+
+  /* ── Large tablet landscape (≤1180px) ─────────────── */
+  @media (max-width: 1180px) {
+    .row1 {
+      grid-template-columns: 180px 1fr 1fr 1fr 1fr;
+      gap: 8px;
+    }
+    .row3 {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .gauge-wrap { width: 90px; height: 52px; }
+    .gauge-val .pct { font-size: 18px; }
+    .stat-val { font-size: 20px; }
+  }
+
+  /* ── Tablet portrait (≤1024px) ─────────────────────── */
+  @media (max-width: 1024px) {
+    html, body, #root { overflow: auto; height: auto; }
+
+    .dash {
+      height: auto;
+      min-height: 100vh;
+      overflow: auto;
+      grid-template-rows: 56px 1fr;
+    }
+
+    .content {
+      overflow: visible;
+      padding: 14px 16px 24px;
+      gap: 14px;
+    }
+
+    /* Row 1: overall card full-width on own row, then 2x2 stats */
+    .row1 {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    /* Make overall card span full width */
+    .row1 .overall-card {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 20px;
+    }
+    .row1 .overall-card .overall-label {
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+    .row1 .overall-card .gauge-wrap {
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .row1 .overall-card .perf-label {
+      text-align: left;
+    }
+    /* row1-stats becomes real 2-col grid spanning both columns */
+    .row1-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-column: 1 / -1;
+      gap: 10px;
+    }
+
+    /* Row 2: stack chart cards vertically */
+    .row2 { grid-template-columns: 1fr; gap: 12px; }
+
+    /* Row 3: 2-column grid */
+    .row3 { grid-template-columns: 1fr 1fr; gap: 10px; }
+  }
+
+  /* ── Tablet portrait narrow / large phone (≤768px) ── */
+  @media (max-width: 768px) {
+    .topbar {
+      padding: 0 16px;
+      flex-wrap: wrap;
+      gap: 8px;
+      height: auto;
+      min-height: 56px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+    .topbar h1 { font-size: 17px; }
+    .topbar p { font-size: 11px; }
+    .view-btn { padding: 6px 12px; font-size: 11.5px; }
+
+    .content { padding: 12px 12px 28px; gap: 12px; }
+
+    /* Row 1: overall full-width + 2-col stats */
+    .row1 {
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .row1 .overall-card {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+    }
+    .row1-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-column: 1 / -1;
+      gap: 8px;
+    }
+    .stat-val { font-size: 20px; }
+    .stat-icon { width: 30px; height: 30px; font-size: 15px; }
+
+    /* Row 2: single column */
+    .row2 { grid-template-columns: 1fr; gap: 10px; }
+    .chart-area { height: 160px; }
+
+    /* Row 3: single column */
+    .row3 { grid-template-columns: 1fr; gap: 10px; }
+
+    .card, .chart-card, .bottom-card { border-radius: 12px; padding: 13px; }
+    .card:hover, .chart-card:hover, .bottom-card:hover { transform: none; }
+  }
+
+  /* ── Mobile (≤600px) ────────────────────────────────── */
+  @media (max-width: 600px) {
+    html, body, #root {
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: auto;
+      min-height: 100vh;
+    }
+
+    .dash {
+      height: auto;
+      min-height: 100svh;
+      overflow: visible;
+      grid-template-rows: auto 1fr;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(5,5,5,0.97);
+      backdrop-filter: blur(10px);
+      padding: 10px 14px;
+      gap: 6px;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: center;
+      height: auto;
+      border-bottom: 1px solid #151515;
+    }
+    .topbar > div { min-width: 0; }
+    .topbar h1 { font-size: 15px; white-space: nowrap; }
+    .topbar p { display: none; }
+    .view-btn {
+      flex-shrink: 0;
+      padding: 6px 10px;
+      font-size: 11px;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    .view-btn span { display: none; }
+
+    .content {
+      padding: 10px 10px 32px;
+      gap: 10px;
+      overflow: visible;
+    }
+
+    /* ── Row 1 on mobile: overall card + 2x2 stat grid ── */
+    .row1 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    /* Overall card: horizontal compact layout */
+    .row1 .overall-card {
+      grid-column: unset;
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+    }
+    .row1 .overall-card .overall-label { font-size: 11px; margin-bottom: 0; white-space: nowrap; }
+    .row1 .overall-card .gauge-wrap { width: 80px; height: 46px; margin: 0; flex-shrink: 0; }
+    .row1 .overall-card .gauge-val .pct { font-size: 16px; }
+    .row1 .overall-card .perf-label { font-size: 10px; text-align: left; }
+    .row1 .overall-card .trend { font-size: 10px; margin-top: 4px; }
+
+    /* Stat cards: 2×2 grid */
+    .row1-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat-card { padding: 12px 10px; gap: 3px; border-radius: 12px; }
+    .stat-icon { width: 28px; height: 28px; font-size: 14px; border-radius: 8px; margin-bottom: 2px; }
+    .stat-val { font-size: 18px; }
+    .stat-title { font-size: 11px; }
+    .stat-sub { font-size: 9.5px; }
+
+    /* ── Row 2 ── */
+    .row2 { grid-template-columns: 1fr; gap: 8px; }
+    .chart-area { height: 150px; }
+    .card-header { margin-bottom: 10px; }
+    .card-title { font-size: 12px; }
+    .dropdown { padding: 4px 8px; font-size: 10.5px; }
+
+    /* Skill bars */
+    .skill-row { gap: 6px; margin-bottom: 8px; }
+    .skill-name { width: 76px; font-size: 11px; }
+    .skill-pct { font-size: 11px; width: 28px; }
+
+    /* ── Row 3 ── */
+    .row3 { grid-template-columns: 1fr; gap: 8px; }
+    .bottom-card { padding: 12px 13px; border-radius: 12px; }
+
+    /* Interview rows */
+    .interview-row { gap: 8px; padding: 6px 0; }
+    .int-icon { width: 26px; height: 26px; font-size: 12px; border-radius: 7px; }
+    .int-name { font-size: 11.5px; }
+    .int-sub { font-size: 10px; }
+    .int-score { font-size: 12px; }
+    .int-ago { font-size: 9.5px; }
+
+    /* Strengths / Improve rows */
+    .item-row { gap: 6px; margin-bottom: 6px; }
+    .item-name { font-size: 11.5px; }
+    .item-sub { font-size: 10px; }
+    .keep-it-up { font-size: 10px; }
+    .focus-box { padding: 8px 10px; gap: 6px; }
+    .focus-icon { width: 24px; height: 24px; font-size: 12px; border-radius: 7px; }
+    .focus-title { font-size: 11px; }
+    .focus-sub { font-size: 9.5px; }
+
+    /* AI recs */
+    .ai-rec { gap: 7px; padding: 6px 0; }
+    .ai-rec-icon { width: 24px; height: 24px; border-radius: 7px; }
+    .ai-rec-title { font-size: 11px; }
+    .ai-rec-sub { font-size: 9.5px; }
+    .start-btn { margin-top: 8px; padding: 11px 10px; font-size: 12px; font-weight: 700; border-radius: 10px; }
+
+    /* Section headers */
+    .section-header { margin-bottom: 8px; }
+    .section-header i { font-size: 13px; }
+    .card-title { font-size: 12px; }
+    .view-all { font-size: 10.5px; }
+  }
+
+  /* ── Very small phones (≤380px) ────────────────────── */
+  @media (max-width: 380px) {
+    .content { padding: 8px 8px 28px; gap: 8px; }
+    .topbar { padding: 8px 12px; }
+    .topbar h1 { font-size: 14px; }
+
+    .row1 .overall-card { padding: 12px; gap: 10px; }
+    .row1 .overall-card .gauge-wrap { width: 70px; height: 40px; }
+    .row1 .overall-card .gauge-val .pct { font-size: 14px; }
+
+    .stat-val { font-size: 16px; }
+    .stat-title { font-size: 10.5px; }
+    .stat-sub { display: none; }
+  }
+
+  /* ── Landscape phones (short height) ───────────────── */
+  @media (max-height: 500px) and (orientation: landscape) {
+    html, body, #root { overflow: auto; height: auto; }
+    .dash { height: auto; overflow: visible; }
+    .content { overflow: visible; }
+    .topbar { position: relative; }
+    .chart-area { height: 120px; }
+  }
+`;
 
 // ─── Gauge ───────────────────────────────────────────────────────────────────
 function Gauge({ pct = 78 }) {
@@ -290,7 +571,6 @@ function PerfChart({ sessions = [] }) {
       if (!window.Chart || !canvasRef.current) return;
       if (chartRef.current) chartRef.current.destroy();
 
-      // Sort sessions chronologically (oldest to newest) to show progress over time
       const sorted = [...sessions].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
       const lastSix = sorted.slice(-6);
       
@@ -411,7 +691,6 @@ export default function MyScore() {
         setSessionsError(data?.message || 'Unable to load sessions');
         setSessions([]);
       } else {
-        // Keep only completed interviews for My Score
         const completed = Array.isArray(data.data) ? data.data.filter(s => s.status === 'completed') : [];
         setSessions(completed);
 
@@ -546,7 +825,6 @@ export default function MyScore() {
   return (
     <>
       <style>{styles}</style>
-      {/* Tabler Icons */}
       <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
@@ -560,7 +838,7 @@ export default function MyScore() {
             <p>Track your interview performance and improve every day.</p>
           </div>
           <button className="view-btn" onClick={() => navigate('/interview/history')}>
-            <i className="ti ti-calendar" /> View All History
+            <i className="ti ti-calendar" /> <span>View All History</span>
           </button>
         </div>
 
@@ -576,19 +854,22 @@ export default function MyScore() {
                 <i className="ti ti-trending-up" /> {recentScores.length ? `${recentScores[recentScores.length-1] - (recentScores[0] || recentScores[recentScores.length-1])}% change` : 'No recent data'}
               </div>
             </div>
-            <StatCard icon="ti-message-dots" iconBg="rgba(59,140,255,.12)" iconColor="#3b8cff"
-              value={totalCompleted} title="Total Interviews" sub="Completed interviews only" />
-            <StatCard icon="ti-circle-check" iconBg="rgba(34,211,126,.12)" iconColor="#22d37e"
-              value={bestScore} title="Best Score" sub="Highest recorded score" />
-            <StatCard icon="ti-clock" iconBg="rgba(255,209,102,.12)" iconColor="#ffd166"
-              value="—" title="Avg. Time" sub="Unavailable" />
-            <StatCard icon="ti-chart-line" iconBg="rgba(155,109,255,.12)" iconColor="#9b6dff"
-              value={`${avgScore}%`} title="Average Score" sub="Average across completed interviews" />
+
+            {/* Stat cards wrapped in a div for mobile 2×2 grid */}
+            <div className="row1-stats">
+              <StatCard icon="ti-message-dots" iconBg="rgba(59,140,255,.12)" iconColor="#3b8cff"
+                value={totalCompleted} title="Total Interviews" sub="Completed interviews only" />
+              <StatCard icon="ti-circle-check" iconBg="rgba(34,211,126,.12)" iconColor="#22d37e"
+                value={bestScore} title="Best Score" sub="Highest recorded score" />
+              <StatCard icon="ti-clock" iconBg="rgba(255,209,102,.12)" iconColor="#ffd166"
+                value="—" title="Avg. Time" sub="Unavailable" />
+              <StatCard icon="ti-chart-line" iconBg="rgba(155,109,255,.12)" iconColor="#9b6dff"
+                value={`${avgScore}%`} title="Average Score" sub="Average across completed interviews" />
+            </div>
           </div>
 
           {/* ── ROW 2: CHARTS ── */}
           <div className="row2">
-            {/* Performance Over Time */}
             <div className="chart-card">
               <div className="card-header">
                 <span className="card-title">Performance Over Time</span>
@@ -600,7 +881,6 @@ export default function MyScore() {
               {mounted && <PerfChart sessions={sessions} />}
             </div>
 
-            {/* Section Wise Performance */}
             <div className="chart-card">
               <div className="card-header">
                 <span className="card-title">Section Wise Performance</span>
