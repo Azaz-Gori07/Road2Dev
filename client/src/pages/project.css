@@ -3,7 +3,7 @@
     width: 100%;
     min-height: 100vh;
     box-sizing: border-box;
-    background: #000;
+    background: var(--bg);
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -58,7 +58,8 @@
 }
 
 .stack-box-23 {
-    background-color: #111;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 25px;
@@ -159,7 +160,8 @@
 }
 
 .project-card-23 {
-    background-color: #1a1a1a;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
     border-radius: 6px;
     padding: 18px;
     margin-bottom: 20px;

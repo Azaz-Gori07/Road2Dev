@@ -5,6 +5,18 @@
 :root {
   --font-heading: 'HelveticaNowDisplay-Medium', 'Helvetica Neue', Arial, sans-serif;
   --font-body: 'HelveticaNowDisplayW01-Rg', 'Helvetica Neue', Arial, sans-serif;
+
+  /* Premium Matte Dark Theme variables */
+  --bg: #09090b;
+  --bg-card: #0f0f11;
+  --bg-card-alt: #131316;
+  --bg-input: #161619;
+  --bg-hover: #17171a;
+  --border: #1c1c1f;
+  --border-foc: #27272a;
+  --text-pri: #ffffff;
+  --text-sec: #c8c8d0;
+  --text-mut: #a1a1aa;
 }
 
 html,
@@ -16,8 +28,8 @@ body,
 body {
   margin: 0;
   font-family: var(--font-body);
-  color: #000;
-  background: #000;
+  color: var(--text-sec);
+  background: var(--bg);
 }
 
 .font-heading {

@@ -14,7 +14,7 @@
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  background: #000000;
+  background: var(--bg);
   position: relative;
   overflow: hidden;
   font-family: 'Inter', sans-serif;

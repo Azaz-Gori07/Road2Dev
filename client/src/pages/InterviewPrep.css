@@ -7,12 +7,12 @@
 }
 
 :root {
-  --bg-page:    #000000;
-  --bg-card:    #0a0a0a;
-  --bg-card2:   #111111;
-  --bg-sel:     #141414;
-  --border:     #222222;
-  --border-sel: #555555;
+  --bg-page:    #09090b;
+  --bg-card:    #0f0f11;
+  --bg-card2:   #131316;
+  --bg-sel:     #17171a;
+  --border:     #1c1c1f;
+  --border-sel: #27272a;
   --accent:     #e2e2e2;
   --accent2:    #888888;
   --grad:       linear-gradient(90deg, #e2e2e2, #aaaaaa);
@@ -41,7 +41,7 @@ html, body {
   display: flex;
   flex-direction: column;
   padding: 28px 36px 24px;
-  background-color: #000000;
+  background-color: var(--bg-page);
 }
 
 /* ── Header ─────────────────────────────────────── */

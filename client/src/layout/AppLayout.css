@@ -8,7 +8,7 @@
 .main-content {
   flex: 1;
   min-width: 0;
-  background: #000;
+  background: var(--bg);
 }
 
 @media (min-width: 801px) {

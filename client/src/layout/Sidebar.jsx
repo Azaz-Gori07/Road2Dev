@@ -27,6 +27,8 @@ function Sidebar() {
     const [recentSessions, setRecentSessions] = useState([]);
     const [recentLoading, setRecentLoading] = useState(false);
     const [recentError, setRecentError] = useState('');
+    const [completedCount, setCompletedCount] = useState(0);
+    const [avgScore, setAvgScore] = useState(0);
     const zenuxAuth = useZenuxAuth();
     const customAuth = useAuth();
     const isAuthenticated = zenuxAuth.isAuthenticated || customAuth.isAuthenticated;
@@ -48,7 +50,15 @@ function Sidebar() {
             .then((res) => res.json())
             .then((data) => {
                 if (data.success && Array.isArray(data.data)) {
-                    setRecentSessions(data.data.slice(0, 7));
+                    setRecentSessions(data.data.slice(0, 3));
+                    const completed = data.data.filter(s => s.status === 'completed');
+                    setCompletedCount(completed.length);
+                    if (completed.length > 0) {
+                        const totalScore = completed.reduce((sum, s) => sum + (s.score || 0), 0);
+                        setAvgScore(Math.round(totalScore / completed.length));
+                    } else {
+                        setAvgScore(0);
+                    }
                 } else {
                     setRecentSessions([]);
                     setRecentError(data.message || 'Unable to load recent interviews.');
@@ -89,6 +99,9 @@ function Sidebar() {
         if (window.innerWidth <= 800) setMobileOpen(false);
     };
 
+    const rankLevel = Math.min(10, Math.floor(completedCount / 3) + 1);
+    const xpPercent = completedCount === 0 ? 0 : Math.round(((completedCount % 3) / 3) * 100) || 33;
+
     return (
         <section id={
             window.innerWidth <= 800
@@ -101,7 +114,11 @@ function Sidebar() {
         }>
             <div className="section">
                 <div className={"logodiv"}>
-                    <h2 className={close ? "logo-close" : "logo"}><img src="logo.png" alt="Logo" className='logoImg' /> Road<b>2</b>Dev</h2>
+                    <h2 className={close ? "logo-close" : "logo"}>
+                        <img src="logo.png" alt="Logo" className='logoImg' /> 
+                        Road<b>2</b>Dev
+                        {!close && <span className="logo-status-dot" title="AI Engine Online"></span>}
+                    </h2>
                     <span className='menutitle' data-title="open/close"><BiFoodMenu className="menubtn" onClick={() => {
                         if (window.innerWidth <= 800) {
                             setMobileOpen(!mobileOpen);
@@ -131,6 +148,16 @@ function Sidebar() {
                     )}
                     <Link to="/about"><li onClick={() => {setActiveLink("about"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'about' ? 'isActive' : 'sidebar-link'} data-title='About'><Info size={20} /> <span className='link-text'>About</span></li></Link>
                 </ul>
+
+                {!isAuthenticated && !close && (
+                    <div className="sidebar-stats-deck unauthorized">
+                        <div className="stats-deck-row">
+                            <span className="stats-deck-rank">STANDBY MODE</span>
+                            <span className="stats-deck-dot-divider">•</span>
+                            <span className="stats-deck-stat">OFFLINE</span>
+                        </div>
+                    </div>
+                )}
 
                 {isAuthenticated && (
                     <div className="recent-sessions">

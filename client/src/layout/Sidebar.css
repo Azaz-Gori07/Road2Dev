@@ -8,7 +8,6 @@
     text-decoration: none;
     scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
-    background-color: #000;
 }
 
 
@@ -19,7 +18,8 @@
     padding: 30px 20px;
     justify-content: space-between;
     align-items: center;
-    background-color: black;
+    background-color: var(--bg-card);
+    border-right: 1px solid var(--border);
     max-width: 250px;
     min-width: 280px;
     transition: all 0.3s ease;
@@ -33,7 +33,8 @@
     padding: 30px;
     justify-content: space-between;
     align-items: center;
-    background-color: black;
+    background-color: var(--bg-card);
+    border-right: 1px solid var(--border);
     max-width: 100px;
     min-width: 100px;
     transition: all 0.3s ease;
@@ -164,7 +165,7 @@
     width: 100%;
     padding: 4px 15px;
     /* border-radius: 8px; */
-    border-left: 3px blue solid;
+    border-left: 3px #a78bfa solid;
     color: white;
     font-size: 13px;
     font-weight: 500;
@@ -179,7 +180,7 @@
     width: 100%;
     padding: 4px 15px;
     /* border-radius: 8px; */
-    border-left: 3px blue solid;
+    border-left: 3px #a78bfa solid;
     color: white;
     font-size: 13px;
     font-weight: 500;
@@ -249,7 +250,7 @@
     padding: 12px 0;
     border-left: none;
     border-radius: 8px;
-    background-color: #272626;
+    background-color: var(--bg-hover);
     display: flex;
     justify-content: center;
 }
@@ -287,8 +288,8 @@
 .recent-item {
     width: 100%;
     padding: 6px 14px;
-    background: #080808;
-    border: 1px solid #1f1f1f;
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border);
     border-radius: 12px;
     text-align: left;
     cursor: pointer;
@@ -298,8 +299,8 @@
 }
 
 .recent-item:hover {
-    background: #111;
-    border-color: #2e2d2d;
+    background: var(--bg-hover);
+    border-color: var(--border-foc);
 }
 
 .recent-item-title {
@@ -366,7 +367,7 @@
     display: flex;
     align-items: center;
     justify-content: start;
-    border-top: 1px solid #222121;
+    border-top: 1px solid var(--border);
     padding-top: 15px;
 }
 
@@ -382,7 +383,7 @@
     align-items: center;
     gap: 10px;
     justify-content: start;
-    background-color: #000;
+    background: transparent;
     border: none;
 }
 
@@ -398,8 +399,8 @@
     align-items: center;
     gap: 10px;
     justify-content: start;
-    background-color: #000;
-    border-left: 4px red solid;
+    background: transparent;
+    border-left: 4px #ef4444 solid;
     border-radius: 2px;
 }
 
@@ -416,7 +417,7 @@
     padding: 12px 12px;
     border-left: none;
     border-radius: 8px;
-    background-color: #272626;
+    background-color: var(--bg-hover);
 }
 
 #sidebar-close .logoutdiv {
@@ -478,7 +479,8 @@
         left: 0;
         height: 100%;
         width: 260px;
-        background-color: black;
+        background-color: var(--bg-card);
+        border-right: 1px solid var(--border);
         z-index: 9999;
         padding: 25px 20px;
         transition: transform 0.3s ease;
@@ -494,7 +496,8 @@
         left: 0;
         height: 100%;
         width: 260px;
-        background-color: black;
+        background-color: var(--bg-card);
+        border-right: 1px solid var(--border);
         z-index: 9999;
         padding: 25px;
         transition: transform 0.3s ease;
