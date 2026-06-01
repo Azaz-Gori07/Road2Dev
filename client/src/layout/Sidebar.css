@@ -360,7 +360,7 @@
     display: flex;
     align-items: center;
     justify-content: start;
-    border-top: 2px solid #3b3a3a;
+    border-top: 1px solid #222121;
     padding-top: 15px;
 }
 
@@ -505,7 +505,7 @@
     }
 
     .logodiv {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         padding-top: 5px;
     }
 
@@ -520,14 +520,14 @@
     }
 
     .sidebar-links {
-        gap: 20px;
+        gap: 16px;
     }
 
     .sidebar-link,
     .isActive {
         font-size: 15px;
         gap: 8px;
-        padding: 4px 12px;
+        padding: 2px 12px;
     }
 
     .sidebar-link svg,
@@ -551,14 +551,15 @@
     }
 
     .recent-list {
-        max-height: 200px;
+        max-height: 210px;
         gap: 6px;
         margin-top: 8px;
     }
 
     .recent-item {
-        padding: 6px 10px;
+        padding: 4px 10px;
         border-radius: 10px;
+        line-height: 1.2;
     }
 
     .recent-item-title {
