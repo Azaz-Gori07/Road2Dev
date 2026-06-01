@@ -16,11 +16,11 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    padding: 30px;
+    padding: 30px 20px;
     justify-content: space-between;
     align-items: center;
     background-color: black;
-    max-width: 300px;
+    max-width: 250px;
     min-width: 280px;
     transition: all 0.3s ease;
     position: relative;
@@ -105,7 +105,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     padding-top: 10px;
     justify-content: space-between;
 }
@@ -143,16 +143,15 @@
 .sidebar-links {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 15px;
     width: 100%;
 }
 
 .sidebar-link {
     width: 100%;
-    padding: 4px 0px;
-    /* border-radius: 8px; */
+    padding: 4px 5px;
     color: rgb(176, 174, 174);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     transition: all 0.3s ease;
     cursor: pointer;
@@ -167,7 +166,7 @@
     /* border-radius: 8px; */
     border-left: 3px blue solid;
     color: white;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     transition: all 0.3s ease;
     cursor: pointer;
@@ -182,7 +181,7 @@
     /* border-radius: 8px; */
     border-left: 3px blue solid;
     color: white;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     transition: all 0.3s ease;
     cursor: pointer;
@@ -190,6 +189,12 @@
     align-items: center;
     gap: 10px;
 }
+
+.sidebar-link svg,
+    .isActive svg {
+        width: 18px;
+        height: 18px;
+    }
 
 #sidebar-close .link-text {
     display: none;
@@ -264,7 +269,7 @@
     line-height: 16px;
     letter-spacing: 0.08em;
     color: #fff;
-    padding: 0 12px;
+    padding: 0 8px;
 }
 
 
@@ -274,20 +279,21 @@
     gap: 10px;
     margin-top: 12px;
     width: 100%;
-    max-height: 170px;
+    max-height: 210px;
     overflow-y: scroll;
     scrollbar-width: none;
 }
 
 .recent-item {
     width: 100%;
-    padding: 10px 14px;
+    padding: 6px 14px;
     background: #080808;
     border: 1px solid #1f1f1f;
     border-radius: 12px;
     text-align: left;
     cursor: pointer;
     box-sizing: border-box;
+    line-height: 1.2;
     transition: background 0.2s ease, border-color 0.2s ease;
 }
 
@@ -474,7 +480,7 @@
         width: 260px;
         background-color: black;
         z-index: 9999;
-        padding: 25px;
+        padding: 25px 20px;
         transition: transform 0.3s ease;
         transform: translateX(0);
         display: flex;
@@ -510,17 +516,18 @@
     }
 
     .logo {
-        font-size: 18px;
+        font-size: 20px;
     }
 
     .logoImg {
-        width: 24px;
-        height: 23px;
+        width: 26px;
+        height: 26px;
         margin-right: 6px;
     }
 
     .sidebar-links {
         gap: 16px;
+        margin-top: 10px;
     }
 
     .sidebar-link,
