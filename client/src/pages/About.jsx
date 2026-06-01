@@ -28,7 +28,7 @@ const About = () => {
         <div className="title-line"></div>
       </div>
 
-      <section className="about-section mission-section">
+      <section className="about-page-section mission-section">
         <p className="lead-text">
           This platform was built with one simple intention —<br />
           to help students and self-learners come out of career confusion and 
@@ -36,7 +36,7 @@ const About = () => {
         </p>
       </section>
 
-      <section className="about-section problem-section">
+      <section className="about-page-section problem-section">
         <h2 className="section-title">The Problem We're Solving</h2>
         <p className="hinglish-text">
           Aaj ke time me bahot saare log YouTube aur online classes se padhte hain, 
@@ -77,7 +77,7 @@ const About = () => {
         </div>
       </section>
 
-      <section className="about-section purpose-section">
+      <section className="about-page-section purpose-section">
         <h2 className="section-title" >Why I Built This</h2>
         <p className="hinglish-text">
           Is platform ka goal YouTube ya teachers ko replace karna nahi hai.
@@ -119,7 +119,7 @@ const About = () => {
         </div>
       </section>
 
-      <section className="about-section interview-section">
+      <section className="about-page-section interview-section">
         <h2 className="section-title">Interview Mindset Matters</h2>
         <p className="hinglish-text">
           Interview preparation yahan sirf questions ya answers ka game nahi hai.
@@ -165,7 +165,7 @@ const About = () => {
         </div>
       </section>
 
-      <section className="about-section opensource-section">
+      <section className="about-page-section opensource-section">
         <h2 className="section-title">Open Source & Community Driven <Heart size={24} style={{display: 'inline-block', marginLeft: '8px', color: '#e74c3c', background:"transparent"}}/></h2>
         <p className="hinglish-text">
           Mere saare projects open-source hain. Agar:
@@ -201,7 +201,7 @@ const About = () => {
         </div>
       </section>
 
-      <section className="about-section connect-section">
+      <section className="about-page-section connect-section">
         <h2 className="section-title">Let's Connect 🌐</h2>
         <p className="hinglish-text">Aap mujhe yahan follow / connect kar sakte ho</p>
         

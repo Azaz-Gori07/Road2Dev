@@ -1,5 +1,5 @@
 import express from 'express';
-import { generateInterview } from '../controllers/interviewController.js';
+import { generateInterview, respondToInterview } from '../controllers/interviewController.js';
 import { createRateLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
@@ -10,5 +10,6 @@ const interviewLimiter = createRateLimiter({
 });
 
 router.post('/generate', interviewLimiter, generateInterview);
+router.post('/respond', interviewLimiter, respondToInterview);
 
 export default router;

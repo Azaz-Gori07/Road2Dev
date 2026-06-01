@@ -302,10 +302,11 @@ const EXP = [
 ];
 
 const INTERVIEW_TYPES = [
-  { id: "technical", label: "Technical", desc: "Core concepts, coding, debugging and system thinking." },
-  { id: "hr", label: "HR", desc: "Communication, motivation, goals and workplace readiness." },
-  { id: "behavioral", label: "Behavioral", desc: "Past projects, ownership, conflict and collaboration." },
-  { id: "mixed", label: "Mixed", desc: "Balanced technical, HR and behavioral preparation." },
+  { id: "technical", label: "Technical", desc: "Core concepts, programming language mechanics, computer science fundamentals, and debugging." },
+  { id: "system-design", label: "System Design", desc: "High-level software architecture, databases, caching, load balancing, API design, and scalability." },
+  { id: "behavioral", label: "Behavioral", desc: "Past engineering projects, leadership, conflict resolution, ownership, and STAR-based situations." },
+  { id: "hr", label: "HR", desc: "Workplace communication, career goals, company alignment, soft skills, and professional readiness." },
+  { id: "mixed", label: "Mixed", desc: "Balanced preparation covering technical skills, system design, behaviors, and soft skills." },
 ];
 
 const formatTimer = (seconds) => {
@@ -649,6 +650,7 @@ const InterviewPrep = () => {
   const [timerSeconds, setTimerSeconds] = useState(() => getInitialValue('timerSeconds', 0));
   const [interviewCompleted, setInterviewCompleted] = useState(() => getInitialValue('interviewCompleted', false));
   const [savedInterview, setSavedInterview] = useState(() => getInitialValue('savedInterview', null));
+  const [activeSkillDetail, setActiveSkillDetail] = useState(null);
   const abortControllerRef = useRef(null);
   const chatEndRef = useRef(null);
   const [showAccessModal, setShowAccessModal] = useState(false);
@@ -1183,11 +1185,10 @@ const InterviewPrep = () => {
     });
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     const trimmed = messageInput.trim();
     if (!trimmed || !interviewSession || interviewCompleted) return;
 
-    const question = interviewSession.questions[currentQuestionIndex];
     const userMessage = {
       id: buildMessageId('user'),
       role: 'user',
@@ -1200,16 +1201,117 @@ const InterviewPrep = () => {
     setChatMessages(afterUserMessage);
     setMessageInput('');
     setIsAiTyping(true);
+
     saveInterviewSessionToServer({
       statusOverride: 'active',
       messages: afterUserMessage,
       currentQuestionIndexOverride: currentQuestionIndex,
     });
 
-    const feedback = buildFeedback(trimmed, question, currentQuestionIndex);
-    const nextIndex = currentQuestionIndex + 1;
+    try {
+      const response = await fetch(`${API_BASE}/interview/respond`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          field: selectedFieldData?.name || '',
+          stack: selectedStackData?.name || '',
+          experienceLevel: selectedExp || '',
+          interviewType: selectedInterviewType || 'technical',
+          messages: afterUserMessage,
+          sessionId: sessionId || '',
+        }),
+      });
 
-    setTimeout(() => {
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'AI failed to evaluate response.');
+      }
+
+      const { isCompleted, evaluation, nextQuestion, summary } = result.data;
+
+      const feedbackMessage = {
+        id: buildMessageId('ai-feedback'),
+        role: 'ai',
+        type: 'feedback',
+        analysis: {
+          correctness: evaluation.correctness,
+          technicalDepth: evaluation.technicalDepth,
+          communication: evaluation.communication,
+          missingPoints: evaluation.missingPoints,
+          confidence: evaluation.confidence,
+          scoringJustification: evaluation.scoringJustification,
+          coveredSkills: evaluation.coveredSkills || [],
+          strongSkills: evaluation.strongSkills || [],
+          weakSkills: evaluation.weakSkills || [],
+          skillsPerformance: evaluation.skillsPerformance || [],
+          coveragePercentage: evaluation.coveragePercentage || 0,
+        },
+        improvedAnswer: evaluation.improvedAnswer,
+        tips: evaluation.tips,
+        score: evaluation.score,
+        timestamp: new Date().toISOString(),
+      };
+
+      const nextMessages = [...afterUserMessage, feedbackMessage];
+
+      if (isCompleted) {
+        const summaryMessage = {
+          id: buildMessageId('ai-summary'),
+          role: 'ai',
+          type: 'summary',
+          summary,
+          timestamp: new Date().toISOString(),
+        };
+
+        const finalMessages = [...nextMessages, summaryMessage];
+        setChatMessages(finalMessages);
+        setInterviewCompleted(true);
+        setIsAiTyping(false);
+
+        saveInterviewSessionToServer({
+          statusOverride: 'completed',
+          messages: finalMessages,
+          scoreOverride: summary.overallScore,
+          feedbackOverride: summary.readiness,
+          currentQuestionIndexOverride: currentQuestionIndex + 1,
+        });
+      } else {
+        const questionMessage = {
+          id: buildMessageId('ai-question'),
+          role: 'ai',
+          type: 'question',
+          question: nextQuestion,
+          timestamp: new Date().toISOString(),
+        };
+
+        const finalMessages = [...nextMessages, questionMessage];
+        
+        const updatedQuestions = [...(interviewSession.questions || [])];
+        const nextIndex = currentQuestionIndex + 1;
+        updatedQuestions[nextIndex] = nextQuestion;
+
+        setInterviewSession({
+          ...interviewSession,
+          questions: updatedQuestions,
+        });
+
+        setChatMessages(finalMessages);
+        setCurrentQuestionIndex(nextIndex);
+        setIsAiTyping(false);
+
+        saveInterviewSessionToServer({
+          statusOverride: 'active',
+          messages: finalMessages,
+          currentQuestionIndexOverride: nextIndex,
+          questionsOverride: updatedQuestions,
+        });
+      }
+    } catch (err) {
+      console.error('Dynamic AI response error:', err);
+      const question = interviewSession.questions[currentQuestionIndex];
+      const feedback = buildFeedback(trimmed, question, currentQuestionIndex);
+      const nextIndex = currentQuestionIndex + 1;
+
       setChatMessages((prev) => {
         const afterFeedback = [...prev, feedback];
         saveInterviewSessionToServer({
@@ -1266,19 +1368,15 @@ const InterviewPrep = () => {
 
         return afterFeedback;
       });
-    }, 1000);
+    }
   };
 
   const handleRetryAnswer = () => {
     if (chatMessages.length === 0) return;
-    
-    // Find the last user message index
     const lastUserIndex = chatMessages.map(m => m.role).lastIndexOf('user');
     if (lastUserIndex === -1) return;
 
     const lastUserMsg = chatMessages[lastUserIndex];
-    
-    // Filter out the last user message and any messages after it
     const newChatMessages = chatMessages.slice(0, lastUserIndex);
     
     setChatMessages(newChatMessages);
@@ -1292,24 +1390,62 @@ const InterviewPrep = () => {
     });
   };
 
-  const handleRegenerateFeedback = () => {
+  const handleRegenerateFeedback = async () => {
     const lastUser = [...chatMessages].reverse().find((message) => message.role === 'user');
     const lastUserIndex = chatMessages.map(m => m.role).lastIndexOf('user');
     if (!lastUser || lastUserIndex === -1 || !interviewSession) return;
 
-    const answeredIndex = Math.max(0, currentQuestionIndex - 1);
-    const question = interviewSession.questions[answeredIndex];
-    const regenerated = buildFeedback(lastUser.text, question, answeredIndex);
+    const historyUpToUser = chatMessages.slice(0, lastUserIndex + 1);
     setIsAiTyping(true);
 
-    setTimeout(() => {
+    try {
+      const response = await fetch(`${API_BASE}/interview/respond`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          field: selectedFieldData?.name || '',
+          stack: selectedStackData?.name || '',
+          experienceLevel: selectedExp || '',
+          interviewType: selectedInterviewType || 'technical',
+          messages: historyUpToUser,
+          sessionId: sessionId || '',
+        }),
+      });
+
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error();
+
+      const { evaluation } = result.data;
+      const regeneratedFeedback = {
+        id: buildMessageId('ai-feedback'),
+        role: 'ai',
+        type: 'feedback',
+        analysis: {
+          correctness: evaluation.correctness,
+          technicalDepth: evaluation.technicalDepth,
+          communication: evaluation.communication,
+          missingPoints: evaluation.missingPoints,
+          confidence: evaluation.confidence,
+          scoringJustification: evaluation.scoringJustification,
+          coveredSkills: evaluation.coveredSkills || [],
+          strongSkills: evaluation.strongSkills || [],
+          weakSkills: evaluation.weakSkills || [],
+          skillsPerformance: evaluation.skillsPerformance || [],
+          coveragePercentage: evaluation.coveragePercentage || 0,
+        },
+        improvedAnswer: evaluation.improvedAnswer,
+        tips: evaluation.tips,
+        score: evaluation.score,
+        timestamp: new Date().toISOString(),
+      };
+
       setChatMessages((prev) => {
         const lastFeedbackIndex = prev.map(m => m.type).lastIndexOf('feedback');
         let newMessages = [...prev];
         if (lastFeedbackIndex !== -1 && lastFeedbackIndex > lastUserIndex) {
-          newMessages.splice(lastFeedbackIndex, 1, regenerated);
+          newMessages.splice(lastFeedbackIndex, 1, regeneratedFeedback);
         } else {
-          newMessages.push(regenerated);
+          newMessages.push(regeneratedFeedback);
         }
         
         saveInterviewSessionToServer({
@@ -1320,69 +1456,175 @@ const InterviewPrep = () => {
         
         return newMessages;
       });
+    } catch (e) {
+      console.warn('Regeneration failed, falling back to local mock');
+      const answeredIndex = Math.max(0, currentQuestionIndex - 1);
+      const question = interviewSession.questions[answeredIndex];
+      const regenerated = buildFeedback(lastUser.text, question, answeredIndex);
+      setIsAiTyping(true);
+
+      setTimeout(() => {
+        setChatMessages((prev) => {
+          const lastFeedbackIndex = prev.map(m => m.type).lastIndexOf('feedback');
+          let newMessages = [...prev];
+          if (lastFeedbackIndex !== -1 && lastFeedbackIndex > lastUserIndex) {
+            newMessages.splice(lastFeedbackIndex, 1, regenerated);
+          } else {
+            newMessages.push(regenerated);
+          }
+          
+          saveInterviewSessionToServer({
+            statusOverride: 'active',
+            messages: newMessages,
+            currentQuestionIndexOverride: currentQuestionIndex,
+          });
+          
+          return newMessages;
+        });
+        setIsAiTyping(false);
+      }, 900);
+    } finally {
       setIsAiTyping(false);
-    }, 900);
+    }
   };
 
-  const handleSkipQuestion = () => {
+  const handleSkipQuestion = async () => {
     if (!interviewSession || interviewCompleted) return;
 
     const noteMessage = {
       id: buildMessageId('system'),
       role: 'system',
       type: 'note',
-      text: 'Skipping this question. We will continue with the next interview prompt.',
+      text: 'Skipping this question. Proceeding to the next prompt.',
       timestamp: new Date().toISOString(),
     };
 
-    const nextIndex = currentQuestionIndex + 1;
-    const baseMessages = [...chatMessages, noteMessage];
-    setChatMessages(baseMessages);
+    const afterNoteMessages = [...chatMessages, noteMessage];
+    setChatMessages(afterNoteMessages);
+    setIsAiTyping(true);
 
-    setTimeout(() => {
-      if (nextIndex < totalQuestions) {
-        const nextQuestion = interviewSession.questions[nextIndex];
-        const nextMessages = [
-          ...baseMessages,
-          {
-            id: buildMessageId('ai-question'),
-            role: 'ai',
-            type: 'question',
-            question: nextQuestion,
-            timestamp: new Date().toISOString(),
-          },
-        ];
+    try {
+      const response = await fetch(`${API_BASE}/interview/respond`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          field: selectedFieldData?.name || '',
+          stack: selectedStackData?.name || '',
+          experienceLevel: selectedExp || '',
+          interviewType: selectedInterviewType || 'technical',
+          messages: afterNoteMessages,
+          sessionId: sessionId || '',
+        }),
+      });
 
-        setChatMessages(nextMessages);
-        setCurrentQuestionIndex(nextIndex);
-        saveInterviewSessionToServer({
-          statusOverride: 'active',
-          messages: nextMessages,
-          currentQuestionIndexOverride: nextIndex,
-        });
-      } else {
-        const summary = buildInterviewSummary(baseMessages, totalQuestions);
-        const completedMessages = [
-          ...baseMessages,
-          {
-            id: buildMessageId('ai-summary'),
-            role: 'ai',
-            type: 'summary',
-            summary,
-            timestamp: new Date().toISOString(),
-          },
-        ];
-        setChatMessages(completedMessages);
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error();
+
+      const { isCompleted, nextQuestion, summary } = result.data;
+
+      if (isCompleted) {
+        const summaryMessage = {
+          id: buildMessageId('ai-summary'),
+          role: 'ai',
+          type: 'summary',
+          summary,
+          timestamp: new Date().toISOString(),
+        };
+
+        const finalMessages = [...afterNoteMessages, summaryMessage];
+        setChatMessages(finalMessages);
         setInterviewCompleted(true);
+
         saveInterviewSessionToServer({
           statusOverride: 'completed',
-          messages: completedMessages,
+          messages: finalMessages,
           scoreOverride: summary.overallScore,
           feedbackOverride: summary.readiness,
+          currentQuestionIndexOverride: currentQuestionIndex + 1,
+        });
+      } else {
+        const questionMessage = {
+          id: buildMessageId('ai-question'),
+          role: 'ai',
+          type: 'question',
+          question: nextQuestion,
+          timestamp: new Date().toISOString(),
+        };
+
+        const finalMessages = [...afterNoteMessages, questionMessage];
+        
+        const updatedQuestions = [...(interviewSession.questions || [])];
+        const nextIndex = currentQuestionIndex + 1;
+        updatedQuestions[nextIndex] = nextQuestion;
+
+        setInterviewSession({
+          ...interviewSession,
+          questions: updatedQuestions,
+        });
+
+        setChatMessages(finalMessages);
+        setCurrentQuestionIndex(nextIndex);
+
+        saveInterviewSessionToServer({
+          statusOverride: 'active',
+          messages: finalMessages,
           currentQuestionIndexOverride: nextIndex,
+          questionsOverride: updatedQuestions,
         });
       }
-    }, 850);
+    } catch (e) {
+      console.warn('Skip failed, falling back to local skip handler');
+      const nextIndex = currentQuestionIndex + 1;
+      const baseMessages = [...chatMessages, noteMessage];
+      setChatMessages(baseMessages);
+
+      setTimeout(() => {
+        if (nextIndex < totalQuestions) {
+          const nextQuestion = interviewSession.questions[nextIndex];
+          const nextMessages = [
+            ...baseMessages,
+            {
+              id: buildMessageId('ai-question'),
+              role: 'ai',
+              type: 'question',
+              question: nextQuestion,
+              timestamp: new Date().toISOString(),
+            },
+          ];
+
+          setChatMessages(nextMessages);
+          setCurrentQuestionIndex(nextIndex);
+          saveInterviewSessionToServer({
+            statusOverride: 'active',
+            messages: nextMessages,
+            currentQuestionIndexOverride: nextIndex,
+          });
+        } else {
+          const summary = buildInterviewSummary(baseMessages, totalQuestions);
+          const completedMessages = [
+            ...baseMessages,
+            {
+              id: buildMessageId('ai-summary'),
+              role: 'ai',
+              type: 'summary',
+              summary,
+              timestamp: new Date().toISOString(),
+            },
+          ];
+          setChatMessages(completedMessages);
+          setInterviewCompleted(true);
+          saveInterviewSessionToServer({
+            statusOverride: 'completed',
+            messages: completedMessages,
+            scoreOverride: summary.overallScore,
+            feedbackOverride: summary.readiness,
+            currentQuestionIndexOverride: nextIndex,
+          });
+        }
+      }, 850);
+    } finally {
+      setIsAiTyping(false);
+    }
   };
 
   const handleSaveInterview = async () => {
@@ -1741,6 +1983,97 @@ const InterviewPrep = () => {
                 <span>{message.analysis.confidence}</span>
               </div>
             </div>
+            {message.analysis.scoringJustification && (
+              <div className="feedback-section" style={{ borderLeft: '3px solid rgba(139, 92, 246, 0.4)', paddingLeft: '12px', background: 'rgba(255,255,255,0.01)', padding: '10px 12px', borderRadius: '6px', marginBottom: '14px' }}>
+                <strong style={{ color: '#d8b4fe', fontSize: '12px' }}>Scoring Evidence & Justification</strong>
+                <p style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: '12.5px', color: '#c0c0c0', lineHeight: '1.4' }}>{message.analysis.scoringJustification}</p>
+              </div>
+            )}
+            {(message.analysis.skillsPerformance?.length > 0 || message.analysis.coveredSkills?.length > 0 || message.analysis.strongSkills?.length > 0 || message.analysis.weakSkills?.length > 0) && (
+              <div className="feedback-section" style={{ border: '1px solid #1c1c1f', padding: '16px', borderRadius: '12px', background: '#09090b', marginBottom: '14px', textAlign: 'left' }}>
+                <strong style={{ display: 'block', fontSize: '13px', color: '#a78bfa', marginBottom: '10px' }}>🎯 Dynamic Skill Matrix</strong>
+                
+                {/* Visual Radial Gauge for Coverage Percentage */}
+                {typeof message.analysis.coveragePercentage === 'number' && message.analysis.coveragePercentage > 0 && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#040405', border: '1px solid #141416', padding: '10px 12px', borderRadius: '8px', marginBottom: '12px' }}>
+                    <div style={{ position: 'relative', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <svg style={{ transform: 'rotate(-90deg)', width: '36px', height: '36px' }}>
+                        <circle cx="18" cy="18" r="15" stroke="#1c1c1f" strokeWidth="4" fill="transparent" />
+                        <circle cx="18" cy="18" r="15" stroke="#a78bfa" strokeWidth="4" fill="transparent" strokeDasharray={94.2} strokeDashoffset={94.2 - (94.2 * message.analysis.coveragePercentage) / 100} style={{ transition: 'stroke-dashoffset 0.8s ease' }} />
+                      </svg>
+                      <span style={{ position: 'absolute', fontSize: '9px', fontWeight: '800', color: 'white' }}>{Math.round(message.analysis.coveragePercentage)}%</span>
+                    </div>
+                    <div>
+                      <span style={{ fontSize: '10px', color: '#a1a1aa', display: 'block' }}>Session Skill Coverage</span>
+                      <strong style={{ fontSize: '11.5px', color: '#d8b4fe' }}>Progressive competency mapping active</strong>
+                    </div>
+                  </div>
+                )}
+
+                {message.analysis.skillsPerformance?.length > 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {(() => {
+                      const mastered = message.analysis.skillsPerformance.filter(s => s.status === 'mastered');
+                      const average = message.analysis.skillsPerformance.filter(s => s.status === 'average');
+                      const weak = message.analysis.skillsPerformance.filter(s => s.status === 'weak');
+                      const unassessed = message.analysis.skillsPerformance.filter(s => s.status === 'not_assessed');
+                      
+                      return (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                          {mastered.map(item => (
+                            <span key={item.skill} onClick={() => setActiveSkillDetail(item)} style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#34d399', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s' }} title="Click to view evidence">
+                              ✔ {item.skill}
+                            </span>
+                          ))}
+                          {average.map(item => (
+                            <span key={item.skill} onClick={() => setActiveSkillDetail(item)} style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#60a5fa', border: '1px solid rgba(59, 130, 246, 0.2)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s' }} title="Click to view evidence">
+                              ● {item.skill}
+                            </span>
+                          ))}
+                          {weak.map(item => (
+                            <span key={item.skill} onClick={() => setActiveSkillDetail(item)} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#f87171', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s' }} title="Click to view evidence">
+                              ⚠ {item.skill}
+                            </span>
+                          ))}
+                          {unassessed.map(item => (
+                            <span key={item.skill} style={{ background: '#18181b', color: '#71717a', border: '1px solid #27272a', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                              ○ {item.skill}
+                            </span>
+                          ))}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {message.analysis.coveredSkills?.length > 0 && (
+                      <div style={{ fontSize: '12px' }}>
+                        <span style={{ color: '#a1a1aa' }}>Covered: </span>
+                        {message.analysis.coveredSkills.map(skill => (
+                          <span key={skill} style={{ background: '#18181b', color: '#e4e4e7', border: '1px solid #27272a', padding: '2px 6px', borderRadius: '4px', marginLeft: '4px', display: 'inline-block' }}>{skill}</span>
+                        ))}
+                      </div>
+                    )}
+                    {message.analysis.strongSkills?.length > 0 && (
+                      <div style={{ fontSize: '12px' }}>
+                        <span style={{ color: '#34d399' }}>✔ Strong: </span>
+                        {message.analysis.strongSkills.map(skill => (
+                          <span key={skill} style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#34d399', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '2px 6px', borderRadius: '4px', marginLeft: '4px', display: 'inline-block' }}>{skill}</span>
+                        ))}
+                      </div>
+                    )}
+                    {message.analysis.weakSkills?.length > 0 && (
+                      <div style={{ fontSize: '12px' }}>
+                        <span style={{ color: '#f87171' }}>⚠ Weak: </span>
+                        {message.analysis.weakSkills.map(skill => (
+                          <span key={skill} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#f87171', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '2px 6px', borderRadius: '4px', marginLeft: '4px', display: 'inline-block' }}>{skill}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
             <div className="feedback-section">
               <strong>Missing / improvement points</strong>
               <p>{message.analysis.missingPoints}</p>
@@ -1782,41 +2115,242 @@ const InterviewPrep = () => {
 
     if (message.type === 'summary') {
       if (!message.summary) return null;
+      const recColor = message.summary.hiringRecommendation?.recommendation === 'Strong Hire' 
+        ? '#10b981' 
+        : message.summary.hiringRecommendation?.recommendation === 'Hire' 
+        ? '#34d399' 
+        : message.summary.hiringRecommendation?.recommendation === 'Borderline' 
+        ? '#fbbf24' 
+        : '#ef4444';
+
       return (
         <div className="chat-message ai" key={message.id}>
-          <div className="message-card ai-summary">
-            <div className="summary-header">
+          <div className="message-card ai-summary" style={{ background: '#09090b', border: '1px solid #1c1c1f', padding: '24px', borderRadius: '16px', maxWidth: '650px', width: '100%', textAlign: 'left', color: 'white', boxSizing: 'border-box' }}>
+            
+            {/* Header */}
+            <div className="summary-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #1c1c1f', paddingBottom: '16px' }}>
               <div>
-                <span className="message-role">Interview Summary</span>
-                <span className="message-time">{time}</span>
+                <span className="message-role" style={{ fontSize: '11px', color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' }}>Interview Report</span>
+                <h3 style={{ fontSize: '20px', fontWeight: '700', color: 'white', margin: '4px 0 0' }}>Performance Evaluation</h3>
               </div>
-              <span className="summary-score">{message.summary.overallScore}%</span>
-            </div>
-            <div className="summary-grid">
-              <div>
-                <strong>Readiness</strong>
-                <p>{message.summary.readiness}</p>
-              </div>
-              <div>
-                <strong>Completed</strong>
-                <p>{message.summary.completed} / {message.summary.totalQuestions}</p>
+              <div style={{ textAlign: 'right' }}>
+                <span style={{ fontSize: '11px', color: '#a1a1aa', display: 'block' }}>Overall Score</span>
+                <strong style={{ fontSize: '24px', color: '#a78bfa', fontWeight: '800' }}>{message.summary.overallScore}%</strong>
               </div>
             </div>
-            <div className="summary-section">
-              <strong>Strengths</strong>
-              <ul>{message.summary.strengths.map((item) => <li key={item}>{item}</li>)}</ul>
+
+            {/* Score Grid Breakdown */}
+            <div className="summary-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '10px', marginBottom: '20px' }}>
+              <div style={{ background: '#040405', padding: '12px 10px', borderRadius: '8px', border: '1px solid #141416', textAlign: 'center' }}>
+                <span style={{ fontSize: '10px', color: '#a1a1aa', display: 'block', textTransform: 'uppercase', marginBottom: '4px' }}>Technical</span>
+                <strong style={{ fontSize: '16px', color: '#e4e4e7' }}>{message.summary.technicalScore ?? message.summary.overallScore}%</strong>
+              </div>
+              <div style={{ background: '#040405', padding: '12px 10px', borderRadius: '8px', border: '1px solid #141416', textAlign: 'center' }}>
+                <span style={{ fontSize: '10px', color: '#a1a1aa', display: 'block', textTransform: 'uppercase', marginBottom: '4px' }}>Comm</span>
+                <strong style={{ fontSize: '16px', color: '#e4e4e7' }}>{message.summary.communicationScore ?? message.summary.overallScore}%</strong>
+              </div>
+              <div style={{ background: '#040405', padding: '12px 10px', borderRadius: '8px', border: '1px solid #141416', textAlign: 'center' }}>
+                <span style={{ fontSize: '10px', color: '#a1a1aa', display: 'block', textTransform: 'uppercase', marginBottom: '4px' }}>Problem Solving</span>
+                <strong style={{ fontSize: '16px', color: '#e4e4e7' }}>{message.summary.problemSolvingScore ?? message.summary.overallScore}%</strong>
+              </div>
+              <div style={{ background: '#040405', padding: '12px 10px', borderRadius: '8px', border: '1px solid #141416', textAlign: 'center' }}>
+                <span style={{ fontSize: '10px', color: '#a1a1aa', display: 'block', textTransform: 'uppercase', marginBottom: '4px' }}>Confidence</span>
+                <strong style={{ fontSize: '16px', color: '#e4e4e7' }}>{message.summary.confidenceScore ?? message.summary.overallScore}%</strong>
+              </div>
             </div>
-            <div className="summary-section">
-              <strong>Weaknesses</strong>
-              <ul>{message.summary.weaknesses.map((item) => <li key={item}>{item}</li>)}</ul>
+
+            {/* Overall Domain Coverage progress gauge */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: '#040405', border: '1px solid #141416', padding: '16px', borderRadius: '12px', marginBottom: '20px' }}>
+              <div style={{ position: 'relative', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg style={{ transform: 'rotate(-90deg)', width: '56px', height: '56px' }}>
+                  <circle cx="28" cy="28" r="24" stroke="#1c1c1f" strokeWidth="5" fill="transparent" />
+                  <circle cx="28" cy="28" r="24" stroke="#a78bfa" strokeWidth="5" fill="transparent" strokeDasharray={150.8} strokeDashoffset={150.8 - (150.8 * (message.summary.coveragePercentage || 0)) / 100} style={{ transition: 'stroke-dashoffset 0.8s ease' }} />
+                </svg>
+                <span style={{ position: 'absolute', fontSize: '11px', fontWeight: '800', color: 'white' }}>{Math.round(message.summary.coveragePercentage || 0)}%</span>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '13px', fontWeight: '700', color: 'white', margin: '0 0 3px' }}>Systematic Domain Coverage</h4>
+                <p style={{ fontSize: '11.5px', color: '#a1a1aa', margin: 0 }}>Eliminating unassessed areas across multi-session evaluations.</p>
+              </div>
             </div>
-            <div className="summary-section">
-              <strong>Recommended topics</strong>
-              <ul>{message.summary.recommendedTopics.map((item) => <li key={item}>{item}</li>)}</ul>
+
+            {/* Interactive Skill Tree Matrix Grid */}
+            {message.summary.skillsPerformance?.length > 0 && (
+              <div style={{ border: '1px solid #1c1c1f', padding: '16px', borderRadius: '12px', background: '#09090b', marginBottom: '20px', textAlign: 'left' }}>
+                <strong style={{ display: 'block', fontSize: '13px', color: '#a78bfa', marginBottom: '10px' }}>🎯 Dynamic Skill Matrix Grid</strong>
+                {(() => {
+                  const mastered = message.summary.skillsPerformance.filter(s => s.status === 'mastered');
+                  const average = message.summary.skillsPerformance.filter(s => s.status === 'average');
+                  const weak = message.summary.skillsPerformance.filter(s => s.status === 'weak');
+                  const unassessed = message.summary.skillsPerformance.filter(s => s.status === 'not_assessed');
+                  
+                  return (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                      {mastered.map(item => (
+                        <span key={item.skill} onClick={() => setActiveSkillDetail(item)} style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#34d399', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s' }} title="Click to view evidence">
+                          ✔ {item.skill}
+                        </span>
+                      ))}
+                      {average.map(item => (
+                        <span key={item.skill} onClick={() => setActiveSkillDetail(item)} style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#60a5fa', border: '1px solid rgba(59, 130, 246, 0.2)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s' }} title="Click to view evidence">
+                          ● {item.skill}
+                        </span>
+                      ))}
+                      {weak.map(item => (
+                        <span key={item.skill} onClick={() => setActiveSkillDetail(item)} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#f87171', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s' }} title="Click to view evidence">
+                          ⚠ {item.skill}
+                        </span>
+                      ))}
+                      {unassessed.map(item => (
+                        <span key={item.skill} style={{ background: '#18181b', color: '#71717a', border: '1px solid #27272a', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          ○ {item.skill}
+                        </span>
+                      ))}
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+
+            {/* Hiring Decision Card */}
+            <div className="hiring-recommendation-card" style={{ marginBottom: '20px', padding: '16px', background: 'rgba(139, 92, 246, 0.04)', border: '1px solid rgba(139, 92, 246, 0.15)', borderRadius: '12px' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#a78bfa', margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span>🏆</span> Final Hiring Decision
+              </h4>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ background: '#040405', padding: '10px', borderRadius: '8px', border: '1px solid #141416' }}>
+                  <span style={{ fontSize: '10px', color: '#a1a1aa', display: 'block' }}>Recommendation</span>
+                  <strong style={{ fontSize: '14px', color: recColor }}>{message.summary.hiringRecommendation?.recommendation || 'Borderline'}</strong>
+                </div>
+                <div style={{ background: '#040405', padding: '10px', borderRadius: '8px', border: '1px solid #141416' }}>
+                  <span style={{ fontSize: '10px', color: '#a1a1aa', display: 'block' }}>Evaluation Confidence</span>
+                  <strong style={{ fontSize: '14px', color: '#d8b4fe' }}>{message.summary.hiringRecommendation?.confidence || '80%'}</strong>
+                </div>
+              </div>
+              {message.summary.hiringRecommendation?.hiring_rationale && (
+                <div style={{ fontSize: '12.5px', color: '#d1d1d6', lineHeight: '1.5', background: '#040405', padding: '12px', borderRadius: '8px', border: '1px solid #141416' }}>
+                  <strong style={{ fontSize: '11px', color: '#c084fc', display: 'block', marginBottom: '4px' }}>Hiring Rationale</strong>
+                  {message.summary.hiringRecommendation.hiring_rationale}
+                </div>
+              )}
             </div>
-            <button className="btn-save" onClick={handleDownloadReport}>
-              <FiDownload size={16} /> Download report
-            </button>
+
+            {/* Market Readiness Matrix Widget */}
+            {message.summary.marketReadinessMatrix && (
+              <div style={{ marginBottom: '20px', padding: '16px', background: 'rgba(52, 211, 153, 0.04)', border: '1px solid rgba(52, 211, 153, 0.15)', borderRadius: '12px' }}>
+                <strong style={{ display: 'block', fontSize: '13px', color: '#34d399', marginBottom: '12px' }}>📈 Market Readiness Analysis Matrix</strong>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: '10px' }}>
+                  {Object.entries(message.summary.marketReadinessMatrix).map(([tier, status]) => {
+                    const lightColor = status === 'Ready' 
+                      ? '#10b981' 
+                      : status === 'Polishing' 
+                      ? '#3b82f6' 
+                      : status === 'Not Ready' 
+                      ? '#ef4444' 
+                      : '#52525b';
+                    return (
+                      <div key={tier} style={{ background: '#040405', padding: '10px', borderRadius: '8px', border: '1px solid #141416', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span style={{ fontSize: '10px', color: '#a1a1aa', textTransform: 'capitalize' }}>
+                          {tier === 'midLevel' ? 'Mid-Level' : tier}
+                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: lightColor, boxShadow: `0 0 6px ${lightColor}` }} />
+                          <strong style={{ fontSize: '12px', color: 'white' }}>{status}</strong>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Market Readiness Statement */}
+            {message.summary.marketReadiness && (
+              <div style={{ marginBottom: '20px', padding: '14px 16px', background: 'rgba(52, 211, 153, 0.04)', border: '1px solid rgba(52, 211, 153, 0.15)', borderRadius: '10px' }}>
+                <strong style={{ display: 'block', fontSize: '13px', color: '#34d399', marginBottom: '4px' }}>📈 Targeted Scope & Capability</strong>
+                <p style={{ margin: 0, fontSize: '12.5px', color: '#d1d1d6', lineHeight: '1.4' }}>{message.summary.marketReadiness}</p>
+              </div>
+            )}
+
+            {/* Human-like closing message */}
+            {message.summary.closingMessage && (
+              <div style={{ marginBottom: '20px', padding: '16px', background: '#040405', border: '1px solid #141416', borderRadius: '12px' }}>
+                <strong style={{ display: 'block', fontSize: '13px', color: '#f472b6', marginBottom: '8px' }}>💬 Interviewer Notes</strong>
+                <p style={{ margin: 0, fontSize: '13.5px', color: '#e4e4e7', lineHeight: '1.5', fontStyle: 'italic' }}>"{message.summary.closingMessage}"</p>
+              </div>
+            )}
+
+            {/* Strengths & Weaknesses */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+              <div className="summary-section" style={{ textAlign: 'left' }}>
+                <strong style={{ fontSize: '13px', color: '#4ade80', display: 'block', marginBottom: '8px' }}>✔ Key Strengths</strong>
+                <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '12.5px', color: '#d1d1d6', lineHeight: '1.5' }}>
+                  {message.summary.strengths.map((item) => <li key={item} style={{ marginBottom: '4px' }}>{item}</li>)}
+                </ul>
+              </div>
+              <div className="summary-section" style={{ textAlign: 'left' }}>
+                <strong style={{ fontSize: '13px', color: '#f87171', display: 'block', marginBottom: '8px' }}>⚠ Core Weaknesses</strong>
+                <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '12.5px', color: '#d1d1d6', lineHeight: '1.5' }}>
+                  {message.summary.weaknesses.map((item) => <li key={item} style={{ marginBottom: '4px' }}>{item}</li>)}
+                </ul>
+              </div>
+            </div>
+
+            {/* Time-Phased Learning Plan Timeline */}
+            {message.summary.timePhasedLearningPlan && (
+              <div className="summary-section" style={{ textAlign: 'left', borderTop: '1px solid #1c1c1f', paddingTop: '16px', marginBottom: '24px' }}>
+                <strong style={{ fontSize: '14px', color: '#c084fc', display: 'block', marginBottom: '12px' }}>🗺 Time-Phased Personalized Learning Plan</strong>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', paddingLeft: '20px', borderLeft: '1px solid #1c1c1f' }}>
+                  
+                  {/* Immediate */}
+                  {message.summary.timePhasedLearningPlan.immediate?.length > 0 && (
+                    <div style={{ position: 'relative' }}>
+                      <span style={{ position: 'absolute', left: '-25px', top: '2px', width: '9px', height: '9px', borderRadius: '50%', background: '#ef4444', border: '2px solid #09090b' }} />
+                      <span style={{ fontSize: '10px', color: '#ef4444', fontWeight: '700', textTransform: 'uppercase' }}>Milestone 1: Immediate Priorities</span>
+                      <ul style={{ margin: '4px 0 0', paddingLeft: '16px', fontSize: '12.5px', color: '#d1d1d6', lineHeight: '1.4' }}>
+                        {message.summary.timePhasedLearningPlan.immediate.map((item, idx) => <li key={idx}>{item}</li>)}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* 30 Days */}
+                  {message.summary.timePhasedLearningPlan.next30Days?.length > 0 && (
+                    <div style={{ position: 'relative', marginTop: '6px' }}>
+                      <span style={{ position: 'absolute', left: '-25px', top: '2px', width: '9px', height: '9px', borderRadius: '50%', background: '#3b82f6', border: '2px solid #09090b' }} />
+                      <span style={{ fontSize: '10px', color: '#3b82f6', fontWeight: '700', textTransform: 'uppercase' }}>Milestone 2: Next 30 Days Build Plan</span>
+                      <ul style={{ margin: '4px 0 0', paddingLeft: '16px', fontSize: '12.5px', color: '#d1d1d6', lineHeight: '1.4' }}>
+                        {message.summary.timePhasedLearningPlan.next30Days.map((item, idx) => <li key={idx}>{item}</li>)}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* 90 Days */}
+                  {message.summary.timePhasedLearningPlan.next90Days?.length > 0 && (
+                    <div style={{ position: 'relative', marginTop: '6px' }}>
+                      <span style={{ position: 'absolute', left: '-25px', top: '2px', width: '9px', height: '9px', borderRadius: '50%', background: '#c084fc', border: '2px solid #09090b' }} />
+                      <span style={{ fontSize: '10px', color: '#c084fc', fontWeight: '700', textTransform: 'uppercase' }}>Milestone 3: Next 90 Days Advanced Mastery</span>
+                      <ul style={{ margin: '4px 0 0', paddingLeft: '16px', fontSize: '12.5px', color: '#d1d1d6', lineHeight: '1.4' }}>
+                        {message.summary.timePhasedLearningPlan.next90Days.map((item, idx) => <li key={idx}>{item}</li>)}
+                      </ul>
+                    </div>
+                  )}
+
+                </div>
+              </div>
+            )}
+
+            {/* Post Interview Flow Action Buttons */}
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', borderTop: '1px solid #1c1c1f', paddingTop: '20px' }}>
+              <button className="btn-secondary" onClick={() => navigate('/')} style={{ padding: '10px 20px', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                Return to Dashboard
+              </button>
+              <button className="btn-primary" onClick={resetSetup} style={{ padding: '10px 20px', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                Start New Interview
+              </button>
+              <button className="btn-secondary" onClick={handleDownloadReport} style={{ padding: '10px 14px', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Download Report">
+                <FiDownload size={15} />
+              </button>
+            </div>
           </div>
         </div>
       );
@@ -2130,6 +2664,63 @@ const InterviewPrep = () => {
             </div>
           )}
         </>
+      )}
+      {activeSkillDetail && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)' }} onClick={() => setActiveSkillDetail(null)}>
+          <div style={{ background: '#09090b', border: '1px solid #1c1c1f', padding: '24px', borderRadius: '16px', maxWidth: '480px', width: '90%', textAlign: 'left', color: 'white', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.5)' }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid #1c1c1f', paddingBottom: '12px' }}>
+              <strong style={{ fontSize: '11px', color: '#c084fc', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🔍 Skill Diagnostics</strong>
+              <button style={{ background: 'transparent', border: 'none', color: '#a1a1aa', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' }} onClick={() => setActiveSkillDetail(null)}>✕</button>
+            </div>
+            <h3 style={{ fontSize: '18px', fontWeight: '800', margin: '0 0 12px', color: 'white' }}>{activeSkillDetail.skill}</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
+              <div style={{ background: '#040405', padding: '8px 12px', borderRadius: '8px', border: '1px solid #141416' }}>
+                <span style={{ fontSize: '10px', color: '#a1a1aa', display: 'block' }}>Status</span>
+                <strong style={{ fontSize: '13px', color: activeSkillDetail.status === 'mastered' ? '#34d399' : activeSkillDetail.status === 'average' ? '#60a5fa' : '#f87171', textTransform: 'capitalize' }}>{activeSkillDetail.status}</strong>
+              </div>
+              <div style={{ background: '#040405', padding: '8px 12px', borderRadius: '8px', border: '1px solid #141416' }}>
+                <span style={{ fontSize: '10px', color: '#a1a1aa', display: 'block' }}>Evaluation Confidence</span>
+                <strong style={{ fontSize: '13px', color: '#d8b4fe' }}>{activeSkillDetail.confidence}</strong>
+              </div>
+            </div>
+            <div>
+              <strong style={{ fontSize: '11px', color: '#a78bfa', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>Hiring Evidence Justification</strong>
+              <p style={{ margin: 0, fontSize: '12.5px', color: '#e4e4e7', lineHeight: '1.5', fontStyle: 'italic', background: '#040405', padding: '12px', borderRadius: '8px', border: '1px solid #141416' }}>
+                "{activeSkillDetail.evidence || 'No direct conversational evidence gathered yet.'}"
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', marginTop: '16px', borderTop: '1px solid #1c1c1f', paddingTop: '16px' }}>
+              <button 
+                onClick={() => {
+                  navigate(`/learning-lab?topic=${encodeURIComponent(activeSkillDetail.skill)}`);
+                  setActiveSkillDetail(null);
+                }}
+                style={{ flex: 1, padding: '8px 10px', background: 'rgba(139, 92, 246, 0.1)', color: '#a78bfa', border: '1px solid rgba(139, 92, 246, 0.2)', borderRadius: '6px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', transition: 'all 0.2s' }}
+              >
+                📖 Learn
+              </button>
+              <button 
+                onClick={() => {
+                  navigate(`/learning-lab?topic=${encodeURIComponent(activeSkillDetail.skill)}`);
+                  setActiveSkillDetail(null);
+                }}
+                style={{ flex: 1, padding: '8px 10px', background: 'rgba(52, 211, 153, 0.1)', color: '#34d399', border: '1px solid rgba(52, 211, 153, 0.2)', borderRadius: '6px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', transition: 'all 0.2s' }}
+              >
+                💻 Practice
+              </button>
+              <button 
+                onClick={() => {
+                  alert(`Targeted Assessment preloaded for: ${activeSkillDetail.skill}. Let's test your competency!`);
+                  setActiveSkillDetail(null);
+                  window.location.reload();
+                }}
+                style={{ flex: 1, padding: '8px 10px', background: '#18181b', color: '#fff', border: '1px solid #27272a', borderRadius: '6px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', transition: 'all 0.2s' }}
+              >
+                🎯 Re-Test
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

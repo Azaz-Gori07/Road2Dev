@@ -10,6 +10,7 @@ import {
     Info,
     LogOut,
     LogIn,
+    Sparkles,
 } from "lucide-react";
 import {
     BiFoodMenu,
@@ -112,6 +113,7 @@ function Sidebar() {
                 <ul className="sidebar-links">
                     <Link to="/"><li onClick={() => {setActiveLink("home"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'home' ? 'isActive' : 'sidebar-link'} data-title='Home'><Home size={20} /> <span className='link-text'>Home</span></li></Link>
                     <Link to="/learning"><li onClick={() => {setActiveLink("learning"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'learning' ? 'isActive' : 'sidebar-link'} data-title='Learning'><BookOpen size={20} /> <span className='link-text'>Learning</span></li></Link>
+                    <Link to="/learning-lab"><li onClick={() => {setActiveLink("learning-lab"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'learning-lab' ? 'isActive' : 'sidebar-link'} data-title='AI Mentor Lab'><Sparkles size={20} /> <span className='link-text'>AI Mentor Lab</span></li></Link>
                     <Link to="/interview"><li onClick={() => {setActiveLink("interview"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'interview' ? 'isActive' : 'sidebar-link'} data-title='Interview Prep'><Mic size={20} /> <span className='link-text'>Interview Prep</span></li></Link>
                     <li onClick={() => {
                         if (!isAuthenticated) {

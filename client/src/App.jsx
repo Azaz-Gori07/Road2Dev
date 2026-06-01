@@ -15,6 +15,7 @@ import RoadMap from "./pages/Roadmap";
 import ContentPage from "./pages/ContentPage";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
+import LearningLab from "./pages/LearningLab";
 
 function App() {
   return (
@@ -24,6 +25,11 @@ function App() {
       <Route element={<AppLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/learning" element={<Learning />} />
+        <Route path="/learning-lab" element={
+          <ProtectedRoute>
+            <LearningLab />
+          </ProtectedRoute>
+        } />
         <Route path="/interview" element={<InterviewPrep />} />
         <Route
           path="/score"

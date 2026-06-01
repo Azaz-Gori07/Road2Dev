@@ -6,6 +6,7 @@ import connectDb, { isConnected } from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import interviewRoutes from './routes/interviewRoutes.js';
 import interviewSessionRoutes from './routes/interviewSessionRoutes.js';
+import learningLabRoutes from './routes/learningLabRoutes.js';
 
 dotenv.config({ quiet: true });
 
@@ -48,5 +49,6 @@ app.get("/", (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/interview', interviewRoutes);
 app.use('/api/interview-sessions', interviewSessionRoutes);
+app.use('/api/learning-lab', learningLabRoutes);
 
 export default app;
