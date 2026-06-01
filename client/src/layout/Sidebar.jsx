@@ -47,7 +47,7 @@ function Sidebar() {
             .then((res) => res.json())
             .then((data) => {
                 if (data.success && Array.isArray(data.data)) {
-                    setRecentSessions(data.data.slice(0, 4));
+                    setRecentSessions(data.data.slice(0, 7));
                 } else {
                     setRecentSessions([]);
                     setRecentError(data.message || 'Unable to load recent interviews.');
