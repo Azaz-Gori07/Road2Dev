@@ -37,11 +37,11 @@
 
   background: linear-gradient(
     90deg,
-    #FF0080 0%,
-    #FF8C00 25%,
-    #40E0D0 50%,
-    #FF8C00 75%,
-    #FF0080 100%
+    var(--accent-pink) 0%,
+    var(--accent-orange) 25%,
+    var(--accent-cyan) 50%,
+    var(--accent-orange) 75%,
+    var(--accent-pink) 100%
   );
   background-size: 300% 100%;
   -webkit-background-clip: text;
@@ -89,11 +89,11 @@
   animation: subtitleEntrance 1s ease-out forwards 0.8s;
   background: linear-gradient(
     90deg,
-    #CCCCCC 0%,
-    #FFFFFF 25%,
-    #CCCCCC 50%,
-    #FFFFFF 75%,
-    #CCCCCC 100%
+    var(--text-muted) 0%,
+    var(--text-primary) 25%,
+    var(--text-muted) 50%,
+    var(--text-primary) 75%,
+    var(--text-muted) 100%
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;
@@ -132,7 +132,7 @@
   top: 0;
   height: 100%;
   width: 3px;
-  background: #FF0080;
+  background: var(--accent-pink);
   animation: cursorBlink 1s infinite;
   display: none;
 }
@@ -156,12 +156,12 @@
   letter-spacing: 5px;
   text-transform: uppercase;
   cursor: pointer;
-  color: #2c9caf;
+  color: var(--primary);
   transition: all 1000ms;
   font-size: 15px;
   position: relative;
   overflow: hidden;
-  outline: 2px solid #2c9caf;
+  outline: 2px solid var(--primary);
   opacity: 0;
   transform: translateY(30px);
   animation: fadeIn 1.5s ease-out forwards 1.2s;
@@ -176,12 +176,12 @@
   letter-spacing: 5px;
   text-transform: uppercase;
   cursor: pointer;
-  color: #2c9caf;
+  color: var(--primary);
   transition: all 1000ms;
   font-size: 13px;
   position: relative;
   overflow: hidden;
-  outline: 2px solid #2c9caf;
+  outline: 2px solid var(--primary);
 }
 }
 
@@ -198,21 +198,21 @@
   letter-spacing: 3px;
   text-transform: uppercase;
   cursor: pointer;
-  color: #2c9caf;
+  color: var(--primary);
   transition: all 1000ms;
   font-size: 12px;
   position: relative;
   overflow: hidden;
-  outline: 2px solid #2c9caf;
+  outline: 2px solid var(--primary);
 }
 
 }
 
 .home .home-button:hover {
-  color: #ffffff;
+  color: var(--background);
   transform: scale(1.1);
-  outline: 2px solid #70bdca;
-  box-shadow: 4px 5px 17px -4px #268391;
+  outline: 2px solid var(--primary-hover);
+  box-shadow: 4px 5px 17px -4px var(--primary-shadow);
 }
 
 .home .home-button::before {
@@ -222,7 +222,7 @@
   top: 0;
   width: 0;
   height: 100%;
-  background-color: #2c9caf;
+  background-color: var(--primary);
   transform: skewX(45deg);
   z-index: -1;
   transition: width 1000ms;

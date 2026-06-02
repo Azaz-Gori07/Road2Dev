@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { hybridGenerate } from './ai/hybridAiRouter.js';
+
 
 const fallbackQuestions = [
   {
@@ -612,12 +614,17 @@ INSTRUCTION FOR THIS TURN:
 `.trim();
 
   try {
-    const text =
-      provider === 'gemini'
-        ? await callGemini({ apiKey, model, timeoutMs, prompt, systemPrompt })
-        : await callOpenAiCompatible({ apiKey, model, provider, timeoutMs, prompt, systemPrompt });
-    
+    const { text } = await hybridGenerate({
+      prompt,
+      systemPrompt,
+      timeoutMs,
+      geminiModel: provider === 'gemini' ? model : undefined,
+      groqModel: provider === 'groq' ? model : undefined,
+      jsonResponse: true,
+    });
+
     const parsed = extractJson(text);
+
     return normalizeEvaluationResponse(parsed, questionCount);
   } catch (error) {
     if (error.code === 'ECONNABORTED') {
@@ -668,13 +675,20 @@ export const generateInterviewSession = async (request) => {
   const prompt = buildPrompt(request);
 
   try {
-    const text =
-      provider === 'gemini'
-        ? await callGemini({ apiKey, model, timeoutMs, prompt })
-        : await callOpenAiCompatible({ apiKey, model, provider, timeoutMs, prompt });
+    const { text } = await hybridGenerate({
+      prompt,
+      systemPrompt: undefined,
+      timeoutMs,
+
+      geminiModel: provider === 'gemini' ? model : undefined,
+      groqModel: provider === 'groq' ? model : undefined,
+      jsonResponse: true,
+    });
+
     const parsed = extractJson(text);
 
     return normalizeSession(parsed, request);
+
   } catch (error) {
     if (error.code === 'ECONNABORTED') {
       error.statusCode = 504;

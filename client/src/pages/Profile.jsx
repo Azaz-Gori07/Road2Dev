@@ -82,7 +82,7 @@ function StatCard({ value, label, color }) {
   const [h, hP] = useHover();
   
   return (
-    <div {...hP} className={`stat-card ${h ? "stat-card-hover" : ""}`} style={{ borderColor: h ? `${color}44` : undefined }}>
+    <div {...hP} className={`stat-card ${h ? "stat-card-hover" : ""}`} style={{ borderColor: h ? "var(--primary-hover)" : undefined }}>
       <div className="stat-value" style={{ color }}>{value}</div>
       <div className="stat-label">{label}</div>
     </div>
@@ -91,20 +91,20 @@ function StatCard({ value, label, color }) {
 
 /* ─── TECH BADGE ─────────────────────────────────── */
 const TECH_COLORS = {
-  JavaScript: { border: "#f5c542", color: "#f5c542" },
-  React:      { border: "#40c8e0", color: "#40c8e0" },
-  "Node.js":  { border: "#3de8a0", color: "#3de8a0" },
-  Python:     { border: "#4b8bbe", color: "#4b8bbe" },
-  MongoDB:    { border: "#3de8a0", color: "#3de8a0" },
-  TypeScript: { border: "#5b8dee", color: "#5b8dee" },
+  JavaScript: { border: "var(--accent-orange)", color: "var(--accent-orange)" },
+  React:      { border: "var(--accent-cyan)", color: "var(--accent-cyan)" },
+  "Node.js":  { border: "var(--accent-green)", color: "var(--accent-green)" },
+  Python:     { border: "var(--info)", color: "var(--info)" },
+  MongoDB:    { border: "var(--accent-green)", color: "var(--accent-green)" },
+  TypeScript: { border: "var(--primary)", color: "var(--primary)" },
 };
 
 function TechBadge({ label }) {
   const [h, hP] = useHover();
-  const c = TECH_COLORS[label] || { border: "rgba(255,255,255,0.07)", color: "#888" };
+  const c = TECH_COLORS[label] || { border: "var(--border)", color: "var(--text-muted)" };
   
   return (
-    <span {...hP} className={`tech-badge ${h ? "tech-badge-hover" : ""}`} style={{ borderColor: `${c.border}44`, background: h ? `${c.border}18` : `${c.border}0a`, color: c.color }}>
+    <span {...hP} className={`tech-badge ${h ? "tech-badge-hover" : ""}`} style={{ borderColor: h ? c.border : "var(--border)", background: h ? "var(--primary-translucent)" : "transparent", color: c.color }}>
       {label}
     </span>
   );
@@ -112,10 +112,10 @@ function TechBadge({ label }) {
 
 /* ─── ACTIVITY ITEM ──────────────────────────────── */
 const ACT_ICONS = {
-  roadmap:   { bg: "#251a3a", color: "#9b6dff", icon: <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM17.5 14v7M14 17.5h7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none"/> },
-  quiz:      { bg: "#2a2200", color: "#f5c542", icon: <><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" fill="none"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></> },
-  interview: { bg: "#1a3a2a", color: "#3de8a0", icon: <><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.8" fill="none"/><line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" strokeWidth="1.5"/><line x1="9" y1="21" x2="9" y2="9" stroke="currentColor" strokeWidth="1.5"/></> },
-  course:    { bg: "#1a2a3a", color: "#40c8e0", icon: <><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.8" fill="none"/><path d="M8 21h8M12 17v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none"/></> },
+  roadmap:   { bg: "var(--secondary-translucent)", color: "var(--secondary)", icon: <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM17.5 14v7M14 17.5h7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none"/> },
+  quiz:      { bg: "var(--warning-translucent)", color: "var(--warning)", icon: <><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" fill="none"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></> },
+  interview: { bg: "var(--success-translucent)", color: "var(--success)", icon: <><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.8" fill="none"/><line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" strokeWidth="1.5"/><line x1="9" y1="21" x2="9" y2="9" stroke="currentColor" strokeWidth="1.5"/></> },
+  course:    { bg: "var(--primary-translucent)", color: "var(--primary)", icon: <><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.8" fill="none"/><path d="M8 21h8M12 17v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none"/></> },
 };
 
 function ActivityItem({ type, title, time, last }) {
@@ -142,7 +142,7 @@ function AvatarSVG({ size = 80 }) {
   return (
     <div className="avatar-container" style={{ width: size, height: size }}>
       <svg width={size} height={size} viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="45" cy="45" r="45" fill="#ddd5c8"/>
+        <circle cx="45" cy="45" r="45" fill="var(--border)"/>
         <ellipse cx="45" cy="78" rx="26" ry="20" fill="#2d2d3a"/>
         <rect x="38" y="56" width="14" height="12" rx="4" fill="#c8956a"/>
         <ellipse cx="45" cy="44" rx="18" ry="20" fill="#c8956a"/>
@@ -163,8 +163,10 @@ function AvatarSVG({ size = 80 }) {
 /* ═══════════════════════════════════════════════════
    PROFILE VIEW
    ═══════════════════════════════════════════════════ */
-function ProfileView({ data, sessions = [], onEdit }) {
+function ProfileView({ data, sessions = [], learningSessions = [], onEdit }) {
   const [hBtn, hBtnP] = useHover();
+  const navigate = useNavigate();
+  const [activeSubTab, setActiveSubTab] = useState("about"); // about, developer
   
   const completedSessions = sessions.filter(s => s.status === 'completed');
   const totalCompleted = completedSessions.length;
@@ -196,6 +198,19 @@ function ProfileView({ data, sessions = [], onEdit }) {
 
   const activities = getRecentActivities();
 
+  // Dynamic calculations for Developer Profile
+  const overallMastery = learningSessions.length > 0 
+    ? Math.round(learningSessions.reduce((acc, s) => acc + (s.masteryPercentage || 0), 0) / learningSessions.length) 
+    : 58;
+
+  const masteredGrows = learningSessions.filter(s => s.masteryPercentage >= 75);
+  const knowledgeGaps = learningSessions.filter(s => s.masteryPercentage < 50);
+
+  // If there are no sessions, use mock defaults to avoid empty states
+  const displayGaps = knowledgeGaps.length > 0 
+    ? knowledgeGaps.map(g => g.topic) 
+    : ['useEffect Hook', 'Closures', 'Promises', 'DOM Manipulation'];
+
   return (
     <div className="profile-view">
       {/* Hero card */}
@@ -214,7 +229,7 @@ function ProfileView({ data, sessions = [], onEdit }) {
           <div className="hero-name-section">
             <h1 className="hero-name">{data.name}</h1>
             <div className="verified-badge">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="#40c8e0">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--accent-cyan)">
                 <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
               </svg>
               <span>Verified</span>
@@ -223,21 +238,21 @@ function ProfileView({ data, sessions = [], onEdit }) {
           <p className="hero-headline">{data.headline}</p>
           <div className="hero-details">
             <div className="hero-detail">
-              <svg width="12" height="12" viewBox="0 0 24 24" color="#444">
+              <svg width="12" height="12" viewBox="0 0 24 24" color="var(--text-muted)">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
                 <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="1.5" fill="none"/>
               </svg>
               <span>{data.location}</span>
             </div>
             <div className="hero-detail">
-              <svg width="12" height="12" viewBox="0 0 24 24" color="#444">
+              <svg width="12" height="12" viewBox="0 0 24 24" color="var(--text-muted)">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
                 <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
               </svg>
               <span>{data.email}</span>
             </div>
             <div className="hero-detail">
-              <svg width="12" height="12" viewBox="0 0 24 24" color="#444">
+              <svg width="12" height="12" viewBox="0 0 24 24" color="var(--text-muted)">
                 <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
                 <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                 <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
@@ -261,28 +276,116 @@ function ProfileView({ data, sessions = [], onEdit }) {
         <StatCard value={totalInterviews} label="Mock Interviews" color="#9b6dff" />
       </div>
 
-      {/* Bottom row */}
-      <div className="bottom-row">
-        {/* About Me + Tech Stack */}
-        <div className="about-section">
-          <h3 className="section-title">About Me</h3>
-          <p className="about-bio">{data.bio}</p>
-          <h3 className="section-title">Tech Stack</h3>
-          <div className="tech-stack">
-            {data.stack.map(t => <TechBadge key={t} label={t} />)}
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="activity-section">
-          <h3 className="section-title">Recent Activity</h3>
-          <div className="activity-list">
-            {activities.map((act, index) => (
-              <ActivityItem key={index} type={act.type} title={act.title} time={act.time} last={act.last} />
-            ))}
-          </div>
-        </div>
+      {/* Profile sub-tabs selection */}
+      <div className="profile-sub-tabs" style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border)', marginBottom: '16px' }}>
+        <button 
+          className={`sub-tab-btn ${activeSubTab === 'about' ? 'active' : ''}`}
+          onClick={() => setActiveSubTab('about')}
+          style={{ background: 'transparent', border: 'none', color: activeSubTab === 'about' ? 'var(--cyan)' : 'var(--text-sec)', padding: '10px 16px', fontSize: '13px', fontWeight: 'bold', borderBottom: activeSubTab === 'about' ? '2px solid var(--cyan)' : '2px solid transparent', cursor: 'pointer', fontFamily: 'Syne' }}
+        >
+          About &amp; Activity
+        </button>
+        <button 
+          className={`sub-tab-btn ${activeSubTab === 'developer' ? 'active' : ''}`}
+          onClick={() => setActiveSubTab('developer')}
+          style={{ background: 'transparent', border: 'none', color: activeSubTab === 'developer' ? 'var(--cyan)' : 'var(--text-sec)', padding: '10px 16px', fontSize: '13px', fontWeight: 'bold', borderBottom: activeSubTab === 'developer' ? '2px solid var(--cyan)' : '2px solid transparent', cursor: 'pointer', fontFamily: 'Syne' }}
+        >
+          Developer Growth Profile
+        </button>
       </div>
+
+      {/* Dynamic Tab Content rendering */}
+      {activeSubTab === 'about' ? (
+        <div className="bottom-row">
+          {/* About Me + Tech Stack */}
+          <div className="about-section">
+            <h3 className="section-title">About Me</h3>
+            <p className="about-bio">{data.bio}</p>
+            <h3 className="section-title">Tech Stack</h3>
+            <div className="tech-stack">
+              {data.stack.map(t => <TechBadge key={t} label={t} />)}
+            </div>
+          </div>
+
+          {/* Recent Activity */}
+          <div className="activity-section">
+            <h3 className="section-title">Recent Activity</h3>
+            <div className="activity-list">
+              {activities.map((act, index) => (
+                <ActivityItem key={index} type={act.type} title={act.title} time={act.time} last={act.last} />
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Dynamic Developer Profile Dashboard Tab */
+        <div className="bottom-row">
+          
+          {/* Left panel: overall mastery circular gauge */}
+          <div className="about-section" style={{ flex: '1 1 240px', gap: '16px' }}>
+            <h3 className="section-title">Overall Mastery Analytics</h3>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', background: 'var(--surface-alt)', padding: '18px', borderRadius: '12px', border: '1px solid var(--border)' }}>
+              <div style={{ flex: 1 }}>
+                <strong style={{ fontSize: '28px', color: '#fff', fontFamily: 'Syne', display: 'block' }}>{overallMastery}%</strong>
+                <span style={{ fontSize: '11px', color: 'var(--text-sec)' }}>Aggregated competency index of all active learning spaces.</span>
+              </div>
+              
+              {/* Mastery bar visual track */}
+              <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'conic-gradient(var(--cyan) 0% ' + overallMastery + '%, var(--border) ' + overallMastery + '% 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '46px', height: '46px', borderRadius: '50%', background: 'var(--bg-card)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 'bold', color: '#fff' }}>
+                  {overallMastery}%
+                </div>
+              </div>
+            </div>
+
+            <p style={{ fontSize: '12.5px', color: 'var(--text-sec)', lineHeight: '1.5' }}>
+              Your mastery delta grows automatically as you tick objectives in concept spaces, resolve weaknesses lists, and defend codebase file configurations.
+            </p>
+          </div>
+
+          {/* Right panel: strengths & gaps */}
+          <div className="activity-section" style={{ flex: '2 1 320px', gap: '18px' }}>
+            <h3 className="section-title">Verified Strengths &amp; Active Gaps</h3>
+
+            {/* Mastered Strengths */}
+            <div>
+              <strong style={{ fontSize: '12.5px', color: 'var(--cyan)', display: 'block', marginBottom: '8px' }}>🏆 Verified Mastered Competencies (Score &ge; 75%):</strong>
+              {masteredGrows.length === 0 ? (
+                <span style={{ fontSize: '12px', color: 'var(--text-mut)' }}>No topics fully mastered yet. Pass compiler assertions to build your portfolio!</span>
+              ) : (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {masteredGrows.map(s => (
+                    <span key={s._id} style={{ background: 'rgba(52, 211, 153, 0.1)', color: '#34d399', border: '1px solid rgba(52, 211, 153, 0.2)', padding: '4px 8px', borderRadius: '6px', fontSize: '11.5px', fontWeight: 'bold' }}>
+                      ✓ {s.topic} ({s.masteryPercentage}% Mastered)
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Active Knowledge Gaps to fix */}
+            <div style={{ marginTop: '10px' }}>
+              <strong style={{ fontSize: '12.5px', color: 'var(--accent-pink)', display: 'block', marginBottom: '8px' }}>⚡ Active Knowledge Gaps (Remediation Awaiting):</strong>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {displayGaps.map((gap, i) => (
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--surface-alt)', border: '1px solid var(--border)', padding: '10px 14px', borderRadius: '8px' }}>
+                    <span style={{ fontSize: '12px', color: '#fff', fontWeight: 'bold' }}>⚡ {gap}</span>
+                    <button 
+                      onClick={() => navigate(`/learning-lab?topic=${encodeURIComponent(gap)}&remediate=true`)}
+                      style={{ background: 'var(--accent-pink)', border: 'none', color: '#fff', padding: '4px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s' }}
+                    >
+                      Fix Topic
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      )}
     </div>
   );
 }
@@ -322,7 +425,7 @@ function EditProfile({ data, onSave, onCancel, onLogout }) {
                 </div>
               </div>
               <button onClick={() => fileRef.current?.click()} className="camera-btn">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0c0c0c" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--background)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
                   <circle cx="12" cy="13" r="4"/>
                 </svg>
@@ -360,7 +463,7 @@ function EditProfile({ data, onSave, onCancel, onLogout }) {
                 <Toggle on={emailNotif} onChange={() => setEmailNotif(v => !v)} />
               </div>
               <div className="toggle-description">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={emailNotif ? "#40c8e0" : "#444"} strokeWidth="1.8">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={emailNotif ? "var(--accent-cyan)" : "var(--border)"} strokeWidth="1.8">
                   <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
                   <polyline points="22 4 12 14.01 9 11.01"/>
                 </svg>
@@ -376,7 +479,7 @@ function EditProfile({ data, onSave, onCancel, onLogout }) {
                 <Toggle on={publicProf} onChange={() => setPublicProf(v => !v)} />
               </div>
               <div className="toggle-description">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={publicProf ? "#40c8e0" : "#444"} strokeWidth="1.8">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={publicProf ? "var(--accent-cyan)" : "var(--border)"} strokeWidth="1.8">
                   <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
                   <polyline points="22 4 12 14.01 9 11.01"/>
                 </svg>
@@ -419,6 +522,8 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [sessions, setSessions] = useState([]);
   const [sessionsLoading, setSessionsLoading] = useState(true);
+  const [learningSessions, setLearningSessions] = useState([]);
+  const [learningSessionsLoading, setLearningSessionsLoading] = useState(true);
   const [data, setData] = useState({
     name:     "Road2Dev User",
     headline: "Full Stack Developer",
@@ -453,9 +558,33 @@ export default function ProfilePage() {
     }
   }, [isAuthenticated]);
 
+  const fetchLearningSessions = useCallback(async () => {
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      setLearningSessionsLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE}/learning-lab/sessions`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.success && Array.isArray(data.data)) {
+        setLearningSessions(data.data);
+      }
+    } catch (err) {
+      console.warn('Unable to load learning sessions for profile:', err);
+    } finally {
+      setLearningSessionsLoading(false);
+    }
+  }, [isAuthenticated]);
+
   useEffect(() => {
-    if (isAuthenticated) fetchSessions();
-  }, [isAuthenticated, fetchSessions]);
+    if (isAuthenticated) {
+      fetchSessions();
+      fetchLearningSessions();
+    }
+  }, [isAuthenticated, fetchSessions, fetchLearningSessions]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -531,7 +660,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="profile-page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-        <div style={{ color: '#888', fontSize: 14, fontFamily: 'DM Sans, sans-serif' }}>Loading...</div>
+        <div style={{ color: 'var(--text-muted)', fontSize: 14, fontFamily: 'DM Sans, sans-serif' }}>Loading...</div>
       </div>
     );
   }
@@ -543,7 +672,7 @@ export default function ProfilePage() {
   return (
     <div className="profile-page">
       {view === "profile"
-        ? <ProfileView data={data} sessions={sessions} onEdit={() => setView("edit")} />
+        ? <ProfileView data={data} sessions={sessions} learningSessions={learningSessions} onEdit={() => setView("edit")} />
         : <EditProfile data={data}
             onSave={handleSaveProfile}
             onCancel={() => setView("profile")}
@@ -554,21 +683,7 @@ export default function ProfilePage() {
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
           <button
             onClick={handleLogout}
-            style={{
-              background: 'rgba(255,60,60,0.1)',
-              border: '1px solid rgba(255,60,60,0.2)',
-              borderRadius: 10,
-              padding: '10px 28px',
-              color: '#ff6b6b',
-              fontFamily: 'Syne, sans-serif',
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={e => { e.target.style.background = 'rgba(255,60,60,0.2)'; }}
-            onMouseLeave={e => { e.target.style.background = 'rgba(255,60,60,0.1)'; }}
+            className="logout-bottom-btn"
           >
             LOG OUT
           </button>

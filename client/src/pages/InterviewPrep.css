@@ -7,23 +7,23 @@
 }
 
 :root {
-  --bg-page:    #09090b;
-  --bg-card:    #0f0f11;
-  --bg-card2:   #131316;
-  --bg-sel:     #17171a;
-  --border:     #1c1c1f;
-  --border-sel: #27272a;
-  --accent:     #e2e2e2;
-  --accent2:    #888888;
-  --grad:       linear-gradient(90deg, #e2e2e2, #aaaaaa);
-  --text-1:     #ffffff;
-  --text-2:     #a0a0a0;
-  --text-3:     #555555;
+  --bg-page:    var(--background);
+  --bg-card:    var(--surface);
+  --bg-card2:   var(--surface-alt);
+  --bg-sel:     var(--surface-hover);
+  --border:     var(--border);
+  --border-sel: var(--border-focus);
+  --accent:     var(--primary);
+  --accent2:    var(--text-muted);
+  --grad:       linear-gradient(90deg, var(--text-primary), var(--text-muted));
+  --text-1:     var(--text-primary);
+  --text-2:     var(--text-secondary);
+  --text-3:     var(--text-muted);
   --radius-lg:  14px;
   --radius-md:  10px;
   --radius-sm:  7px;
   --font:       'Inter', system-ui, sans-serif;
-  --hover-border: #333333;
+  --hover-border: var(--border-focus);
 }
 
 html, body {
@@ -87,7 +87,7 @@ html, body {
 
 .btn-history:hover {
   border-color: var(--accent);
-  background: #111111;
+  background: var(--surface-hover);
 }
 
 .btn-history svg {
@@ -136,14 +136,14 @@ html, body {
 .step.active .step-circle {
   background: var(--accent);
   border-color: var(--accent);
-  color: #000000;
+  color: var(--background);
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.10);
 }
 
 .step.done .step-circle {
   background: var(--accent);
   border-color: var(--accent);
-  color: #000000;
+  color: var(--background);
 }
 
 .step-info {
@@ -243,7 +243,7 @@ html, body {
 
 .field-card:hover {
   border-color: var(--accent);
-  background: #161616;
+  background: var(--surface-hover);
   transform: translateY(-2px);
 }
 
@@ -305,7 +305,7 @@ html, body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #000000;
+  background: var(--background);
   display: block;
 }
 
@@ -332,7 +332,7 @@ html, body {
 
 .stack-card:hover {
   border-color: var(--accent);
-  background: #161616;
+  background: var(--surface-hover);
   transform: translateY(-2px);
 }
 
@@ -382,7 +382,7 @@ html, body {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #000000;
+  background: var(--background);
 }
 
 /* ── Experience grid ─────────────────────────────── */
@@ -406,7 +406,7 @@ html, body {
 
 .exp-card:hover {
   border-color: var(--accent);
-  background: #161616;
+  background: var(--surface-hover);
   transform: translateY(-2px);
 }
 
@@ -455,7 +455,7 @@ html, body {
 
 .type-card:hover {
   border-color: var(--accent);
-  background: #161616;
+  background: var(--surface-hover);
   transform: translateY(-2px);
 }
 
@@ -501,7 +501,7 @@ html, body {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #000000;
+  background: var(--background);
   display: block;
   margin: 3.5px auto;
 }
@@ -711,7 +711,7 @@ html, body {
   align-items: center;
   gap: 8px;
   background: var(--grad);
-  color: #000000;
+  color: var(--background);
   border: none;
   border-radius: var(--radius-md);
   padding: 11px 28px;
@@ -755,7 +755,7 @@ html, body {
 .btn-back:hover {
   border-color: var(--accent);
   color: var(--text-1);
-  background: #161616;
+  background: var(--surface-hover);
 }
 
 /* ── How it works ───────────────────────────────── */

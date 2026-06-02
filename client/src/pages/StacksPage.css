@@ -18,7 +18,7 @@
 
 .stacks-container .sub-title {
     font-size: 1.2rem;
-    color: #ccc;
+    color: var(--text-secondary);
     text-align: center;
 }
 
@@ -33,28 +33,35 @@
     overflow-y: scroll;
     scroll-behavior: smooth;
     scrollbar-width: thin;
-    scrollbar-color: #555 transparent;
+    scrollbar-color: var(--border) transparent;
 }
 
 .stack-card {
     display: flex;
     flex-direction: column;
-    background-color: #111;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 20px;
     margin: 10px 0;
     min-width: 200px;
     max-width: 340px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    transition: transform 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
     cursor: pointer;
+}
+
+.stack-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary);
+    box-shadow: 0 6px 12px var(--primary-translucent);
 }
 
 .stackname {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
-    color: #fff;
+    color: var(--text-primary);
     background: none;
 }
 

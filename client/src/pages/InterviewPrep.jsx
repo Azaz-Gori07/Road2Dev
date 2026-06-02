@@ -138,111 +138,111 @@ const StackIcons = ({ stackId }) => {
     case 'mern':
       return (
         <div style={iconStyle}>
-          <MongoDBIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>MongoDB</span>
-          <ExpressIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Express</span>
-          <ReactIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>React</span>
-          <NodeIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Node.js</span>
+          <MongoDBIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>MongoDB</span>
+          <ExpressIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Express</span>
+          <ReactIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>React</span>
+          <NodeIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Node.js</span>
         </div>
       );
     case 'sern':
       return (
         <div style={iconStyle}>
-          <SQLIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>SQL</span>
-          <ExpressIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Express</span>
-          <ReactIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>React</span>
-          <NodeIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Node.js</span>
+          <SQLIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>SQL</span>
+          <ExpressIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Express</span>
+          <ReactIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>React</span>
+          <NodeIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Node.js</span>
         </div>
       );
     case 'laravel':
       return (
         <div style={iconStyle}>
-          <PHPIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>PHP</span>
-          <LaravelIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Laravel</span>
+          <PHPIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>PHP</span>
+          <LaravelIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Laravel</span>
         </div>
       );
     case 'django':
       return (
         <div style={iconStyle}>
-          <DjangoIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Django</span>
-          <ReactIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>React</span>
+          <DjangoIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Django</span>
+          <ReactIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>React</span>
         </div>
       );
     case 'nextjs':
       return (
         <div style={iconStyle}>
-          <NextIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Next.js</span>
-          <ReactIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>React</span>
+          <NextIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Next.js</span>
+          <ReactIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>React</span>
         </div>
       );
     case 'wp':
       return (
         <div style={iconStyle}>
-          <WordPressIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>WordPress</span>
-          <PHPIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>PHP</span>
+          <WordPressIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>WordPress</span>
+          <PHPIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>PHP</span>
         </div>
       );
     case 'c':
       return (
         <div style={iconStyle}>
-          <CIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>C</span>
+          <CIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>C</span>
         </div>
       );
     case 'cpp':
       return (
         <div style={iconStyle}>
-          <CPPIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>C++</span>
+          <CPPIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>C++</span>
         </div>
       );
     case 'java':
       return (
         <div style={iconStyle}>
-          <JavaIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Java</span>
+          <JavaIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Java</span>
         </div>
       );
     case 'python':
       return (
         <div style={iconStyle}>
-          <PythonIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Python</span>
+          <PythonIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Python</span>
         </div>
       );
     case 'spring':
       return (
         <div style={iconStyle}>
-          <JavaIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Java</span>
-          <SpringIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Spring Boot</span>
+          <JavaIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Java</span>
+          <SpringIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Spring Boot</span>
         </div>
       );
     case 'dotnet':
       return (
         <div style={iconStyle}>
-          <DotNetIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>.NET</span>
+          <DotNetIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>.NET</span>
         </div>
       );
     case 'android-java':
       return (
         <div style={iconStyle}>
-          <AndroidIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Android</span>
-          <JavaIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Java</span>
+          <AndroidIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Android</span>
+          <JavaIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Java</span>
         </div>
       );
     case 'android-kotlin':
       return (
         <div style={iconStyle}>
-          <AndroidIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Android</span>
-          <KotlinIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Kotlin</span>
+          <AndroidIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Android</span>
+          <KotlinIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Kotlin</span>
         </div>
       );
     case 'flutter':
       return (
         <div style={iconStyle}>
-          <FlutterIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>Flutter</span>
+          <FlutterIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Flutter</span>
         </div>
       );
     case 'react-native':
       return (
         <div style={iconStyle}>
-          <ReactNativeIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>React Native</span>
-          <ReactIcon /><span style={{ fontSize: '10px', color: '#a0a0a0' }}>React</span>
+          <ReactNativeIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>React Native</span>
+          <ReactIcon /><span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>React</span>
         </div>
       );
     default:
@@ -254,7 +254,7 @@ const StackIcons = ({ stackId }) => {
 const FIELDS = [
   {
     id: "web-development", name: "Web Development", desc: "Frontend, Backend and Full Stack Development", 
-    icon: "</>", iconBg: "#1e2d40", iconColor: "#38bdf8",
+    icon: "</>", iconBg: "var(--primary-translucent)", iconColor: "var(--accent-cyan)",
     stacks: [
       { id: "mern", name: "MERN Stack", desc: "MongoDB, Express, React and Node.js full stack." },
       { id: "sern", name: "SERN Stack", desc: "SQL, Express, React and Node.js full stack." },
@@ -266,7 +266,7 @@ const FIELDS = [
   },
   {
     id: "software-development", name: "Software Development", desc: "Programming & Software Engineering", 
-    icon: "⚙️", iconBg: "#2d1f40", iconColor: "#a78bfa",
+    icon: "⚙️", iconBg: "var(--secondary-translucent)", iconColor: "var(--secondary-hover)",
     stacks: [
       { id: "c", name: "C Programming", desc: "Core programming fundamentals using C." },
       { id: "cpp", name: "C++ with DSA", desc: "Data structures and algorithms using C++." },
@@ -277,12 +277,12 @@ const FIELDS = [
     ]
   },
   { id: "data-analyst", name: "Data Analyst", desc: "Data Analysis & Visualization", 
-    icon: "📊", iconBg: "#1f2e1a", iconColor: "#4ade80", stacks: [] },
+    icon: "📊", iconBg: "var(--success-translucent)", iconColor: "var(--success)", stacks: [] },
   { id: "data-science", name: "Data Science", desc: "Machine Learning & Artificial Intelligence", 
-    icon: "🧠", iconBg: "#2a1f35", iconColor: "#c084fc", stacks: [] },
+    icon: "🧠", iconBg: "var(--secondary-translucent)", iconColor: "var(--secondary)", stacks: [] },
   {
     id: "mobile-development", name: "Mobile App Development", desc: "Android, iOS & Cross Platform", 
-    icon: "📱", iconBg: "#2a2210", iconColor: "#fbbf24",
+    icon: "📱", iconBg: "var(--warning-translucent)", iconColor: "var(--warning)",
     stacks: [
       { id: "android-java", name: "Android (Java)", desc: "Native Android development using Java." },
       { id: "android-kotlin", name: "Android (Kotlin)", desc: "Modern Android development using Kotlin." },
@@ -291,7 +291,7 @@ const FIELDS = [
     ]
   },
   { id: "devops-cloud", name: "DevOps & Cloud", desc: "Cloud, DevOps & Infrastructure", 
-    icon: "☁️", iconBg: "#102230", iconColor: "#38bdf8", stacks: [] },
+    icon: "☁️", iconBg: "var(--primary-translucent)", iconColor: "var(--accent-cyan)", stacks: [] },
 ];
 
 const EXP = [
@@ -1984,28 +1984,28 @@ const InterviewPrep = () => {
               </div>
             </div>
             {message.analysis.scoringJustification && (
-              <div className="feedback-section" style={{ borderLeft: '3px solid rgba(139, 92, 246, 0.4)', paddingLeft: '12px', background: 'rgba(255,255,255,0.01)', padding: '10px 12px', borderRadius: '6px', marginBottom: '14px' }}>
-                <strong style={{ color: '#d8b4fe', fontSize: '12px' }}>Scoring Evidence & Justification</strong>
-                <p style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: '12.5px', color: '#c0c0c0', lineHeight: '1.4' }}>{message.analysis.scoringJustification}</p>
+              <div className="feedback-section" style={{ borderLeft: '3px solid var(--secondary-translucent)', paddingLeft: '12px', background: 'var(--surface-alt)', padding: '10px 12px', borderRadius: '6px', marginBottom: '14px' }}>
+                <strong style={{ color: 'var(--secondary)', fontSize: '12px' }}>Scoring Evidence & Justification</strong>
+                <p style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: '12.5px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>{message.analysis.scoringJustification}</p>
               </div>
             )}
             {(message.analysis.skillsPerformance?.length > 0 || message.analysis.coveredSkills?.length > 0 || message.analysis.strongSkills?.length > 0 || message.analysis.weakSkills?.length > 0) && (
-              <div className="feedback-section" style={{ border: '1px solid #1c1c1f', padding: '16px', borderRadius: '12px', background: '#09090b', marginBottom: '14px', textAlign: 'left' }}>
-                <strong style={{ display: 'block', fontSize: '13px', color: '#a78bfa', marginBottom: '10px' }}>🎯 Dynamic Skill Matrix</strong>
+              <div className="feedback-section" style={{ border: '1px solid var(--border)', padding: '16px', borderRadius: '12px', background: 'var(--surface)', marginBottom: '14px', textAlign: 'left' }}>
+                <strong style={{ display: 'block', fontSize: '13px', color: 'var(--secondary)', marginBottom: '10px' }}>🎯 Dynamic Skill Matrix</strong>
                 
                 {/* Visual Radial Gauge for Coverage Percentage */}
                 {typeof message.analysis.coveragePercentage === 'number' && message.analysis.coveragePercentage > 0 && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#040405', border: '1px solid #141416', padding: '10px 12px', borderRadius: '8px', marginBottom: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--background)', border: '1px solid var(--border)', padding: '10px 12px', borderRadius: '8px', marginBottom: '12px' }}>
                     <div style={{ position: 'relative', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <svg style={{ transform: 'rotate(-90deg)', width: '36px', height: '36px' }}>
-                        <circle cx="18" cy="18" r="15" stroke="#1c1c1f" strokeWidth="4" fill="transparent" />
-                        <circle cx="18" cy="18" r="15" stroke="#a78bfa" strokeWidth="4" fill="transparent" strokeDasharray={94.2} strokeDashoffset={94.2 - (94.2 * message.analysis.coveragePercentage) / 100} style={{ transition: 'stroke-dashoffset 0.8s ease' }} />
+                        <circle cx="18" cy="18" r="15" stroke="var(--border)" strokeWidth="4" fill="transparent" />
+                        <circle cx="18" cy="18" r="15" stroke="var(--secondary)" strokeWidth="4" fill="transparent" strokeDasharray={94.2} strokeDashoffset={94.2 - (94.2 * message.analysis.coveragePercentage) / 100} style={{ transition: 'stroke-dashoffset 0.8s ease' }} />
                       </svg>
-                      <span style={{ position: 'absolute', fontSize: '9px', fontWeight: '800', color: 'white' }}>{Math.round(message.analysis.coveragePercentage)}%</span>
+                      <span style={{ position: 'absolute', fontSize: '9px', fontWeight: '800', color: 'var(--text-primary)' }}>{Math.round(message.analysis.coveragePercentage)}%</span>
                     </div>
                     <div>
-                      <span style={{ fontSize: '10px', color: '#a1a1aa', display: 'block' }}>Session Skill Coverage</span>
-                      <strong style={{ fontSize: '11.5px', color: '#d8b4fe' }}>Progressive competency mapping active</strong>
+                      <span style={{ fontSize: '10px', color: 'var(--text-muted)', display: 'block' }}>Session Skill Coverage</span>
+                      <strong style={{ fontSize: '11.5px', color: 'var(--secondary)' }}>Progressive competency mapping active</strong>
                     </div>
                   </div>
                 )}
@@ -2021,22 +2021,22 @@ const InterviewPrep = () => {
                       return (
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                           {mastered.map(item => (
-                            <span key={item.skill} onClick={() => setActiveSkillDetail(item)} style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#34d399', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s' }} title="Click to view evidence">
+                            <span key={item.skill} onClick={() => setActiveSkillDetail(item)} style={{ background: 'var(--success-translucent)', color: 'var(--success)', border: '1px solid var(--success-translucent)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s' }} title="Click to view evidence">
                               ✔ {item.skill}
                             </span>
                           ))}
                           {average.map(item => (
-                            <span key={item.skill} onClick={() => setActiveSkillDetail(item)} style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#60a5fa', border: '1px solid rgba(59, 130, 246, 0.2)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s' }} title="Click to view evidence">
+                            <span key={item.skill} onClick={() => setActiveSkillDetail(item)} style={{ background: 'var(--info-translucent)', color: 'var(--info)', border: '1px solid var(--info-translucent)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s' }} title="Click to view evidence">
                               ● {item.skill}
                             </span>
                           ))}
                           {weak.map(item => (
-                            <span key={item.skill} onClick={() => setActiveSkillDetail(item)} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#f87171', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s' }} title="Click to view evidence">
+                            <span key={item.skill} onClick={() => setActiveSkillDetail(item)} style={{ background: 'var(--error-translucent)', color: 'var(--error)', border: '1px solid var(--error-translucent)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'all 0.2s' }} title="Click to view evidence">
                               ⚠ {item.skill}
                             </span>
                           ))}
                           {unassessed.map(item => (
-                            <span key={item.skill} style={{ background: '#18181b', color: '#71717a', border: '1px solid #27272a', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <span key={item.skill} style={{ background: 'var(--surface-alt)', color: 'var(--text-muted)', border: '1px solid var(--border)', padding: '3px 8px', borderRadius: '4px', fontSize: '11.5px', fontWeight: '500', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                               ○ {item.skill}
                             </span>
                           ))}

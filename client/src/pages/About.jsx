@@ -166,7 +166,7 @@ const About = () => {
       </section>
 
       <section className="about-page-section opensource-section">
-        <h2 className="section-title">Open Source & Community Driven <Heart size={24} style={{display: 'inline-block', marginLeft: '8px', color: '#e74c3c', background:"transparent"}}/></h2>
+        <h2 className="section-title">Open Source & Community Driven <Heart size={24} style={{display: 'inline-block', marginLeft: '8px', color: 'var(--error)', background:"transparent"}}/></h2>
         <p className="hinglish-text">
           Mere saare projects open-source hain. Agar:
         </p>

@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     background: var(--bg);
-    color: #fff;
+    color: var(--text-primary);
     overflow: hidden; 
 }
 
@@ -24,12 +24,12 @@
     align-items: center;
     letter-spacing: 10px;
     margin-bottom: 10px;
-    color: #fff;
+    color: var(--text-primary);
 }
 
 .roadmap-subtitle {
     font-size: 1.2rem;
-    color: #ccc;
+    color: var(--text-secondary);
     text-align: center;
     margin-bottom: 20px;
 }
@@ -78,12 +78,12 @@
 }
 
 .roadmap-list::-webkit-scrollbar-thumb {
-    background: #333;
+    background: var(--border);
     border-radius: 3px;
 }
 
 .roadmap-list::-webkit-scrollbar-thumb:hover {
-    background: #444;
+    background: var(--border-focus);
 }
 
 .roadmap-item {
@@ -102,23 +102,23 @@
 
 .roadmap-item.unlocked {
     cursor: pointer;
-    border-left-color: #4a9eff;
+    border-left-color: var(--primary);
 }
 
 .roadmap-item.unlocked:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
-    background-color: #1a1a1a;
+    background-color: var(--surface-hover);
 }
 
 .roadmap-item.locked {
     cursor: not-allowed;
     opacity: 0.7;
-    border-left-color: #555;
+    border-left-color: var(--border);
 }
 
 .roadmap-item.completed {
-    border-left-color: #00cc66;
+    border-left-color: var(--success);
 }
 
 .roadmap-content {
@@ -140,7 +140,7 @@
     font-size: 1.3rem;
     font-weight: bold;
     margin-bottom: 8px;
-    color: #fff;
+    color: var(--text-primary);
     background: none;
     letter-spacing: 1px;
 }
@@ -173,21 +173,21 @@
 }
 
 .badge-unlocked {
-    background: rgba(74, 158, 255, 0.1);
-    color: #4a9eff;
-    border: 1px solid rgba(74, 158, 255, 0.3);
+    background: var(--primary-translucent);
+    color: var(--primary-hover);
+    border: 1px solid var(--primary-translucent);
 }
 
 .badge-locked {
-    background: rgba(85, 85, 85, 0.1);
-    color: #888;
-    border: 1px solid rgba(85, 85, 85, 0.3);
+    background: var(--border);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
 }
 
 .badge-completed {
-    background: rgba(0, 204, 102, 0.1);
-    color: #00cc66;
-    border: 1px solid rgba(0, 204, 102, 0.3);
+    background: var(--success-translucent);
+    color: var(--success);
+    border: 1px solid var(--success-translucent);
 }
 
 .status-icon {
@@ -202,31 +202,31 @@
     left: 20px;
     width: 35px;
     height: 35px;
-    background: #222;
-    color: #fff;
+    background: var(--surface-alt);
+    color: var(--text-primary);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
     font-size: 1rem;
-    border: 2px solid #333;
+    border: 2px solid var(--border);
     z-index: 1;
 }
 
 .roadmap-item.unlocked .item-index {
-    background: #4a9eff;
-    border-color: rgba(74, 158, 255, 0.5);
+    background: var(--primary);
+    border-color: var(--primary-shadow);
 }
 
 .roadmap-item.locked .item-index {
-    background: #555;
-    border-color: #666;
+    background: var(--border);
+    border-color: var(--border-focus);
 }
 
 .roadmap-item.completed .item-index {
-    background: #00cc66;
-    border-color: rgba(0, 204, 102, 0.5);
+    background: var(--success);
+    border-color: var(--success-translucent);
 }
 
 .progress-line {
@@ -235,7 +235,7 @@
     top: 23px;
     width: 2px;
     height: calc(100% + 15px);
-    background: linear-gradient(to bottom, #333, #555);
+    background: linear-gradient(to bottom, var(--border), var(--border-focus));
     z-index: 0;
 }
 
@@ -253,9 +253,9 @@
 
 .roadmap-nav-button {
     padding: 14px 28px;
-    background-color: #111;
-    color: #fff;
-    border: 1px solid #333;
+    background-color: var(--surface-alt);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
     border-radius: 6px;
     cursor: pointer;
     font-size: 1rem;
@@ -266,8 +266,8 @@
 }
 
 .roadmap-nav-button:hover {
-    background-color: #1a1a1a;
-    border-color: #4a9eff;
+    background-color: var(--surface-hover);
+    border-color: var(--primary);
     transform: translateY(-2px);
 }
 
@@ -428,7 +428,7 @@
 
 .roadmap-list {
     scrollbar-width: thin;
-    scrollbar-color: #333 transparent;
+    scrollbar-color: var(--border) transparent;
 }
 
 .roadmap-container::-webkit-scrollbar {

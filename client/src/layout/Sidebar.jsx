@@ -11,7 +11,10 @@ import {
     LogOut,
     LogIn,
     Sparkles,
+    Sun,
+    Moon,
 } from "lucide-react";
+import { useTheme } from '../components/ThemeContext';
 import {
     BiFoodMenu,
 } from "react-icons/bi";
@@ -21,6 +24,7 @@ import useAuth from '../hooks/useAuth';
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
 
 function Sidebar() {
+    const { theme, toggleTheme } = useTheme();
     const [activeLink, setActiveLink] = useState('home');
     const [close, setClose] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -115,7 +119,7 @@ function Sidebar() {
             <div className="section">
                 <div className={"logodiv"}>
                     <h2 className={close ? "logo-close" : "logo"}>
-                        <img src="logo.png" alt="Logo" className='logoImg' /> 
+                        <img src="logo.png" alt="Logo" className='logoImg' />
                         Road<b>2</b>Dev
                         {!close && <span className="logo-status-dot" title="AI Engine Online"></span>}
                     </h2>
@@ -128,10 +132,10 @@ function Sidebar() {
                     }} data-title="open/close" /></span>
                 </div>
                 <ul className="sidebar-links">
-                    <Link to="/"><li onClick={() => {setActiveLink("home"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'home' ? 'isActive' : 'sidebar-link'} data-title='Home'><Home size={20} /> <span className='link-text'>Home</span></li></Link>
-                    <Link to="/learning"><li onClick={() => {setActiveLink("learning"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'learning' ? 'isActive' : 'sidebar-link'} data-title='Learning'><BookOpen size={20} /> <span className='link-text'>Learning</span></li></Link>
-                    <Link to="/learning-lab"><li onClick={() => {setActiveLink("learning-lab"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'learning-lab' ? 'isActive' : 'sidebar-link'} data-title='AI Mentor Lab'><Sparkles size={20} /> <span className='link-text'>AI Mentor Lab</span></li></Link>
-                    <Link to="/interview"><li onClick={() => {setActiveLink("interview"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'interview' ? 'isActive' : 'sidebar-link'} data-title='Interview Prep'><Mic size={20} /> <span className='link-text'>Interview Prep</span></li></Link>
+                    <Link to="/"><li onClick={() => { setActiveLink("home"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'home' ? 'isActive' : 'sidebar-link'} data-title='Home'><Home size={20} /> <span className='link-text'>Home</span></li></Link>
+                    <Link to="/learning"><li onClick={() => { setActiveLink("learning"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'learning' ? 'isActive' : 'sidebar-link'} data-title='Learning'><BookOpen size={20} /> <span className='link-text'>Learning</span></li></Link>
+                    <Link to="/learning-lab"><li onClick={() => { setActiveLink("learning-lab"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'learning-lab' ? 'isActive' : 'sidebar-link'} data-title='AI Mentor Lab'><Sparkles size={20} /> <span className='link-text'>AI Mentor Lab</span></li></Link>
+                    <Link to="/interview"><li onClick={() => { setActiveLink("interview"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'interview' ? 'isActive' : 'sidebar-link'} data-title='Interview Prep'><Mic size={20} /> <span className='link-text'>Interview Prep</span></li></Link>
                     <li onClick={() => {
                         if (!isAuthenticated) {
                             navigate('/auth', { replace: true, state: { from: '/score' } });
@@ -146,7 +150,7 @@ function Sidebar() {
                     ) : (
                         <li onClick={handleProfileClick} className={activeLink === 'profile' ? 'isActive' : 'sidebar-link'} data-title='Profile' style={{ cursor: 'pointer' }}><User size={20} /> <span className='link-text'>Profile</span></li>
                     )}
-                    <Link to="/about"><li onClick={() => {setActiveLink("about"); if (window.innerWidth <= 800) setMobileOpen(false);}} className={activeLink === 'about' ? 'isActive' : 'sidebar-link'} data-title='About'><Info size={20} /> <span className='link-text'>About</span></li></Link>
+                    <Link to="/about"><li onClick={() => { setActiveLink("about"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'about' ? 'isActive' : 'sidebar-link'} data-title='About'><Info size={20} /> <span className='link-text'>About</span></li></Link>
                 </ul>
 
                 {!isAuthenticated && !close && (
@@ -183,7 +187,7 @@ function Sidebar() {
                                         if (window.innerWidth <= 800) setMobileOpen(false);
                                     }}
                                 >
-                                    <span className="recent-item-title" style={{marginRight: "5px"}}>{session.title || 'Interview Session'}</span>
+                                    <span className="recent-item-title" style={{ marginRight: "5px" }}>{session.title || 'Interview Session'}</span>
                                     <span className="recent-item-meta">{session.field || 'Unknown field'} • {(session.type || 'N/A').toUpperCase()}</span>
                                 </button>
                             ))}
@@ -193,6 +197,12 @@ function Sidebar() {
             </div>
 
             <div className="logoutdiv">
+                <div className="theme-toggle-div">
+                    <button className="theme-toggle-btn" data-title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'} onClick={toggleTheme}>
+                        {theme === 'dark' ? <Sun size={22} /> : <Moon size={22} />}
+                        <span className='theme-toggle-text'>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+                    </button>
+                </div>
                 {isAuthenticated ? (
                     <button className="logoutbtn" data-title='SignOut' onClick={() => { handleLogout(); if (window.innerWidth <= 800) setMobileOpen(false); }}><LogOut size={22} /> <span className='logout-text'>Log Out</span></button>
                 ) : (

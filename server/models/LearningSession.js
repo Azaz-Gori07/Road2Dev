@@ -43,7 +43,7 @@ const learningSessionSchema = new mongoose.Schema({
   
   sessionType: { 
     type: String, 
-    enum: ['Concept Learning', 'Sandbox Practice', 'Project Defense', 'Interview Remediation', 'Career Strategy'], 
+    enum: ['Concept Learning', 'Sandbox Practice', 'Project Defense', 'Interview Remediation', 'Career Strategy', 'Career Coach'], 
     default: 'Concept Learning' 
   },
   personality: { 

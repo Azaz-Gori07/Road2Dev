@@ -31,6 +31,7 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/interview" element={<InterviewPrep />} />
+        <Route path="/interview-prep" element={<InterviewPrep />} />
         <Route
           path="/score"
           element={

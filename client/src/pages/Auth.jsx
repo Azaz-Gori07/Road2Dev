@@ -146,10 +146,10 @@ function Logo() {
 // ── Feature item ──
 function Feature({ type, label, icon }) {
   const featureColors = {
-    roadmap:   { bg: "#251a3a", stroke: "#9b6dff" },
-    interview: { bg: "#1a2a3a", stroke: "#40c8e0" },
-    track:     { bg: "#1a3a2a", stroke: "#3de8a0" },
-    goal:      { bg: "#2a1a2a", stroke: "#ff6db0" },
+    roadmap:   { bg: "var(--secondary-translucent)", stroke: "var(--secondary)" },
+    interview: { bg: "var(--primary-translucent)", stroke: "var(--accent-cyan)" },
+    track:     { bg: "var(--primary-translucent)", stroke: "var(--accent-green)" },
+    goal:      { bg: "var(--primary-translucent)", stroke: "var(--accent-pink)" },
   };
   
   const c = featureColors[type];
@@ -470,20 +470,20 @@ function OtpPanel({ email, onVerify, onResend, authLoading, onBack }) {
               style={{
                 width: 48,
                 height: 56,
-                background: "#1f1f1f",
-                border: `2px solid ${digit ? "rgba(64,200,224,0.5)" : "rgba(255,255,255,0.1)"}`,
+                background: "var(--input-bg)",
+                border: `2px solid ${digit ? "var(--primary)" : "var(--border)"}`,
                 borderRadius: 10,
-                color: "#f0f0f0",
+                color: "var(--text-primary)",
                 fontSize: 22,
                 fontWeight: 700,
                 textAlign: "center",
                 fontFamily: "'DM Sans', sans-serif",
                 outline: "none",
                 transition: "border-color 0.2s",
-                caretColor: "#40c8e0",
+                caretColor: "var(--accent-cyan)",
               }}
-              onFocus={e => e.target.style.borderColor = "rgba(64,200,224,0.6)"}
-              onBlur={e => e.target.style.borderColor = digit ? "rgba(64,200,224,0.5)" : "rgba(255,255,255,0.1)"}
+              onFocus={e => e.target.style.borderColor = "var(--primary-hover)"}
+              onBlur={e => e.target.style.borderColor = digit ? "var(--primary)" : "var(--border)"}
             />
           ))}
         </div>
@@ -804,10 +804,10 @@ export default function Auth() {
           style={{
             marginTop: 20,
             background: 'transparent',
-            border: '1px solid rgba(255,255,255,0.1)',
+            border: '1px solid var(--border)',
             borderRadius: 10,
             padding: '10px 24px',
-            color: '#888',
+            color: 'var(--text-muted)',
             fontFamily: 'DM Sans, sans-serif',
             fontSize: 13,
             fontWeight: 500,
@@ -818,12 +818,12 @@ export default function Auth() {
             gap: 8,
           }}
           onMouseEnter={e => {
-            e.target.style.borderColor = 'rgba(64,200,224,0.4)';
-            e.target.style.color = '#40c8e0';
+            e.target.style.borderColor = 'var(--accent-cyan)';
+            e.target.style.color = 'var(--accent-cyan)';
           }}
           onMouseLeave={e => {
-            e.target.style.borderColor = 'rgba(255,255,255,0.1)';
-            e.target.style.color = '#888';
+            e.target.style.borderColor = 'var(--border)';
+            e.target.style.color = 'var(--text-muted)';
           }}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -841,11 +841,11 @@ export default function Auth() {
           bottom: 24,
           left: '50%',
           transform: 'translateX(-50%)',
-          background: '#2a1515',
-          border: '1px solid rgba(255,60,60,0.3)',
+          background: 'var(--error-bg)',
+          border: '1px solid var(--error)',
           borderRadius: 12,
           padding: '12px 20px',
-          color: '#ff6b6b',
+          color: 'var(--error)',
           fontSize: 13,
           fontFamily: 'DM Sans, sans-serif',
           zIndex: 1000,
@@ -859,7 +859,7 @@ export default function Auth() {
             style={{
               background: 'none',
               border: 'none',
-              color: '#ff6b6b',
+              color: 'var(--error)',
               marginLeft: 12,
               cursor: 'pointer',
               fontSize: 16,

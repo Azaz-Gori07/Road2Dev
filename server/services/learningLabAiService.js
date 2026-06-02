@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { hybridGenerate } from './ai/hybridAiRouter.js';
+
+
 
 const inferProvider = (apiKey = '') => {
   const configuredProvider = process.env.AI_PROVIDER?.trim().toLowerCase();
@@ -205,9 +208,14 @@ INSTRUCTION:
 Generate the mentor response. Respond to the candidate's last request. Output strict JSON.
 `.trim();
 
-  const text = provider === 'gemini'
-    ? await callGemini({ apiKey, model, timeoutMs, prompt, systemPrompt })
-    : await callOpenAiCompatible({ apiKey, model, provider, timeoutMs, prompt, systemPrompt });
+  const { text } = await hybridGenerate({
+    prompt,
+    systemPrompt,
+    timeoutMs,
+    geminiModel: provider === 'gemini' ? model : undefined,
+    groqModel: provider === 'groq' ? model : undefined,
+    jsonResponse: true,
+  });
 
   return extractJson(text);
 };
@@ -259,9 +267,14 @@ INSTRUCTION:
 Analyze this summary and compile the high-fidelity Architecture Report, Top 25 Questions list, and starter defense question. Output strict JSON.
 `.trim();
 
-  const text = provider === 'gemini'
-    ? await callGemini({ apiKey, model, timeoutMs, prompt, systemPrompt })
-    : await callOpenAiCompatible({ apiKey, model, provider, timeoutMs, prompt, systemPrompt });
+  const { text } = await hybridGenerate({
+    prompt,
+    systemPrompt,
+    timeoutMs,
+    geminiModel: provider === 'gemini' ? model : undefined,
+    groqModel: provider === 'groq' ? model : undefined,
+    jsonResponse: true,
+  });
 
   return extractJson(text);
 };
@@ -271,6 +284,7 @@ Analyze this summary and compile the high-fidelity Architecture Report, Top 25 Q
  */
 export const evaluateDefenseAnswer = async ({ report, currentQuestion, answer, previousQuestions = [], currentQuestionIndex = 0 }) => {
   const apiKey = process.env.AI_API_KEY;
+
   if (!apiKey) throw new Error('AI Service not configured.');
 
   const provider = inferProvider(apiKey);
@@ -316,9 +330,14 @@ You must respond in strict JSON only, using this schema:
 Provide the evaluation of the candidate's response. Output strict JSON matching the instructions.
 `.trim();
 
-  const text = provider === 'gemini'
-    ? await callGemini({ apiKey, model, timeoutMs, prompt, systemPrompt })
-    : await callOpenAiCompatible({ apiKey, model, provider, timeoutMs, prompt, systemPrompt });
+  const { text } = await hybridGenerate({
+    prompt,
+    systemPrompt,
+    timeoutMs,
+    geminiModel: provider === 'gemini' ? model : undefined,
+    groqModel: provider === 'groq' ? model : undefined,
+    jsonResponse: true,
+  });
 
   return extractJson(text);
 };
@@ -370,9 +389,15 @@ You must respond in strict JSON only, using this schema:
 Generate the Career Coach profile scorecard. Output strict JSON.
 `.trim();
 
-  const text = provider === 'gemini'
-    ? await callGemini({ apiKey, model, timeoutMs, prompt, systemPrompt })
-    : await callOpenAiCompatible({ apiKey, model, provider, timeoutMs, prompt, systemPrompt });
+  const { text } = await hybridGenerate({
+    prompt,
+    systemPrompt,
+    timeoutMs,
+    geminiModel: provider === 'gemini' ? model : undefined,
+    groqModel: provider === 'groq' ? model : undefined,
+    jsonResponse: true,
+  });
 
   return extractJson(text);
 };
+

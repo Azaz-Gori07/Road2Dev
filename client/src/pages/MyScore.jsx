@@ -12,25 +12,25 @@ const styles = `
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-  --bg0: #000000;
-  --bg1: #050505;
-  --bg2: #0A0A0A;
-  --bg3: #111111;
+  --bg0: var(--background);
+  --bg1: var(--surface);
+  --bg2: var(--surface-alt);
+  --bg3: var(--border);
 
-  --brd: #1A1A1A;
-  --brd2: #242424;
+  --brd: var(--border);
+  --brd2: var(--border-focus);
 
-  --t1: #FFFFFF;
-  --t2: #A1A1AA;
-  --t3: #71717A;
+  --t1: var(--text-primary);
+  --t2: var(--text-secondary);
+  --t3: var(--text-muted);
 
-  --blue: #3B82F6;
-  --green: #22C55E;
-  --cyan: #06B6D4;
-  --purple: #8B5CF6;
-  --orange: #F97316;
-  --yellow: #FACC15;
-  --red: #EF4444;
+  --blue: var(--info);
+  --green: var(--success);
+  --cyan: var(--accent-cyan);
+  --purple: var(--secondary);
+  --orange: var(--accent-orange);
+  --yellow: var(--warning);
+  --red: var(--error);
 }
 
   html, body, #root {
@@ -41,10 +41,10 @@ const styles = `
   background:
     radial-gradient(
       circle at top right,
-      rgba(139,92,246,.08),
+      var(--primary-translucent),
       transparent 30%
     ),
-    #000;
+    var(--background);
 
   color: var(--t1);
   font-family: 'Outfit', sans-serif;
@@ -63,8 +63,8 @@ const styles = `
   .topbar {
     padding: 0 24px;
     display: flex;
-    background: #050505;
-  border-bottom: 1px solid #151515;
+    background: var(--surface);
+  border-bottom: 1px solid var(--border);
     align-items: center;
     justify-content: space-between;
   }
@@ -98,8 +98,8 @@ const styles = `
   .card,
 .chart-card,
 .bottom-card {
-  background: #0A0A0A;
-  border: 1px solid #1A1A1A;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 14px;
 
@@ -114,7 +114,7 @@ const styles = `
 .chart-card:hover,
 .bottom-card:hover {
   transform: translateY(-2px);
-  border-color: #2A2A2A;
+  border-color: var(--border-focus);
 }
 
   .overall-card { padding: 16px 18px; display: flex; flex-direction: column; align-items: flex-start; }
@@ -150,8 +150,8 @@ const styles = `
   .card-title { font-size: 13px; font-weight: 600; }
   .dropdown {
     display: flex; align-items: center; gap: 5px;
-    background: #111111;
-  border: 1px solid #222222;
+    background: var(--bg-input);
+  border: 1px solid var(--border);
     border-radius: 7px; padding: 5px 10px;
     font-size: 11.5px; color: var(--t2); cursor: pointer;
     font-family: 'Outfit', sans-serif;
@@ -195,7 +195,7 @@ const styles = `
 
   .focus-box { background: rgba(255,79,94,.07); border: 1px solid rgba(255,79,94,.2); border-radius: 9px; padding: 9px 11px; margin-top: 8px; display: flex; gap: 8px; align-items: flex-start; }
   .focus-icon { width: 28px; height: 28px; border-radius: 8px; background: rgba(255,79,94,.15); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
-  .focus-title { font-size: 11.5px; font-weight: 600; color: #ff7080; }
+  .focus-title { font-size: 11.5px; font-weight: 600; color: var(--red); }
   .focus-sub { font-size: 10px; color: var(--t3); margin-top: 1px; }
 
   /* AI RECS */
@@ -213,8 +213,8 @@ const styles = `
 
   background: linear-gradient(
     135deg,
-    #8B5CF6,
-    #6D28D9
+    var(--purple),
+    var(--secondary-hover)
   );
 
   border: none;
@@ -224,7 +224,7 @@ const styles = `
   font-weight: 600;
 
   box-shadow:
-    0 0 25px rgba(139,92,246,.25);
+    0 0 25px var(--secondary-translucent);
 
   transition: all .25s ease;
 }
@@ -232,7 +232,7 @@ const styles = `
 .start-btn:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 0 35px rgba(139,92,246,.4);
+    0 0 35px var(--secondary-translucent);
 }
   .start-btn i { font-size: 14px; }
 
@@ -385,7 +385,7 @@ const styles = `
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(5,5,5,0.97);
+      background: var(--surface);
       backdrop-filter: blur(10px);
       padding: 10px 14px;
       gap: 6px;
@@ -393,7 +393,7 @@ const styles = `
       justify-content: space-between;
       align-items: center;
       height: auto;
-      border-bottom: 1px solid #151515;
+      border-bottom: 1px solid var(--border);
     }
     .topbar > div { min-width: 0; }
     .topbar h1 { font-size: 15px; white-space: nowrap; }
@@ -529,11 +529,11 @@ function Gauge({ pct = 78 }) {
       <svg className="gauge-svg" viewBox="0 0 110 62">
         <defs>
           <linearGradient id="ggrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#3b8cff" />
-            <stop offset="100%" stopColor="#22d37e" />
+            <stop offset="0%" stopColor="var(--primary)" />
+            <stop offset="100%" stopColor="var(--accent-green)" />
           </linearGradient>
         </defs>
-        <path d="M10,58 A46,46 0 0,1 100,58" fill="none" stroke="#1f1f32" strokeWidth="9" strokeLinecap="round" />
+        <path d="M10,58 A46,46 0 0,1 100,58" fill="none" stroke="var(--border)" strokeWidth="9" strokeLinecap="round" />
         <path
           d="M10,58 A46,46 0 0,1 100,58"
           fill="none" stroke="url(#ggrad)" strokeWidth="9" strokeLinecap="round"
@@ -585,8 +585,17 @@ function PerfChart({ sessions = [] }) {
       }
 
       const ctx = canvasRef.current.getContext("2d");
+
+      const style = getComputedStyle(document.documentElement);
+      const accentGreen = style.getPropertyValue('--accent-green').trim() || "#22d37e";
+      const greenTranslucent = style.getPropertyValue('--success-translucent').trim() || "rgba(34,211,126,.18)";
+      const bg = style.getPropertyValue('--background').trim() || "#08080e";
+      const surfaceAlt = style.getPropertyValue('--surface-alt').trim() || "#191927";
+      const border = style.getPropertyValue('--border').trim() || "#252538";
+      const textMuted = style.getPropertyValue('--text-muted').trim() || "#4a4a6e";
+
       const grad = ctx.createLinearGradient(0, 0, 0, 140);
-      grad.addColorStop(0, "rgba(34,211,126,.18)");
+      grad.addColorStop(0, greenTranslucent);
       grad.addColorStop(1, "rgba(34,211,126,0)");
 
       chartRef.current = new window.Chart(ctx, {
@@ -595,10 +604,10 @@ function PerfChart({ sessions = [] }) {
           labels,
           datasets: [{
             data: dataPoints,
-            borderColor: "#22d37e",
+            borderColor: accentGreen,
             borderWidth: 2,
-            pointBackgroundColor: "#22d37e",
-            pointBorderColor: "#08080e",
+            pointBackgroundColor: accentGreen,
+            pointBorderColor: bg,
             pointBorderWidth: 2,
             pointRadius: 5,
             tension: 0.4,
@@ -612,17 +621,17 @@ function PerfChart({ sessions = [] }) {
           plugins: {
             legend: { display: false },
             tooltip: {
-              backgroundColor: "#191927",
-              borderColor: "#252538",
+              backgroundColor: surfaceAlt,
+              borderColor: border,
               borderWidth: 1,
               callbacks: { label: (c) => ` ${c.raw}%` },
             },
           },
           scales: {
-            x: { grid: { color: "#1a1a28" }, ticks: { color: "#4a4a6e", font: { size: 10 } } },
+            x: { grid: { color: border }, ticks: { color: textMuted, font: { size: 10 } } },
             y: {
-              grid: { color: "#1a1a28" },
-              ticks: { color: "#4a4a6e", font: { size: 10 }, callback: (v) => v + "%" },
+              grid: { color: border },
+              ticks: { color: textMuted, font: { size: 10 }, callback: (v) => v + "%" },
               min: 0, max: 100,
             },
           },
@@ -745,75 +754,81 @@ export default function MyScore() {
     const avg = (field) => count ? Math.round(totals[field] / count) : 0;
 
     return [
-      { name: 'Accuracy', icon: 'ti-target', bg: 'rgba(34,211,126,.12)', color: '#22d37e', pct: avg('accuracy') },
-      { name: 'Technical', icon: 'ti-code', bg: 'rgba(59,140,255,.12)', color: '#3b8cff', pct: avg('technical') },
-      { name: 'Communication', icon: 'ti-message-dots', bg: 'rgba(155,109,255,.12)', color: '#9b6dff', pct: avg('communication') },
-      { name: 'Confidence', icon: 'ti-award', bg: 'rgba(255,209,102,.12)', color: '#ffd166', pct: avg('confidence') },
+      { name: 'Accuracy', icon: 'ti-target', bg: 'var(--success-translucent)', color: 'var(--success)', pct: avg('accuracy') },
+      { name: 'Technical', icon: 'ti-code', bg: 'var(--primary-translucent)', color: 'var(--primary)', pct: avg('technical') },
+      { name: 'Communication', icon: 'ti-message-dots', bg: 'var(--secondary-translucent)', color: 'var(--secondary)', pct: avg('communication') },
+      { name: 'Confidence', icon: 'ti-award', bg: 'var(--warning-translucent)', color: 'var(--warning)', pct: avg('confidence') },
     ];
   };
 
   const getStrengths = () => {
     const strengthsList = [];
-    sessions.forEach(session => {
-      const summaryMsg = session.messages?.find(m => m.type === 'summary');
-      if (summaryMsg?.summary?.strengths) {
-        summaryMsg.summary.strengths.forEach(str => {
-          if (!strengthsList.some(item => item.name === str)) {
-            strengthsList.push({ name: str, sub: `Demonstrated in ${session.title || 'interview'}` });
+
+    sessions.forEach((session) => {
+      const summaryMsg = session.messages?.find((m) => m.type === 'summary');
+      const strengths = summaryMsg?.summary?.strengths;
+
+      if (Array.isArray(strengths) && strengths.length) {
+        strengths.forEach((str) => {
+          if (!strengthsList.some((item) => item.name === str)) {
+            strengthsList.push({
+              name: str,
+              sub: `Demonstrated in ${session.title || 'interview'}`,
+            });
           }
         });
       }
     });
 
-    if (strengthsList.length === 0) {
-      return [
-        { name: 'Complete an Interview', sub: 'Complete your first AI prep session to discover your strengths.' },
-        { name: 'Clear Communication', sub: 'Try to speak clearly and structure your answers during prep.' }
-      ];
-    }
+    // No mock/fallback strengths: show empty state if none exist.
     return strengthsList.slice(0, 4);
   };
 
   const getImprove = () => {
     const weaknessesList = [];
-    sessions.forEach(session => {
-      const summaryMsg = session.messages?.find(m => m.type === 'summary');
-      if (summaryMsg?.summary?.weaknesses) {
-        summaryMsg.summary.weaknesses.forEach(weak => {
-          if (!weaknessesList.some(item => item.name === weak)) {
-            weaknessesList.push({ name: weak, sub: `Identified in ${session.title || 'interview'}`, color: 'var(--red)' });
+
+    sessions.forEach((session) => {
+      const summaryMsg = session.messages?.find((m) => m.type === 'summary');
+      const weaknesses = summaryMsg?.summary?.weaknesses;
+
+      if (Array.isArray(weaknesses) && weaknesses.length) {
+        weaknesses.forEach((weak) => {
+          if (!weaknessesList.some((item) => item.name === weak)) {
+            weaknessesList.push({
+              name: weak,
+              sub: `Identified in ${session.title || 'interview'}`,
+              color: 'var(--red)',
+            });
           }
         });
       }
     });
 
-    if (weaknessesList.length === 0) {
-      return [
-        { name: 'No Weaknesses Yet', sub: 'Keep practice sessions going to pinpoint topics to refine.', color: 'var(--cyan)' },
-      ];
-    }
+    // No mock/fallback weaknesses: show empty state if none exist.
     return weaknessesList.slice(0, 3);
   };
 
   const getAiRecs = () => {
     const recsList = [];
-    sessions.forEach(session => {
-      const summaryMsg = session.messages?.find(m => m.type === 'summary');
-      if (summaryMsg?.summary?.recommendedTopics) {
-        summaryMsg.summary.recommendedTopics.forEach(topic => {
-          if (!recsList.some(item => item.title === topic)) {
-            recsList.push({ title: topic, sub: 'Study and practice questions on this topic.', icon: 'ti-book-open' });
+
+    sessions.forEach((session) => {
+      const summaryMsg = session.messages?.find((m) => m.type === 'summary');
+      const recommendedTopics = summaryMsg?.summary?.recommendedTopics;
+
+      if (Array.isArray(recommendedTopics) && recommendedTopics.length) {
+        recommendedTopics.forEach((topic) => {
+          if (!recsList.some((item) => item.title === topic)) {
+            recsList.push({
+              title: topic,
+              sub: 'Study and practice questions on this topic.',
+              icon: 'ti-book-open',
+            });
           }
         });
       }
     });
 
-    if (recsList.length === 0) {
-      return [
-        { title: 'Core Tech Fundamentals', sub: 'Revise syntax, loops, memory, and runtime concepts.', icon: 'ti-sparkles' },
-        { title: 'System Design Basics', sub: 'Learn APIs, cache, database indexing, and scaling.', icon: 'ti-target' }
-      ];
-    }
+    // No mock/fallback recommendations: show empty state if none exist.
     return recsList.slice(0, 3);
   };
 
@@ -857,13 +872,13 @@ export default function MyScore() {
 
             {/* Stat cards wrapped in a div for mobile 2×2 grid */}
             <div className="row1-stats">
-              <StatCard icon="ti-message-dots" iconBg="rgba(59,140,255,.12)" iconColor="#3b8cff"
+              <StatCard icon="ti-message-dots" iconBg="var(--primary-translucent)" iconColor="var(--primary)"
                 value={totalCompleted} title="Total Interviews" sub="Completed interviews only" />
-              <StatCard icon="ti-circle-check" iconBg="rgba(34,211,126,.12)" iconColor="#22d37e"
+              <StatCard icon="ti-circle-check" iconBg="var(--success-translucent)" iconColor="var(--success)"
                 value={bestScore} title="Best Score" sub="Highest recorded score" />
-              <StatCard icon="ti-clock" iconBg="rgba(255,209,102,.12)" iconColor="#ffd166"
+              <StatCard icon="ti-clock" iconBg="var(--warning-translucent)" iconColor="var(--warning)"
                 value="—" title="Avg. Time" sub="Unavailable" />
-              <StatCard icon="ti-chart-line" iconBg="rgba(155,109,255,.12)" iconColor="#9b6dff"
+              <StatCard icon="ti-chart-line" iconBg="var(--secondary-translucent)" iconColor="var(--secondary)"
                 value={`${avgScore}%`} title="Average Score" sub="Average across completed interviews" />
             </div>
           </div>
@@ -916,7 +931,7 @@ export default function MyScore() {
               {!sessionsLoading && sessions.length === 0 && <div className="history-empty">No completed interviews found.</div>}
               {!sessionsLoading && sessions.map((session) => (
                 <div className="interview-row" key={session._id || session.id}>
-                  <div className="int-icon" style={{ background: 'rgba(0,0,0,.06)', color: '#9b6dff' }}>
+                  <div className="int-icon" style={{ background: 'var(--secondary-translucent)', color: 'var(--secondary)' }}>
                     <i className={`ti ti-clipboard`} />
                   </div>
                   <div className="int-info">
@@ -924,7 +939,7 @@ export default function MyScore() {
                     <div className="int-sub">{(session.field || 'Unknown field') + ' · ' + (session.experience || session.type || '')}</div>
                   </div>
                   <div className="int-right">
-                    <div className="int-score" style={{ color: '#22d37e' }}>{session.score ?? 0}%</div>
+                    <div className="int-score" style={{ color: 'var(--success)' }}>{session.score ?? 0}%</div>
                     <div className="int-ago">{new Date(session.updatedAt || session.createdAt).toLocaleDateString()}</div>
                   </div>
                 </div>

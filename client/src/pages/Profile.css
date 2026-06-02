@@ -10,12 +10,12 @@
 
 /* Design Tokens as CSS Variables */
 :root {
-  --cyan: #40c8e0;
-  --green: #3de8a0;
-  --purple: #9b6dff;
-  --yellow: #f5c542;
-  --pink: #ff6db0;
-  --grad-btn: linear-gradient(90deg, #5b8dee 0%, #3de8a0 100%);
+  --cyan: var(--accent-cyan);
+  --green: var(--accent-green);
+  --purple: var(--secondary);
+  --yellow: var(--accent-orange);
+  --pink: var(--accent-pink);
+  --grad-btn: linear-gradient(90deg, var(--primary) 0%, var(--accent-green) 100%);
   --font-h: 'Syne', sans-serif;
   --font-b: 'DM Sans', sans-serif;
 }
@@ -90,7 +90,7 @@
 .avatar-container {
   border-radius: 50%;
   overflow: hidden;
-  background: #e8e0d5;
+  background: var(--surface-alt);
   flex-shrink: 0;
 }
 
@@ -119,8 +119,8 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #0e2a35;
-  border: 1px solid rgba(64, 200, 224, 0.27);
+  background: var(--primary-translucent);
+  border: 1px solid var(--primary-translucent);
   border-radius: 20px;
   padding: 2px 8px;
 }
@@ -437,7 +437,7 @@
   height: 26px;
   border-radius: 50%;
   background: var(--cyan);
-  border: 2px solid #191919;
+  border: 2px solid var(--background);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -539,7 +539,8 @@
 }
 
 .select-field option {
-  background: #1e1e1e;
+  background: var(--surface-alt);
+  color: var(--text-primary);
 }
 
 .select-focused {
@@ -633,7 +634,7 @@
 }
 
 .toggle-off {
-  background: #2a2a2a;
+  background: var(--border);
   border: 1px solid var(--border);
 }
 
@@ -648,13 +649,13 @@
 
 .toggle-knob-on {
   left: 21px;
-  background: #0c0c0c;
-  box-shadow: 0 0 6px rgba(64, 200, 224, 0.4);
+  background: var(--background);
+  box-shadow: 0 0 6px var(--primary-translucent);
 }
 
 .toggle-knob-off {
   left: 3px;
-  background: #555;
+  background: var(--text-muted);
 }
 
 /* Action Buttons */
@@ -703,8 +704,8 @@
 
 .save-btn-hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(91, 141, 238, 0.35);
-  background: linear-gradient(90deg, #6d9bff, #50f5b2);
+  box-shadow: 0 6px 20px var(--primary-translucent);
+  background: linear-gradient(90deg, var(--primary-hover), var(--accent-green));
 }
 
 .logout-btn {
@@ -712,19 +713,20 @@
   padding: 10px 0;
   margin-top: 8px;
   background: transparent;
-  border: 1px solid rgba(255, 80, 80, 0.3);
+  border: 1px solid var(--error-translucent);
   border-radius: 8px;
   font-family: var(--font-h);
   font-size: clamp(10px, 3vw, 11px);
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: #ff6b6b;
+  color: var(--error);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .logout-btn:hover {
-  border-color: #ff6b6b;
+  border-color: var(--error);
+  background: var(--error-translucent);
 }
 
 /* Scrollbar */
@@ -750,6 +752,26 @@
 /* Autofill Styles */
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #1e1e1e inset !important;
-  -webkit-text-fill-color: #f0f0f0 !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--input-bg) inset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+}
+
+.logout-bottom-btn {
+  background: var(--error-translucent);
+  border: 1px solid var(--error-translucent);
+  border-radius: 10px;
+  padding: 10px 28px;
+  color: var(--error);
+  font-family: var(--font-h);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.logout-bottom-btn:hover {
+  background: var(--error);
+  color: #fff;
+  box-shadow: 0 0 12px var(--error-translucent);
 }

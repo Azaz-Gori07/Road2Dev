@@ -1,0 +1,129 @@
+/* Theme variables */
+
+/* By default, we use the Premium Dark Theme (since the project's original styling is dark) */
+:root {
+  --font-heading: 'HelveticaNowDisplay-Medium', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'HelveticaNowDisplayW01-Rg', 'Helvetica Neue', Arial, sans-serif;
+
+  /* Premium Matte Dark Theme variables */
+  --background: #09090b;
+  --surface: #0f0f11;
+  --surface-alt: #131316;
+  --surface-hover: #17171a;
+  --surface-elevated: #161619;
+  --input-bg: #161619;
+  --border: #1c1c1f;
+  --border-focus: #27272a;
+  --text-primary: #ffffff;
+  --text-secondary: #c8c8d0;
+  --text-muted: #a1a1aa;
+  
+  --primary: #2c9caf;
+  --primary-hover: #70bdca;
+  --primary-shadow: #268391;
+  --primary-translucent: rgba(44, 156, 175, 0.15);
+  
+  --secondary: #9b6dff;
+  --secondary-hover: #b593ff;
+  --secondary-translucent: rgba(155, 109, 255, 0.15);
+  
+  --accent-cyan: #40c8e0;
+  --accent-green: #3de8a0;
+  --accent-pink: #ff6db0;
+  --accent-orange: #ff8c00;
+  
+  --success: #22c55e;
+  --success-translucent: rgba(34, 197, 94, 0.15);
+  --warning: #fb923c;
+  --warning-translucent: rgba(251, 146, 60, 0.15);
+  --error: #ef4444;
+  --error-bg: #2a1515;
+  --error-translucent: rgba(239, 68, 68, 0.15);
+  --info: #3b82f6;
+  --info-translucent: rgba(59, 130, 246, 0.15);
+  
+  --brand-google: #4285F4;
+  --brand-github: #ffffff;
+  --brand-linkedin: #0A66C2;
+  --brand-twitter: #1da1f2;
+  --brand-instagram: #e1306c;
+  
+  /* Additional system colors */
+  --selection-bg: rgba(44, 156, 175, 0.3);
+  --selection-text: #ffffff;
+  --scrollbar-thumb: #27272a;
+  --scrollbar-track: #0f0f11;
+
+  /* Backwards compatibility aliases */
+  --bg: var(--background);
+  --bg-card: var(--surface);
+  --bg-card-alt: var(--surface-alt);
+  --bg-input: var(--input-bg);
+  --bg-hover: var(--surface-hover);
+  --border-foc: var(--border-focus);
+  --text-pri: var(--text-primary);
+  --text-sec: var(--text-secondary);
+  --text-mut: var(--text-muted);
+}
+
+/* Premium Matte Light Theme variables */
+:root[data-theme="light"] {
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --surface-alt: #f1f5f9;
+  --surface-hover: #e2e8f0;
+  --surface-elevated: #ffffff;
+  --input-bg: #f1f5f9;
+  --border: #e2e8f0;
+  --border-focus: #cbd5e1;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --primary: #1e7485;
+  --primary-hover: #185d6b;
+  --primary-shadow: #144e59;
+  --primary-translucent: rgba(30, 116, 133, 0.15);
+  
+  --secondary: #6d28d9;
+  --secondary-hover: #5b21b6;
+  --secondary-translucent: rgba(109, 40, 217, 0.15);
+  
+  --accent-cyan: #06b6d4;
+  --accent-green: #10b981;
+  --accent-pink: #db2777;
+  --accent-orange: #f97316;
+  
+  --success: #16a34a;
+  --success-translucent: rgba(22, 163, 74, 0.15);
+  --warning: #ea580c;
+  --warning-translucent: rgba(234, 88, 12, 0.15);
+  --error: #dc2626;
+  --error-bg: #fee2e2;
+  --error-translucent: rgba(220, 38, 38, 0.15);
+  --info: #2563eb;
+  --info-translucent: rgba(37, 99, 235, 0.15);
+  
+  --brand-google: #4285F4;
+  --brand-github: #0f172a;
+  --brand-linkedin: #0A66C2;
+  --brand-twitter: #1da1f2;
+  --brand-instagram: #e1306c;
+  
+  /* Additional system colors */
+  --selection-bg: rgba(30, 116, 133, 0.3);
+  --selection-text: #0f172a;
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-track: #f1f5f9;
+
+  /* Backwards compatibility aliases */
+  --bg: var(--background);
+  --bg-card: var(--surface);
+  --bg-card-alt: var(--surface-alt);
+  --bg-input: var(--input-bg);
+  --bg-hover: var(--surface-hover);
+  --border-foc: var(--border-focus);
+  --text-pri: var(--text-primary);
+  --text-sec: var(--text-secondary);
+  --text-mut: var(--text-muted);
+}

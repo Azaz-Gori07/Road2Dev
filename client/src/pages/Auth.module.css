@@ -25,7 +25,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #0c0c0c;
+  background: var(--background);
   padding: 16px;
   font-family: 'DM Sans', sans-serif;
   perspective: 1200px;
@@ -44,9 +44,9 @@
   display: flex;
   width: 100%;
   min-height: 600px;
-  background: #141414;
+  background: var(--surface);
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
   overflow: hidden;
   transform-origin: center center;
@@ -60,9 +60,9 @@
   top: 20px;
   right: 20px;
   z-index: 1500;
-  background: rgba(12, 32, 52, 0.96);
-  border: 1px solid rgba(64, 200, 224, 0.3);
-  color: #e8faff;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-focus);
+  color: var(--text-primary);
   padding: 14px 18px;
   border-radius: 18px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
@@ -74,7 +74,7 @@
 
 .toastMessage span {
   display: block;
-  color: #d7f7ff;
+  color: var(--text-secondary);
   font-weight: 500;
   margin-top: 6px;
 }
@@ -134,31 +134,31 @@
 /* Left panel */
 .authLeft {
   flex: 1;
-  background: #0f0f0f;
+  background: var(--surface);
   padding: 32px 24px;
   display: flex;
   flex-direction: column;
   border-right: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid var(--border);
   background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255, 255, 255, 0.016) 39px, rgba(255, 255, 255, 0.016) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255, 255, 255, 0.016) 39px, rgba(255, 255, 255, 0.016) 40px);
 }
 
 /* Left panel for reset page */
 .authLeftReset {
   flex: 1;
-  background: #0f0f0f;
+  background: var(--surface);
   padding: 32px 24px;
   display: flex;
   flex-direction: column;
   border-right: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid var(--border);
   background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255, 255, 255, 0.016) 39px, rgba(255, 255, 255, 0.016) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255, 255, 255, 0.016) 39px, rgba(255, 255, 255, 0.016) 40px);
 }
 
 /* Right panel */
 .authRight {
   flex: 1.1;
-  background: #181818;
+  background: var(--surface-alt);
   padding: 32px 24px;
   display: flex;
   flex-direction: column;
@@ -179,7 +179,7 @@
   height: 40px;
   border-radius: 10px;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #1e8a4a 0%, #1a6fc4 50%, #0e3a7a 100%);
+  background: linear-gradient(135deg, var(--success) 0%, var(--info) 50%, var(--background) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -190,7 +190,7 @@
   font-family: 'Syne', sans-serif;
   font-size: 20px;
   font-weight: 700;
-  color: #40c8e0;
+  color: var(--accent-cyan);
   background-color: transparent;
 }
 
@@ -199,14 +199,14 @@
   font-family: 'Syne', sans-serif;
   font-size: 28px;
   font-weight: 800;
-  color: #f0f0f0;
+  color: var(--text-primary);
   background-color: transparent;
   margin-bottom: 8px;
 }
 
 .authSubheadline {
   font-size: 14px;
-  color: #888;
+  color: var(--text-muted);
   background-color: transparent;
   font-family: 'DM Sans', sans-serif;
   line-height: 1.5;
@@ -215,7 +215,7 @@
 
 .authSubheadlineReset {
   font-size: 14px;
-  color: #888;
+  color: var(--text-muted);
   background-color: transparent;
   font-family: 'DM Sans', sans-serif;
   line-height: 1.6;
@@ -226,7 +226,7 @@
   font-family: 'Syne', sans-serif;
   font-size: 20px;
   font-weight: 700;
-  color: #f0f0f0;
+  color: var(--text-primary);
   background-color: transparent;
   text-align: center;
   margin-bottom: 6px;
@@ -234,7 +234,7 @@
 
 .formSubtitle {
   font-size: 13px;
-  color: #888;
+  color: var(--text-muted);
   background-color: transparent;
   text-align: center;
   margin-bottom: 28px;
@@ -243,7 +243,7 @@
 
 .formSubtitleForgot {
   font-size: 13px;
-  color: #888;
+  color: var(--text-muted);
   background-color: transparent;
   text-align: center;
   margin-bottom: 28px;
@@ -285,7 +285,7 @@
 
 .featureLabel {
   font-size: 13px;
-  color: #ccc;
+  color: var(--text-secondary);
   font-family: 'DM Sans', sans-serif;
   background-color: transparent;
 }
@@ -298,7 +298,7 @@
 
 .authSignup p {
   font-size: 13px;
-  color: #888;
+  color: var(--text-muted);
   background-color: transparent;
   font-family: 'DM Sans', sans-serif;
 }
@@ -306,7 +306,7 @@
 .signupLink {
   background: none;
   border: none;
-  color: #40c8e0;
+  color: var(--accent-cyan);
   font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 500;
@@ -315,7 +315,7 @@
 }
 
 .signupLink:hover {
-  color: #3de8a0;
+  color: var(--accent-green);
 }
 
 /* Form fields */
@@ -328,7 +328,7 @@
   display: block;
   font-size: 13px;
   font-weight: 600;
-  color: #f0f0f0;
+  color: var(--text-primary);
   margin-bottom: 6px;
   font-family: 'DM Sans', sans-serif;
   background-color: transparent;
@@ -341,26 +341,26 @@
 
 .fieldInput {
   width: 100%;
-  background: #1f1f1f;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--input-bg);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 16px;
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
-  color: #f0f0f0;
+  color: var(--text-primary);
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
-  caret-color: #40c8e0;
+  caret-color: var(--accent-cyan);
   box-sizing: border-box;
 }
 
 .fieldInput::-webkit-input-placeholder {
-  color: #444;
+  color: var(--text-muted);
 }
 
 .fieldInputFocused {
-  border-color: rgba(64, 200, 224, 0.45);
-  box-shadow: 0 0 0 3px rgba(64, 200, 224, 0.08);
+  border-color: var(--primary-hover);
+  box-shadow: 0 0 0 3px var(--primary-translucent);
 }
 
 /* Password toggle */
@@ -372,13 +372,13 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #444;
+  color: var(--text-muted);
   display: flex;
   padding: 4px;
 }
 
 .passwordToggle:hover {
-  color: #888;
+  color: var(--text-secondary);
 }
 
 .passwordToggle svg {
@@ -397,7 +397,7 @@
 .forgotLink {
   background: none;
   border: none;
-  color: #40c8e0;
+  color: var(--accent-cyan);
   font-size: 12px;
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
@@ -406,21 +406,21 @@
 }
 
 .forgotLink:hover {
-  color: #3de8a0;
+  color: var(--accent-green);
 }
 
 /* Gradient button */
 .gradBtn {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(90deg, #5b8dee 0%, #3de8a0 100%);
+  background: linear-gradient(90deg, var(--info) 0%, var(--accent-green) 100%);
   border: none;
   border-radius: 10px;
   font-family: 'Syne', sans-serif;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: #fff;
+  color: var(--text-primary);
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.2s;
 }
@@ -446,12 +446,12 @@
 .dividerLine {
   flex: 1;
   height: 1px;
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--border);
 }
 
 .dividerText {
   font-size: 11px;
-  color: #444;
+  color: var(--text-muted);
   white-space: nowrap;
   font-family: 'DM Sans', sans-serif;
   background-color: transparent;
@@ -468,8 +468,8 @@
 .socialBtn {
   width: 48px;
   height: 48px;
-  background: #1c1c1c;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -484,8 +484,8 @@
 }
 
 .socialBtnHover {
-  background: #252525;
-  border-color: rgba(255, 255, 255, 0.13);
+  background: var(--surface-hover);
+  border-color: var(--border-focus);
   transform: translateY(-2px);
 }
 
@@ -504,7 +504,7 @@
   height: 16px;
   border-radius: 4px;
   flex-shrink: 0;
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border: 1.5px solid var(--border);
   background: transparent;
   display: flex;
   align-items: center;
@@ -514,24 +514,24 @@
 }
 
 .checkboxChecked {
-  background: #40c8e0;
-  border-color: #40c8e0;
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
 }
 
 .termsText {
   font-size: 12px;
-  color: #888;
+  color: var(--text-muted);
   font-family: 'DM Sans', sans-serif;
   line-height: 1.4;
 }
 
 .termsLink {
-  color: #40c8e0;
+  color: var(--accent-cyan);
   cursor: pointer;
 }
 
 .termsLink:hover {
-  color: #3de8a0;
+  color: var(--accent-green);
 }
 
 /* Back to login */
@@ -542,7 +542,7 @@
 
 .backToLogin p {
   font-size: 12px;
-  color: #888;
+  color: var(--text-muted);
   font-family: 'DM Sans', sans-serif;
   margin-bottom: 6px;
 }
@@ -550,7 +550,7 @@
 .backLink {
   background: none;
   border: none;
-  color: #40c8e0;
+  color: var(--accent-cyan);
   font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 500;
@@ -559,7 +559,7 @@
 }
 
 .backLink:hover {
-  color: #3de8a0;
+  color: var(--accent-green);
 }
 
 /* Envelope container */
@@ -581,8 +581,8 @@
 .fieldInput:-webkit-autofill,
 .fieldInput:-webkit-autofill:hover,
 .fieldInput:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #1f1f1f inset !important;
-  -webkit-text-fill-color: #f0f0f0 !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--input-bg) inset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
 }
 
 /* Scrollbar */
@@ -595,7 +595,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--scrollbar-thumb);
   border-radius: 2px;
 }
 
