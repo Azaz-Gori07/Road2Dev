@@ -12,7 +12,18 @@ const mentorMemorySchema = new mongoose.Schema({
   attemptCount: { type: Number, default: 0 },
   failureCount: { type: Number, default: 0 },
   successCount: { type: Number, default: 0 },
-  lastReviewDate: { type: Date, default: Date.now }
+  lastReviewDate: { type: Date, default: Date.now },
+  evidenceCounts: {
+    sandbox: { type: Number, default: 0 },
+    interview: { type: Number, default: 0 },
+    defense: { type: Number, default: 0 }
+  },
+  sources: [{
+    refType: { type: String, required: true }, // e.g., 'SandboxSubmission', 'InterviewSession', 'LearningSession'
+    refId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    source: { type: String, required: true }, // e.g., 'sandbox_passed', 'interview_completed', 'project_defense_completed'
+    date: { type: Date, default: Date.now }
+  }]
 }, {
   timestamps: true
 });

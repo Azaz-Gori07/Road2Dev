@@ -19,6 +19,8 @@ import LearningLab from "./pages/LearningLab";
 import LearningHistory from "./pages/LearningHistory";
 import SandboxHistory from "./pages/SandboxHistory";
 import LearningAnalytics from "./pages/LearningAnalytics";
+import IntelligenceDashboard from "./pages/IntelligenceDashboard";
+import MentorMemoryViewer from "./pages/MentorMemoryViewer";
 
 function App() {
   return (
@@ -128,6 +130,22 @@ function App() {
         <Route path="/learning/:fieldSlug" element={<StacksPage />} />
         <Route path="/learning/:fieldSlug/:stackSlug" element={<RoadMap />} />
         <Route path="/learning/:fieldSlug/:stackSlug/:techSlug" element={<ContentPage />} />
+        <Route
+          path="/intelligence"
+          element={
+            <ProtectedRoute>
+              <IntelligenceDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/memory"
+          element={
+            <ProtectedRoute>
+              <MentorMemoryViewer />
+            </ProtectedRoute>
+          }
+        />
       </Route>
     </Routes>
   );

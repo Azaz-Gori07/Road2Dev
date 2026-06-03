@@ -201,15 +201,14 @@ function ProfileView({ data, sessions = [], learningSessions = [], onEdit }) {
   // Dynamic calculations for Developer Profile
   const overallMastery = learningSessions.length > 0 
     ? Math.round(learningSessions.reduce((acc, s) => acc + (s.masteryPercentage || 0), 0) / learningSessions.length) 
-    : 58;
+    : 0;
 
   const masteredGrows = learningSessions.filter(s => s.masteryPercentage >= 75);
   const knowledgeGaps = learningSessions.filter(s => s.masteryPercentage < 50);
 
-  // If there are no sessions, use mock defaults to avoid empty states
   const displayGaps = knowledgeGaps.length > 0 
     ? knowledgeGaps.map(g => g.topic) 
-    : ['useEffect Hook', 'Closures', 'Promises', 'DOM Manipulation'];
+    : [];
 
   return (
     <div className="profile-view">
@@ -270,8 +269,8 @@ function ProfileView({ data, sessions = [], learningSessions = [], onEdit }) {
 
       {/* Stats row */}
       <div className="stats-row">
-        <StatCard value="12" label="Roadmaps Completed" color="#40c8e0" />
-        <StatCard value="45" label="Quizzes Taken" color="#3de8a0" />
+        <StatCard value={0} label="Roadmaps Completed" color="#40c8e0" />
+        <StatCard value={0} label="Quizzes Taken" color="#3de8a0" />
         <StatCard value={`${avgScore}%`} label="Average Score" color="#3de8a0" />
         <StatCard value={totalInterviews} label="Mock Interviews" color="#9b6dff" />
       </div>
@@ -401,6 +400,14 @@ function EditProfile({ data, onSave, onCancel, onLogout }) {
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
+  const handleAvatarChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => set('avatar', ev.target?.result || '');
+    reader.readAsDataURL(file);
+  };
+
   const [hSave, hSaveP] = useHover();
   const [hCancel, hCancelP] = useHover();
 
@@ -430,7 +437,7 @@ function EditProfile({ data, onSave, onCancel, onLogout }) {
                   <circle cx="12" cy="13" r="4"/>
                 </svg>
               </button>
-              <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} />
+              <input ref={fileRef} type="file" accept="image/*" onChange={handleAvatarChange} style={{ display: "none" }} />
             </div>
             <button onClick={() => fileRef.current?.click()} className="change-photo-btn">
               Change Photo
@@ -617,7 +624,7 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     await Promise.all([customAuth.logout?.(), zenuxAuth.logout?.()]);
-    sessionStorage.clear();
+    ['auth_token', 'road2dev-interview', 'road2dev-learning'].forEach(key => sessionStorage.removeItem(key));
     navigate("/auth", { replace: true });
   };
 

@@ -1464,6 +1464,247 @@
   color: #a78bfa;
 }
 
+/* Fallback Mode Banner */
+.pd-fallback-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.pd-fallback-banner svg {
+  color: #fbbf24;
+  flex-shrink: 0;
+}
+
+.pd-fallback-banner strong {
+  display: block;
+  font-size: 12px;
+  color: #fbbf24;
+}
+
+.pd-fallback-banner span {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Tech Badge Tooltip */
+.pd-tech-badge__tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #18181b;
+  border: 1px solid #3f3f46;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 10px;
+  color: #e4e4e7;
+  white-space: nowrap;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.pd-tech-badge__tooltip div {
+  line-height: 1.5;
+}
+
+/* Evidence Details */
+.pd-evidence-details {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.pd-evidence-details summary {
+  cursor: pointer;
+  color: #a78bfa;
+}
+
+.pd-evidence-list {
+  margin: 6px 0 0;
+  padding: 0 0 0 16px;
+  list-style: disc;
+}
+
+.pd-evidence-list li {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 2px 0;
+}
+
+/* Analysis Unavailable */
+.pd-report--failed {
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.pd-report__unavailable {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--text-muted);
+}
+
+.pd-report__unavailable svg {
+  color: #fbbf24;
+  margin-bottom: 8px;
+}
+
+.pd-report__unavailable h3 {
+  font-size: 16px;
+  color: #fbbf24;
+  margin: 0 0 8px;
+}
+
+.pd-report__unavailable p {
+  font-size: 12px;
+  margin: 0 0 4px;
+}
+
+.pd-report__reason {
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: rgba(0,0,0,0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+.pd-report__unavailable-actions {
+  margin-top: 16px;
+}
+
+.pd-report__unavailable-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Generic Mode Badge */
+.pd-generic-badge {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+}
+
+.pd-generic-note {
+  font-size: 11px;
+  color: #fbbf24;
+  font-style: italic;
+}
+
+/* Defense Evaluation Feedback */
+.pd-eval-feedback {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pd-eval-feedback h4 {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.pd-eval-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+}
+
+.pd-eval-card--passed {
+  border-left: 3px solid #34d399;
+}
+
+.pd-eval-card--failed {
+  border-left: 3px solid #f87171;
+}
+
+.pd-eval-card__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.pd-eval-card__icon svg {
+  display: block;
+}
+
+.pd-eval-card--passed .pd-eval-card__icon svg {
+  color: #34d399;
+}
+
+.pd-eval-card--failed .pd-eval-card__icon svg {
+  color: #f87171;
+}
+
+.pd-eval-card__score {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.pd-eval-card--passed .pd-eval-card__score {
+  color: #34d399;
+}
+
+.pd-eval-card--failed .pd-eval-card__score {
+  color: #f87171;
+}
+
+.pd-eval-card__question {
+  margin: 0 0 4px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.pd-eval-card__feedback {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+/* Question Source */
+.pd-question-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-left: 8px;
+}
+
+.pd-question-source svg {
+  color: var(--text-muted);
+}
+
+/* Top 25 Question List Items */
+.pd-top25__list li {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
 .pd-error {
   background: rgba(239, 68, 68, 0.1);
   color: #f87171;

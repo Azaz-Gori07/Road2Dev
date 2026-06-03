@@ -14,7 +14,9 @@ import {
   FileCode2,
   GitBranch,
   Gauge,
-  Link2Off
+  Link2Off,
+  Info,
+  RefreshCw
 } from 'lucide-react';
 import { pickLocalProjectFolder, supportsDirectoryPicker } from '../utils/projectFolderScanner';
 import {
@@ -52,8 +54,36 @@ function ScanProgressPanel({ lines, activeIndex }) {
   );
 }
 
-function TechBadge({ label }) {
-  return <span className="pd-tech-badge">{label}</span>;
+function FallbackModeBanner({ fallbackMode }) {
+  if (!fallbackMode?.active) return null;
+  return (
+    <div className="pd-fallback-banner">
+      <AlertTriangle size={16} />
+      <div>
+        <strong>Fallback Mode Active</strong>
+        <span>Project analysis unavailable. Questions may be generic. Reason: {fallbackMode.reason || 'AI analysis failed'}</span>
+      </div>
+    </div>
+  );
+}
+
+function TechBadge({ label, evidence }) {
+  const [showTooltip, setShowTooltip] = useState(false);
+  return (
+    <span
+      className="pd-tech-badge"
+      onMouseEnter={() => setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+      style={{ position: 'relative', cursor: evidence ? 'help' : 'default' }}
+    >
+      {label}
+      {evidence && showTooltip && (
+        <span className="pd-tech-badge__tooltip">
+          {evidence.map((e, i) => <div key={i}>{e}</div>)}
+        </span>
+      )}
+    </span>
+  );
 }
 
 function ConnectionStatus({ connected, projectName, ingestionMethod }) {
@@ -137,13 +167,65 @@ function ProjectConnectPanel({
 }
 
 function ProjectAnalysisReport({ context }) {
-  const report = context.architectureReport || {};
-  const technologies = context.detectedTechnologies?.length
-    ? context.detectedTechnologies
-    : [...(report.frameworks || []), ...(report.libraries || [])].slice(0, 14);
+  const analysisFailed = context.scanStatus === 'failed';
+  const report = context.architectureReport;
+  const technologies = context.detectedTechnologies || [];
   const features = context.detectedFeatures || [];
   const weakAreas = context.potentialWeakAreas || [];
   const complexity = context.projectComplexity;
+  const techEvidence = context.detectedTechnologiesEvidence || [];
+
+  // Build evidence map for tech badges
+  const evidenceMap = {};
+  for (const te of techEvidence) {
+    evidenceMap[te.name] = te.evidence;
+  }
+
+  if (analysisFailed) {
+    return (
+      <div className="pd-report pd-report--failed">
+        <header className="pd-report__hero">
+          <div className="pd-report__hero-icon">
+            {context.ingestionMethod === 'github' ? <Github size={22} /> : <FolderOpen size={22} />}
+          </div>
+          <div>
+            <span className="pd-report__eyebrow">Project Analysis Report</span>
+            <h2>{context.projectName}</h2>
+            {context.repoUrl && (
+              <a href={context.repoUrl} target="_blank" rel="noopener noreferrer" className="pd-report__repo-link">
+                <GitBranch size={12} /> {context.repoUrl}
+              </a>
+            )}
+          </div>
+          <div className="pd-report__stats">
+            <span><FileCode2 size={14} /> {context.scanStats?.filesScanned ?? 0} files scanned</span>
+          </div>
+        </header>
+
+        <div className="pd-report__unavailable">
+          <AlertTriangle size={24} />
+          <h3>Analysis unavailable</h3>
+          <p>We successfully scanned your project but could not generate an AI architecture review.</p>
+          <p className="pd-report__reason">Reason: {context.fallbackMode?.reason || 'AI service unavailable'}</p>
+          <div className="pd-report__unavailable-actions">
+            <button type="button" className="pd-secondary-btn" onClick={() => window.location.reload()}>
+              <RefreshCw size={14} /> Retry Analysis
+            </button>
+          </div>
+        </div>
+
+        {/* Show deterministic tech detections even when analysis fails */}
+        {techEvidence.length > 0 && (
+          <section className="pd-report__section">
+            <h3><Cpu size={16} /> Detected Technologies (from files)</h3>
+            <div className="pd-tech-badges">
+              {techEvidence.map((t) => <TechBadge key={t.name} label={t.name} evidence={t.evidence} />)}
+            </div>
+          </section>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="pd-report">
@@ -179,11 +261,23 @@ function ProjectAnalysisReport({ context }) {
         </h3>
         <div className="pd-tech-badges">
           {technologies.length ? (
-            technologies.map((t) => <TechBadge key={t} label={t} />)
+            technologies.map((t) => <TechBadge key={t} label={t} evidence={evidenceMap[t]} />)
           ) : (
             <span className="pd-muted">None detected</span>
           )}
         </div>
+        {techEvidence.length > 0 && (
+          <details className="pd-evidence-details">
+            <summary>View detection evidence ({techEvidence.length} sources)</summary>
+            <ul className="pd-evidence-list">
+              {techEvidence.map((t) => (
+                <li key={t.name}>
+                  <strong>{t.name}</strong>: {t.evidence.join(', ')}
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
       </section>
 
       <section className="pd-report__section">
@@ -207,24 +301,30 @@ function ProjectAnalysisReport({ context }) {
         <h3>
           <Layers size={16} /> Architecture Summary
         </h3>
-        <div className="pd-arch-grid">
-          <div className="pd-arch-card">
-            <span>State</span>
-            <strong>{report.stateManagement || 'None'}</strong>
-          </div>
-          <div className="pd-arch-card">
-            <span>Auth</span>
-            <strong>{report.auth || 'None'}</strong>
-          </div>
-          <div className="pd-arch-card">
-            <span>Database</span>
-            <strong>{report.database || 'None'}</strong>
-          </div>
-        </div>
-        <div className="pd-arch-summary">
-          <p>{report.summary || 'Summary unavailable.'}</p>
-        </div>
-        {report.structure && <pre className="pd-structure-block">{report.structure}</pre>}
+        {report ? (
+          <>
+            <div className="pd-arch-grid">
+              <div className="pd-arch-card">
+                <span>State</span>
+                <strong>{report.stateManagement || 'None'}</strong>
+              </div>
+              <div className="pd-arch-card">
+                <span>Auth</span>
+                <strong>{report.auth || 'None'}</strong>
+              </div>
+              <div className="pd-arch-card">
+                <span>Database</span>
+                <strong>{report.database || 'None'}</strong>
+              </div>
+            </div>
+            <div className="pd-arch-summary">
+              <p>{report.summary || 'Summary unavailable.'}</p>
+            </div>
+            {report.structure && <pre className="pd-structure-block">{report.structure}</pre>}
+          </>
+        ) : (
+          <p className="pd-muted">Architecture report unavailable.</p>
+        )}
       </section>
 
       <section className="pd-report__section pd-report__section--warn">
@@ -448,8 +548,15 @@ export default function ProjectDefenseWorkspace({
 
   if (defenseStarted && projectScanned) {
     const progress = projectContext.defenseProgress;
+    const isFallback = projectContext?.fallbackMode?.active === true;
+
+    // Render a question text from either string or object format
+    const renderQuestionText = (q) => (typeof q === 'object' ? q.text : q);
+    const renderQuestionSource = (q) => (typeof q === 'object' && q.source ? q.source : null);
+
     return (
       <div className="pd-workspace pd-interview">
+        <FallbackModeBanner fallbackMode={projectContext.fallbackMode} />
         <ConnectionStatus
           connected
           projectName={projectContext.projectName}
@@ -463,6 +570,7 @@ export default function ProjectDefenseWorkspace({
             <span>
               Question {(progress?.currentQuestionIndex ?? 0) + 1} of{' '}
               {progress?.totalQuestions ?? 5}
+              {isFallback && <span className="pd-generic-badge">Generic</span>}
             </span>
           </div>
         </div>
@@ -483,6 +591,36 @@ export default function ProjectDefenseWorkspace({
           </form>
         )}
 
+        {(progress?.evaluations?.length ?? 0) > 0 && (
+          <div className="pd-eval-feedback">
+            <h4>Answer evaluations</h4>
+            {progress.evaluations
+              .slice()
+              .reverse()
+              .map((ev, idx) => {
+                const passed = ev.authorshipScore >= 40;
+                return (
+                  <div
+                    key={idx}
+                    className={`pd-eval-card ${passed ? 'pd-eval-card--passed' : 'pd-eval-card--failed'}`}
+                  >
+                    <div className="pd-eval-card__header">
+                      <span className="pd-eval-card__icon">
+                        {passed ? <CheckCircle2 size={14} /> : <AlertTriangle size={14} />}
+                      </span>
+                      <span className="pd-eval-card__score">
+                        Authorship: {ev.authorshipScore ?? '?'}/100
+                        {passed ? ' — Passed' : ' — Below threshold'}
+                      </span>
+                    </div>
+                    <p className="pd-eval-card__question">{ev.question}</p>
+                    {ev.feedback && <p className="pd-eval-card__feedback">{ev.feedback}</p>}
+                  </div>
+                );
+              })}
+          </div>
+        )}
+
         {projectContext.topQuestions?.length > 0 && (
           <div className="pd-top25">
             <button
@@ -496,7 +634,14 @@ export default function ProjectDefenseWorkspace({
             {top25Expanded && (
               <ol className="pd-top25__list">
                 {projectContext.topQuestions.map((q, idx) => (
-                  <li key={idx}>{q}</li>
+                  <li key={idx}>
+                    {renderQuestionText(q)}
+                    {renderQuestionSource(q) && (
+                      <span className="pd-question-source">
+                        <Info size={10} /> Source: {renderQuestionSource(q)}
+                      </span>
+                    )}
+                  </li>
                 ))}
               </ol>
             )}
@@ -508,6 +653,7 @@ export default function ProjectDefenseWorkspace({
 
   return (
     <div className="pd-workspace">
+      <FallbackModeBanner fallbackMode={projectContext?.fallbackMode} />
       <header className="pd-landing__header pd-landing__header--compact">
         <FolderGit2 size={28} className="pd-landing__logo" />
         <h2>Project Defense</h2>
@@ -539,6 +685,9 @@ export default function ProjectDefenseWorkspace({
           <p className="pd-review-note">
             Review the analysis below. The defense interview starts only when you click{' '}
             <strong>Start Defense</strong>.
+            {projectContext?.fallbackMode?.active && (
+              <span className="pd-generic-note"> (Generic mode — questions will not be project-specific)</span>
+            )}
           </p>
           <ProjectAnalysisReport context={projectContext} />
         </>
@@ -556,7 +705,11 @@ export default function ProjectDefenseWorkspace({
           title={!projectScanned ? CONNECT_REQUIRED_MSG : undefined}
         >
           <Shield size={16} />
-          {isStartingDefense ? 'Starting interview…' : 'Start Defense'}
+          {isStartingDefense
+            ? 'Starting interview…'
+            : projectContext?.fallbackMode?.active
+              ? 'Start Defense (Generic)'
+              : 'Start Defense'}
           <ArrowRight size={14} />
         </button>
       </footer>

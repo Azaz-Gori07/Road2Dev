@@ -1,32 +1,15 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { 
-  Sparkles, 
-  Terminal, 
-  Play, 
-  CheckCircle, 
-  RotateCcw, 
-  FolderGit2, 
-  Briefcase, 
-  Send, 
+import {
+  Sparkles,
+  Terminal,
+  Send,
   ArrowRight,
-  Plus, 
-  BookOpen, 
-  Code2,
   Copy,
   Check,
-  Brain,
-  ChevronRight,
-  ArrowLeft,
-  Calendar,
-  DollarSign,
-  TrendingUp,
-  UserCheck,
-  AlertTriangle,
-  Shield
+  ArrowLeft
 } from 'lucide-react';
 import useAuth from '../hooks/useAuth';
-import useZenuxAuth from '../hooks/useZenuxAuth';
 import ProjectDefenseWorkspace from '../components/ProjectDefenseWorkspace';
 import { isProjectScanned } from '../utils/projectScanProgress';
 import './LearningLab.css';
@@ -211,9 +194,7 @@ function LearningLab() {
   const navigate = useNavigate();
   const { sessionId } = useParams();
   
-  const customAuth = useAuth();
-  const zenuxAuth = useZenuxAuth();
-  const authUser = customAuth.user || zenuxAuth.user;
+  const { user: authUser } = useAuth();
   
   // State
   const [sessions, setSessions] = useState([]);
@@ -466,7 +447,7 @@ function LearningLab() {
         if (syncRoute) {
           const nextRoute = getWorkflowRoute(session, routeWorkflowTab || undefined);
           if (location.pathname !== nextRoute) {
-            navigate(nextRoute, { replace: true });
+            navigate(nextRoute, { replace: false });
           }
         }
       }
@@ -542,6 +523,54 @@ function LearningLab() {
     };
     init();
   }, [sessionId, currentRouteWorkflowTab, location.search, location.state, navigate, fetchSessions, fetchSessionDetails, fetchTimeline, fetchRecommendations]);
+
+  // Clear active session when sessionId is not present in route (e.g. back to landing)
+  useEffect(() => {
+    if (!sessionId) {
+      setActiveSession(null);
+      setMessages([]);
+    }
+  }, [sessionId]);
+
+  // Sync State to URL parameters (Tab & Stage)
+  useEffect(() => {
+    if (!activeSession) return;
+
+    const id = activeSession._id || activeSession.id;
+    const stage = activeSession.learningEngine?.currentStage || 'WHY';
+    const tab = activeTab;
+
+    const nextRoute = getWorkflowRoute(activeSession, tab);
+    const searchParams = new URLSearchParams(location.search);
+
+    const currentStageInUrl = searchParams.get('stage');
+    const currentTabInUrl = searchParams.get('tab');
+
+    const routeChanged = location.pathname !== nextRoute;
+    const stageChanged = currentStageInUrl !== stage;
+    const tabChanged = currentTabInUrl !== tab;
+
+    if (routeChanged || stageChanged || tabChanged) {
+      searchParams.set('stage', stage);
+      searchParams.set('tab', tab);
+      const isFirstLoad = !currentStageInUrl && !currentTabInUrl;
+      navigate(`${nextRoute}?${searchParams.toString()}`, { replace: isFirstLoad });
+    }
+  }, [activeSession?._id, activeSession?.learningEngine?.currentStage, activeTab, navigate, location.pathname, location.search]);
+
+  // Sync URL parameters to State (for Back/Forward navigation support)
+  useEffect(() => {
+    if (!activeSession) return;
+
+    const searchParams = new URLSearchParams(location.search);
+    const urlTab = searchParams.get('tab');
+
+    if (urlTab && ['playground', 'project', 'coach', 'memory'].includes(urlTab) && urlTab !== activeTab) {
+      setActiveTab(urlTab);
+    }
+
+    // Stage is driven by server response only; URL param is ignored to prevent client-side manipulation
+  }, [location.search, activeSession?._id, activeTab]);
 
   // Scroll to bottom of chat
   useEffect(() => {
@@ -866,6 +895,10 @@ function LearningLab() {
       if (data.success) {
         setActiveSession(data.data);
         setMessages(data.data.messages || []);
+      } else if (data.evaluationFailed) {
+        // Evaluation failed but answer was recorded - update UI to show the error message
+        setActiveSession(data.data);
+        setMessages(data.data.messages || []);
       }
     } catch (err) {
       if (err.name !== 'AbortError') {
@@ -1095,6 +1128,11 @@ function LearningLab() {
   const focusCompletedTasks = focusChecklist.filter(item => item.completed).length;
   const focusTotalTasks = focusChecklist.length;
   const focusPercent = focusTotalTasks ? Math.round((focusCompletedTasks / focusTotalTasks) * 100) : 0;
+
+  const unfinishedConceptLearning = sessions.find(s => s.sessionType === 'Concept Learning' && s.status !== 'completed');
+  const unfinishedSandboxPractice = sessions.find(s => s.sessionType === 'Sandbox Practice' && s.status !== 'completed');
+  const unfinishedProjectDefense = sessions.find(s => (s.sessionType === 'Project Defense' || s.topic?.startsWith('Project Defense:')) && s.status !== 'completed');
+  const unfinishedCareerCoach = sessions.find(s => s.sessionType === 'Career Coach' && s.status !== 'completed');
   const recommendation = recommendations[0] || null;
   const recommendationTopic = recommendation?.topic || null;
   const recentActivities = timelineEvents.map(e => ({
@@ -1386,8 +1424,12 @@ function LearningLab() {
                       <strong style={{ color: '#fff', fontSize: '14px', display: 'block' }}>Guided Concept Learning</strong>
                       <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Deep dive into Closures, Promises, or custom logic with our analogy-first AI Coach.</span>
                     </div>
-                    <button type="button" className="r2d-resume-btn stage-row-cta stage-row-cta--purple" onClick={() => setGuidedModalType('learn')}>
-                      Start Learning
+                    <button 
+                      type="button" 
+                      className="r2d-resume-btn stage-row-cta stage-row-cta--purple" 
+                      onClick={() => unfinishedConceptLearning ? openLearningSession(unfinishedConceptLearning) : setGuidedModalType('learn')}
+                    >
+                      {unfinishedConceptLearning ? "Resume Learning Session" : "Start Learning"}
                     </button>
                   </div>
 
@@ -1398,8 +1440,12 @@ function LearningLab() {
                       <strong style={{ color: '#fff', fontSize: '14px', display: 'block' }}>Sandbox Practice Workspace</strong>
                       <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Write code, debug syntax, and pass validation challenges in our secure ES6 compiler.</span>
                     </div>
-                    <button type="button" className="r2d-resume-btn stage-row-cta stage-row-cta--green" onClick={() => handleCreateGuidedSession('Vanilla JS Sandbox Compiler', 'Sandbox Practice')}>
-                      Open Sandbox
+                    <button 
+                      type="button" 
+                      className="r2d-resume-btn stage-row-cta stage-row-cta--green" 
+                      onClick={() => unfinishedSandboxPractice ? openLearningSession(unfinishedSandboxPractice) : handleCreateGuidedSession('Vanilla JS Sandbox Compiler', 'Sandbox Practice')}
+                    >
+                      {unfinishedSandboxPractice ? "Resume Sandbox Challenge" : "Open Sandbox"}
                     </button>
                   </div>
 
@@ -1410,8 +1456,12 @@ function LearningLab() {
                       <strong style={{ color: '#fff', fontSize: '14px', display: 'block' }}>Automated Project Defense</strong>
                       <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Connect GitHub or a local folder, review the architecture report, then start the AI defense interview.</span>
                     </div>
-                    <button type="button" className="r2d-resume-btn stage-row-cta stage-row-cta--rose" onClick={() => handleCreateGuidedSession('Project Defense Lab', 'Project Defense')}>
-                      Defend Project
+                    <button 
+                      type="button" 
+                      className="r2d-resume-btn stage-row-cta stage-row-cta--rose" 
+                      onClick={() => unfinishedProjectDefense ? openLearningSession(unfinishedProjectDefense) : handleCreateGuidedSession('Project Defense Lab', 'Project Defense')}
+                    >
+                      {unfinishedProjectDefense ? "Resume Project Defense" : "Defend Project"}
                     </button>
                   </div>
 
@@ -1425,8 +1475,12 @@ function LearningLab() {
                       </div>
                       <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Monitor live job readiness percentages, study priority roadmap timelines, and launch targeted remediations.</span>
                     </div>
-                    <button type="button" className="r2d-resume-btn stage-row-cta stage-row-cta--cyan" onClick={() => handleCreateGuidedSession('Career Roadmaps & Interview Guidance', 'Career Coach')}>
-                      Open Career OS
+                    <button 
+                      type="button" 
+                      className="r2d-resume-btn stage-row-cta stage-row-cta--cyan" 
+                      onClick={() => unfinishedCareerCoach ? openLearningSession(unfinishedCareerCoach) : handleCreateGuidedSession('Career Roadmaps & Interview Guidance', 'Career Coach')}
+                    >
+                      {unfinishedCareerCoach ? "Resume Career Coach" : "Open Career OS"}
                     </button>
                   </div>
                 </div>
@@ -1736,6 +1790,9 @@ function LearningLab() {
                 {activeSession.topic.startsWith('Project Defense:') ? activeSession.topic.replace('Project Defense: ', '') : activeSession.topic}
               </h2>
               <span className="difficulty-badge">{activeSession.mode || 'Intermediate'}</span>
+              {isProjectDefenseSession && projectContext?.fallbackMode?.active === true && (
+                <span className="pd-generic-badge">Generic</span>
+              )}
             </div>
             
             <div className="workspace-header-center">

@@ -1,9 +1,11 @@
+import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 import Otp from '../models/Otp.js';
 import User from '../models/User.js';
 import { sendOtpEmail } from '../utils/mailer.js';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Helper: Generate JWT token
 const generateToken = (userId) => {
@@ -12,7 +14,7 @@ const generateToken = (userId) => {
 
 // Helper: Generate 6-digit OTP
 const generateOtp = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+  return crypto.randomInt(100000, 1000000).toString();
 };
 
 /**
@@ -44,11 +46,14 @@ export const sendOtp = async (req, res) => {
     const otp = generateOtp();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     await Otp.create({
       email,
       otp,
       name,
-      password,
+      password: hashedPassword,
       expiresAt,
     });
 
@@ -63,8 +68,6 @@ export const sendOtp = async (req, res) => {
     res.json({
       message: 'OTP sent successfully to your email',
       email,
-      // In development, send OTP in response for testing
-      ...(process.env.NODE_ENV !== 'production' && { otp }),
     });
   } catch (error) {
     console.error('Send OTP error:', error.message);
@@ -182,7 +185,6 @@ export const resendOtp = async (req, res) => {
     res.json({
       message: 'OTP resent successfully',
       email,
-      ...(process.env.NODE_ENV !== 'production' && { otp }),
     });
   } catch (error) {
     console.error('Resend OTP error:', error.message);

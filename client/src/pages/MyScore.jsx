@@ -2,6 +2,9 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import useZenuxAuth from "../hooks/useZenuxAuth";
 import useAuth from "../hooks/useAuth";
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables);
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
 
@@ -33,11 +36,7 @@ const styles = `
   --red: var(--error);
 }
 
-  html, body, #root {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-
+  .dash {
   background:
     radial-gradient(
       circle at top right,
@@ -45,10 +44,6 @@ const styles = `
       transparent 30%
     ),
     var(--background);
-
-  color: var(--t1);
-  font-family: 'Outfit', sans-serif;
-  font-size: 13px;
 }
 
   .dash {
@@ -567,38 +562,37 @@ function PerfChart({ sessions = [] }) {
   const chartRef = useRef(null);
 
   useEffect(() => {
-    const loadChart = () => {
-      if (!window.Chart || !canvasRef.current) return;
-      if (chartRef.current) chartRef.current.destroy();
+    if (!canvasRef.current) return;
+    if (chartRef.current) chartRef.current.destroy();
 
-      const sorted = [...sessions].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-      const lastSix = sorted.slice(-6);
-      
-      let labels = lastSix.map(s => 
-        new Date(s.updatedAt || s.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
-      );
-      let dataPoints = lastSix.map(s => typeof s.score === 'number' ? s.score : 0);
+    const sorted = [...sessions].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    const lastSix = sorted.slice(-6);
+    
+    let labels = lastSix.map(s => 
+      new Date(s.updatedAt || s.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+    );
+    let dataPoints = lastSix.map(s => typeof s.score === 'number' ? s.score : 0);
 
-      if (labels.length === 0) {
-        labels = ["Start practicing"];
-        dataPoints = [0];
-      }
+    if (labels.length === 0) {
+      labels = ["Start practicing"];
+      dataPoints = [0];
+    }
 
-      const ctx = canvasRef.current.getContext("2d");
+    const ctx = canvasRef.current.getContext("2d");
 
-      const style = getComputedStyle(document.documentElement);
-      const accentGreen = style.getPropertyValue('--accent-green').trim() || "#22d37e";
-      const greenTranslucent = style.getPropertyValue('--success-translucent').trim() || "rgba(34,211,126,.18)";
-      const bg = style.getPropertyValue('--background').trim() || "#08080e";
-      const surfaceAlt = style.getPropertyValue('--surface-alt').trim() || "#191927";
-      const border = style.getPropertyValue('--border').trim() || "#252538";
-      const textMuted = style.getPropertyValue('--text-muted').trim() || "#4a4a6e";
+    const style = getComputedStyle(document.documentElement);
+    const accentGreen = style.getPropertyValue('--accent-green').trim() || "#22d37e";
+    const greenTranslucent = style.getPropertyValue('--success-translucent').trim() || "rgba(34,211,126,.18)";
+    const bg = style.getPropertyValue('--background').trim() || "#08080e";
+    const surfaceAlt = style.getPropertyValue('--surface-alt').trim() || "#191927";
+    const border = style.getPropertyValue('--border').trim() || "#252538";
+    const textMuted = style.getPropertyValue('--text-muted').trim() || "#4a4a6e";
 
-      const grad = ctx.createLinearGradient(0, 0, 0, 140);
-      grad.addColorStop(0, greenTranslucent);
-      grad.addColorStop(1, "rgba(34,211,126,0)");
+    const grad = ctx.createLinearGradient(0, 0, 0, 140);
+    grad.addColorStop(0, greenTranslucent);
+    grad.addColorStop(1, "rgba(34,211,126,0)");
 
-      chartRef.current = new window.Chart(ctx, {
+    chartRef.current = new Chart(ctx, {
         type: "line",
         data: {
           labels,
@@ -637,16 +631,7 @@ function PerfChart({ sessions = [] }) {
           },
         },
       });
-    };
 
-    if (window.Chart) {
-      loadChart();
-    } else {
-      const script = document.createElement("script");
-      script.src = "https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js";
-      script.onload = loadChart;
-      document.head.appendChild(script);
-    }
     return () => { if (chartRef.current) chartRef.current.destroy(); };
   }, [sessions]);
 

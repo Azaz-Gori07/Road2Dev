@@ -1,0 +1,8 @@
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+✓ Database connected successfully
+✓ Ready to accept requests on port 5500
+Server is running on port 5500
+[AI_PROVIDER] Groq https://api.groq.com/openai/v1/chat/completions 2026-06-03T13:33:57.732Z
+[AI_PROVIDER] Groq https://api.groq.com/openai/v1/chat/completions 2026-06-03T13:34:05.936Z
+[AI_PROVIDER] Groq https://api.groq.com/openai/v1/chat/completions 2026-06-03T13:34:10.645Z
+[AI_PROVIDER] Groq https://api.groq.com/openai/v1/chat/completions 2026-06-03T13:34:15.350Z

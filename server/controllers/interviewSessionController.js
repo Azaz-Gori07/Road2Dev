@@ -5,7 +5,7 @@ import {
   updateSession,
   deleteSession,
 } from '../services/interviewSessionService.js';
-import { logTimelineEvent } from './learningLabController.js';
+import { logTimelineEvent, updateMentorMemory } from './learningLabController.js';
 
 const VALID_STATUS = new Set(['draft', 'incomplete', 'active', 'completed', 'archived', 'in_progress', 'abandoned']);
 
@@ -150,6 +150,89 @@ export const getInterviewSessions = async (req, res) => {
   }
 };
 
+const mapSkillsToDimensions = (skillsPerformance, overallScore = 70) => {
+  const totals = {
+    conceptUnderstanding: [],
+    codingAbility: [],
+    problemSolving: [],
+    projectUsage: [],
+    interviewReadiness: [overallScore]
+  };
+
+  const skillMapping = {
+    'closures': 'conceptUnderstanding',
+    'scope': 'conceptUnderstanding',
+    'hoisting': 'conceptUnderstanding',
+    'event loop': 'conceptUnderstanding',
+    'cap theorem': 'conceptUnderstanding',
+    'fundamentals': 'conceptUnderstanding',
+    'promises': 'conceptUnderstanding',
+    'async programming': 'conceptUnderstanding',
+    'javascript': 'codingAbility',
+    'react': 'codingAbility',
+    'node.js': 'codingAbility',
+    'functions': 'codingAbility',
+    'arrays': 'codingAbility',
+    'es6+': 'codingAbility',
+    'coding ability': 'codingAbility',
+    'system design': 'problemSolving',
+    'problem solving': 'problemSolving',
+    'debugging': 'problemSolving',
+    'algorithms': 'problemSolving',
+    'authentication': 'projectUsage',
+    'authorization': 'projectUsage',
+    'database': 'projectUsage',
+    'mongodb': 'projectUsage',
+    'indexing': 'projectUsage',
+    'apis': 'projectUsage',
+    'backend': 'projectUsage',
+    'security': 'projectUsage'
+  };
+
+  if (Array.isArray(skillsPerformance)) {
+    skillsPerformance.forEach(s => {
+      const name = (s.skill || '').toLowerCase();
+      const status = (s.status || '').toLowerCase();
+      
+      let scoreVal = 0;
+      if (status === 'mastered') scoreVal = 92;
+      else if (status === 'average') scoreVal = 72;
+      else if (status === 'weak') scoreVal = 48;
+      else return; // Ignore not_assessed
+
+      let mapped = false;
+      for (const [key, category] of Object.entries(skillMapping)) {
+        if (name.includes(key)) {
+          totals[category].push(scoreVal);
+          mapped = true;
+          break;
+        }
+      }
+      if (!mapped) {
+        if (name.includes('code') || name.includes('syntax') || name.includes('write')) {
+          totals.codingAbility.push(scoreVal);
+        } else if (name.includes('design') || name.includes('db') || name.includes('api') || name.includes('project')) {
+          totals.projectUsage.push(scoreVal);
+        } else {
+          totals.conceptUnderstanding.push(scoreVal);
+        }
+      }
+    });
+  }
+
+  const finalScores = {};
+  Object.keys(totals).forEach(dim => {
+    const list = totals[dim];
+    if (list.length > 0) {
+      finalScores[dim] = Math.round(list.reduce((a, b) => a + b, 0) / list.length);
+    } else {
+      finalScores[dim] = overallScore;
+    }
+  });
+
+  return finalScores;
+};
+
 export const updateInterviewSession = async (req, res) => {
   const updates = sanitizePayload(req.body);
 
@@ -172,6 +255,30 @@ export const updateInterviewSession = async (req, res) => {
         detail: `Final Score: ${updated.score || 0}%`,
         status: 'completed'
       });
+
+      // Unified Mentor Memory Integration
+      try {
+        const summaryMsg = updated.messages?.find((m) => m.type === 'summary');
+        const summary = summaryMsg?.summary || {};
+        const overallScore = updated.score || summary.overallScore || 70;
+        const skillsPerformance = summary.skillsPerformance || [];
+        
+        const mappedScores = mapSkillsToDimensions(skillsPerformance, overallScore);
+        
+        await updateMentorMemory({
+          userId: req.user._id,
+          topic: updated.field || 'Interview Topic',
+          scores: mappedScores,
+          passed: overallScore >= 60,
+          sourceInfo: {
+            refType: 'InterviewSession',
+            refId: updated._id,
+            source: 'interview_completed'
+          }
+        });
+      } catch (memErr) {
+        console.error('Failed to sync interview score to mentor memory:', memErr.message);
+      }
     }
 
     return res.status(200).json({ success: true, data: updated });

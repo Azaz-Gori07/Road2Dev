@@ -14,6 +14,7 @@ export const createRateLimiter = ({
   windowMs = 60 * 1000,
   maxRequests = 8,
   keyGenerator = (req) => req.ip || 'anonymous',
+  message = 'Too many requests. Please try again shortly.',
 } = {}) => {
   return (req, res, next) => {
     cleanupBuckets(windowMs);
@@ -34,7 +35,7 @@ export const createRateLimiter = ({
 
       return res.status(429).json({
         success: false,
-        message: 'Too many interview generation requests. Please try again shortly.',
+        message,
         retryAfter,
       });
     }

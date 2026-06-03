@@ -13,6 +13,9 @@ import {
     Sparkles,
     Sun,
     Moon,
+    BrainCircuit,
+    TrendingUp,
+    Clock,
 } from "lucide-react";
 import { useTheme } from '../components/ThemeContext';
 import {
@@ -178,12 +181,15 @@ function Sidebar() {
                         }
                         if (window.innerWidth <= 800) setMobileOpen(false);
                     }} className={activeLink === 'score' ? 'isActive' : 'sidebar-link'} data-title='My Score' style={{ cursor: 'pointer' }}><BarChart3 size={20} /> <span className='link-text'>My Score</span></li>
+                    <Link to="/intelligence"><li onClick={() => { setActiveLink("intelligence"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'intelligence' ? 'isActive' : 'sidebar-link'} data-title='Intelligence'><BrainCircuit size={20} /> <span className='link-text'>Intelligence</span></li></Link>
+                    <Link to="/learning/analytics"><li onClick={() => { setActiveLink("analytics"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'analytics' ? 'isActive' : 'sidebar-link'} data-title='Analytics'><TrendingUp size={20} /> <span className='link-text'>Analytics</span></li></Link>
                     {isAuthenticated ? (
                         <Link to="/profile"><li onClick={() => { setActiveLink("profile"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'profile' ? 'isActive' : 'sidebar-link'} data-title='Profile'><User size={20} /> <span className='link-text'>Profile</span></li></Link>
                     ) : (
                         <li onClick={handleProfileClick} className={activeLink === 'profile' ? 'isActive' : 'sidebar-link'} data-title='Profile' style={{ cursor: 'pointer' }}><User size={20} /> <span className='link-text'>Profile</span></li>
                     )}
                     <Link to="/about"><li onClick={() => { setActiveLink("about"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'about' ? 'isActive' : 'sidebar-link'} data-title='About'><Info size={20} /> <span className='link-text'>About</span></li></Link>
+                    <Link to="/memory"><li onClick={() => { setActiveLink("memory"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'memory' ? 'isActive' : 'sidebar-link'} data-title='Memory'><Clock size={20} /> <span className='link-text'>Memory</span></li></Link>
                 </ul>
 
                 {!isAuthenticated && !close && (

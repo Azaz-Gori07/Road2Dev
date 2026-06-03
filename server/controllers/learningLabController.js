@@ -9,12 +9,20 @@ import {
   compileCareerCoachRoadmap
 } from '../services/learningLabAiService.js';
 import { executeJsCode } from '../services/codeExecutionService.js';
+import {
+  generateRecommendations,
+  computeReadinessIndexes,
+  analyzeStrengthsAndWeaknesses
+} from '../services/mentorIntelligenceEngine.js';
+import { canonicalize } from '../utils/topicNormalizer.js';
 import axios from 'axios';
 import {
   isIgnoredPath,
   isTextSourcePath,
   parseGitHubUrl,
   buildProjectSummaryText,
+  detectTechnologiesFromFiles,
+  validateClaimsAgainstEvidence,
   KEY_CONFIG_FILES
 } from '../utils/projectScanUtils.js';
 
@@ -35,8 +43,9 @@ export const logTimelineEvent = async ({ userId, learningSessionId = null, actio
   }
 };
 
-export const updateMentorMemory = async ({ userId, topic, scores = {}, passed = null }) => {
+export const updateMentorMemory = async ({ userId, topic: rawTopic, scores = {}, passed = null, sourceInfo = null }) => {
   try {
+    const topic = canonicalize(rawTopic);
     let memory = await MentorMemory.findOne({ userId, topic });
     if (!memory) {
       memory = new MentorMemory({ userId, topic });
@@ -45,6 +54,7 @@ export const updateMentorMemory = async ({ userId, topic, scores = {}, passed = 
     if (scores.conceptUnderstanding !== undefined) memory.conceptUnderstanding = Math.max(memory.conceptUnderstanding, scores.conceptUnderstanding);
     if (scores.codingAbility !== undefined) memory.codingAbility = Math.max(memory.codingAbility, scores.codingAbility);
     if (scores.problemSolving !== undefined) memory.problemSolving = Math.max(memory.problemSolving, scores.problemSolving);
+    if (scores.projectUsage !== undefined) memory.projectUsage = Math.max(memory.projectUsage, scores.projectUsage);
     if (scores.projectReadiness !== undefined) memory.projectUsage = Math.max(memory.projectUsage, scores.projectReadiness);
     if (scores.interviewReadiness !== undefined) memory.interviewReadiness = Math.max(memory.interviewReadiness, scores.interviewReadiness);
     
@@ -53,6 +63,35 @@ export const updateMentorMemory = async ({ userId, topic, scores = {}, passed = 
       memory.successCount += 1;
     } else if (passed === false) {
       memory.failureCount += 1;
+    }
+
+    if (sourceInfo && sourceInfo.refType && sourceInfo.refId && sourceInfo.source) {
+      // Avoid duplicate source logs for the same activity completion
+      const alreadyLogged = memory.sources.some(s => s.refId.toString() === sourceInfo.refId.toString() && s.source === sourceInfo.source);
+      if (!alreadyLogged) {
+        memory.sources.push({
+          refType: sourceInfo.refType,
+          refId: sourceInfo.refId,
+          source: sourceInfo.source,
+          date: new Date()
+        });
+
+        // Increment evidence counts based on the activity type
+        if (!memory.evidenceCounts) {
+          memory.evidenceCounts = { sandbox: 0, interview: 0, defense: 0 };
+        }
+        if (sourceInfo.refType === 'SandboxSubmission') {
+          memory.evidenceCounts.sandbox += 1;
+        } else if (sourceInfo.refType === 'InterviewSession') {
+          memory.evidenceCounts.interview += 1;
+        } else if (sourceInfo.refType === 'LearningSession') {
+          if (sourceInfo.source === 'project_defense_completed') {
+            memory.evidenceCounts.defense += 1;
+          } else {
+            memory.evidenceCounts.sandbox += 1; // Fallback or learning checkpoint
+          }
+        }
+      }
     }
 
     const activeScores = [
@@ -118,14 +157,19 @@ export const recordSandboxSubmission = async ({ userId, learningSessionId, chall
       status: passed ? 'completed' : 'failed'
     });
 
-    if (mode !== 'practice') {
+    if (mode !== 'practice' && passed) {
       const session = await LearningSession.findById(learningSessionId);
       const topic = session ? session.topic : (challengeTitle || 'General Sandbox Practice');
       await updateMentorMemory({
         userId,
         topic,
         scores,
-        passed
+        passed,
+        sourceInfo: {
+          refType: 'SandboxSubmission',
+          refId: sub._id,
+          source: 'sandbox_passed'
+        }
       });
     }
 
@@ -326,7 +370,8 @@ const completeLearningStage = (session, stageKey, evidenceType) => {
     stage.evidenceType = evidenceType;
   }
 
-  const currentIndex = LEARNING_STAGES.findIndex(item => item.key === stageKey);
+  // Only advance one stage from current position (sequential progression)
+  const currentIndex = LEARNING_STAGES.findIndex(item => item.key === session.learningEngine.currentStage);
   const nextStage = LEARNING_STAGES[currentIndex + 1];
   if (nextStage) {
     session.learningEngine.currentStage = nextStage.key;
@@ -561,7 +606,8 @@ Ask me any questions you have on the left, or try compiling a script in the edit
  * POST send message in chat
  */
 export const sendChatMessage = async (req, res) => {
-  const { text } = req.body || {};
+  const { text: rawText } = req.body || {};
+  const text = (rawText || '').trim().slice(0, 5000);
   if (!text) {
     return res.status(400).json({ success: false, message: 'Message text is required.' });
   }
@@ -961,40 +1007,70 @@ const buildProjectContextFromAnalysis = (analysisReport, {
   projectName,
   repoUrl = '',
   ingestionMethod = '',
-  filesScanned = 0
-}) => ({
-  projectName,
-  repoUrl,
-  ingestionMethod,
-  scanComplete: true,
-  defenseStarted: false,
-  starterDefenseQuestion: analysisReport.starterDefenseQuestion || '',
-  detectedTechnologies: analysisReport.detectedTechnologies || [],
-  detectedFeatures: analysisReport.detectedFeatures || [],
-  potentialWeakAreas: analysisReport.potentialWeakAreas || [],
-  projectComplexity: analysisReport.projectComplexity || {
-    level: 'Moderate',
-    score: 50,
-    rationale: 'Complexity inferred from project structure and dependencies.'
-  },
-  scanStats: { filesScanned, foldersScanned: 0 },
-  architectureReport: analysisReport.architectureReport,
-  defenseProgress: {
-    currentQuestionIndex: 0,
-    totalQuestions: 5,
-    evaluations: []
-  },
-  topQuestions: analysisReport.topQuestions || [],
-  learningReport: {
-    strengths: [],
-    weakAreas: [],
-    missingConcepts: [],
-    suggestedImprovements: [],
-    refactoringIdeas: [],
-    productionReadinessScore: 0,
-    portfolioReadinessScore: 0
-  }
-});
+  filesScanned = 0,
+  detectedTechnologiesEvidence = [],
+  unverifiedClaims = [],
+  fallbackReason = ''
+}) => {
+  const analysisFailed = !analysisReport;
+  const fallbackMode = analysisFailed ? {
+    active: true,
+    reason: fallbackReason,
+    affectedFeatures: ['architecture_report', 'question_generation']
+  } : { active: false, reason: '', affectedFeatures: [] };
+
+  const base = {
+    projectName,
+    repoUrl,
+    ingestionMethod,
+    scanComplete: true,
+    scanStatus: analysisFailed ? 'failed' : 'success',
+    defenseStarted: false,
+    starterDefenseQuestion: '',
+    detectedTechnologies: [],
+    detectedFeatures: [],
+    potentialWeakAreas: [],
+    projectComplexity: {
+      level: 'Moderate',
+      score: 50,
+      rationale: 'Complexity inferred from project structure and dependencies.'
+    },
+    scanStats: { filesScanned, foldersScanned: 0 },
+    architectureReport: null,
+    defenseProgress: {
+      currentQuestionIndex: 0,
+      totalQuestions: 5,
+      evaluations: []
+    },
+    topQuestions: [],
+    learningReport: {
+      strengths: [],
+      weakAreas: [],
+      missingConcepts: [],
+      suggestedImprovements: [],
+      refactoringIdeas: [],
+      productionReadinessScore: 0,
+      portfolioReadinessScore: 0
+    },
+    fallbackMode,
+    unverifiedClaims,
+    detectedTechnologiesEvidence
+  };
+
+  if (analysisFailed) return base;
+
+  return {
+    ...base,
+    scanStatus: 'success',
+    starterDefenseQuestion: analysisReport.starterDefenseQuestion || '',
+    detectedTechnologies: analysisReport.detectedTechnologies || [],
+    detectedFeatures: analysisReport.detectedFeatures || [],
+    potentialWeakAreas: analysisReport.potentialWeakAreas || [],
+    projectComplexity: analysisReport.projectComplexity || base.projectComplexity,
+    architectureReport: analysisReport.architectureReport || null,
+    topQuestions: analysisReport.topQuestions || []
+  };
+};
 
 const fetchKeyFileContents = async (filesList) => {
   const contents = [];
@@ -1023,35 +1099,7 @@ const fetchKeyFileContents = async (filesList) => {
   return contents;
 };
 
-const getFallbackAnalysis = () => ({
-  architectureReport: {
-    structure: "- `client/`: React frontend pages and components\n- `server/`: Node.js/Express API, models, and middleware\n- `package.json`: Root dependency and script configuration",
-    libraries: ['React', 'Express', 'Mongoose', 'Axios'],
-    frameworks: ['React', 'Express'],
-    components: ['App shell', 'API controllers', 'Data models'],
-    apis: ['/api routes', 'REST handlers'],
-    stateManagement: 'Context API or local state',
-    auth: 'JWT or session middleware',
-    database: 'MongoDB or SQL store',
-    summary: 'A full-stack application with separated client and server layers, typical of portfolio or learning platforms.'
-  },
-  detectedTechnologies: ['React', 'Node.js', 'Express', 'MongoDB', 'Vite'],
-  detectedFeatures: ['REST API layer', 'Authenticated routes', 'Client routing', 'Persistent data models'],
-  potentialWeakAreas: ['Error handling consistency', 'Input validation on API routes', 'Client-side loading states'],
-  projectComplexity: {
-    level: 'Moderate',
-    score: 55,
-    rationale: 'Multi-layer client/server structure with authentication and persistence.'
-  },
-  topQuestions: [
-    'Why did you choose this authentication approach for your API?',
-    'How do you structure error responses across controllers?',
-    'Explain how client state syncs with server data.',
-    'What database indexing or schema decisions did you make?',
-    'Why was your chosen bundler or framework selected over alternatives?'
-  ],
-  starterDefenseQuestion: 'Walk me through your authentication flow from client request to protected route.'
-});
+
 
 /**
  * POST ingest project — GitHub URL or local folder file manifest (no ZIP)
@@ -1104,6 +1152,10 @@ export const ingestProject = async (req, res) => {
       return res.status(400).json({ success: false, message: 'No scannable project files found. Check the path or repository visibility.' });
     }
 
+    // Step 1: Deterministic technology detection (always runs, no AI needed)
+    const deterministicTech = detectTechnologiesFromFiles(filesList, fileContents);
+
+    // Step 2: Build summary for AI
     const projectSummaryText = buildProjectSummaryText({
       sourceLabel,
       repoUrl: githubUrl || '',
@@ -1111,22 +1163,39 @@ export const ingestProject = async (req, res) => {
       fileContents
     });
 
-    let analysisReport;
+    // Step 3: AI analysis with multi-provider fallback (Gemini → Groq → Failure)
+    let analysisReport = null;
+    let aiError = '';
     try {
       analysisReport = await analyzeProjectSummary({
         projectSummaryText,
         repoUrl: githubUrl || ''
       });
     } catch (aiErr) {
-      console.warn('Project ingestion AI failed, using fallback analysis:', aiErr.message);
-      analysisReport = getFallbackAnalysis();
+      aiError = aiErr?.publicMessage || aiErr?.message || 'AI analysis failed after all providers exhausted';
+      console.warn('Project ingestion AI failed (all providers):', aiError);
     }
 
+    // Step 4: Hallucination protection - validate AI claims against evidence
+    let unverifiedClaims = [];
+    if (analysisReport && Array.isArray(analysisReport.detectedTechnologies)) {
+      const validation = validateClaimsAgainstEvidence(
+        analysisReport.detectedTechnologies,
+        deterministicTech.technologies
+      );
+      analysisReport.detectedTechnologies = validation.verified;
+      unverifiedClaims = validation.unverified;
+    }
+
+    // Step 5: Build project context
     const projectContext = buildProjectContextFromAnalysis(analysisReport, {
       projectName,
       repoUrl: githubUrl || '',
       ingestionMethod: resolvedMethod,
-      filesScanned: filesList.length
+      filesScanned: filesList.length,
+      detectedTechnologiesEvidence: deterministicTech.technologies,
+      unverifiedClaims,
+      fallbackReason: aiError
     });
 
     let session;
@@ -1138,16 +1207,22 @@ export const ingestProject = async (req, res) => {
       session.topic = `Project Defense: ${projectName}`;
       session.sessionType = 'Project Defense';
       session.projectContext = projectContext;
+      const scanText = analysisReport
+        ? `### Project scan complete\nI've analyzed **${projectName}** and prepared your **Project Analysis Report**. Review detected technologies, architecture, and weak areas in the Project tab, then click **Start Defense** when you're ready.`
+        : `### Project scan complete\nI scanned **${projectName}** but could not generate an AI architecture review. Technologies were detected from your project files. You can still start a generic defense interview. Reason: ${aiError}`;
       session.messages.push({
         id: `defense-scan-${Date.now()}`,
         role: 'assistant',
-        text: `### Project scan complete\nI've analyzed **${projectName}** and prepared your **Project Analysis Report**. Review detected technologies, architecture, and weak areas in the Project tab, then click **Start Defense** when you're ready.`,
+        text: scanText,
         timestamp: new Date()
       });
       if (session.missionChecklist?.length) {
         markFirstIncompleteTaskComplete(session, (t) => /connect|github|local|folder/i.test(t.task));
       }
     } else {
+      const scanTextForNew = analysisReport
+        ? `### Project scan complete\nI've analyzed **${projectName}** and prepared your **Project Analysis Report**. Review the findings below, then click **Start Defense** when you're ready for interview questions.`
+        : `### Project scan complete\nI scanned **${projectName}** but could not generate an AI architecture review. Technologies were detected from your project files. You can still start a generic defense interview. Reason: ${aiError}`;
       session = new LearningSession({
         userId: req.user._id,
         topic: `Project Defense: ${projectName}`,
@@ -1158,7 +1233,7 @@ export const ingestProject = async (req, res) => {
         messages: [{
           id: `defense-scan-${Date.now()}`,
           role: 'assistant',
-          text: `### Project scan complete\nI've analyzed **${projectName}** and prepared your **Project Analysis Report**. Review the findings below, then click **Start Defense** when you're ready for interview questions.`,
+          text: scanTextForNew,
           timestamp: new Date()
         }],
         missionChecklist: [
@@ -1204,15 +1279,32 @@ export const startProjectDefense = async (req, res) => {
       return res.status(200).json({ success: true, data: session });
     }
 
-    const starterQuestion = context.starterDefenseQuestion
-      || context.topQuestions?.[0]
-      || 'Explain the core architecture of your project and the main tradeoffs you made.';
+    const isFallback = context?.fallbackMode?.active === true;
+    const genericQuestions = [
+      'Explain the core architecture of your project and the main tradeoffs you made.',
+      'Walk me through your authentication flow from client request to protected route.',
+      'How do you structure error responses across your application?',
+      'What database schema decisions did you make and why?',
+      'How do you handle state management across your application?'
+    ];
+
+    const starterQuestion = isFallback
+      ? genericQuestions[0]
+      : (context.starterDefenseQuestion || context.topQuestions?.[0] || genericQuestions[0]);
+
+    // Ensure topQuestions exist even in fallback mode for fallback evaluation
+    if (isFallback && (!Array.isArray(context.topQuestions) || context.topQuestions.length === 0)) {
+      context.topQuestions = genericQuestions;
+    }
 
     context.defenseStarted = true;
+    const startMsg = isFallback
+      ? `### Project Defense started (Generic Mode)\nAI architecture review was unavailable. Questions will be based on general project patterns. Here is your first question:\n\n**"${starterQuestion}"**`
+      : `### Project Defense started\nBased on my analysis of your codebase, here is your first question:\n\n**"${starterQuestion}"**`;
     session.messages.push({
       id: `defense-start-${Date.now()}`,
       role: 'assistant',
-      text: `### Project Defense started\nBased on my analysis of your codebase, here is your first question:\n\n**"${starterQuestion}"**`,
+      text: startMsg,
       timestamp: new Date()
     });
 
@@ -1256,8 +1348,12 @@ export const submitProjectDefenseAnswer = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Learning session not found.' });
     }
 
+    if (session.status === 'completed') {
+      return res.status(400).json({ success: false, message: 'This project defense has already been completed.' });
+    }
+
     const context = session.projectContext;
-    if (!context || !context.architectureReport) {
+    if (!context || (!context.architectureReport && context?.fallbackMode?.active !== true)) {
       return res.status(400).json({ success: false, message: 'This learning session is not a project defense session.' });
     }
 
@@ -1298,12 +1394,23 @@ export const submitProjectDefenseAnswer = async (req, res) => {
       currentQuestionIndex: currentQIdx
     });
 
-    // Append evaluation details
+    // Deduplication: reject exact duplicate of any previous answer
+    const isDuplicate = progress.evaluations.some(e => e.answer.trim() === answer.trim());
+    if (isDuplicate) {
+      return res.status(400).json({ success: false, message: 'Duplicate answer. Please provide a new response.' });
+    }
+
+    // Append evaluation details with multi-dimension scores
     progress.evaluations.push({
       question: currentQuestion,
       answer,
-      authorshipScore: evalResult.authorshipScore,
-      feedback: evalResult.feedback
+      authorshipScore: evalResult.authorshipScore || 0,
+      technicalCorrectness: evalResult.technicalCorrectness || 0,
+      projectAwareness: evalResult.projectAwareness || 0,
+      architectureUnderstanding: evalResult.architectureUnderstanding || 0,
+      implementationReasoning: evalResult.implementationReasoning || 0,
+      tradeoffUnderstanding: evalResult.tradeoffUnderstanding || 0,
+      feedback: evalResult.feedback || ''
     });
 
     // Append user response to chat logs
@@ -1314,7 +1421,8 @@ export const submitProjectDefenseAnswer = async (req, res) => {
       timestamp: new Date()
     });
 
-    const milestonePassed = answer.trim().length >= 15;
+    // AI evaluation scoring: award progress based on authorshipScore (>= 40 indicates genuine effort)
+    const milestonePassed = (evalResult.authorshipScore || 0) >= 40;
     if (milestonePassed) {
       completeLearningStage(session, 'PROJECT_APPLICATION', 'project_defense_answer');
       applyVerifiedProgress(session, DEFAULT_MASTERY_INCREMENT.projectDefenseMilestonePassed);
@@ -1343,6 +1451,32 @@ export const submitProjectDefenseAnswer = async (req, res) => {
         portfolioReadinessScore: session.masteryPercentage
       };
 
+      // MentorMemory update for completed defense with evaluation-based scoring
+      try {
+        const evals = progress.evaluations || [];
+        const avg = (key) => evals.length > 0 ? Math.round(evals.reduce((s, e) => s + (e[key] || 0), 0) / evals.length) : 0;
+        const defenseScores = {
+          conceptUnderstanding: avg('technicalCorrectness'),
+          codingAbility: avg('implementationReasoning'),
+          problemSolving: avg('architectureUnderstanding'),
+          projectUsage: avg('projectAwareness'),
+          interviewReadiness: Math.round((avg('technicalCorrectness') + avg('implementationReasoning') + avg('architectureUnderstanding') + avg('projectAwareness') + avg('tradeoffUnderstanding')) / 5)
+        };
+        await updateMentorMemory({
+          userId: req.user._id,
+          topic: session.topic,
+          scores: defenseScores,
+          passed: milestonePassed,
+          sourceInfo: {
+            refType: 'LearningSession',
+            refId: session._id,
+            source: 'project_defense_completed'
+          }
+        });
+      } catch (memErr) {
+        console.error('Failed to sync defense scores to mentor memory:', memErr.message);
+      }
+
       session.messages.push({
         id: `a-def-summary-${Date.now()}`,
         role: 'assistant',
@@ -1358,14 +1492,51 @@ export const submitProjectDefenseAnswer = async (req, res) => {
         detail: `Final score: ${session.masteryPercentage}%`,
         status: 'completed'
       });
+
+      // Unified Mentor Memory Project Defense Integration
+      try {
+        const evaluations = context.defenseProgress.evaluations || [];
+        const authorshipScores = evaluations.map(e => e.authorshipScore || 0);
+        const avgAuthorship = authorshipScores.length > 0
+          ? Math.round(authorshipScores.reduce((a, b) => a + b, 0) / authorshipScores.length)
+          : 70;
+
+        const defenseReport = context.learningReport || {};
+        const productionScore = defenseReport.productionReadinessScore || avgAuthorship;
+        const portfolioScore = defenseReport.portfolioReadinessScore || avgAuthorship;
+
+        const defenseMappedScores = {
+          projectUsage: avgAuthorship,
+          problemSolving: productionScore,
+          codingAbility: portfolioScore,
+          conceptUnderstanding: productionScore,
+          interviewReadiness: avgAuthorship
+        };
+
+        await updateMentorMemory({
+          userId: req.user._id,
+          topic: session.topic.replace('Project Defense: ', ''),
+          scores: defenseMappedScores,
+          passed: avgAuthorship >= 60,
+          sourceInfo: {
+            refType: 'LearningSession',
+            refId: session._id,
+            source: 'project_defense_completed'
+          }
+        });
+      } catch (memErr) {
+        console.error('Failed to sync project defense score to mentor memory:', memErr.message);
+      }
     } else {
       // Prompt next question
       progress.currentQuestionIndex += 1;
+      const nextQ = evalResult.nextQuestion || context.topQuestions?.[progress.currentQuestionIndex] || 'How does the authentication flow work in your application?';
+      const nextQText = typeof nextQ === 'object' ? nextQ.text : nextQ;
       
       session.messages.push({
         id: `a-def-next-${Date.now()}`,
         role: 'assistant',
-        text: `**Feedback**: ${evalResult.feedback}\n\nHere is your next Project Defense question:\n\n**"${evalResult.nextQuestion}"**`,
+        text: `**Feedback**: ${evalResult.feedback || 'Good effort.'}\n\nHere is your next Project Defense question:\n\n**"${nextQText}"**`,
         timestamp: new Date()
       });
 
@@ -1385,7 +1556,7 @@ export const submitProjectDefenseAnswer = async (req, res) => {
 
     return res.status(200).json({ success: true, data: session });
   } catch (error) {
-    console.warn('Submit project defense AI failed, using high-fidelity fallback evaluation:', error.message);
+    console.warn('Submit project defense AI evaluation failed:', error.message);
     try {
       const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
       if (!session) {
@@ -1396,26 +1567,7 @@ export const submitProjectDefenseAnswer = async (req, res) => {
       const progress = context.defenseProgress;
       const currentQIdx = progress.currentQuestionIndex;
 
-      const lastMsg = session.messages[session.messages.length - 1];
-      let currentQuestion = lastMsg.text;
-      if (currentQuestion.includes('**"')) {
-        currentQuestion = currentQuestion.split('**"')[1].split('"**')[0];
-      }
-
-      // Check if user answer is at least 15 chars (basic sanity authorship check)
-      const passedCheck = answer.trim().length > 15;
-      const score = passedCheck ? 80 : 45;
-      const feedbackText = passedCheck 
-        ? "Excellent defense response. You accurately explained the scoping pattern and architectural rationale."
-        : "Vague response. Try to elaborate more on specific files, functions, or package configs in your repo.";
-
-      progress.evaluations.push({
-        question: currentQuestion,
-        answer,
-        authorshipScore: score,
-        feedback: feedbackText
-      });
-
+      // Record the user answer without scoring
       session.messages.push({
         id: `u-def-fallback-${Date.now()}`,
         role: 'user',
@@ -1424,77 +1576,28 @@ export const submitProjectDefenseAnswer = async (req, res) => {
       });
 
       const totalDefenseQuestions = progress.totalQuestions || context.topQuestions?.length || 5;
-      const isCompleted = currentQIdx >= totalDefenseQuestions - 1;
-      if (passedCheck) {
-        completeLearningStage(session, 'PROJECT_APPLICATION', 'project_defense_answer');
-        applyVerifiedProgress(session, DEFAULT_MASTERY_INCREMENT.projectDefenseMilestonePassed);
-      }
+      const isLastQuestion = currentQIdx >= totalDefenseQuestions - 1;
 
-      if (isCompleted) {
-        session.status = 'completed';
-        context.learningReport = {
-          strengths: [],
-          weakAreas: [],
-          missingConcepts: [],
-          suggestedImprovements: [],
-          refactoringIdeas: [],
-          productionReadinessScore: session.masteryPercentage,
-          portfolioReadinessScore: session.masteryPercentage
-        };
-        markFirstIncompleteTaskComplete(session, task => /defense|project|validated|solve|challenge/i.test(task.task));
-        if (passedCheck) {
-          completeLearningStage(session, 'INTERVIEW_ROUND', 'project_defense_completed');
-          completeLearningStage(session, 'EVALUATION', 'project_defense_completed');
-          completeLearningStage(session, 'MASTERY_DECISION', 'project_defense_completed');
-          applyVerifiedProgress(session, DEFAULT_MASTERY_INCREMENT.projectDefenseCompleted);
-          context.learningReport.productionReadinessScore = session.masteryPercentage;
-          context.learningReport.portfolioReadinessScore = session.masteryPercentage;
-        }
+      // Do NOT advance progress or assign fabricated scores
+      // Show evaluation failure message with retry option
+      const evalFailedMsg = isLastQuestion
+        ? `### Evaluation unavailable\nI could not evaluate your final answer due to an AI service error. You may retry or try switching providers.\n\n**Your answer was:** ${answer}`
+        : `### Evaluation unavailable\nI could not evaluate your answer due to an AI service error. Your answer has been recorded but no score was assigned. Please retry or switch providers.\n\n**Your answer was:** ${answer}`;
 
-        session.messages.push({
-          id: `a-def-summary-fallback-${Date.now()}`,
-          role: 'assistant',
-          text: `### 🏁 Project Defense Completed!\n\n**Authorship Check Summary**:\n${feedbackText}\n\nWe have finalized your comprehensive **Project Readiness Report** inside the learning dashboard tab containing refactoring roadmaps and portfolio readiness grades. Great job defending your implementation choices!`,
-          timestamp: new Date()
-        });
-
-        await logTimelineEvent({
-          userId: req.user._id,
-          learningSessionId: session._id,
-          action: 'Completed project defense',
-          topic: session.topic,
-          detail: `Final score: ${session.masteryPercentage}%`,
-          status: 'completed'
-        });
-      } else {
-        progress.currentQuestionIndex += 1;
-        // Draw a next question from topQuestions list
-        const nextQ = context.topQuestions[progress.currentQuestionIndex] || "How do you manage cross-origin resource sharing (CORS) on your API routes?";
-
-        session.messages.push({
-          id: `a-def-next-fallback-${Date.now()}`,
-          role: 'assistant',
-          text: `**Feedback**: ${feedbackText}\n\nHere is your next Project Defense question:\n\n**"${nextQ}"**`,
-          timestamp: new Date()
-        });
-
-        await logTimelineEvent({
-          userId: req.user._id,
-          learningSessionId: session._id,
-          action: 'Completed project defense checkpoint',
-          topic: session.topic,
-          detail: `Question ${currentQIdx + 1} of ${totalDefenseQuestions}`,
-          status: 'active'
-        });
-      }
+      session.messages.push({
+        id: `a-def-eval-failed-${Date.now()}`,
+        role: 'assistant',
+        text: evalFailedMsg,
+        timestamp: new Date()
+      });
 
       session.markModified('projectContext');
       session.markModified('messages');
       await session.save();
 
-      return res.status(200).json({ success: true, data: session });
+      return res.status(200).json({ success: false, evaluationFailed: true, message: 'AI evaluation failed. Answer recorded but not scored. Please retry.', data: session });
     } catch (fallbackErr) {
-      console.error('Submit project defense fallback failed:', fallbackErr.message);
+      console.error('Submit project defense fallback save failed:', fallbackErr.message);
       return res.status(500).json({ success: false, message: 'Failed to process project defense response.' });
     }
   }
@@ -1504,36 +1607,56 @@ export const submitProjectDefenseAnswer = async (req, res) => {
  * POST compile career coach roadmap
  */
 export const getCareerCoachRoadmap = async (req, res) => {
-  const { topic = 'Full Stack Development' } = req.body || {};
+  const { topic = 'Full Stack Development', sessionId } = req.body || {};
   const weakSkills = [];
   const masteredSkills = [];
 
   try {
-    // Collect candidate skills memory
+    const memories = await MentorMemory.find({ userId: req.user._id });
+
+    let readiness = null;
+    try {
+      readiness = await computeReadinessIndexes(req.user._id);
+    } catch (engineErr) {
+      console.warn('Readiness engine unavailable for career coach:', engineErr.message);
+    }
+
     const completedSessions = await LearningSession.find({ userId: req.user._id, status: 'completed' });
-    if (completedSessions.length === 0) {
+
+    for (const mem of memories) {
+      if (mem.mastery >= 75) {
+        masteredSkills.push(mem.topic);
+      } else if (mem.mastery > 0 && mem.mastery < 50) {
+        weakSkills.push(mem.topic);
+      }
+    }
+
+    completedSessions.forEach(s => {
+      const topicStr = s.topic || '';
+      if (!memories.some(m => m.topic === topicStr)) {
+        if (s.masteryPercentage >= 75) {
+          masteredSkills.push(topicStr);
+        } else if (s.masteryPercentage < 50 && s.masteryPercentage > 0) {
+          weakSkills.push(topicStr);
+        }
+      }
+    });
+
+    if (completedSessions.length === 0 && memories.length === 0) {
       return res.status(200).json({
         success: true,
         data: {
           insufficientData: true,
-          reason: 'Career recommendations require completed learning sessions owned by the current user.',
+          reason: 'Career recommendations require completed learning sessions or mentor memory topics.',
           weakSkills: [],
           masteredSkills: [],
           recommendedRoles: [],
           recommendedCompanies: [],
-          learningRoadmap: []
+          learningRoadmap: [],
+          readinessScores: null
         }
       });
     }
-
-    // Analyze previous learning states
-    completedSessions.forEach(s => {
-      if (s.masteryPercentage >= 75) {
-        masteredSkills.push(s.topic);
-      } else if (s.masteryPercentage < 50) {
-        weakSkills.push(s.topic);
-      }
-    });
 
     const coachData = await compileCareerCoachRoadmap({
       masteredSkills,
@@ -1541,18 +1664,77 @@ export const getCareerCoachRoadmap = async (req, res) => {
       topic
     });
 
+    // Persist career coach data to a LearningSession
+    try {
+      let coachSession = null;
+      if (sessionId) {
+        coachSession = await LearningSession.findOne({ _id: sessionId, userId: req.user._id });
+      }
+      if (!coachSession) {
+        coachSession = await LearningSession.findOne({ userId: req.user._id, sessionType: 'Career Coach', status: 'active' });
+      }
+      if (!coachSession) {
+        coachSession = await LearningSession.create({
+          userId: req.user._id,
+          topic: 'Career Coach',
+          sessionType: 'Career Coach',
+          mode: 'Advanced',
+          status: 'active'
+        });
+      }
+      coachSession.careerCoach = {
+        marketReadiness: coachData.marketReadiness || '',
+        jobReadiness: coachData.jobReadiness || '',
+        recommendedRoles: coachData.recommendedRoles || [],
+        recommendedCompanies: coachData.recommendedCompanies || [],
+        salaryGuidance: coachData.salaryGuidance || '',
+        learningRoadmap: (coachData.learningRoadmap || []).map(phase => ({
+          phase: phase.phase || '',
+          topics: phase.topics || []
+        }))
+      };
+      coachSession.masteryPercentage = Math.min(100, Math.max(
+        coachSession.masteryPercentage || 0,
+        readiness?.hiringReadinessIndex || 0
+      ));
+      await coachSession.save();
+
+      await logTimelineEvent({
+        userId: req.user._id,
+        learningSessionId: coachSession._id,
+        action: 'Generated career coach roadmap',
+        topic: 'Career Coach',
+        detail: `Market: ${coachData.marketReadiness || 'N/A'}, Roles: ${(coachData.recommendedRoles || []).slice(0, 3).join(', ') || 'N/A'}`,
+        status: 'completed'
+      });
+    } catch (persistErr) {
+      console.warn('Failed to persist career coach data to session:', persistErr.message);
+    }
+
     return res.status(200).json({
       success: true,
       data: {
         ...coachData,
         weakSkills,
         masteredSkills,
-        insufficientData: false
+        insufficientData: false,
+        readinessScores: readiness ? {
+          interviewReadiness: readiness.interviewReadinessIndex,
+          projectReadiness: readiness.projectReadinessIndex,
+          hiringReadiness: readiness.hiringReadinessIndex,
+          consistencyScore: readiness.consistencyScore,
+          overallMastery: readiness.overallMastery
+        } : null
       }
     });
   } catch (error) {
     console.warn('Career Coach generation AI failed, serving robust high-fidelity fallback:', error.message);
     
+    let fallbackReadiness = null;
+    try {
+      fallbackReadiness = await computeReadinessIndexes(req.user._id);
+    } catch { /* skip */ }
+
     const fallbackData = {
       insufficientData: true,
       reason: 'Career recommendations are unavailable because AI roadmap generation failed. No fallback recommendations are shown.',
@@ -1560,7 +1742,14 @@ export const getCareerCoachRoadmap = async (req, res) => {
       masteredSkills,
       recommendedRoles: [],
       recommendedCompanies: [],
-      learningRoadmap: []
+      learningRoadmap: [],
+      readinessScores: fallbackReadiness ? {
+        interviewReadiness: fallbackReadiness.interviewReadinessIndex,
+        projectReadiness: fallbackReadiness.projectReadinessIndex,
+        hiringReadiness: fallbackReadiness.hiringReadinessIndex,
+        consistencyScore: fallbackReadiness.consistencyScore,
+        overallMastery: fallbackReadiness.overallMastery
+      } : null
     };
     
     return res.status(200).json({ success: true, data: fallbackData });
@@ -1590,10 +1779,14 @@ export const updateLearningSession = async (req, res) => {
       );
       session.missionChecklist = session.missionChecklist.map(item => {
         const wasCompleted = !!item.completed;
+        // Once completed, a task cannot be reverted (integrity enforcement)
+        if (wasCompleted) {
+          return { task: item.task, completed: true };
+        }
         const willBeCompleted = requestedByTask.has(item.task.toLowerCase())
           ? requestedByTask.get(item.task.toLowerCase())
-          : wasCompleted;
-        if (!wasCompleted && willBeCompleted) {
+          : false;
+        if (willBeCompleted) {
           newlyCompleted.push(item.task);
         }
         return {
@@ -1644,6 +1837,112 @@ export const updateLearningSession = async (req, res) => {
     await session.save();
     return res.status(200).json({ success: true, data: session });
   } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/**
+ * POST create a learning session from a recommendation
+ * Bridges the gap between Recommendations → Learning Paths
+ */
+export const createLearningPathFromRecommendation = async (req, res) => {
+  const { topic, mode = 'Intermediate', sessionType = 'Concept Learning', personality = 'The Coding Coach' } = req.body || {};
+  if (!topic) {
+    return res.status(400).json({ success: false, message: 'Topic is required to create a learning path.' });
+  }
+
+  try {
+    const session = await LearningSession.create({
+      userId: req.user._id,
+      topic,
+      mode,
+      sessionType,
+      personality,
+      status: 'active',
+      learningEngine: { currentStage: 'WHY', stageProgress: [] },
+      missionChecklist: [
+        { task: `WHY: Why ${topic}?`, completed: false },
+        { task: `CONCEPT: Core concepts of ${topic}`, completed: false },
+        { task: `VISUALIZATION: Visualize ${topic}`, completed: false },
+        { task: `SIMPLE EXAMPLE: Simple ${topic} example`, completed: false },
+        { task: `REAL PROJECT USAGE: ${topic} in projects`, completed: false },
+        { task: `UNDERSTANDING CHECK: Check understanding`, completed: false },
+        { task: `GUIDED CHALLENGE: Guided ${topic} challenge`, completed: false },
+        { task: `INDEPENDENT CHALLENGE: Independent ${topic} challenge`, completed: false },
+        { task: `PROJECT APPLICATION: Apply ${topic}`, completed: false },
+        { task: `INTERVIEW ROUND: ${topic} interview`, completed: false },
+        { task: `EVALUATION: Evaluate ${topic} mastery`, completed: false },
+        { task: `MASTERY DECISION: Mastery check`, completed: false }
+      ]
+    });
+
+    await logTimelineEvent({
+      userId: req.user._id,
+      learningSessionId: session._id,
+      action: 'Started learning path from recommendation',
+      topic,
+      detail: `Learning path generated for ${topic} (${sessionType})`,
+      status: 'active'
+    });
+
+    return res.status(201).json({ success: true, data: session });
+  } catch (error) {
+    console.error('Create learning path failed:', error.message);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/**
+ * GET unified intelligence dashboard
+ * Returns readiness + SWOT + recommendations + career coach data in a single call
+ */
+export const getUnifiedDashboard = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const [readiness, swot, recommendations, coachSessions] = await Promise.all([
+      computeReadinessIndexes(userId).catch(() => null),
+      analyzeStrengthsAndWeaknesses(userId).catch(() => null),
+      generateRecommendations(userId).catch(() => []),
+      LearningSession.find({ userId, sessionType: 'Career Coach' })
+        .sort({ updatedAt: -1 })
+        .limit(1)
+        .lean()
+        .catch(() => [])
+    ]);
+
+    const latestCoach = coachSessions[0] || null;
+
+    const data = {
+      readiness: readiness ? {
+        interviewReadinessIndex: readiness.interviewReadinessIndex,
+        projectReadinessIndex: readiness.projectReadinessIndex,
+        hiringReadinessIndex: readiness.hiringReadinessIndex,
+        consistencyScore: readiness.consistencyScore,
+        overallMastery: readiness.overallMastery,
+        dimensionAverages: readiness.dimensionAverages,
+        rawAverages: readiness.rawAverages
+      } : null,
+      swot: swot ? {
+        weakTopics: swot.weakTopics,
+        strongTopics: swot.strongTopics,
+        failedChallenges: swot.failedChallenges
+      } : null,
+      recommendations: recommendations.slice(0, 10),
+      careerCoach: latestCoach ? {
+        marketReadiness: latestCoach.careerCoach?.marketReadiness || '',
+        jobReadiness: latestCoach.careerCoach?.jobReadiness || '',
+        recommendedRoles: latestCoach.careerCoach?.recommendedRoles || [],
+        recommendedCompanies: latestCoach.careerCoach?.recommendedCompanies || [],
+        salaryGuidance: latestCoach.careerCoach?.salaryGuidance || '',
+        learningRoadmap: latestCoach.careerCoach?.learningRoadmap || []
+      } : null,
+      coachSessionId: latestCoach?._id || null
+    };
+
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    console.error('Unified dashboard failed:', error.message);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -1807,6 +2106,16 @@ export const getLearningAnalytics = async (req, res) => {
       score: s.learningEngine?.evaluationScores?.interviewReadiness || 0
     }));
 
+    // Unified Intelligence Engine: weighted readiness indexes
+    let unifiedReadiness = null;
+    let swot = null;
+    try {
+      unifiedReadiness = await computeReadinessIndexes(req.user._id);
+      swot = await analyzeStrengthsAndWeaknesses(req.user._id);
+    } catch (engineErr) {
+      console.warn('Unified readiness engine failed, using legacy calculations:', engineErr.message);
+    }
+
     return res.status(200).json({
       success: true,
       data: {
@@ -1818,7 +2127,13 @@ export const getLearningAnalytics = async (req, res) => {
           interviewReadiness,
           projectReadiness,
           learningStreak: streak,
-          hoursPracticed
+          hoursPracticed,
+          // Unified indexes (fall back to legacy if engine unavailable)
+          unifiedInterviewReadiness: unifiedReadiness?.interviewReadinessIndex ?? interviewReadiness,
+          unifiedProjectReadiness: unifiedReadiness?.projectReadinessIndex ?? projectReadiness,
+          hiringReadinessIndex: unifiedReadiness?.hiringReadinessIndex ?? 0,
+          consistencyScore: unifiedReadiness?.consistencyScore ?? 0,
+          overallMastery: unifiedReadiness?.overallMastery ?? masteryAvg
         },
         charts: {
           masteryGrowth,
@@ -1829,7 +2144,13 @@ export const getLearningAnalytics = async (req, res) => {
             active: activeTopics
           },
           interviewReadinessTrend
-        }
+        },
+        unified: unifiedReadiness ? {
+          dimensionAverages: unifiedReadiness.dimensionAverages,
+          rawAverages: unifiedReadiness.rawAverages,
+          weakTopics: swot?.weakTopics ?? [],
+          strongTopics: swot?.strongTopics ?? []
+        } : null
       }
     });
   } catch (error) {
@@ -1839,56 +2160,10 @@ export const getLearningAnalytics = async (req, res) => {
 
 export const getRecommendations = async (req, res) => {
   try {
-    const memories = await MentorMemory.find({ userId: req.user._id });
-    const submissions = await SandboxSubmission.find({ userId: req.user._id });
-
-    const recommendations = [];
-
-    const failedMap = {};
-    for (const sub of submissions) {
-      if (!sub.passed) {
-        failedMap[sub.challengeTitle] = (failedMap[sub.challengeTitle] || 0) + 1;
-      }
-    }
-
-    for (const [title, count] of Object.entries(failedMap)) {
-      if (count >= 2) {
-        recommendations.push({
-          title: `${title} Revision`,
-          reason: `You failed ${count} challenge attempts for "${title}". We suggest revisiting this module.`,
-          topic: title,
-          type: 'remediation',
-          pathway: [title, 'Sandbox Practice']
-        });
-      }
-    }
-
-    for (const mem of memories) {
-      if (mem.mastery > 0 && mem.mastery < 60) {
-        recommendations.push({
-          title: `Master ${mem.topic}`,
-          reason: `Your current mastery on "${mem.topic}" is at ${mem.mastery}%. Revisit explanations to build confidence.`,
-          topic: mem.topic,
-          type: 'concept',
-          pathway: [mem.topic, 'Concept Learning']
-        });
-      }
-    }
-
-    const promiseMemory = memories.find(m => m.topic.toLowerCase().includes('promise'));
-    const asyncMemory = memories.find(m => m.topic.toLowerCase().includes('async'));
-    if ((promiseMemory && promiseMemory.mastery < 60) || (asyncMemory && asyncMemory.mastery < 60)) {
-      recommendations.push({
-        title: 'Asynchronous JS Path',
-        reason: 'You have active gaps in Asynchronous JavaScript and Promises. Practice chaining.',
-        topic: 'Promises',
-        type: 'roadmap',
-        pathway: ['Promises', 'Promise.all', 'Async Await']
-      });
-    }
-
+    const recommendations = await generateRecommendations(req.user._id);
     return res.status(200).json({ success: true, data: recommendations });
   } catch (error) {
+    console.error('Recommendations generation failed:', error.message);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -1911,6 +2186,36 @@ export const archiveLearningSession = async (req, res) => {
       detail: `Topic mastery reached: ${session.masteryPercentage}%`,
       status: 'completed'
     });
+
+    // Unified Mentor Memory Learning Session integration
+    try {
+      const engine = session.learningEngine || {};
+      const evalScores = engine.evaluationScores || {};
+      const mastery = session.masteryPercentage || 0;
+      
+      const baseScore = Math.max(mastery, 70);
+      const scores = {
+        conceptUnderstanding: evalScores.conceptUnderstanding || baseScore,
+        codingAbility: evalScores.codingAbility || baseScore,
+        problemSolving: evalScores.problemSolving || baseScore,
+        projectUsage: evalScores.projectReadiness || baseScore,
+        interviewReadiness: evalScores.interviewReadiness || baseScore
+      };
+
+      await updateMentorMemory({
+        userId: req.user._id,
+        topic: session.topic,
+        scores,
+        passed: mastery >= 60,
+        sourceInfo: {
+          refType: 'LearningSession',
+          refId: session._id,
+          source: 'learning_session_archived'
+        }
+      });
+    } catch (memErr) {
+      console.error('Failed to sync learning session score to mentor memory:', memErr.message);
+    }
 
     return res.status(200).json({ success: true, data: session });
   } catch (error) {

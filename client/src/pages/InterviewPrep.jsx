@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FiMic, FiSend, FiRefreshCw, FiSkipForward, FiSave, FiPlay, FiClock, FiMessageCircle, FiDownload, FiCheckCircle } from 'react-icons/fi';
-import useZenuxAuth from '../hooks/useZenuxAuth';
+import { FiMic, FiSend, FiDownload, FiCheckCircle } from 'react-icons/fi';
 import useAuth from '../hooks/useAuth';
 import './InterviewPrep.css';
 
@@ -338,50 +337,6 @@ const simpleMarkdown = (text = '') => {
   });
 };
 
-const buildFeedback = (answer, question, index) => {
-  const trimmed = answer.trim();
-  const baseScore = Math.min(92, Math.max(55, Math.round(trimmed.length / 1.4)));
-  const accuracy = Math.max(60, Math.min(95, baseScore));
-  const communication = Math.max(55, Math.min(95, Math.round(baseScore * 0.92)));
-  const technical = Math.max(50, Math.min(95, Math.round(baseScore * 0.88)));
-  const confidence = Math.round((accuracy + communication + technical) / 3);
-  const weaknesses = [];
-  if (trimmed.length < 90) weaknesses.push('Add more technical depth and specific examples.');
-  if (!/performance|scalability|security|database|architecture|API|algorithm/i.test(trimmed)) weaknesses.push('Include architecture or design terms to strengthen your answer.');
-  if (!/first|next|then|finally|because/i.test(trimmed)) weaknesses.push('Use clear structure and transition language for better flow.');
-  const missingPoints = weaknesses.length ? weaknesses.join(' ') : 'Good coverage with a professional tone.';
-  const improvedAnswer = trimmed
-    ? `A polished professional response: ${trimmed.charAt(0).toUpperCase() + trimmed.slice(1)}.`
-    : 'A strong answer should include a concise explanation, a technical example, and a structured outcome.';
-  const tips = [
-    'Keep your answers structured with situation, action, result.',
-    'Mention specific tools or frameworks when relevant.',
-    'Clarify the trade-offs behind your choices.',
-  ];
-
-  return {
-    id: `ai-feedback-${index}-${Date.now()}`,
-    role: 'ai',
-    type: 'feedback',
-    analysis: {
-      correctness: accuracy >= 85 ? 'Strong' : accuracy >= 70 ? 'Good' : 'Needs improvement',
-      technicalDepth: technical >= 78 ? 'Deep' : technical >= 65 ? 'Moderate' : 'Basic',
-      communication: communication >= 80 ? 'Clear' : communication >= 65 ? 'Solid' : 'Could improve',
-      missingPoints,
-      confidence: `${confidence}%`,
-    },
-    improvedAnswer,
-    tips,
-    score: {
-      accuracy,
-      confidence,
-      technical,
-      communication,
-    },
-    timestamp: new Date().toISOString(),
-  };
-};
-
 const buildInterviewSummary = (messages, totalQuestions) => {
   const feedbackMessages = messages.filter((message) => message.type === 'feedback');
   const scores = feedbackMessages.reduce(
@@ -652,6 +607,7 @@ const InterviewPrep = () => {
   const [savedInterview, setSavedInterview] = useState(() => getInitialValue('savedInterview', null));
   const [activeSkillDetail, setActiveSkillDetail] = useState(null);
   const abortControllerRef = useRef(null);
+  const saveInFlight = useRef(false);
   const chatEndRef = useRef(null);
   const [showAccessModal, setShowAccessModal] = useState(false);
   const [hasSeenAccessModal, setHasSeenAccessModal] = useState(false);
@@ -660,10 +616,7 @@ const InterviewPrep = () => {
   const [showAbandonConfirmModal, setShowAbandonConfirmModal] = useState(false);
   const [saveStatus, setSaveStatus] = useState('idle');
   const navigate = useNavigate();
-  const customAuth = useAuth();
-  const zenuxAuth = useZenuxAuth();
-  const isAuthenticated = customAuth.isAuthenticated || zenuxAuth.isAuthenticated;
-  const loadingAuth = customAuth.loading || zenuxAuth.loading;
+  const { isAuthenticated, loading: loadingAuth } = useAuth();
 
   const selectedFieldData = FIELDS.find((f) => f.id === selectedField);
   const selectedStackData = selectedFieldData?.stacks.find((s) => s.id === selectedStack);
@@ -696,7 +649,7 @@ const InterviewPrep = () => {
     return Math.round((totals.accuracy + totals.technical + totals.communication + totals.confidence) / (count * 4));
   };
 
-  const buildSessionPayload = ({ messages = chatMessages, statusOverride, scoreOverride, feedbackOverride, currentQuestionIndexOverride, questionsOverride, tipsOverride } = {}) => {
+  const buildSessionPayload = ({ messages = chatMessages, statusOverride, scoreOverride, feedbackOverride, currentQuestionIndexOverride, questionsOverride, tipsOverride, timerStateOverride } = {}) => {
     const payloadScore =
       typeof scoreOverride === 'number'
         ? scoreOverride
@@ -727,46 +680,50 @@ const InterviewPrep = () => {
       totalQuestions: questionsToSave.length,
       completedQuestions: messages.filter((m) => m.type === 'feedback').length,
       skippedQuestions: messages.filter((m) => m.type === 'note' && m.text.includes('Skipping')).length,
-      timerState: timerSeconds,
+      timerState: timerStateOverride ?? timerSeconds,
       difficulty: questionsToSave[indexToSave]?.difficulty || 'Medium',
     };
   };
 
   const saveInterviewSessionToServer = async (overrides = {}) => {
+    if (saveInFlight.current) return;
+
     const authToken = getAuthToken();
     if (!authToken) return;
 
-    const payload = buildSessionPayload(overrides);
-    const url = sessionId
-      ? `${API_BASE}/interview-sessions/${sessionId}`
-      : `${API_BASE}/interview-sessions`;
-    const method = sessionId ? 'PUT' : 'POST';
+    saveInFlight.current = true;
 
-    // Synchronize to localStorage in real-time
     try {
-      const activeId = sessionId || rawInterviewSession?._id || rawInterviewSession?.id;
-      if (activeId) {
-        const syncedLocal = {
-          interviewSession: {
-            ...rawInterviewSession,
-            ...payload,
-            _id: activeId,
-          },
-          chatMessages: payload.messages,
-          currentQuestionIndex: payload.currentQuestionIndex,
-          timerSeconds: payload.timerState,
-          interviewStarted: payload.status === 'active' || payload.status === 'incomplete' || payload.status === 'in_progress',
-          interviewCompleted: payload.status === 'completed',
-          savedAt: new Date().toISOString(),
-        };
-        localStorage.setItem('road2dev-interview', JSON.stringify(syncedLocal));
-        setSavedInterview(syncedLocal);
+      const payload = buildSessionPayload(overrides);
+      const url = sessionId
+        ? `${API_BASE}/interview-sessions/${sessionId}`
+        : `${API_BASE}/interview-sessions`;
+      const method = sessionId ? 'PUT' : 'POST';
+
+      // Synchronize to localStorage in real-time
+      try {
+        const activeId = sessionId || rawInterviewSession?._id || rawInterviewSession?.id;
+        if (activeId) {
+          const syncedLocal = {
+            interviewSession: {
+              ...rawInterviewSession,
+              ...payload,
+              _id: activeId,
+            },
+            chatMessages: payload.messages,
+            currentQuestionIndex: payload.currentQuestionIndex,
+            timerSeconds: payload.timerState,
+            interviewStarted: payload.status === 'active' || payload.status === 'incomplete' || payload.status === 'in_progress',
+            interviewCompleted: payload.status === 'completed',
+            savedAt: new Date().toISOString(),
+          };
+          localStorage.setItem('road2dev-interview', JSON.stringify(syncedLocal));
+          setSavedInterview(syncedLocal);
+        }
+      } catch (e) {
+        console.warn('Failed to sync to local storage during autosave:', e);
       }
-    } catch (e) {
-      console.warn('Failed to sync to local storage during autosave:', e);
-    }
 
-    try {
       const res = await fetch(url, {
         method,
         headers: {
@@ -788,7 +745,6 @@ const InterviewPrep = () => {
           setSessionId(newId);
           localStorage.setItem('road2dev-interview-session-id', newId);
 
-          // Write to road2dev-interview cache with the newly created ID
           const syncedLocal = {
             interviewSession: data.data,
             chatMessages: payload.messages,
@@ -806,6 +762,8 @@ const InterviewPrep = () => {
       window.dispatchEvent(new Event('interview-sessions-updated'));
     } catch (saveError) {
       console.warn('Interview session autosave error:', saveError);
+    } finally {
+      saveInFlight.current = false;
     }
   };
 
@@ -1208,6 +1166,9 @@ const InterviewPrep = () => {
       currentQuestionIndexOverride: currentQuestionIndex,
     });
 
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = new AbortController();
+
     try {
       const response = await fetch(`${API_BASE}/interview/respond`, {
         method: 'POST',
@@ -1220,6 +1181,7 @@ const InterviewPrep = () => {
           messages: afterUserMessage,
           sessionId: sessionId || '',
         }),
+        signal: abortControllerRef.current.signal,
       });
 
       const result = await response.json();
@@ -1307,67 +1269,18 @@ const InterviewPrep = () => {
         });
       }
     } catch (err) {
-      console.error('Dynamic AI response error:', err);
-      const question = interviewSession.questions[currentQuestionIndex];
-      const feedback = buildFeedback(trimmed, question, currentQuestionIndex);
-      const nextIndex = currentQuestionIndex + 1;
-
-      setChatMessages((prev) => {
-        const afterFeedback = [...prev, feedback];
-        saveInterviewSessionToServer({
-          statusOverride: 'active',
-          messages: afterFeedback,
-          currentQuestionIndexOverride: currentQuestionIndex,
-        });
-
-        if (nextIndex < totalQuestions) {
-          setTimeout(() => {
-            const nextQuestion = interviewSession.questions[nextIndex];
-            const nextMessages = [
-              ...afterFeedback,
-              {
-                id: buildMessageId('ai-question'),
-                role: 'ai',
-                type: 'question',
-                question: nextQuestion,
-                timestamp: new Date().toISOString(),
-              },
-            ];
-            setChatMessages(nextMessages);
-            setCurrentQuestionIndex(nextIndex);
-            setIsAiTyping(false);
-            saveInterviewSessionToServer({
-              statusOverride: 'active',
-              messages: nextMessages,
-              currentQuestionIndexOverride: nextIndex,
-            });
-          }, 900);
-        } else {
-          setTimeout(() => {
-            const summary = buildInterviewSummary([...afterFeedback], totalQuestions);
-            const summaryMessage = {
-              id: buildMessageId('ai-summary'),
-              role: 'ai',
-              type: 'summary',
-              summary,
-              timestamp: new Date().toISOString(),
-            };
-            const completedMessages = [...afterFeedback, summaryMessage];
-            setChatMessages((prevNext) => [...prevNext, summaryMessage]);
-            setInterviewCompleted(true);
-            setIsAiTyping(false);
-            saveInterviewSessionToServer({
-              statusOverride: 'completed',
-              messages: completedMessages,
-              scoreOverride: summary.overallScore,
-              feedbackOverride: summary.readiness,
-              currentQuestionIndexOverride: nextIndex,
-            });
-          }, 900);
-        }
-
-        return afterFeedback;
-      });
+      if (err.name !== 'AbortError') {
+        console.error('Dynamic AI response error:', err);
+        const errorMessage = {
+          id: buildMessageId('system'),
+          role: 'system',
+          type: 'note',
+          text: 'AI evaluation is temporarily unavailable. You can retry your answer or skip to the next question.',
+          timestamp: new Date().toISOString(),
+        };
+        setChatMessages((prev) => [...prev, errorMessage]);
+      }
+      setIsAiTyping(false);
     }
   };
 
@@ -1398,6 +1311,9 @@ const InterviewPrep = () => {
     const historyUpToUser = chatMessages.slice(0, lastUserIndex + 1);
     setIsAiTyping(true);
 
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = new AbortController();
+
     try {
       const response = await fetch(`${API_BASE}/interview/respond`, {
         method: 'POST',
@@ -1410,6 +1326,7 @@ const InterviewPrep = () => {
           messages: historyUpToUser,
           sessionId: sessionId || '',
         }),
+        signal: abortControllerRef.current.signal,
       });
 
       const result = await response.json();
@@ -1457,32 +1374,17 @@ const InterviewPrep = () => {
         return newMessages;
       });
     } catch (e) {
-      console.warn('Regeneration failed, falling back to local mock');
-      const answeredIndex = Math.max(0, currentQuestionIndex - 1);
-      const question = interviewSession.questions[answeredIndex];
-      const regenerated = buildFeedback(lastUser.text, question, answeredIndex);
-      setIsAiTyping(true);
-
-      setTimeout(() => {
-        setChatMessages((prev) => {
-          const lastFeedbackIndex = prev.map(m => m.type).lastIndexOf('feedback');
-          let newMessages = [...prev];
-          if (lastFeedbackIndex !== -1 && lastFeedbackIndex > lastUserIndex) {
-            newMessages.splice(lastFeedbackIndex, 1, regenerated);
-          } else {
-            newMessages.push(regenerated);
-          }
-          
-          saveInterviewSessionToServer({
-            statusOverride: 'active',
-            messages: newMessages,
-            currentQuestionIndexOverride: currentQuestionIndex,
-          });
-          
-          return newMessages;
-        });
-        setIsAiTyping(false);
-      }, 900);
+      if (e.name !== 'AbortError') {
+        console.warn('Regeneration failed:', e);
+        const errorMessage = {
+          id: buildMessageId('system'),
+          role: 'system',
+          type: 'note',
+          text: 'Feedback regeneration is temporarily unavailable. The current feedback remains in place.',
+          timestamp: new Date().toISOString(),
+        };
+        setChatMessages((prev) => [...prev, errorMessage]);
+      }
     } finally {
       setIsAiTyping(false);
     }
@@ -1503,6 +1405,9 @@ const InterviewPrep = () => {
     setChatMessages(afterNoteMessages);
     setIsAiTyping(true);
 
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = new AbortController();
+
     try {
       const response = await fetch(`${API_BASE}/interview/respond`, {
         method: 'POST',
@@ -1515,6 +1420,7 @@ const InterviewPrep = () => {
           messages: afterNoteMessages,
           sessionId: sessionId || '',
         }),
+        signal: abortControllerRef.current.signal,
       });
 
       const result = await response.json();
@@ -1573,6 +1479,10 @@ const InterviewPrep = () => {
         });
       }
     } catch (e) {
+      if (e.name === 'AbortError') {
+        setIsAiTyping(false);
+        return;
+      }
       console.warn('Skip failed, falling back to local skip handler');
       const nextIndex = currentQuestionIndex + 1;
       const baseMessages = [...chatMessages, noteMessage];
@@ -2710,9 +2620,8 @@ const InterviewPrep = () => {
               </button>
               <button 
                 onClick={() => {
-                  alert(`Targeted Assessment preloaded for: ${activeSkillDetail.skill}. Let's test your competency!`);
+                  navigate(`/learning-lab?topic=${encodeURIComponent(activeSkillDetail.skill)}&remediate=true`);
                   setActiveSkillDetail(null);
-                  window.location.reload();
                 }}
                 style={{ flex: 1, padding: '8px 10px', background: '#18181b', color: '#fff', border: '1px solid #27272a', borderRadius: '6px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', transition: 'all 0.2s' }}
               >

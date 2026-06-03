@@ -130,6 +130,7 @@ const learningSessionSchema = new mongoose.Schema({
     repoUrl: { type: String },
     ingestionMethod: { type: String, enum: ['github', 'local', ''], default: '' },
     scanComplete: { type: Boolean, default: false },
+    scanStatus: { type: String, enum: ['analyzing', 'success', 'failed', ''], default: '' },
     defenseStarted: { type: Boolean, default: false },
     projectComplexity: {
       level: { type: String, default: '' },
@@ -161,7 +162,12 @@ const learningSessionSchema = new mongoose.Schema({
       evaluations: [{
         question: String,
         answer: String,
-        authorshipScore: Number, // 1-100% evaluating deep understanding
+        authorshipScore: Number,
+        technicalCorrectness: { type: Number, default: 0 },
+        projectAwareness: { type: Number, default: 0 },
+        architectureUnderstanding: { type: Number, default: 0 },
+        implementationReasoning: { type: Number, default: 0 },
+        tradeoffUnderstanding: { type: Number, default: 0 },
         feedback: String
       }]
     },
@@ -174,7 +180,24 @@ const learningSessionSchema = new mongoose.Schema({
       productionReadinessScore: { type: Number, default: 0 },
       portfolioReadinessScore: { type: Number, default: 0 }
     },
-    topQuestions: [String] // List of Top 25 Project-Specific Questions
+    topQuestions: [mongoose.Schema.Types.Mixed],
+    // New trust & transparency fields
+    fallbackMode: {
+      active: { type: Boolean, default: false },
+      reason: { type: String, default: '' },
+      affectedFeatures: [String]
+    },
+    unverifiedClaims: [{
+      name: { type: String },
+      status: { type: String, default: 'unverified' },
+      reason: { type: String, default: '' }
+    }],
+    // Deterministic evidence for architecture claims
+    detectedTechnologiesEvidence: [{
+      name: { type: String },
+      evidence: [String],
+      paths: [String]
+    }]
   },
   
   // Career Coach recommendations

@@ -3,7 +3,7 @@ import axios from 'axios';
 import User from '../models/User.js';
 
 const AUTH_SERVER = 'https://api.auth.zenuxs.in';
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Helper: Generate JWT token
 const generateToken = (userId) => {

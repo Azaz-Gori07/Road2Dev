@@ -1,0 +1,4 @@
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+✓ Database connected successfully
+✓ Ready to accept requests on port 5500
+Server is running on port 5500

@@ -88,9 +88,10 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// Hash password before saving
+// Hash password before saving (skip if already bcrypt-hashed)
 userSchema.pre('save', async function () {
   if (!this.isModified('password')) return;
+  if (this.password.startsWith('$2')) return;
   const salt = await bcrypt.genSalt(12);
   this.password = await bcrypt.hash(this.password, salt);
 });

@@ -255,16 +255,79 @@ export default function LearningAnalytics() {
               </div>
               <div className="an-readiness-card">
                 <span>Interview Readiness</span>
-                <strong className="text-cyan">{stats.interviewReadiness}%</strong>
-                <div className="an-bar-track"><div className="an-bar-fill fill-cyan" style={{ width: `${stats.interviewReadiness}%` }} /></div>
+                <strong className="text-cyan">{stats.unifiedInterviewReadiness ?? stats.interviewReadiness}%</strong>
+                <div className="an-bar-track"><div className="an-bar-fill fill-cyan" style={{ width: `${stats.unifiedInterviewReadiness ?? stats.interviewReadiness}%` }} /></div>
               </div>
               <div className="an-readiness-card">
                 <span>Project Readiness</span>
-                <strong className="text-green">{stats.projectReadiness}%</strong>
-                <div className="an-bar-track"><div className="an-bar-fill fill-green" style={{ width: `${stats.projectReadiness}%` }} /></div>
+                <strong className="text-green">{stats.unifiedProjectReadiness ?? stats.projectReadiness}%</strong>
+                <div className="an-bar-track"><div className="an-bar-fill fill-green" style={{ width: `${stats.unifiedProjectReadiness ?? stats.projectReadiness}%` }} /></div>
               </div>
             </div>
           </div>
+
+          {/* Hiring Readiness Panel */}
+          {(stats.hiringReadinessIndex > 0 || stats.consistencyScore > 0 || stats.overallMastery > 0) && (
+            <div className="an-readiness-panel an-hiring-panel">
+              <h2 className="an-section-title"><Award size={18} /> Hiring Readiness</h2>
+              <div className="an-hiring-grid">
+                <div className="an-hiring-gauge-card">
+                  <div className="an-hiring-gauge">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="42" fill="none" stroke="var(--border)" strokeWidth="8" />
+                      <circle cx="50" cy="50" r="42" fill="none"
+                        stroke={stats.hiringReadinessIndex >= 80 ? '#34d399' : stats.hiringReadinessIndex >= 60 ? '#fbbf24' : '#ef4444'}
+                        strokeWidth="8" strokeDasharray={`${(stats.hiringReadinessIndex / 100) * 264} 264`}
+                        strokeLinecap="round" transform="rotate(-90 50 50)"
+                        style={{ transition: 'stroke-dasharray 0.8s ease' }}
+                      />
+                      <text x="50" y="48" textAnchor="middle" dominantBaseline="central"
+                        fill="var(--text-primary)" fontSize="24" fontWeight="800">{stats.hiringReadinessIndex}%</text>
+                      <text x="50" y="70" textAnchor="middle" dominantBaseline="central"
+                        fill="var(--text-muted)" fontSize="9">Hiring</text>
+                    </svg>
+                  </div>
+                  <div className="an-hiring-label">
+                    <strong>
+                      {stats.hiringReadinessIndex >= 80 ? 'Ready to Apply' :
+                       stats.hiringReadinessIndex >= 60 ? 'Almost Ready' :
+                       stats.hiringReadinessIndex >= 40 ? 'Building Foundation' : 'Early Stage'}
+                    </strong>
+                  </div>
+                </div>
+                <div className="an-hiring-metrics">
+                  <div className="an-hiring-metric">
+                    <span className="an-hiring-metric-label">Overall Mastery</span>
+                    <div className="an-hiring-metric-bar">
+                      <div className="an-hiring-metric-fill" style={{ width: `${stats.overallMastery}%`, background: '#8b5cf6' }} />
+                    </div>
+                    <span className="an-hiring-metric-val">{stats.overallMastery}%</span>
+                  </div>
+                  <div className="an-hiring-metric">
+                    <span className="an-hiring-metric-label">Consistency</span>
+                    <div className="an-hiring-metric-bar">
+                      <div className="an-hiring-metric-fill" style={{ width: `${stats.consistencyScore}%`, background: '#3b82f6' }} />
+                    </div>
+                    <span className="an-hiring-metric-val">{stats.consistencyScore}%</span>
+                  </div>
+                  <div className="an-hiring-metric">
+                    <span className="an-hiring-metric-label">Interview Readiness</span>
+                    <div className="an-hiring-metric-bar">
+                      <div className="an-hiring-metric-fill" style={{ width: `${stats.unifiedInterviewReadiness ?? stats.interviewReadiness}%`, background: '#06b6d4' }} />
+                    </div>
+                    <span className="an-hiring-metric-val">{stats.unifiedInterviewReadiness ?? stats.interviewReadiness}%</span>
+                  </div>
+                  <div className="an-hiring-metric">
+                    <span className="an-hiring-metric-label">Project Readiness</span>
+                    <div className="an-hiring-metric-bar">
+                      <div className="an-hiring-metric-fill" style={{ width: `${stats.unifiedProjectReadiness ?? stats.projectReadiness}%`, background: '#10b981' }} />
+                    </div>
+                    <span className="an-hiring-metric-val">{stats.unifiedProjectReadiness ?? stats.projectReadiness}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Charts Row */}
           {!hasTimelineData ? (
