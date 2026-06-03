@@ -149,3 +149,21 @@
 .mmv-action-fix:hover { opacity: 0.85; }
 .mmv-action-lab { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
 .mmv-action-lab:hover { border-color: var(--secondary); color: var(--secondary); }
+
+@media (max-width: 600px) {
+  .mmv-container { padding: 20px; }
+  .mmv-status-bar { padding: 12px 14px; gap: 10px; }
+  .mmv-card { padding: 12px 14px; }
+  .mmv-card-main { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .mmv-evidence-last { margin-left: 0; }
+  .mmv-expanded-grid { gap: 12px; }
+  .mmv-controls { flex-direction: column; align-items: stretch; }
+  .mmv-search { min-width: 0; }
+}
+@media (max-width: 480px) {
+  .mmv-container { padding: 12px; }
+  .mmv-topic-name { font-size: 14px; }
+  .mmv-status-item { font-size: 12px; }
+  .mmv-card-main { gap: 6px; }
+  .mmv-card-left { gap: 10px; }
+}

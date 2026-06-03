@@ -6,8 +6,6 @@
   color: var(--t1);
   font-family: 'Outfit', sans-serif;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
 }
 
 .id-header { margin-bottom: 32px; }
@@ -129,3 +127,15 @@
   transition: all 0.2s;
 }
 .id-rec-btn:hover { border-color: var(--secondary); color: var(--secondary); }
+
+@media (max-width: 600px) {
+  .id-container { padding: 20px; }
+  .id-section { padding: 16px; }
+  .id-gauges { gap: 12px; }
+}
+@media (max-width: 480px) {
+  .id-container { padding: 12px; }
+  .id-section-title { font-size: 14px; }
+  .id-rec-title { font-size: 13px; }
+  .id-coach-label { min-width: 100px; font-size: 12px; }
+}

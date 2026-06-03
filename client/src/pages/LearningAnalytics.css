@@ -6,8 +6,6 @@
   color: var(--t1);
   font-family: 'Outfit', sans-serif;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
 }
 
 .an-header {
@@ -257,3 +255,17 @@
 .an-hiring-metric-bar { flex: 1; height: 8px; background: var(--border); border-radius: 6px; overflow: hidden; }
 .an-hiring-metric-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease; }
 .an-hiring-metric-val { font-size: 13px; font-weight: 700; color: var(--text-primary); min-width: 36px; text-align: right; }
+
+@media (max-width: 600px) {
+  .analytics-container { padding: 20px; }
+  .an-readiness-panel { padding: 16px; }
+  .an-chart-card { padding: 16px; }
+  .an-canvas-wrap { height: 180px; }
+  .an-hiring-metric-label { min-width: 80px; font-size: 11px; }
+}
+@media (max-width: 480px) {
+  .analytics-container { padding: 12px; }
+  .an-header h1 { font-size: 22px; }
+  .an-hiring-gauge-card { min-width: 120px; }
+  .an-hiring-grid { gap: 12px; }
+}
