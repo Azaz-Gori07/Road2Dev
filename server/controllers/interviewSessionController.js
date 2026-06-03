@@ -5,6 +5,7 @@ import {
   updateSession,
   deleteSession,
 } from '../services/interviewSessionService.js';
+import { logTimelineEvent } from './learningLabController.js';
 
 const VALID_STATUS = new Set(['draft', 'incomplete', 'active', 'completed', 'archived', 'in_progress', 'abandoned']);
 
@@ -108,6 +109,15 @@ export const createInterviewSession = async (req, res) => {
 
   try {
     const session = await createSession(req.user._id, validation.value);
+
+    await logTimelineEvent({
+      userId: req.user._id,
+      action: 'Started interview session',
+      topic: session.field || 'Interview Session',
+      detail: session.title || 'Technical Interview',
+      status: 'started'
+    });
+
     return res.status(201).json({ success: true, data: session });
   } catch (error) {
     console.error('Create interview session failed:', error.message);
@@ -152,6 +162,16 @@ export const updateInterviewSession = async (req, res) => {
 
     if (!updated) {
       return res.status(404).json({ success: false, message: 'Interview session not found or not owned by user.' });
+    }
+
+    if (updates.status === 'completed') {
+      await logTimelineEvent({
+        userId: req.user._id,
+        action: 'Completed interview session',
+        topic: updated.field || 'Interview Session',
+        detail: `Final Score: ${updated.score || 0}%`,
+        status: 'completed'
+      });
     }
 
     return res.status(200).json({ success: true, data: updated });

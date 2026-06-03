@@ -33,6 +33,8 @@ function Sidebar() {
     const [recentError, setRecentError] = useState('');
     const [completedCount, setCompletedCount] = useState(0);
     const [avgScore, setAvgScore] = useState(0);
+    const [recentLearning, setRecentLearning] = useState([]);
+    const [learningLoading, setLearningLoading] = useState(false);
     const zenuxAuth = useZenuxAuth();
     const customAuth = useAuth();
     const isAuthenticated = zenuxAuth.isAuthenticated || customAuth.isAuthenticated;
@@ -75,14 +77,45 @@ function Sidebar() {
             .finally(() => setRecentLoading(false));
     }, [isAuthenticated]);
 
+    const fetchRecentLearning = useCallback(() => {
+        if (!isAuthenticated) return;
+        const token = localStorage.getItem('auth_token');
+        if (!token) return;
+
+        setLearningLoading(true);
+
+        fetch(`${API_BASE}/learning-lab/sessions`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success && Array.isArray(data.data)) {
+                    setRecentLearning(data.data.slice(0, 3));
+                } else {
+                    setRecentLearning([]);
+                }
+            })
+            .catch(() => {
+                setRecentLearning([]);
+            })
+            .finally(() => setLearningLoading(false));
+    }, [isAuthenticated]);
+
     useEffect(() => {
         fetchRecentSessions();
-    }, [fetchRecentSessions]);
+        fetchRecentLearning();
+    }, [fetchRecentSessions, fetchRecentLearning]);
 
     useEffect(() => {
         window.addEventListener('interview-sessions-updated', fetchRecentSessions);
-        return () => window.removeEventListener('interview-sessions-updated', fetchRecentSessions);
-    }, [fetchRecentSessions]);
+        window.addEventListener('learning-lab-sessions-updated', fetchRecentLearning);
+        return () => {
+            window.removeEventListener('interview-sessions-updated', fetchRecentSessions);
+            window.removeEventListener('learning-lab-sessions-updated', fetchRecentLearning);
+        };
+    }, [fetchRecentSessions, fetchRecentLearning]);
 
     const handleLogout = async () => {
         await Promise.all([customAuth.logout?.(), zenuxAuth.logout?.()]);
@@ -191,6 +224,50 @@ function Sidebar() {
                                     <span className="recent-item-meta">{session.field || 'Unknown field'} • {(session.type || 'N/A').toUpperCase()}</span>
                                 </button>
                             ))}
+                        </div>
+                    </div>
+                )}
+
+                {isAuthenticated && (
+                    <div className="recent-sessions" style={{ marginTop: '16px' }}>
+                        <div className="recent-header">
+                            <span>Recent Learning</span>
+                            <button className="recent-view-all" onClick={() => { navigate('/learning/history'); if (window.innerWidth <= 800) setMobileOpen(false); }}>
+                                View All
+                            </button>
+                        </div>
+
+                        <div className="recent-list">
+                            {learningLoading && <div className="sidebar-small-text">Loading...</div>}
+                            {!learningLoading && recentLearning.length === 0 && (
+                                <div className="sidebar-small-text">No recent learning</div>
+                            )}
+                            {!learningLoading && recentLearning.map((session) => {
+                                const isCompleted = session.status === 'completed' || session.masteryPercentage >= 100;
+                                const isNeedsReview = !isCompleted && (session.masteryPercentage < 35 || session.learningEngine?.sandboxEvidence?.some(e => !e.passed));
+                                const indicator = isCompleted ? '🟩' : isNeedsReview ? '🟥' : '🟨';
+                                const statusText = isCompleted ? 'Completed' : isNeedsReview ? 'Needs Review' : `${session.masteryPercentage}% Mastery`;
+                                
+                                return (
+                                    <button
+                                        key={session._id}
+                                        className="recent-item"
+                                        onClick={() => {
+                                            setActiveLink('learning-lab');
+                                            navigate(`/learning-lab`, { state: { resumeSessionId: session._id } });
+                                            if (window.innerWidth <= 800) setMobileOpen(false);
+                                        }}
+                                    >
+                                        <span className="recent-item-title" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                            <span>{indicator}</span>
+                                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                {session.topic.startsWith('Project Defense:') ? session.topic.replace('Project Defense: ', '') : session.topic}
+                                            </span>
+                                        </span>
+                                        <span className="recent-item-meta">{statusText}</span>
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
                 )}

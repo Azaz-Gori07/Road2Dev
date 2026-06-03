@@ -18,7 +18,7 @@ export class GeminiProvider extends AIProvider {
       ],
       generationConfig: {
         temperature: 0.35,
-        maxOutputTokens: Number(process.env.AI_MAX_OUTPUT_TOKENS || 1800),
+        maxOutputTokens: Number(process.env.AI_MAX_OUTPUT_TOKENS || 4000),
         responseMimeType: 'application/json',
       },
     };

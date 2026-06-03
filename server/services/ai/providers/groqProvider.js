@@ -25,7 +25,7 @@ export class GroqProvider extends AIProvider {
           },
         ],
         temperature: 0.35,
-        max_tokens: Number(process.env.AI_MAX_TOKENS || 2500),
+        max_tokens: Number(process.env.AI_MAX_TOKENS || 4000),
         response_format: { type: 'json_object' },
       },
       {

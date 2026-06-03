@@ -16,6 +16,9 @@ import ContentPage from "./pages/ContentPage";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
 import LearningLab from "./pages/LearningLab";
+import LearningHistory from "./pages/LearningHistory";
+import SandboxHistory from "./pages/SandboxHistory";
+import LearningAnalytics from "./pages/LearningAnalytics";
 
 function App() {
   return (
@@ -26,6 +29,31 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/learning" element={<Learning />} />
         <Route path="/learning-lab" element={
+          <ProtectedRoute>
+            <LearningLab />
+          </ProtectedRoute>
+        } />
+        <Route path="/learning-lab/session/:sessionId" element={
+          <ProtectedRoute>
+            <LearningLab />
+          </ProtectedRoute>
+        } />
+        <Route path="/learning-lab/project-defense/:sessionId" element={
+          <ProtectedRoute>
+            <LearningLab />
+          </ProtectedRoute>
+        } />
+        <Route path="/learning-lab/sandbox/:sessionId" element={
+          <ProtectedRoute>
+            <LearningLab />
+          </ProtectedRoute>
+        } />
+        <Route path="/learning-lab/career-coach/:sessionId" element={
+          <ProtectedRoute>
+            <LearningLab />
+          </ProtectedRoute>
+        } />
+        <Route path="/learning-lab/knowledge-gap/:sessionId" element={
           <ProtectedRoute>
             <LearningLab />
           </ProtectedRoute>
@@ -70,6 +98,30 @@ function App() {
           element={
             <ProtectedRoute>
               <InterviewHistory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/learning/history"
+          element={
+            <ProtectedRoute>
+              <LearningHistory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/sandbox/history"
+          element={
+            <ProtectedRoute>
+              <SandboxHistory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/learning/analytics"
+          element={
+            <ProtectedRoute>
+              <LearningAnalytics />
             </ProtectedRoute>
           }
         />

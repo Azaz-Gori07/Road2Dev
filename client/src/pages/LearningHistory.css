@@ -1,0 +1,379 @@
+.learning-history-container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  color: var(--t1);
+  font-family: 'Outfit', sans-serif;
+  overflow-y: auto;
+}
+
+.lh-header {
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.lh-back-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--t2);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-bottom: 20px;
+}
+
+.lh-back-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+  border-color: var(--border-focus);
+}
+
+.lh-header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, var(--text-primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lh-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.lh-loading, .lh-error {
+  text-align: center;
+  padding: 80px 20px;
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.lh-empty-state {
+  text-align: center;
+  padding: 80px 40px;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 20px;
+  max-width: 500px;
+  margin: 40px auto;
+}
+
+.lh-empty-icon {
+  color: var(--secondary);
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.lh-empty-state h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.lh-empty-state p {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.lh-primary-btn {
+  background: var(--secondary);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lh-primary-btn:hover {
+  background: var(--secondary-hover);
+  transform: translateY(-1px);
+}
+
+.lh-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.lh-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.lh-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-focus);
+}
+
+.lh-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.lh-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 99px;
+  text-transform: uppercase;
+}
+
+.badge-active {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.badge-completed {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.lh-mode {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.lh-topic {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+.lh-type {
+  font-size: 12px;
+  color: var(--secondary);
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.lh-timeline-info {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+  margin-bottom: 20px;
+}
+
+.lh-time-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.lh-time-row:last-child {
+  margin-bottom: 0;
+}
+
+.lh-time-row span {
+  color: var(--text-muted);
+}
+
+.lh-time-row strong {
+  color: var(--text-secondary);
+}
+
+.lh-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.lh-stat-box {
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.lh-stat-label {
+  display: block;
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.lh-stat-val {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.text-green { color: #34d399; }
+.text-purple { color: #a78bfa; }
+.text-cyan { color: #22d3ee; }
+
+.lh-card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.lh-action-btn {
+  flex: 1;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.open-btn {
+  background: var(--secondary-translucent);
+  color: var(--secondary-hover);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.open-btn:hover {
+  background: var(--secondary);
+  color: white;
+  border-color: var(--secondary);
+}
+
+.archive-btn {
+  background: var(--surface-hover);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.archive-btn:hover {
+  background: var(--border-focus);
+  color: var(--text-primary);
+}
+
+.delete-btn {
+  background: rgba(239, 68, 68, 0.08);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.delete-btn:hover {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
+/* Modal Styling */
+.lh-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.lh-modal {
+  background: var(--surface);
+  border: 1px solid var(--border-focus);
+  padding: 32px;
+  border-radius: 20px;
+  max-width: 460px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.lh-modal-warn-icon {
+  color: #ef4444;
+  margin-bottom: 16px;
+}
+
+.lh-modal h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.lh-modal p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.lh-modal-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.lh-modal-cancel {
+  flex: 1;
+  background: var(--surface-hover);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lh-modal-cancel:hover {
+  background: var(--border-focus);
+  color: white;
+}
+
+.lh-modal-delete {
+  flex: 1;
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lh-modal-delete:hover {
+  background: #dc2626;
+}

@@ -1,5 +1,5 @@
-﻿import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { 
   Sparkles, 
   Terminal, 
@@ -27,9 +27,46 @@ import {
 } from 'lucide-react';
 import useAuth from '../hooks/useAuth';
 import useZenuxAuth from '../hooks/useZenuxAuth';
+import ProjectDefenseWorkspace from '../components/ProjectDefenseWorkspace';
+import { isProjectScanned } from '../utils/projectScanProgress';
 import './LearningLab.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
+const SANDBOX_DRAFT_PREFIX = 'road2dev-learninglab-sandbox-';
+const WORKFLOW_UI_PREFIX = 'road2dev-learninglab-ui-';
+
+const getRouteWorkflowTab = (pathname = '') => {
+  if (pathname.includes('/project-defense/')) return 'project';
+  if (pathname.includes('/career-coach/')) return 'coach';
+  if (pathname.includes('/knowledge-gap/')) return 'memory';
+  if (pathname.includes('/sandbox/')) return 'playground';
+  if (pathname.includes('/session/')) return 'playground';
+  return null;
+};
+
+const hasPlaygroundChallenge = (session) =>
+  Array.isArray(session?.messages) &&
+  session.messages.some(message => message.playgroundChallenge?.title);
+
+const getWorkflowRoute = (session, preferredTab) => {
+  const id = session?._id || session?.id || session;
+  if (!id) return '/learning-lab';
+
+  if (preferredTab === 'project' || session?.sessionType === 'Project Defense' || session?.topic?.startsWith('Project Defense:')) {
+    return `/learning-lab/project-defense/${id}`;
+  }
+  if (preferredTab === 'coach' || session?.sessionType === 'Career Coach' || session?.sessionType === 'Career Strategy') {
+    return `/learning-lab/career-coach/${id}`;
+  }
+  if (preferredTab === 'memory' || session?.sessionType === 'Interview Remediation') {
+    return `/learning-lab/knowledge-gap/${id}`;
+  }
+  if (preferredTab === 'playground' && (session?.sessionType === 'Sandbox Practice' || hasPlaygroundChallenge(session))) {
+    return `/learning-lab/sandbox/${id}`;
+  }
+
+  return `/learning-lab/session/${id}`;
+};
 
 /* â”€â”€ CIRCLE PROGRESS â”€â”€ */
 function CircleProgress({ percent }) {
@@ -172,6 +209,7 @@ if (typeof window !== 'undefined' && !window.__mentorMetrics) {
 function LearningLab() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { sessionId } = useParams();
   
   const customAuth = useAuth();
   const zenuxAuth = useZenuxAuth();
@@ -189,6 +227,13 @@ function LearningLab() {
   const [loading, setLoading] = useState(false);
   const [sidebarOpen] = useState(true);
   const [mobilePane, setMobilePane] = useState('chat');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [lastSeenNotificationsAt, setLastSeenNotificationsAt] = useState(() => {
+    const saved = localStorage.getItem('road2dev-learninglab-notifications-seen-at');
+    return saved ? Number(saved) : 0;
+  });
   
   // Journey-First Onboarding states
   const [showHistoryResume, setShowHistoryResume] = useState(false);
@@ -201,13 +246,9 @@ function LearningLab() {
   const [isSubmittingCode, setIsSubmittingCode] = useState(false);
   const [runningCode, setRunningCode] = useState(false);
   
-  // Project Ingestion state
-  const [projectName, setProjectName] = useState('');
-  const [githubUrl, setGithubUrl] = useState('');
-  const [isIngestingProject, setIsIngestingProject] = useState(false);
+  // Project Defense state
   const [defenseAnswer, setDefenseAnswer] = useState('');
   const [isSubmittingDefense, setIsSubmittingDefense] = useState(false);
-  const [ingestError, setIngestError] = useState('');
   const [top25QuestionsExpanded, setTop25QuestionsExpanded] = useState(false);
 
   // Career Coach / Recruiter state
@@ -215,23 +256,39 @@ function LearningLab() {
   const [loadingCoach, setLoadingCoach] = useState(false);
   const [memoryGaps, setMemoryGaps] = useState([]);
   
+  // Real history and AI recommendation states
+  const [timelineEvents, setTimelineEvents] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
+
   // Copied states for code copy button animation
   const [copiedIndex, setCopiedIndex] = useState(null);
 
   const messagesEndRef = useRef(null);
+  const currentRouteWorkflowTab = getRouteWorkflowTab(location.pathname);
+
+  const openLearningSession = useCallback((session) => {
+    if (!session?._id) return;
+    navigate(getWorkflowRoute(session), { replace: false });
+  }, [navigate]);
 
   useEffect(() => {
     if (activeSession?._id) {
-      setMobilePane('chat');
+      if (
+        activeSession.sessionType === 'Project Defense' &&
+        !isProjectScanned(activeSession.projectContext)
+      ) {
+        setMobilePane('workspace');
+      } else {
+        setMobilePane('chat');
+      }
     }
-  }, [activeSession?._id]);
+  }, [activeSession?._id, activeSession?.sessionType, activeSession?.projectContext]);
 
   // Request Tracking & Abort Refs
   const sessionCreationInFlight = useRef(false);
   const careerCoachInFlight = useRef(false);
   const chatInFlight = useRef(false);
   const codeEvalInFlight = useRef(false);
-  const ingestInFlight = useRef(false);
   const defenseInFlight = useRef(false);
   const activeRequests = useRef(new Map());
 
@@ -317,8 +374,37 @@ function LearningLab() {
     return [];
   }, []);
 
+  const fetchTimeline = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_BASE}/learning-lab/timeline`, {
+        headers: getHeaders()
+      });
+      const data = await res.json();
+      if (data.success) {
+        setTimelineEvents(data.data);
+      }
+    } catch (e) {
+      console.error('Error fetching timeline:', e);
+    }
+  }, []);
+
+  const fetchRecommendations = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_BASE}/learning-lab/recommendations`, {
+        headers: getHeaders()
+      });
+      const data = await res.json();
+      if (data.success) {
+        setRecommendations(data.data);
+      }
+    } catch (e) {
+      console.error('Error fetching recommendations:', e);
+    }
+  }, []);
+
   // Fetch specific session details
-  const fetchSessionDetails = useCallback(async (id) => {
+  const fetchSessionDetails = useCallback(async (id, options = {}) => {
+    const { syncRoute = true, routeWorkflowTab = currentRouteWorkflowTab } = options;
     setLoading(true);
     try {
       const res = await fetch(`${API_BASE}/learning-lab/session/${id}`, {
@@ -326,31 +412,61 @@ function LearningLab() {
       });
       const data = await res.json();
       if (data.success) {
-        setActiveSession(data.data);
-        setMessages(data.data.messages || []);
-        setSelectedMode(data.data.mode || 'Intermediate');
-        setPersonality(data.data.personality || 'The Coding Coach');
+        const session = data.data;
+        const messages = session.messages || [];
+        const uiStateKey = `${WORKFLOW_UI_PREFIX}${session._id}`;
+        const savedUiState = (() => {
+          try {
+            return JSON.parse(localStorage.getItem(uiStateKey) || '{}');
+          } catch (e) {
+            return {};
+          }
+        })();
+
+        setActiveSession(session);
+        setMessages(messages);
+        setSelectedMode(session.mode || 'Intermediate');
+        setPersonality(session.personality || 'The Coding Coach');
         
         // Find if last message has a playground challenge to load into playgroundCode
-        const lastMsg = data.data.messages?.slice().reverse().find(m => m.playgroundChallenge && m.playgroundChallenge.initialCode);
-        if (lastMsg) {
-          setPlaygroundCode(lastMsg.playgroundChallenge.initialCode);
-        } else {
-          setPlaygroundCode('// Select a topic to start coding or request a challenge in the chat!');
-        }
+        const lastMsg = messages.slice().reverse().find(m => m.playgroundChallenge && m.playgroundChallenge.initialCode);
+        const savedDraft = localStorage.getItem(`${SANDBOX_DRAFT_PREFIX}${session._id}`);
+        setPlaygroundCode(savedDraft || lastMsg?.playgroundChallenge?.initialCode || '// Select a topic to start coding or request a challenge in the chat!');
 
         // Set playground tab active if project defense is not active
-        if (data.data.topic.startsWith('Project Defense:')) {
+        if (routeWorkflowTab) {
+          setActiveTab(routeWorkflowTab);
+        } else if (['playground', 'project', 'coach', 'memory'].includes(savedUiState.activeTab)) {
+          setActiveTab(savedUiState.activeTab);
+        } else if (session.sessionType === 'Project Defense' || session.topic.startsWith('Project Defense:')) {
           setActiveTab('project');
+          if (!isProjectScanned(session.projectContext)) {
+            setMobilePane('workspace');
+          }
+        } else if (session.sessionType === 'Career Coach' || session.sessionType === 'Career Strategy') {
+          setActiveTab('coach');
+        } else if (session.sessionType === 'Interview Remediation') {
+          setActiveTab('memory');
         } else {
           setActiveTab('playground');
         }
 
+        if (savedUiState.mobilePane === 'chat' || savedUiState.mobilePane === 'workspace') {
+          setMobilePane(savedUiState.mobilePane);
+        }
+
         // AUTO-TAB SWITCHING: If AI issued a coding challenge, switch active right toolbox tab to 'playground' instantly!
-        if (data.data.messages?.length > 0) {
-          const lastAssistantMsg = data.data.messages.slice().reverse().find(m => m.role === 'assistant');
-          if (lastAssistantMsg?.playgroundChallenge?.title) {
+        if (!routeWorkflowTab && messages.length > 0) {
+          const lastAssistantMsg = messages.slice().reverse().find(m => m.role === 'assistant');
+          if (lastAssistantMsg?.playgroundChallenge?.title && session.sessionType !== 'Project Defense') {
             setActiveTab('playground');
+          }
+        }
+
+        if (syncRoute) {
+          const nextRoute = getWorkflowRoute(session, routeWorkflowTab || undefined);
+          if (location.pathname !== nextRoute) {
+            navigate(nextRoute, { replace: true });
           }
         }
       }
@@ -359,13 +475,26 @@ function LearningLab() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [currentRouteWorkflowTab, location.pathname, navigate]);
 
   // Initialize or fetch sessions on mount
   useEffect(() => {
     const init = async () => {
-      const allSessions = await fetchSessions();
+      await fetchSessions();
+      await fetchTimeline();
+      await fetchRecommendations();
+
+      if (sessionId) {
+        await fetchSessionDetails(sessionId, { syncRoute: false, routeWorkflowTab: currentRouteWorkflowTab });
+        return;
+      }
       
+      // Check for session to resume passed from navigation state
+      if (location.state?.resumeSessionId) {
+        await fetchSessionDetails(location.state.resumeSessionId);
+        return;
+      }
+
       // Check query params for preloadedTopic (Knowledge Gap learn button flow)
       const params = new URLSearchParams(location.search);
       const preloadTopic = params.get('topic');
@@ -396,10 +525,10 @@ function LearningLab() {
           );
           const data = await res.json();
           if (data.success) {
-            // Immediately clean URL parameters to prevent repeated mount loops and creation loops on exit
-            navigate('/learning-lab', { replace: true });
+            const nextRoute = getWorkflowRoute(data.data);
+            navigate(nextRoute, { replace: true, state: {} });
             await fetchSessions();
-            fetchSessionDetails(data.data._id);
+            await fetchSessionDetails(data.data._id, { syncRoute: false });
           }
         } catch (e) {
           if (e.name !== 'AbortError') {
@@ -412,12 +541,28 @@ function LearningLab() {
       }
     };
     init();
-  }, [location.search, fetchSessions, fetchSessionDetails]);
+  }, [sessionId, currentRouteWorkflowTab, location.search, location.state, navigate, fetchSessions, fetchSessionDetails, fetchTimeline, fetchRecommendations]);
 
   // Scroll to bottom of chat
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  useEffect(() => {
+    if (!activeSession?._id) return;
+    localStorage.setItem(`${SANDBOX_DRAFT_PREFIX}${activeSession._id}`, playgroundCode);
+  }, [activeSession?._id, playgroundCode]);
+
+  useEffect(() => {
+    if (!activeSession?._id) return;
+    localStorage.setItem(`${WORKFLOW_UI_PREFIX}${activeSession._id}`, JSON.stringify({
+      activeTab,
+      mobilePane,
+      route: location.pathname,
+      stage: activeSession.learningEngine?.currentStage || '',
+      savedAt: new Date().toISOString()
+    }));
+  }, [activeSession?._id, activeSession?.learningEngine?.currentStage, activeTab, mobilePane, location.pathname]);
 
   // Load Career Coach data & active weaknesses gaps list
   const loadCareerCoach = async (triggerSource = 'direct_load') => {
@@ -527,6 +672,18 @@ function LearningLab() {
   const handleSendMessage = async (e) => {
     e?.preventDefault();
     if (!inputText.trim() || !activeSession || chatInFlight.current) return;
+
+    if (isProjectDefenseSession) {
+      if (!projectDefenseScanned) {
+        setMobilePane('workspace');
+        return;
+      }
+      if (!projectDefenseInterviewActive) {
+        setMobilePane('workspace');
+        return;
+      }
+    }
+
     chatInFlight.current = true;
 
     const userText = inputText;
@@ -565,6 +722,10 @@ function LearningLab() {
         if (lastMsg) {
           setPlaygroundCode(lastMsg.playgroundChallenge.initialCode);
           setActiveTab('playground');
+          const sandboxRoute = getWorkflowRoute(data.data, 'playground');
+          if (location.pathname !== sandboxRoute) {
+            navigate(sandboxRoute, { replace: false });
+          }
         }
       }
     } catch (err) {
@@ -616,6 +777,11 @@ function LearningLab() {
     // Find active challenge title
     const challengeMsg = messages.slice().reverse().find(m => m.playgroundChallenge?.title);
     const challengeTitle = challengeMsg ? challengeMsg.playgroundChallenge.title : activeSession.topic;
+    const sandboxMode = challengeMsg
+      ? activeSession.learningEngine?.currentStage === 'EVALUATION'
+        ? 'assessment'
+        : 'challenge'
+      : 'practice';
 
     try {
       if (window.__mentorMetrics) {
@@ -627,7 +793,7 @@ function LearningLab() {
         {
           method: 'POST',
           headers: getHeaders(),
-          body: JSON.stringify({ code: playgroundCode, challengeTitle })
+          body: JSON.stringify({ code: playgroundCode, challengeTitle, sandboxMode })
         },
         'sandbox_code_submit'
       );
@@ -635,7 +801,7 @@ function LearningLab() {
       if (data.success) {
         const evaluation = data.data;
         if (evaluation.passed) {
-          setConsoleOutput(`[SUCCESS] Challenge Completed Successfully!\nFeedback: ${evaluation.feedback}\nConsole Logs: ${evaluation.stdout}`);
+          setConsoleOutput(`[SUCCESS] ${evaluation.mode === 'practice' ? 'Practice Run' : 'Submission'} Completed Successfully!\nFeedback: ${evaluation.feedback}\nConsole Logs: ${evaluation.stdout}`);
         } else {
           setConsoleError(`[FAILED] Assertions Failed.\nFeedback: ${evaluation.feedback}`);
           setConsoleOutput(evaluation.stdout || '');
@@ -666,51 +832,10 @@ function LearningLab() {
     setConsoleError('');
   };
 
-  // Handle Project Ingestion
-  const handleIngestProject = async (e) => {
-    e.preventDefault();
-    if (!githubUrl.trim() && !projectName.trim()) {
-      setIngestError('Project Name and GitHub URL are required.');
-      return;
-    }
-    if (isIngestingProject || ingestInFlight.current) return;
-    ingestInFlight.current = true;
-    setIsIngestingProject(true);
-    setIngestError('');
-    try {
-      if (window.__mentorMetrics) {
-        window.__mentorMetrics.projectIngests += 1;
-      }
-      const res = await makeTraceableRequest(
-        'ingest_project',
-        `${API_BASE}/learning-lab/project/ingest`,
-        {
-          method: 'POST',
-          headers: getHeaders(),
-          body: JSON.stringify({
-            projectName,
-            githubUrl
-          })
-        },
-        'project_ingest'
-      );
-      const data = await res.json();
-      if (data.success) {
-        setProjectName('');
-        setGithubUrl('');
-        await fetchSessions();
-        fetchSessionDetails(data.data._id);
-      } else {
-        setIngestError(data.message || 'Ingestion analysis failed.');
-      }
-    } catch (err) {
-      if (err.name !== 'AbortError') {
-        setIngestError('Repository clone & compress service timeout.');
-      }
-    } finally {
-      setIsIngestingProject(false);
-      ingestInFlight.current = false;
-    }
+  const handleProjectDefenseSessionUpdated = (session) => {
+    setActiveSession(session);
+    setMessages(session.messages || []);
+    fetchSessions();
   };
 
   // Submit Answer to Project Defense Question
@@ -786,10 +911,9 @@ function LearningLab() {
       );
       const data = await res.json();
       if (data.success) {
-        // Immediately clean URL parameters to prevent repeated mount loops
-        navigate('/learning-lab', { replace: true });
+        navigate(getWorkflowRoute(data.data), { replace: false, state: {} });
         await fetchSessions();
-        fetchSessionDetails(data.data._id);
+        await fetchSessionDetails(data.data._id, { syncRoute: false });
       }
     } catch (e) {
       if (e.name !== 'AbortError') {
@@ -895,6 +1019,10 @@ function LearningLab() {
 
   const projectContext = activeSession?.projectContext;
   const isProjectSession = activeSession?.topic.startsWith('Project Defense:');
+  const isProjectDefenseSession = activeSession?.sessionType === 'Project Defense';
+  const projectDefenseScanned = isProjectScanned(projectContext);
+  const projectDefenseInterviewActive =
+    projectDefenseScanned && projectContext?.defenseStarted === true;
 
   // Calculates completion checklist delta
   const calculateChecklistPercent = () => {
@@ -907,6 +1035,27 @@ function LearningLab() {
   useEffect(() => {
     fetchSessions();
     fetchInterviewSessions();
+    fetchTimeline();
+    fetchRecommendations();
+  }, [fetchSessions, fetchInterviewSessions, fetchTimeline, fetchRecommendations]);
+
+  useEffect(() => {
+    const refreshDashboardData = () => {
+      fetchSessions();
+      fetchInterviewSessions();
+      fetchTimeline();
+      fetchRecommendations();
+    };
+
+    window.addEventListener('interview-sessions-updated', refreshDashboardData);
+    window.addEventListener('learning-lab-sessions-updated', refreshDashboardData);
+    const intervalId = window.setInterval(refreshDashboardData, 30000);
+
+    return () => {
+      window.removeEventListener('interview-sessions-updated', refreshDashboardData);
+      window.removeEventListener('learning-lab-sessions-updated', refreshDashboardData);
+      window.clearInterval(intervalId);
+    };
   }, [fetchSessions, fetchInterviewSessions]);
 
   const overallMastery = sessions.length > 0 
@@ -914,46 +1063,111 @@ function LearningLab() {
     : 0;
 
   const completedInterviewCount = interviewSessions.filter(s => s.status === 'completed').length;
-  const learningPathItems = sessions.slice(0, 4).map((session) => ({
+  const learningPathItems = sessions
+    .filter(session => session.status === 'completed' || (Number(session.masteryPercentage) || 0) > 0)
+    .slice(0, 4)
+    .map((session) => ({
     id: session._id,
     title: session.topic,
     status: session.status === 'completed' ? 'Completed' : 'Active',
     mastery: Number(session.masteryPercentage) || 0
   }));
-  const focusTopic = memoryGaps[0] || sessions.find(s => (s.masteryPercentage || 0) < 50)?.topic || null;
+  const latestActiveSession = sessions[0] || null;
+
+  const STAGES_ORDER = [
+    { key: 'WHY', label: 'Why This Exists' },
+    { key: 'CONCEPT', label: 'Concept Explanation' },
+    { key: 'VISUALIZATION', label: 'Visualization' },
+    { key: 'SIMPLE_EXAMPLE', label: 'Simple Example' },
+    { key: 'REAL_PROJECT_USAGE', label: 'Real Project Usage' },
+    { key: 'UNDERSTANDING_CHECK', label: 'Understanding Check' },
+    { key: 'GUIDED_CHALLENGE', label: 'Guided Challenge' },
+    { key: 'INDEPENDENT_CHALLENGE', label: 'Independent Challenge' },
+    { key: 'PROJECT_APPLICATION', label: 'Project Application' },
+    { key: 'INTERVIEW_ROUND', label: 'Interview Round' },
+    { key: 'EVALUATION', label: 'Evaluation' },
+    { key: 'MASTERY_DECISION', label: 'Mastery Decision' }
+  ];
+
+  const focusTopic = memoryGaps[0] || null;
   const focusSession = focusTopic ? sessions.find(s => s.topic === focusTopic) : null;
   const focusChecklist = focusSession?.missionChecklist || [];
   const focusCompletedTasks = focusChecklist.filter(item => item.completed).length;
   const focusTotalTasks = focusChecklist.length;
   const focusPercent = focusTotalTasks ? Math.round((focusCompletedTasks / focusTotalTasks) * 100) : 0;
-  const recommendationTopic = coachData?.learningRoadmap
-    ?.flatMap(phase => Array.isArray(phase.topics) ? phase.topics : [])
-    ?.find(Boolean) || null;
-  const recentActivities = [
-    ...sessions.map(session => ({
-      id: `learning-${session._id}`,
-      type: 'learning',
-      text: `${session.status === 'completed' ? 'Completed' : 'Updated'}: ${session.topic}`,
-      time: session.updatedAt || session.createdAt,
-      color: session.status === 'completed' ? 'var(--success)' : 'var(--secondary)'
-    })),
-    ...interviewSessions.map(session => ({
-      id: `interview-${session._id || session.id}`,
-      type: 'interview',
-      text: `${session.status === 'completed' ? 'Completed' : 'Started'} interview: ${session.title || session.field || 'Interview Session'}`,
-      time: session.updatedAt || session.createdAt,
-      color: session.status === 'completed' ? 'var(--success)' : 'var(--info)'
-    }))
-  ]
-    .filter(activity => activity.time)
-    .sort((a, b) => new Date(b.time) - new Date(a.time))
-    .slice(0, 3);
+  const recommendation = recommendations[0] || null;
+  const recommendationTopic = recommendation?.topic || null;
+  const recentActivities = timelineEvents.map(e => ({
+    id: e._id,
+    text: `${e.action}: ${e.topic}`,
+    time: e.createdAt,
+    color: e.status === 'completed' || e.action.startsWith('Passed') || e.action.startsWith('Completed') ? 'var(--success)' : e.status === 'failed' || e.action.startsWith('Failed') ? 'var(--error)' : 'var(--secondary)'
+  })).slice(0, 3);
 
   const formatActivityTime = (value) => {
     if (!value) return '';
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return '';
     return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  };
+
+  const searchValue = searchQuery.trim().toLowerCase();
+  const searchResults = searchValue
+    ? [
+        ...sessions.map(session => ({
+          id: `learning-${session._id}`,
+          title: session.topic,
+          meta: `${session.sessionType || 'Learning Session'} • ${session.status || 'active'} • ${Number(session.masteryPercentage) || 0}% mastery`,
+          type: 'Learning',
+          action: () => openLearningSession(session)
+        })),
+        ...interviewSessions.map(session => ({
+          id: `interview-${session._id || session.id}`,
+          title: session.title || session.field || 'Interview Session',
+          meta: `${session.field || 'Interview'}${session.stack ? ` • ${session.stack}` : ''} • ${session.status || 'draft'}`,
+          type: 'Interview',
+          action: () => navigate(`/interview/session/${session._id || session.id}`)
+        }))
+      ]
+        .filter(item => `${item.title} ${item.meta} ${item.type}`.toLowerCase().includes(searchValue))
+        .slice(0, 6)
+    : [];
+
+  const notifications = [
+    ...sessions.map(session => ({
+      id: `learning-${session._id}`,
+      title: session.status === 'completed' ? 'Learning session completed' : 'Learning session updated',
+      detail: session.topic,
+      time: session.updatedAt || session.createdAt,
+      action: () => openLearningSession(session)
+    })),
+    ...interviewSessions.map(session => ({
+      id: `interview-${session._id || session.id}`,
+      title: session.status === 'completed' ? 'Interview completed' : 'Interview session updated',
+      detail: session.title || session.field || 'Interview Session',
+      time: session.updatedAt || session.createdAt,
+      action: () => navigate(`/interview/session/${session._id || session.id}`)
+    }))
+  ]
+    .filter(item => item.time)
+    .sort((a, b) => new Date(b.time) - new Date(a.time))
+    .slice(0, 8);
+
+  const unreadNotifications = notifications.filter(item => {
+    const timestamp = new Date(item.time).getTime();
+    return Number.isFinite(timestamp) && timestamp > lastSeenNotificationsAt;
+  }).length;
+
+  const openNotifications = () => {
+    setNotificationsOpen(prev => {
+      const nextOpen = !prev;
+      if (nextOpen) {
+        const now = Date.now();
+        setLastSeenNotificationsAt(now);
+        localStorage.setItem('road2dev-learninglab-notifications-seen-at', String(now));
+      }
+      return nextOpen;
+    });
   };
 
   return (
@@ -982,7 +1196,46 @@ function LearningLab() {
                 className="r2d-search-input"
                 placeholder="Search sessions, topics..."
                 aria-label="Search learning lab"
+                value={searchQuery}
+                onChange={(event) => {
+                  setSearchQuery(event.target.value);
+                  setSearchOpen(true);
+                }}
+                onFocus={() => setSearchOpen(true)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape') {
+                    setSearchOpen(false);
+                    event.currentTarget.blur();
+                  }
+                }}
               />
+              {searchOpen && searchQuery.trim() && (
+                <div className="r2d-search-results" role="listbox">
+                  {searchResults.length > 0 ? (
+                    searchResults.map(result => (
+                      <button
+                        type="button"
+                        className="r2d-search-result"
+                        key={result.id}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => {
+                          result.action();
+                          setSearchOpen(false);
+                          setSearchQuery('');
+                        }}
+                      >
+                        <span className="r2d-search-result-type">{result.type}</span>
+                        <span className="r2d-search-result-title">{result.title}</span>
+                        <span className="r2d-search-result-meta">{result.meta}</span>
+                      </button>
+                    ))
+                  ) : (
+                    <div className="r2d-search-empty">
+                      No user-owned learning or interview records match this search.
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             <div className="r2d-topbar-actions">
               <div className="r2d-streak" title="5 day streak">
@@ -990,13 +1243,54 @@ function LearningLab() {
                 <span className="r2d-streak-label">5 Day Streak</span>
               </div>
               <div className="r2d-topbar-tools">
-                <button type="button" className="r2d-bell-btn" aria-label="Notifications">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-                    <path d="M6 10a6 6 0 0 1 12 0v4l2 2H4l2-2v-4z" stroke="var(--text-muted)" strokeWidth="2" strokeLinejoin="round"/>
-                    <path d="M10 18a2 2 0 0 0 4 0" stroke="var(--text-muted)" strokeWidth="2"/>
-                    <circle cx="18" cy="6" r="3" fill="var(--error)"/>
-                  </svg>
-                </button>
+                <div className="r2d-notification-wrap">
+                  <button
+                    type="button"
+                    className="r2d-bell-btn"
+                    aria-label={`Notifications${unreadNotifications ? `, ${unreadNotifications} unread` : ''}`}
+                    aria-expanded={notificationsOpen}
+                    onClick={openNotifications}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+                      <path d="M6 10a6 6 0 0 1 12 0v4l2 2H4l2-2v-4z" stroke="var(--text-muted)" strokeWidth="2" strokeLinejoin="round"/>
+                      <path d="M10 18a2 2 0 0 0 4 0" stroke="var(--text-muted)" strokeWidth="2"/>
+                    </svg>
+                    {unreadNotifications > 0 && (
+                      <span className="r2d-notification-badge">
+                        {unreadNotifications > 9 ? '9+' : unreadNotifications}
+                      </span>
+                    )}
+                  </button>
+                  {notificationsOpen && (
+                    <div className="r2d-notification-panel">
+                      <div className="r2d-notification-head">
+                        <strong>Notifications</strong>
+                        <span>Live user activity</span>
+                      </div>
+                      {notifications.length > 0 ? (
+                        notifications.map(item => (
+                          <button
+                            type="button"
+                            className="r2d-notification-item"
+                            key={item.id}
+                            onClick={() => {
+                              item.action();
+                              setNotificationsOpen(false);
+                            }}
+                          >
+                            <span className="r2d-notification-title">{item.title}</span>
+                            <span className="r2d-notification-detail">{item.detail}</span>
+                            <span className="r2d-notification-time">{formatActivityTime(item.time)}</span>
+                          </button>
+                        ))
+                      ) : (
+                        <div className="r2d-notification-empty">
+                          No notifications yet. New learning and interview activity will appear here.
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
                 <button
                   type="button"
                   className="r2d-topbar-avatar"
@@ -1044,8 +1338,8 @@ function LearningLab() {
                 {/* SLEEK MATTE SCORECARD PANEL */}
                 <section className="r2d-scorecard-panel">
                   <div className="r2d-scorecard-cell">
-                    <span style={{ fontSize: '10px', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>Mastered Skills</span>
-                    <strong style={{ fontSize: '18px', color: '#34d399' }}>{sessions.filter(s => s.masteryPercentage >= 75).length} Mapped</strong>
+                    <span style={{ fontSize: '10px', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>Skill Mastery</span>
+                    <strong style={{ fontSize: '18px', color: '#34d399' }}>{overallMastery}%</strong>
                   </div>
                   <div className="r2d-scorecard-cell">
                     <span style={{ fontSize: '10px', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>Interviews Done</span>
@@ -1060,7 +1354,7 @@ function LearningLab() {
                   </div>
                   <div className="r2d-scorecard-cell r2d-scorecard-cell--last">
                     <span style={{ fontSize: '10px', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', fontWeight: 'bold' }}>Current Focus</span>
-                    <strong style={{ fontSize: '13px', color: 'var(--secondary-hover)', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: '4px' }}>{focusTopic || 'No focus yet'}</strong>
+                    <strong style={{ fontSize: '13px', color: 'var(--secondary-hover)', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: '4px' }}>{focusTopic || 'Not available yet'}</strong>
                   </div>
                 </section>
 
@@ -1114,9 +1408,9 @@ function LearningLab() {
                     <div className="stage-num stage-num--rose">04</div>
                     <div className="stage-row-body">
                       <strong style={{ color: '#fff', fontSize: '14px', display: 'block' }}>Automated Project Defense</strong>
-                      <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Ingest GitHub repo, scan files architecture blueprint, study top 25 questions, and defend choices before AI Critic.</span>
+                      <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Connect GitHub or a local folder, review the architecture report, then start the AI defense interview.</span>
                     </div>
-                    <button type="button" className="r2d-resume-btn stage-row-cta stage-row-cta--rose" onClick={() => handleCreateGuidedSession('Ingest Repository Blueprint', 'Project Defense')}>
+                    <button type="button" className="r2d-resume-btn stage-row-cta stage-row-cta--rose" onClick={() => handleCreateGuidedSession('Project Defense Lab', 'Project Defense')}>
                       Defend Project
                     </button>
                   </div>
@@ -1176,7 +1470,7 @@ function LearningLab() {
                           </div>
                           <button 
                             className={index === 0 ? "r2d-resume-btn" : "r2d-continue-btn-green"} 
-                            onClick={() => fetchSessionDetails(s._id)}
+                            onClick={() => openLearningSession(s)}
                           >
                             {index === 0 ? 'Resume Session' : 'Continue'}
                           </button>
@@ -1215,24 +1509,56 @@ function LearningLab() {
                     Learning Path Map
                   </div>
                   
-                  <div style={{ marginTop: '12px', borderLeft: '2px solid var(--border)', paddingLeft: '12px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                    {learningPathItems.length === 0 ? (
-                      <div className="r2d-empty-state">
-                        No learning path yet. Complete or update learning sessions to build this map.
+                  {latestActiveSession ? (
+                    <div style={{ marginTop: '12px' }}>
+                      <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}>
+                        Active: {latestActiveSession.topic}
                       </div>
-                    ) : (
-                      learningPathItems.map(item => (
-                        <div style={{ position: 'relative' }} key={item.id}>
-                          <span style={{ color: item.status === 'Completed' ? '#34d399' : '#f59e0b', fontSize: '12px', fontWeight: 'bold' }}>
-                            {item.title}
-                          </span>
-                          <p style={{ color: 'var(--text-muted)', fontSize: '11px', margin: '2px 0 0' }}>
-                            {item.status} - {item.mastery}% Mastery
-                          </p>
-                        </div>
-                      ))
-                    )}
-                  </div>
+                      <div style={{ borderLeft: '2px solid var(--border)', marginLeft: '6px', paddingLeft: '14px', display: 'flex', flexDirection: 'column', gap: '10px', position: 'relative' }}>
+                        {STAGES_ORDER.map(stage => {
+                          const matchingProgress = (latestActiveSession.learningEngine?.stageProgress || []).find(p => p.stage === stage.key);
+                          const isCompleted = matchingProgress?.completed || false;
+                          const isActive = (latestActiveSession.learningEngine?.currentStage || 'WHY') === stage.key;
+                          
+                          let indicatorColor = 'var(--border)';
+                          let textColor = 'var(--text-muted)';
+                          let weight = 'normal';
+                          
+                          if (isCompleted) {
+                            indicatorColor = '#34d399';
+                            textColor = 'var(--success)';
+                          } else if (isActive) {
+                            indicatorColor = 'var(--secondary)';
+                            textColor = '#fff';
+                            weight = 'bold';
+                          }
+                          
+                          return (
+                            <div key={stage.key} style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span style={{ 
+                                position: 'absolute', 
+                                left: '-20px', 
+                                background: 'var(--background)', 
+                                border: `2px solid ${indicatorColor}`, 
+                                borderRadius: '50%', 
+                                width: '10px', 
+                                height: '10px', 
+                                display: 'inline-block',
+                                zIndex: 2
+                              }} />
+                              <div style={{ fontSize: '11.5px', color: textColor, fontWeight: weight }}>
+                                {stage.label} {isActive && <span style={{ color: 'var(--secondary-hover)', fontSize: '10px' }}>(Active)</span>}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="r2d-empty-state">
+                      No active learning session to map. Start a session to view progression.
+                    </div>
+                  )}
                 </div>
 
                 {/* TODAY'S FOCUS */}
@@ -1266,7 +1592,7 @@ function LearningLab() {
                     </>
                   ) : (
                     <div className="r2d-empty-state">
-                      No focus has been identified from your learning or interview history yet.
+                      Not available yet.
                     </div>
                   )}
                 </div>
@@ -1279,20 +1605,33 @@ function LearningLab() {
                     </svg>
                     AI Recommendation
                   </div>
-                  {recommendationTopic ? (
+                  {recommendation ? (
                     <>
-                      <p className="r2d-rec-desc">Based on your recorded gaps, we recommend: </p>
-                      <div className="r2d-rec-chip" onClick={() => handleCreateGuidedSession(recommendationTopic, 'Concept Learning')}>
-                        <span>{recommendationTopic}</span>
+                      <p className="r2d-rec-desc" style={{ fontSize: '12.5px', color: '#fff', fontWeight: 'bold', margin: '0 0 6px' }}>{recommendation.title}</p>
+                      <div className="r2d-rec-chip" onClick={() => handleCreateGuidedSession(recommendation.topic, recommendation.type === 'remediation' ? 'Interview Remediation' : 'Concept Learning')} style={{ cursor: 'pointer', marginBottom: '8px' }}>
+                        <span>{recommendation.topic}</span>
                         <span className="r2d-rec-arrow">›</span>
                       </div>
-                      <p className="r2d-rec-why" style={{ marginTop: '8px' }}>
-                        <strong>Why?</strong> Generated from completed user learning sessions.
+                      <p className="r2d-rec-why" style={{ marginTop: '8px', fontSize: '11.5px', color: 'var(--text-muted)' }}>
+                        <strong>Why?</strong> {recommendation.reason}
                       </p>
+                      {recommendation.pathway && recommendation.pathway.length > 0 && (
+                        <div style={{ marginTop: '10px', fontSize: '11px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                          <span style={{ color: 'var(--text-secondary)', fontWeight: 'bold' }}>Suggested Pathway:</span>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', alignItems: 'center' }}>
+                            {recommendation.pathway.map((p, idx) => (
+                              <React.Fragment key={idx}>
+                                {idx > 0 && <span style={{ color: 'var(--text-muted)', fontSize: '10px' }}>➔</span>}
+                                <span style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', padding: '2px 6px', borderRadius: '4px', color: '#fff' }}>{p}</span>
+                              </React.Fragment>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </>
                   ) : (
                     <div className="r2d-empty-state">
-                      No recommendations yet. Complete a learning session or interview so the AI has real evidence to analyze.
+                      Complete a learning mission or interview to receive recommendations.
                     </div>
                   )}
                 </div>
@@ -1309,7 +1648,7 @@ function LearningLab() {
                   
                   {recentActivities.length === 0 ? (
                     <div className="r2d-empty-state">
-                      No activity yet. Activity appears after you start learning or interview sessions.
+                      No activity recorded yet.
                     </div>
                   ) : (
                     recentActivities.map(activity => (
@@ -1347,7 +1686,7 @@ function LearningLab() {
                     return (
                       <div 
                         key={s._id} 
-                        onClick={() => fetchSessionDetails(s._id)}
+                        onClick={() => openLearningSession(s)}
                         style={{ 
                           background: 'var(--surface)', 
                           border: '1px solid var(--border)', 
@@ -1435,28 +1774,32 @@ function LearningLab() {
                   </div>
                 </div>
 
-                {/* Before vs After gauge */}
+                {/* Verified mastery gauge */}
                 <div style={{ background: 'var(--background)', border: '1px solid var(--border)', padding: '18px 24px', borderRadius: '12px', marginBottom: '28px', textAlign: 'left' }}>
-                  <strong style={{ color: 'var(--text-secondary)', fontSize: '12.5px', display: 'block', marginBottom: '10px' }}>Competency Growth Analytics:</strong>
+                  <strong style={{ color: 'var(--text-secondary)', fontSize: '12.5px', display: 'block', marginBottom: '10px' }}>Verified Competency Progress:</strong>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Before: 25%</span>
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Verified</span>
                     <div style={{ flex: 1, height: '10px', background: 'var(--border)', borderRadius: '5px', overflow: 'hidden', position: 'relative' }}>
-                      <div style={{ width: '25%', height: '100%', background: '#6b7280', borderRadius: '5px', position: 'absolute', top: 0, left: 0 }} />
                       <div style={{ width: `${activeSession.masteryPercentage}%`, height: '100%', background: '#34d399', borderRadius: '5px', position: 'absolute', top: 0, left: 0, zIndex: 2 }} />
                     </div>
-                    <span style={{ fontSize: '11px', color: '#34d399', fontWeight: 'bold' }}>After: {activeSession.masteryPercentage}%</span>
+                    <span style={{ fontSize: '11px', color: '#34d399', fontWeight: 'bold' }}>{activeSession.masteryPercentage}%</span>
                   </div>
                 </div>
 
-                {/* AI Next Recommendation CTA */}
-                <div className="completion-recommendation" style={{ background: 'rgba(139, 92, 246, 0.05)', border: '1px solid rgba(139, 92, 246, 0.15)', padding: '20px', borderRadius: '12px', marginBottom: '28px', textAlign: 'left' }}>
-                  <div className="rec-badge" style={{ background: 'var(--secondary-translucent)', color: 'var(--secondary-hover)', padding: '2px 6px', borderRadius: '3px', fontSize: '9px', fontWeight: 'bold', display: 'inline-block', marginBottom: '8px' }}>â˜… RECOMMENDED NEXT</div>
-                  <h3 style={{ fontSize: '14px', color: '#fff', margin: '0 0 4px', fontWeight: '800' }}>Promises &amp; Async/Await Mastery</h3>
-                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 14px' }}>Estimated Time: 15 mins. Why: Gaps identified in asynchronous function execution flow control.</p>
-                  <button className="start-rec-btn" onClick={() => handleCreateGuidedSession('Promises & Async/Await Mastery', 'Concept Learning')} style={{ width: '100%', background: 'var(--secondary)', border: 'none', color: '#fff', padding: '10px', borderRadius: '8px', fontSize: '12.5px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s' }}>
-                    Start Next Recommended Mission â†’
-                  </button>
-                </div>
+                {recommendationTopic ? (
+                  <div className="completion-recommendation" style={{ background: 'rgba(139, 92, 246, 0.05)', border: '1px solid rgba(139, 92, 246, 0.15)', padding: '20px', borderRadius: '12px', marginBottom: '28px', textAlign: 'left' }}>
+                    <div className="rec-badge" style={{ background: 'var(--secondary-translucent)', color: 'var(--secondary-hover)', padding: '2px 6px', borderRadius: '3px', fontSize: '9px', fontWeight: 'bold', display: 'inline-block', marginBottom: '8px' }}>RECOMMENDED NEXT</div>
+                    <h3 style={{ fontSize: '14px', color: '#fff', margin: '0 0 4px', fontWeight: '800' }}>{recommendationTopic}</h3>
+                    <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 14px' }}>Generated from completed user-owned learning evidence.</p>
+                    <button className="start-rec-btn" onClick={() => handleCreateGuidedSession(recommendationTopic, 'Concept Learning')} style={{ width: '100%', background: 'var(--secondary)', border: 'none', color: '#fff', padding: '10px', borderRadius: '8px', fontSize: '12.5px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s' }}>
+                      Start Recommended Mission
+                    </button>
+                  </div>
+                ) : (
+                  <div className="r2d-empty-state" style={{ marginBottom: '28px', textAlign: 'left' }}>
+                    Complete a learning mission or interview to receive recommendations.
+                  </div>
+                )}
 
                 <div className="completion-actions" style={{ display: 'flex', gap: '10px' }}>
                   <button className="portal-back-btn" onClick={handleExitToGoalsPortal} style={{ flex: 1, background: 'var(--surface-alt)', border: '1px solid var(--border-focus)', color: '#fff', padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer' }}>
@@ -1574,18 +1917,36 @@ function LearningLab() {
 
                 {/* Input area */}
                 <div className="chat-input-container">
-                  <form onSubmit={handleSendMessage} className="chat-input-wrapper">
-                    <input 
-                      type="text" 
-                      className="chat-input"
-                      placeholder={activeSession.sessionType === 'Project Defense' ? "Answer the Critic's question..." : "Ask your Mentor about hooks, variables, performance..."}
-                      value={inputText}
-                      onChange={e => setInputText(e.target.value)}
-                    />
-                    <button type="submit" className="send-btn">
-                      <Send size={14} />
-                    </button>
-                  </form>
+                  {isProjectDefenseSession && !projectDefenseInterviewActive ? (
+                    <div className="pd-chat-blocked">
+                      <p>
+                        {!projectDefenseScanned
+                          ? 'Please connect a GitHub repository or local project folder before starting Project Defense. Use the Workspace panel.'
+                          : 'Review the analysis report and click Start Defense in the Workspace panel.'}
+                      </p>
+                      <button
+                        type="button"
+                        className="pd-chat-blocked__btn"
+                        onClick={() => setMobilePane('workspace')}
+                      >
+                        Open Workspace
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSendMessage} className="chat-input-wrapper">
+                      <input 
+                        type="text" 
+                        className="chat-input"
+                        placeholder={isProjectDefenseSession ? "Answer the Critic's question..." : "Ask your Mentor about hooks, variables, performance..."}
+                        value={inputText}
+                        onChange={e => setInputText(e.target.value)}
+                        disabled={isProjectDefenseSession && !projectDefenseInterviewActive}
+                      />
+                      <button type="submit" className="send-btn" disabled={isProjectDefenseSession && !projectDefenseInterviewActive}>
+                        <Send size={14} />
+                      </button>
+                    </form>
+                  )}
                 </div>
               </div>
 
@@ -1753,121 +2114,20 @@ function LearningLab() {
 
                 {/* 4. PROJECT DEFENSE WORKSPACE */}
                 {activeSession.sessionType === 'Project Defense' && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', textAlign: 'left' }}>
-                    {projectContext ? (
-                      <>
-                        <div style={{ padding: '16px', background: 'rgba(139, 92, 246, 0.05)', border: '1px solid rgba(139, 92, 246, 0.15)', borderRadius: '12px' }}>
-                          <h3 style={{ margin: '0 0 6px 0', fontSize: '14px', color: '#fff' }}>
-                            ðŸ›¡ï¸ Active Defense Ingestion: {projectContext.projectName}
-                          </h3>
-                          <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>The AI Tech Critic probes technical setup choices. Complete all questions to reveal verified readiness scoring report grades.</p>
-                        </div>
-
-                        {/* Diagnostics & Scores report summary */}
-                        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: '16px', borderRadius: '12px' }}>
-                          <strong style={{ fontSize: '13px', color: '#a78bfa', display: 'block', marginBottom: '12px' }}>ðŸ“Š System Architecture Blueprint Diagnostics</strong>
-                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '14px' }}>
-                            <div style={{ background: 'var(--background)', padding: '10px', borderRadius: '6px', border: '1px solid var(--border)' }}>
-                              <span style={{ fontSize: '10px', color: '#71717a', display: 'block' }}>State Engine</span>
-                              <strong style={{ fontSize: '12px', color: '#fff' }}>{projectContext.architectureReport?.stateManagement || 'None'}</strong>
-                            </div>
-                            <div style={{ background: 'var(--background)', padding: '10px', borderRadius: '6px', border: '1px solid var(--border)' }}>
-                              <span style={{ fontSize: '10px', color: '#71717a', display: 'block' }}>Auth Provider</span>
-                              <strong style={{ fontSize: '12px', color: '#fff' }}>{projectContext.architectureReport?.auth || 'None'}</strong>
-                            </div>
-                            <div style={{ background: 'var(--background)', padding: '10px', borderRadius: '6px', border: '1px solid var(--border)' }}>
-                              <span style={{ fontSize: '10px', color: '#71717a', display: 'block' }}>Database System</span>
-                              <strong style={{ fontSize: '12px', color: '#fff' }}>{projectContext.architectureReport?.database || 'None'}</strong>
-                            </div>
-                          </div>
-                          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', background: 'var(--background)', padding: '10px', borderRadius: '6px', border: '1px solid var(--border)', lineHeight: '1.4' }}>
-                            <strong>Analysis Summary:</strong> {projectContext.architectureReport?.summary || 'Scanning file logic directories...'}
-                          </div>
-                        </div>
-
-                        {/* Q&A Critic form interface */}
-                        {activeSession.status === 'active' && (
-                          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: '16px', borderRadius: '12px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', alignItems: 'center' }}>
-                              <strong style={{ fontSize: '13px', color: '#f4f4f5' }}>ðŸ“ Tech Critic Probing</strong>
-                              <span style={{ fontSize: '11px', color: '#a78bfa', fontWeight: 'bold' }}>Question {projectContext.defenseProgress?.currentQuestionIndex + 1 || 1} / 5</span>
-                            </div>
-                            <form onSubmit={handleSubmitDefenseAnswer}>
-                              <textarea 
-                                value={defenseAnswer}
-                                onChange={e => setDefenseAnswer(e.target.value)}
-                                className="ingestion-input"
-                                style={{ minHeight: '80px', resize: 'vertical', fontSize: '12.5px', background: 'var(--background)', border: '1px solid var(--border)', color: '#fff', borderRadius: '8px', padding: '10px', width: '100%', outline: 'none', marginBottom: '10px' }}
-                                placeholder="Defend your architectural folder setups, file logic choices, or database mappings..."
-                                required
-                              />
-                              <button type="submit" disabled={isSubmittingDefense} className="send-btn" style={{ width: '100%', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-                                {isSubmittingDefense ? 'Critic checking solution...' : 'Submit Defense Explanation'} <ArrowRight size={14} />
-                              </button>
-                            </form>
-                          </div>
-                        )}
-
-                        {/* Top 25 Specific custom questions list */}
-                        {projectContext.topQuestions && (
-                          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px' }}>
-                            <button 
-                              onClick={() => setTop25QuestionsExpanded(!top25QuestionsExpanded)}
-                              style={{ width: '100%', background: 'transparent', border: 'none', color: '#e4e4e7', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '12.5px', padding: 0 }}
-                            >
-                              <span>ðŸ“ Top 25 custom Project Questions to Practice</span>
-                              <span>{top25QuestionsExpanded ? 'â–¼' : 'â–¶'}</span>
-                            </button>
-                            {top25QuestionsExpanded && (
-                              <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '200px', overflowY: 'auto' }}>
-                                {projectContext.topQuestions.map((q, idx) => (
-                                  <div key={idx} style={{ background: 'var(--background)', padding: '8px 12px', borderRadius: '6px', fontSize: '12px', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
-                                    <strong>Q{idx + 1}:</strong> {q}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      /* ZIP Upload Repository Form */
-                      <div className="ingestion-form" style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: '24px', borderRadius: '16px' }}>
-                        <h3 style={{ margin: '0 0 10px 0', fontSize: '15px', color: '#fff', fontFamily: 'Sora' }}>ðŸ”Œ Ingest GitHub Repository / Code Folder</h3>
-                        <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', margin: '0 0 20px', lineHeight: '1.5' }}>
-                          Provide a public GitHub Repository URL to scan the folder logic, package configurations, state auth components, and trigger automated probe questions.
-                        </p>
-                        {ingestError && (
-                          <div style={{ background: 'rgba(239,68,68,0.1)', color: '#f87171', border: '1px solid rgba(239,68,68,0.2)', padding: '10px', borderRadius: '6px', marginBottom: '12px', fontSize: '12px' }}>
-                            {ingestError}
-                          </div>
-                        )}
-                        <form onSubmit={handleIngestProject} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                          <input 
-                            type="text" 
-                            className="ingestion-input"
-                            style={{ background: 'var(--background)', border: '1px solid var(--border)', color: '#fff', borderRadius: '8px', padding: '10px 14px', fontSize: '13px', outline: 'none' }}
-                            placeholder="e.g. My E-commerce Webapp"
-                            value={projectName}
-                            onChange={e => setProjectName(e.target.value)}
-                            required
-                          />
-                          <input 
-                            type="text" 
-                            className="ingestion-input"
-                            style={{ background: 'var(--background)', border: '1px solid var(--border)', color: '#fff', borderRadius: '8px', padding: '10px 14px', fontSize: '13px', outline: 'none' }}
-                            placeholder="e.g. https://github.com/Azaz-Gori07/Road2Dev"
-                            value={githubUrl}
-                            onChange={e => setGithubUrl(e.target.value)}
-                            required
-                          />
-                          <button type="submit" disabled={isIngestingProject} className="send-btn" style={{ padding: '12px', borderRadius: '8px', fontSize: '13px', fontWeight: 'bold' }}>
-                            {isIngestingProject ? 'Scanning Architecture Files...' : 'Ingest & Compile Report'}
-                          </button>
-                        </form>
-                      </div>
-                    )}
-                  </div>
+                  <ProjectDefenseWorkspace
+                    activeSession={activeSession}
+                    projectContext={projectContext}
+                    apiBase={API_BASE}
+                    getHeaders={getHeaders}
+                    makeTraceableRequest={makeTraceableRequest}
+                    onSessionUpdated={handleProjectDefenseSessionUpdated}
+                    defenseAnswer={defenseAnswer}
+                    setDefenseAnswer={setDefenseAnswer}
+                    onSubmitDefenseAnswer={handleSubmitDefenseAnswer}
+                    isSubmittingDefense={isSubmittingDefense}
+                    top25Expanded={top25QuestionsExpanded}
+                    setTop25Expanded={setTop25QuestionsExpanded}
+                  />
                 )}
 
                 {/* 5. CAREER OPERATING SYSTEM WORKSPACE */}

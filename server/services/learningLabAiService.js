@@ -107,16 +107,34 @@ const extractJson = (text) => {
   const lastBrace = cleaned.lastIndexOf('}');
 
   if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
+    console.error('--- INVALID JSON RECEIVED ---');
+    console.error(text);
+    console.error('-----------------------------');
     throw new Error('AI response was not valid JSON.');
   }
 
-  return JSON.parse(cleaned.slice(firstBrace, lastBrace + 1));
+  const jsonStr = cleaned.slice(firstBrace, lastBrace + 1);
+  try {
+    return JSON.parse(jsonStr);
+  } catch (initialError) {
+    try {
+      const fixed = jsonStr.replace(/,\s*([\]}])/g, '$1');
+      return JSON.parse(fixed);
+    } catch (secondError) {
+      console.error('--- JSON PARSE ERROR DETECTED ---');
+      console.error('Raw AI Output:');
+      console.error(text);
+      console.error('Parse Error:', initialError.message);
+      console.error('---------------------------------');
+      throw new Error(`AI JSON parse failed: ${initialError.message}`);
+    }
+  }
 };
 
 /**
  * AI Mentor: Concept explanation and challenge builder
  */
-export const generateMentorResponse = async ({ topic, mode, messages, personality = 'The Coding Coach', sessionType = 'Concept Learning' }) => {
+export const generateMentorResponse = async ({ topic, mode, messages, personality = 'The Coding Coach', sessionType = 'Concept Learning', learningEngine = null, mentorMemoryContext = '' }) => {
   const apiKey = process.env.AI_API_KEY;
   if (!apiKey) throw new Error('AI Service not configured.');
 
@@ -154,12 +172,36 @@ You are NOT an interviewer. You behave like a friendly senior colleague pair-pro
 Topic to teach: "${topic}"
 Mode Selected: "${mode}" (Beginner, Intermediate, Advanced)
 Current Focus: "${sessionType}"
+Current Learning Stage: "${learningEngine?.currentStage || 'WHY'}"
+Stage Progress: ${JSON.stringify(learningEngine?.stageProgress || [])}
 
 MENTOR PERSONALITY CONSTRAINTS:
 You must adopt this personality strictly:
 ${personalityDirective}
 
+${mentorMemoryContext ? `
+LEARNER MEMORY AND HISTORY:
+${mentorMemoryContext}
+IMPORTANT: If the learner struggled with this topic in the past (e.g., failureCount > 0 or mastery < 50%), you MUST reference it in your first response (e.g. "Last week you struggled with Closures. Let's quickly revisit one scenario before continuing."). Revisit it briefly and warmly before moving ahead.
+` : ''}
+
 Rules for teaching:
+0. UNIVERSAL LEARNING PIPELINE:
+   - Every topic must move through this order: WHY -> CONCEPT -> VISUALIZATION -> SIMPLE_EXAMPLE -> REAL_PROJECT_USAGE -> UNDERSTANDING_CHECK -> GUIDED_CHALLENGE -> INDEPENDENT_CHALLENGE -> PROJECT_APPLICATION -> INTERVIEW_ROUND -> EVALUATION -> MASTERY_DECISION.
+   - You must teach only the Current Learning Stage. Do not skip ahead, unlock later stages, or declare the topic complete.
+   - If Current Learning Stage is WHY, explain what problem the topic solves before defining it.
+   - If CONCEPT, explain what it is and how it works simply.
+   - If VISUALIZATION, prefer diagrams, memory maps, flows, or architecture sketches.
+   - If SIMPLE_EXAMPLE, provide one short example only.
+   - If REAL_PROJECT_USAGE, connect the concept to real applications.
+   - If UNDERSTANDING_CHECK, ask the learner to explain it in their own words.
+   - If GUIDED_CHALLENGE, provide a small challenge with hints allowed.
+   - If INDEPENDENT_CHALLENGE, provide a challenge and do not give the full solution.
+   - If PROJECT_APPLICATION, ask how the concept appears in a real application.
+   - If INTERVIEW_ROUND, ask interview-style questions appropriate to the selected mode.
+   - If EVALUATION, evaluate only the provided evidence, but do not assign mastery or complete the topic.
+   - If MASTERY_DECISION, explain what evidence is still required; application logic decides pass/fail.
+   - Keep the response locked to "${topic}". Only mention prerequisites when required, then return immediately to "${topic}".
 1. ADAPTIVITY:
    - "Beginner": Use simple English, visual analogies, and basic concepts. Avoid high-level abstractions.
    - "Intermediate": Discuss real-world project context, library usages, and architectural patterns.
@@ -176,17 +218,21 @@ Rules for teaching:
 6. THE ZERO-DEAD-END RULE (SUGGESTED NEXT ACTION):
    - You must NEVER leave the user without a next step. Always define a suggestedNextStep in the JSON.
    - Every session must conclude with advice on "What should I learn next?" mapping out a clear milestone suggestion.
+7. PROGRESSION BOUNDARY:
+   - You teach, explain, hint, and suggest practice.
+   - You must not mark tasks complete, unlock milestones, assign mastery percentages, or award progress.
+   - Application validation logic owns completion and mastery.
 
 You must respond in strict JSON only, using this schema:
 {
   "text": "Your mentoring explanation text. Use markdown, tables, lists, and bold words freely. Keep explanations engaging, structured, and customized for your personality.",
   "suggestedNextStep": {
     "title": "Short title, e.g. 'Solve Counter Loop'",
-    "actionText": "Instruction, e.g. 'Go to Sandbox Playground and write a closures counter script to achieve 60% mastery.'",
+    "actionText": "Instruction for the next learning action. Never mention gaining mastery percentage.",
     "targetTab": "playground | project | coach"
   },
   "missionChecklistUpdates": [
-    { "task": "Short title of a task to learn or complete in this session", "completed": true }
+    { "task": "Short title of a task to learn or practice in this session" }
   ],
   "playgroundChallenge": {
     "title": "Short title of the challenge, or null if not issuing a challenge",
@@ -194,8 +240,7 @@ You must respond in strict JSON only, using this schema:
     "instructions": "Markdown instructions for the user, specifying expectations, constraints, and inputs.",
     "initialCode": "Starter Javascript code in the editor",
     "solutionTemplate": "Expected string match or test condition description"
-  },
-  "masteryDelta": 5
+  }
 }
 `.trim();
 
@@ -250,6 +295,14 @@ You must respond in strict JSON only, using this schema:
     "auth": "JWT, Session Cookies, OAuth2, Firebase Auth, or None",
     "database": "MongoDB, PostgreSQL, MySQL, Redis, SQLite, or None",
     "summary": "1-2 paragraph professional architectural breakdown of what this project does and how it is organized."
+  },
+  "detectedTechnologies": ["8-14 technology badges inferred from the codebase, e.g. React 18, Vite, Express, MongoDB, JWT"],
+  "detectedFeatures": ["6-10 concrete product/engineering features detected, e.g. User auth flow, REST API layer, Admin dashboard"],
+  "potentialWeakAreas": ["5-8 specific weak areas or risks to probe in defense, e.g. Missing input validation on auth routes, No error boundary in client"],
+  "projectComplexity": {
+    "level": "Low | Moderate | High | Enterprise",
+    "score": 55,
+    "rationale": "1-2 sentences explaining complexity based on layers, integrations, file count, and architectural depth"
   },
   "topQuestions": [
     "A list of EXACTLY 25 highly customized, project-specific defense questions probing details (e.g. 'Why did you use Redux in cart.js?', 'How does token validation in auth.js work?', 'Explain why MongoDB was selected instead of Postgres here.'). Absolutely NO generic questions."
@@ -400,4 +453,3 @@ Generate the Career Coach profile scorecard. Output strict JSON.
 
   return extractJson(text);
 };
-

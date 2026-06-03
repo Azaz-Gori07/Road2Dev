@@ -72,10 +72,28 @@ const extractJson = (text) => {
   const lastBrace = cleaned.lastIndexOf('}');
 
   if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
+    console.error('--- INVALID JSON RECEIVED ---');
+    console.error(text);
+    console.error('-----------------------------');
     throw new Error('AI response was not valid JSON.');
   }
 
-  return JSON.parse(cleaned.slice(firstBrace, lastBrace + 1));
+  const jsonStr = cleaned.slice(firstBrace, lastBrace + 1);
+  try {
+    return JSON.parse(jsonStr);
+  } catch (initialError) {
+    try {
+      const fixed = jsonStr.replace(/,\s*([\]}])/g, '$1');
+      return JSON.parse(fixed);
+    } catch (secondError) {
+      console.error('--- JSON PARSE ERROR DETECTED ---');
+      console.error('Raw AI Output:');
+      console.error(text);
+      console.error('Parse Error:', initialError.message);
+      console.error('---------------------------------');
+      throw new Error(`AI JSON parse failed: ${initialError.message}`);
+    }
+  }
 };
 
 const normalizeQuestions = (questions) => {

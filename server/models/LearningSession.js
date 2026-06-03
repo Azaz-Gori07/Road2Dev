@@ -17,6 +17,15 @@ const messageSchema = new mongoose.Schema({
     evaluation: {
       passed: { type: Boolean },
       feedback: { type: String },
+      mode: { type: String, enum: ['practice', 'challenge', 'assessment'] },
+      scores: {
+        conceptUnderstanding: { type: Number, default: 0 },
+        codingAbility: { type: Number, default: 0 },
+        problemSolving: { type: Number, default: 0 },
+        codeQuality: { type: Number, default: 0 },
+        projectReadiness: { type: Number, default: 0 },
+        interviewReadiness: { type: Number, default: 0 }
+      }
     }
   },
   
@@ -60,6 +69,57 @@ const learningSessionSchema = new mongoose.Schema({
     actionText: { type: String, default: '' },
     targetTab: { type: String, default: '' } // playground, project, coach
   },
+  learningEngine: {
+    currentStage: {
+      type: String,
+      enum: [
+        'WHY',
+        'CONCEPT',
+        'VISUALIZATION',
+        'SIMPLE_EXAMPLE',
+        'REAL_PROJECT_USAGE',
+        'UNDERSTANDING_CHECK',
+        'GUIDED_CHALLENGE',
+        'INDEPENDENT_CHALLENGE',
+        'PROJECT_APPLICATION',
+        'INTERVIEW_ROUND',
+        'EVALUATION',
+        'MASTERY_DECISION'
+      ],
+      default: 'WHY'
+    },
+    stageProgress: [{
+      stage: { type: String, required: true },
+      completed: { type: Boolean, default: false },
+      completedAt: { type: Date },
+      evidenceType: { type: String, default: '' }
+    }],
+    evaluationScores: {
+      conceptUnderstanding: { type: Number, default: 0 },
+      codingAbility: { type: Number, default: 0 },
+      problemSolving: { type: Number, default: 0 },
+      codeQuality: { type: Number, default: 0 },
+      projectReadiness: { type: Number, default: 0 },
+      interviewReadiness: { type: Number, default: 0 }
+    },
+    sandboxEvidence: [{
+      mode: { type: String, enum: ['practice', 'challenge', 'assessment'], default: 'practice' },
+      challengeTitle: { type: String, default: '' },
+      passed: { type: Boolean, default: false },
+      feedback: { type: String, default: '' },
+      stdout: { type: String, default: '' },
+      error: { type: String, default: '' },
+      scores: {
+        conceptUnderstanding: { type: Number, default: 0 },
+        codingAbility: { type: Number, default: 0 },
+        problemSolving: { type: Number, default: 0 },
+        codeQuality: { type: Number, default: 0 },
+        projectReadiness: { type: Number, default: 0 },
+        interviewReadiness: { type: Number, default: 0 }
+      },
+      createdAt: { type: Date, default: Date.now }
+    }]
+  },
   
   // Chat dialogue logs
   messages: [messageSchema],
@@ -68,6 +128,22 @@ const learningSessionSchema = new mongoose.Schema({
   projectContext: {
     projectName: { type: String },
     repoUrl: { type: String },
+    ingestionMethod: { type: String, enum: ['github', 'local', ''], default: '' },
+    scanComplete: { type: Boolean, default: false },
+    defenseStarted: { type: Boolean, default: false },
+    projectComplexity: {
+      level: { type: String, default: '' },
+      score: { type: Number, default: 0 },
+      rationale: { type: String, default: '' }
+    },
+    starterDefenseQuestion: { type: String, default: '' },
+    detectedTechnologies: [String],
+    detectedFeatures: [String],
+    potentialWeakAreas: [String],
+    scanStats: {
+      filesScanned: { type: Number, default: 0 },
+      foldersScanned: { type: Number, default: 0 }
+    },
     architectureReport: {
       structure: { type: String },
       libraries: [String],
