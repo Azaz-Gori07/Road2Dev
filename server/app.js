@@ -17,14 +17,38 @@ if (!process.env.JWT_SECRET) {
 
 const app = express();
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',')
-  : ['http://localhost:5173', 'http://localhost:5000'];
+const PRODUCTION_ORIGINS = [
+  'https://road2-dev.vercel.app',
+  'https://road2-dev-0a9s.vercel.app',
+];
+
+const LOCAL_ORIGINS = [
+  'http://localhost:5173',
+  'http://localhost:5000',
+  'http://localhost:3000',
+];
+
+const envOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim()).filter(Boolean)
+  : [];
+
+const staticOrigins = [...new Set([...LOCAL_ORIGINS, ...PRODUCTION_ORIGINS, ...envOrigins])];
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (server-to-server, health checks, curl)
+    if (!origin) return callback(null, true);
+    // Allow if in the explicit allowlist
+    if (staticOrigins.includes(origin)) return callback(null, true);
+    // Allow Vercel preview deployments
+    if (origin.startsWith('https://') && origin.endsWith('.vercel.app')) return callback(null, true);
+    callback(null, false);
+  },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
+
 app.use(express.json());
 
 /**
