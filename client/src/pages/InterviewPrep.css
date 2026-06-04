@@ -2810,3 +2810,37 @@ html, body {
     display: none;
   }
 }
+
+/* AI Voice Mode Premium Micro-animations & CSS Rules */
+@keyframes pulse-voice {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    transform: scale(1);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    transform: scale(1);
+  }
+}
+
+.icon-button.listening {
+  color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.15) !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+.voice-toggle-pill.enabled {
+  background: rgba(139, 92, 246, 0.2) !important;
+  border-color: #8b5cf6 !important;
+  color: #c084fc !important;
+}
+
+.voice-speak-full-btn:hover {
+  background: var(--surface-hover) !important;
+  border-color: var(--border-focus) !important;
+  color: #fff !important;
+}

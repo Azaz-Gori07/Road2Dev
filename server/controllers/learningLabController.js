@@ -486,6 +486,14 @@ LEARNER MEMORY PROFILE:
 ${currentTopicMemory ? `- Past attempts on this topic: ${currentTopicMemory.attemptCount} attempts, ${currentTopicMemory.successCount} successes, ${currentTopicMemory.failureCount} failures, current mastery: ${currentTopicMemory.mastery}%` : ''}
 `;
 
+    const userPreferences = req.user ? {
+      language: req.user.language || 'English',
+      communicationMode: req.user.communicationMode || 'Natural',
+    } : {
+      language: 'English',
+      communicationMode: 'Natural',
+    };
+
     // Auto-initialize first AI explanation to welcome user
     const aiResponse = await generateMentorResponse({
       topic,
@@ -494,7 +502,8 @@ ${currentTopicMemory ? `- Past attempts on this topic: ${currentTopicMemory.atte
       personality,
       sessionType,
       learningEngine: session.learningEngine,
-      mentorMemoryContext: memoryPromptContext
+      mentorMemoryContext: memoryPromptContext,
+      userPreferences
     });
 
     session.messages.push({
@@ -650,6 +659,14 @@ export const sendChatMessage = async (req, res) => {
       timestamp: new Date()
     });
 
+    const userPreferences = req.user ? {
+      language: req.user.language || 'English',
+      communicationMode: req.user.communicationMode || 'Natural',
+    } : {
+      language: 'English',
+      communicationMode: 'Natural',
+    };
+
     // Generate AI response
     const aiResponse = await generateMentorResponse({
       topic: session.topic,
@@ -657,7 +674,8 @@ export const sendChatMessage = async (req, res) => {
       messages: session.messages,
       personality: session.personality,
       sessionType: session.sessionType,
-      learningEngine: session.learningEngine || createLearningEngineState()
+      learningEngine: session.learningEngine || createLearningEngineState(),
+      userPreferences
     });
 
     session.messages.push({
@@ -1386,12 +1404,21 @@ export const submitProjectDefenseAnswer = async (req, res) => {
       currentQuestion = currentQuestion.split('**"')[1].split('"**')[0];
     }
 
+    const userPreferences = req.user ? {
+      language: req.user.language || 'English',
+      communicationMode: req.user.communicationMode || 'Natural',
+    } : {
+      language: 'English',
+      communicationMode: 'Natural',
+    };
+
     // Evaluate answer with AI
     const evalResult = await evaluateDefenseAnswer({
       report: context.architectureReport,
       currentQuestion,
       answer,
-      currentQuestionIndex: currentQIdx
+      currentQuestionIndex: currentQIdx,
+      userPreferences
     });
 
     // Deduplication: reject exact duplicate of any previous answer
@@ -1658,10 +1685,19 @@ export const getCareerCoachRoadmap = async (req, res) => {
       });
     }
 
+    const userPreferences = req.user ? {
+      language: req.user.language || 'English',
+      communicationMode: req.user.communicationMode || 'Natural',
+    } : {
+      language: 'English',
+      communicationMode: 'Natural',
+    };
+
     const coachData = await compileCareerCoachRoadmap({
       masteredSkills,
       weakSkills,
-      topic
+      topic,
+      userPreferences
     });
 
     // Persist career coach data to a LearningSession

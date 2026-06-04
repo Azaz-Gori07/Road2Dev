@@ -26,11 +26,13 @@ const fallbackQuestions = [
   },
 ];
 
-const buildPrompt = ({ field, stack, experienceLevel, interviewType }) => {
+const buildPrompt = ({ field, stack, experienceLevel, interviewType, userPreferences }) => {
   const stackText = stack ? ` Technology stack: ${stack}.` : '';
+  const targetLanguage = userPreferences?.interviewLanguage || 'English';
 
   return `
 Generate an interview prep session as strict JSON only.
+IMPORTANT: Generate all initial interview questions in the target language: "${targetLanguage}".
 
 Candidate profile:
 - Field/domain: ${field}
@@ -270,7 +272,7 @@ const getSafeAiErrorMessage = (error) => {
   return upstreamMessage.slice(0, 240);
 };
 
-const buildInterviewerSystemPrompt = ({ field, stack, experienceLevel, interviewType, questionCount, previousSummaries = [], candidateName = 'Candidate' }) => {
+const buildInterviewerSystemPrompt = ({ field, stack, experienceLevel, interviewType, questionCount, previousSummaries = [], candidateName = 'Candidate', userPreferences }) => {
   const stackText = stack ? ` Technology stack: ${stack}.` : '';
   
   // Define Domain Skill Trees
@@ -293,6 +295,10 @@ const buildInterviewerSystemPrompt = ({ field, stack, experienceLevel, interview
   const historyText = previousSummaries.length > 0 
     ? `We have found summaries of the candidate's PREVIOUS completed interviews in this domain: \n${JSON.stringify(previousSummaries, null, 2)}\n- Spend heavily on previous 'weak' or 'not_assessed' areas. Reduce coverage on mastered strengths. Measure improvement!`
     : 'This is the candidate\'s first completed interview in this field. Start with standard topic mapping.';
+
+  const prefLang = userPreferences?.language || 'English';
+  const commMode = userPreferences?.communicationMode || 'Natural';
+  const intLang = userPreferences?.interviewLanguage || 'English';
 
   return `
 # AI INTERVIEWER & KNOWLEDGE GAP ELIMINATION BEHAVIOR PROMPT
@@ -343,12 +349,22 @@ Do not ask HR or project questions as a generic checklist. Listen to their answe
 
 ---
 
-## 4. MULTI-LANGUAGE Hinglish/Hindi COMMUNICATION
-- The candidate can answer in English, Hindi, Hinglish, or mixed-language.
-- You must remain a professional, English-first interviewer.
-- However, to make the conversation feel natural, encourage them and sprinkle minor Hindi/Hinglish feedback or clarifications:
-  * Example: "Your explanation of useState was correct. Bas thoda aur closures se relative detail me batate to answer stronger lagta."
-  * Maintain professional standards, do not switch entirely to Hindi.
+## 4. MULTILINGUAL & COMMUNICATION PREFERENCES
+You must respect the candidate's communication settings:
+- Preferred Language (explanations/feedback): **${prefLang}**
+- Communication Mode: **${commMode}**
+- Target Interview Language: **${intLang}**
+
+### Mode Specific Instructions:
+- **Natural**: Adapt dynamically to the user's input. If the candidate speaks in mixed Hindi + English (Hinglish), adapt and communicate naturally in Hinglish.
+- **Learning Friendly**: Explain concepts, corrections, and feedback primarily in Preferred Language (**${prefLang}**). Keep all code blocks and technical terms strictly in English.
+- **Interview Realistic**: Conduct the interview strictly in the target Interview Language (**${intLang}**). The candidate is allowed to answer in any language they prefer. Your technical evaluation and scoring must focus entirely on their capability, not language skills. Do not penalize scores for answering in non-English languages.
+- **Industry Ready**: Conduct the interview strictly in English. If the candidate answers in another language, provide gentle suggestions/corrections in English to help them phrase it professionally.
+
+### Critical Formatting Rules:
+1. **No Code Translations**: Never translate syntax, variables, comments, or structure inside markdown code blocks. Keep all code blocks strictly in English.
+2. **English Technical Terms**: Keep technical terms in English. If explaining in another language, write the English term (optionally followed by translation in parentheses, e.g. State Management (स्थिति प्रबंधन)).
+3. **User Message Instruction Override**: If the candidate's last message contains an explicit request to explain or speak in a specific language (e.g. "Explain this in English"), override the global preference temporarily for this turn and answer in the requested language.
 
 ---
 

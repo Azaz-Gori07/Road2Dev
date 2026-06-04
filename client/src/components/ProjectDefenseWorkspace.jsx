@@ -25,6 +25,7 @@ import {
   pathToScanLine,
   isProjectScanned
 } from '../utils/projectScanProgress';
+import TypingIndicator from './TypingIndicator';
 
 const CONNECT_REQUIRED_MSG =
   'Please connect a GitHub repository or local project folder before starting Project Defense.';
@@ -376,6 +377,7 @@ export default function ProjectDefenseWorkspace({
   setDefenseAnswer,
   onSubmitDefenseAnswer,
   isSubmittingDefense,
+  setIsAiTyping = () => {},
   top25Expanded,
   setTop25Expanded
 }) {
@@ -523,6 +525,7 @@ export default function ProjectDefenseWorkspace({
     if (!activeSession?._id || isStartingDefense || defenseStarted) return;
 
     setIsStartingDefense(true);
+    setIsAiTyping(true);
     setIngestError('');
     try {
       const res = await makeTraceableRequest(
@@ -542,6 +545,7 @@ export default function ProjectDefenseWorkspace({
         setIngestError(CONNECT_REQUIRED_MSG);
       }
     } finally {
+      setIsAiTyping(false);
       setIsStartingDefense(false);
     }
   };
@@ -583,11 +587,18 @@ export default function ProjectDefenseWorkspace({
               onChange={(e) => setDefenseAnswer(e.target.value)}
               placeholder="Defend your architectural choices, data flow, and tradeoffs…"
               required
+              disabled={isSubmittingDefense}
             />
-            <button type="submit" disabled={isSubmittingDefense}>
-              {isSubmittingDefense ? 'Critic reviewing…' : 'Submit answer'}
-              <ArrowRight size={14} />
-            </button>
+            {isSubmittingDefense ? (
+              <div style={{ marginTop: '12px' }}>
+                <TypingIndicator context="project-defense" />
+              </div>
+            ) : (
+              <button type="submit" disabled={isSubmittingDefense}>
+                Submit answer
+                <ArrowRight size={14} />
+              </button>
+            )}
           </form>
         )}
 

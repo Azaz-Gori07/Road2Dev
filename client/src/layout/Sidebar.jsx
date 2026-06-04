@@ -16,6 +16,7 @@ import {
     BrainCircuit,
     TrendingUp,
     Clock,
+    Settings,
 } from "lucide-react";
 import { useTheme } from '../components/ThemeContext';
 import {
@@ -23,6 +24,7 @@ import {
 } from "react-icons/bi";
 import useZenuxAuth from '../hooks/useZenuxAuth';
 import useAuth from '../hooks/useAuth';
+import AiSettingsModal from '../components/AiSettingsModal';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
 
@@ -31,6 +33,7 @@ function Sidebar() {
     const [activeLink, setActiveLink] = useState('home');
     const [close, setClose] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [isAiSettingsOpen, setIsAiSettingsOpen] = useState(false);
     const [recentSessions, setRecentSessions] = useState([]);
     const [recentLoading, setRecentLoading] = useState(false);
     const [recentError, setRecentError] = useState('');
@@ -143,6 +146,7 @@ function Sidebar() {
     const xpPercent = completedCount === 0 ? 0 : Math.round(((completedCount % 3) / 3) * 100) || 33;
 
     return (
+        <>
         <section id={
             window.innerWidth <= 800
                 ? mobileOpen
@@ -190,6 +194,9 @@ function Sidebar() {
                     )}
                     <Link to="/about"><li onClick={() => { setActiveLink("about"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'about' ? 'isActive' : 'sidebar-link'} data-title='About'><Info size={20} /> <span className='link-text'>About</span></li></Link>
                     <Link to="/memory"><li onClick={() => { setActiveLink("memory"); if (window.innerWidth <= 800) setMobileOpen(false); }} className={activeLink === 'memory' ? 'isActive' : 'sidebar-link'} data-title='Memory'><Clock size={20} /> <span className='link-text'>Memory</span></li></Link>
+                    {isAuthenticated && (
+                        <li onClick={() => { setIsAiSettingsOpen(true); if (window.innerWidth <= 800) setMobileOpen(false); }} className='sidebar-link' data-title='AI Settings' style={{ cursor: 'pointer' }}><Settings size={20} /> <span className='link-text'>AI Settings</span></li>
+                    )}
                 </ul>
 
                 {!isAuthenticated && !close && (
@@ -293,6 +300,8 @@ function Sidebar() {
                 )}
             </div>
         </section>
+        <AiSettingsModal isOpen={isAiSettingsOpen} onClose={() => setIsAiSettingsOpen(false)} />
+        </>
     )
 }
 

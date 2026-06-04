@@ -457,7 +457,32 @@ function EditProfile({ data, onSave, onCancel, onLogout }) {
             <h3 className="section-title-small">Preferences</h3>
             <Select label="Experience Level" value={form.expLevel} onChange={e => set("expLevel", e.target.value)} options={["Beginner", "Mid Level", "Senior", "Expert"]} />
             <Select label="Primary Focus" value={form.focus} onChange={e => set("focus", e.target.value)} options={["Full Stack Development", "Frontend", "Backend", "Data Science", "DevOps", "Mobile"]} />
-            <Select label="Preferred Language" value={form.language} onChange={e => set("language", e.target.value)} options={["English", "Hindi", "Spanish", "French", "German", "Japanese"]} />
+            <Select 
+              label="Preferred Language" 
+              value={form.language} 
+              onChange={e => set("language", e.target.value)} 
+              options={[
+                'English', 'Hindi', 'Spanish', 'French', 'Arabic', 
+                'German', 'Portuguese', 'Russian', 'Japanese', 'Korean', 
+                'Chinese', 'Turkish', 'Indonesian', 'Thai', 'Vietnamese'
+              ]} 
+            />
+            <Select 
+              label="Interview Target Language" 
+              value={form.interviewLanguage} 
+              onChange={e => set("interviewLanguage", e.target.value)} 
+              options={[
+                'English', 'Hindi', 'Spanish', 'French', 'Arabic', 
+                'German', 'Portuguese', 'Russian', 'Japanese', 'Korean', 
+                'Chinese', 'Turkish', 'Indonesian', 'Thai', 'Vietnamese'
+              ]} 
+            />
+            <Select 
+              label="Communication Mode" 
+              value={form.communicationMode} 
+              onChange={e => set("communicationMode", e.target.value)} 
+              options={['Natural', 'Learning Friendly', 'Interview Realistic', 'Industry Ready']} 
+            />
           </div>
 
           {/* Toggles */}
@@ -532,16 +557,18 @@ export default function ProfilePage() {
   const [learningSessions, setLearningSessions] = useState([]);
   const [learningSessionsLoading, setLearningSessionsLoading] = useState(true);
   const [data, setData] = useState({
-    name:     "Road2Dev User",
-    headline: "Full Stack Developer",
-    location: "Unknown Location",
-    email:    "user@example.com",
-    joined:   "Joined",
-    bio:      "Write a short bio to introduce yourself to the Road2Dev community.",
-    stack:    ["JavaScript", "React", "Node.js"],
-    expLevel: "Beginner",
-    focus:    "Full Stack Development",
-    language: "English",
+    name:              "Road2Dev User",
+    headline:          "Full Stack Developer",
+    location:          "Unknown Location",
+    email:             "user@example.com",
+    joined:            "Joined",
+    bio:               "Write a short bio to introduce yourself to the Road2Dev community.",
+    stack:             ["JavaScript", "React", "Node.js"],
+    expLevel:          "Beginner",
+    focus:             "Full Stack Development",
+    language:          "English",
+    communicationMode: "Natural",
+    interviewLanguage: "English",
   });
 
   const fetchSessions = useCallback(async () => {
@@ -614,6 +641,8 @@ export default function ProfilePage() {
         expLevel: authUser.expLevel || prev.expLevel,
         focus: authUser.focus || prev.focus,
         language: authUser.language || prev.language,
+        communicationMode: authUser.communicationMode || prev.communicationMode,
+        interviewLanguage: authUser.interviewLanguage || prev.interviewLanguage,
         stack: Array.isArray(authUser.stack) && authUser.stack.length > 0 ? authUser.stack : prev.stack,
         joined: authUser.createdAt
           ? `Joined ${new Date(authUser.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`
@@ -642,6 +671,8 @@ export default function ProfilePage() {
           expLevel: updatedUser.expLevel || prev.expLevel,
           focus: updatedUser.focus || prev.focus,
           language: updatedUser.language || prev.language,
+          communicationMode: updatedUser.communicationMode || prev.communicationMode,
+          interviewLanguage: updatedUser.interviewLanguage || prev.interviewLanguage,
           stack: Array.isArray(updatedUser.stack) && updatedUser.stack.length > 0 ? updatedUser.stack : prev.stack,
           joined: updatedUser.createdAt
             ? `Joined ${new Date(updatedUser.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`

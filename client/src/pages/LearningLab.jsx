@@ -13,6 +13,14 @@ import useAuth from '../hooks/useAuth';
 import ProjectDefenseWorkspace from '../components/ProjectDefenseWorkspace';
 import { isProjectScanned } from '../utils/projectScanProgress';
 import './LearningLab.css';
+import TypingIndicator from '../components/TypingIndicator';
+import {
+  isVoiceSupported,
+  getLangLocaleCode,
+  cleanTextForSpeech,
+  speakTextHelper,
+  initSpeechRecognition
+} from '../utils/voiceEngine';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
 const SANDBOX_DRAFT_PREFIX = 'road2dev-learninglab-sandbox-';
@@ -236,6 +244,7 @@ function LearningLab() {
   const [coachData, setCoachData] = useState(null);
   const [loadingCoach, setLoadingCoach] = useState(false);
   const [memoryGaps, setMemoryGaps] = useState([]);
+  const [isAiTyping, setIsAiTyping] = useState(false);
   
   // Real history and AI recommendation states
   const [timelineEvents, setTimelineEvents] = useState([]);
@@ -243,6 +252,21 @@ function LearningLab() {
 
   // Copied states for code copy button animation
   const [copiedIndex, setCopiedIndex] = useState(null);
+
+  // AI Mentor Voice Mode States & Refs
+  const [voiceModeEnabled, setVoiceModeEnabled] = useState(() => {
+    try {
+      return localStorage.getItem('road2dev-voice-mode') === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const [voiceState, setVoiceState] = useState('idle');
+  const recognitionRef = useRef(null);
+  const spokenMessageIdRef = useRef(null);
+  const supported = typeof window !== 'undefined' &&
+    'speechSynthesis' in window &&
+    ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
 
   const messagesEndRef = useRef(null);
   const currentRouteWorkflowTab = getRouteWorkflowTab(location.pathname);
@@ -278,8 +302,125 @@ function LearningLab() {
     return () => {
       activeRequests.current.forEach(controller => controller.abort());
       activeRequests.current.clear();
+      window.speechSynthesis?.cancel();
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+        } catch (e) {}
+      }
     };
   }, []);
+
+  // Helper methods for speech synthesis & recognition
+  const startListening = () => {
+    if (!supported || voiceState === 'listening') return;
+    
+    // Interrupt Synthesis playback immediately
+    window.speechSynthesis?.cancel();
+    setVoiceState('listening');
+
+    const userLang = authUser?.preferredLanguage || 'English';
+    const rec = initSpeechRecognition(
+      userLang,
+      () => {
+        setVoiceState('listening');
+      },
+      () => {
+        setVoiceState(prev => prev === 'listening' ? 'idle' : prev);
+      },
+      (transcript) => {
+        setInputText(prev => {
+          const space = prev && !prev.endsWith(' ') ? ' ' : '';
+          return prev + space + transcript;
+        });
+        setVoiceState('idle');
+      },
+      (err) => {
+        console.warn('Speech recognition error:', err);
+        setVoiceState('error');
+        setTimeout(() => setVoiceState('idle'), 2000);
+      }
+    );
+
+    if (rec) {
+      recognitionRef.current = rec;
+      try {
+        rec.start();
+      } catch (e) {
+        console.error('Failed to start speech recognition:', e);
+        setVoiceState('error');
+      }
+    }
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch (e) {}
+      setVoiceState('idle');
+    }
+  };
+
+  const toggleListening = () => {
+    if (voiceState === 'listening') {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
+
+  // Keyboard Shortcuts Effect
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Spacebar when input/textarea is NOT focused: toggle listening
+      if (e.code === 'Space') {
+        const activeElement = document.activeElement;
+        const isInputFocused = activeElement && (
+          activeElement.tagName === 'INPUT' ||
+          activeElement.tagName === 'TEXTAREA' ||
+          activeElement.isContentEditable
+        );
+        if (!isInputFocused && voiceModeEnabled && supported) {
+          e.preventDefault();
+          toggleListening();
+        }
+      }
+      // Esc key: stop speaking
+      if (e.key === 'Escape') {
+        if (voiceModeEnabled && supported) {
+          window.speechSynthesis?.cancel();
+          setVoiceState('idle');
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [voiceModeEnabled, voiceState, supported]);
+
+  // Automatic Speech Playback Effect
+  useEffect(() => {
+    if (!voiceModeEnabled || !supported) return;
+
+    const lastMsg = messages[messages.length - 1];
+    if (lastMsg && lastMsg.role === 'assistant') {
+      const msgId = lastMsg.id || messages.length - 1;
+      if (spokenMessageIdRef.current !== msgId) {
+        spokenMessageIdRef.current = msgId;
+        
+        const textToSpeak = lastMsg.text || '';
+        if (textToSpeak) {
+          speakTextHelper(textToSpeak, authUser?.preferredLanguage || 'English',
+            () => setVoiceState('speaking'),
+            () => setVoiceState('idle'),
+            () => setVoiceState('error'),
+            true // Truncate automatically (first 350-400 characters)
+          );
+        }
+      }
+    }
+  }, [messages, voiceModeEnabled, authUser?.preferredLanguage, supported]);
 
   const makeTraceableRequest = async (name, endpoint, options = {}, triggerSource) => {
     // Abort only the same request type to prevent overlap
@@ -575,7 +716,7 @@ function LearningLab() {
   // Scroll to bottom of chat
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, isAiTyping]);
 
   useEffect(() => {
     if (!activeSession?._id) return;
@@ -652,6 +793,7 @@ function LearningLab() {
           window.__mentorMetrics.chatRequests += 1;
         }
 
+        setIsAiTyping(true);
         // Auto-retrigger explanation in new tone
         const resChat = await makeTraceableRequest(
           'chat',
@@ -674,6 +816,7 @@ function LearningLab() {
         console.error('Personality swap failed:', e);
       }
     } finally {
+      setIsAiTyping(false);
       chatInFlight.current = false;
     }
   };
@@ -701,6 +844,9 @@ function LearningLab() {
   const handleSendMessage = async (e) => {
     e?.preventDefault();
     if (!inputText.trim() || !activeSession || chatInFlight.current) return;
+
+    window.speechSynthesis?.cancel();
+    setVoiceState('processing');
 
     if (isProjectDefenseSession) {
       if (!projectDefenseScanned) {
@@ -731,6 +877,7 @@ function LearningLab() {
       if (window.__mentorMetrics) {
         window.__mentorMetrics.chatRequests += 1;
       }
+      setIsAiTyping(true);
       const res = await makeTraceableRequest(
         'chat',
         `${API_BASE}/learning-lab/session/${activeSession._id}/chat`,
@@ -762,6 +909,7 @@ function LearningLab() {
         console.error('Failed to send message:', err);
       }
     } finally {
+      setIsAiTyping(false);
       chatInFlight.current = false;
     }
   };
@@ -873,6 +1021,7 @@ function LearningLab() {
     if (!defenseAnswer.trim() || !activeSession || isSubmittingDefense || defenseInFlight.current) return;
     defenseInFlight.current = true;
     setIsSubmittingDefense(true);
+    setIsAiTyping(true);
 
     const answer = defenseAnswer;
     setDefenseAnswer('');
@@ -905,6 +1054,7 @@ function LearningLab() {
         console.error('Defense submission failed:', err);
       }
     } finally {
+      setIsAiTyping(false);
       setIsSubmittingDefense(false);
       defenseInFlight.current = false;
     }
@@ -1910,7 +2060,47 @@ function LearningLab() {
                   </h1>
                   
                   {/* Personality select */}
-                  <div className="chat-header-actions">
+                  <div className="chat-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <button
+                      type="button"
+                      className={`voice-toggle-btn ${voiceModeEnabled ? 'enabled' : ''}`}
+                      style={{
+                        background: voiceModeEnabled ? 'rgba(139, 92, 246, 0.2)' : 'rgba(255,255,255,0.05)',
+                        border: voiceModeEnabled ? '1px solid #8b5cf6' : '1px solid rgba(255,255,255,0.1)',
+                        color: voiceModeEnabled ? '#c084fc' : '#a1a1aa',
+                        cursor: supported ? 'pointer' : 'not-allowed',
+                        opacity: supported ? 1 : 0.5,
+                        padding: '6px 12px',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: '600',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        transition: 'all 0.2s',
+                        height: '32px'
+                      }}
+                      onClick={() => {
+                        if (supported) {
+                          const nextVal = !voiceModeEnabled;
+                          setVoiceModeEnabled(nextVal);
+                          localStorage.setItem('road2dev-voice-mode', String(nextVal));
+                          if (!nextVal) {
+                            window.speechSynthesis?.cancel();
+                            try { recognitionRef.current?.stop(); } catch (e) {}
+                            setVoiceState('idle');
+                          }
+                        }
+                      }}
+                      title={supported ? "Toggle voice mode" : "Voice Mode works best in Chrome, Edge, and Safari."}
+                    >
+                      🎤 {voiceModeEnabled ? 'Voice: ON' : 'Voice: OFF'}
+                    </button>
+                    {!supported && (
+                      <span style={{ fontSize: '10px', color: '#f87171' }} title="Voice Mode works best in Chrome, Edge, and Safari.">
+                        (Unsupported)
+                      </span>
+                    )}
                     <select 
                       className="personality-select"
                       value={personality}
@@ -1954,9 +2144,39 @@ function LearningLab() {
                   {loading ? (
                     <div style={{ color: '#71717a', textAlign: 'center', marginTop: '40px', fontSize: '13px' }}>Syncing mentor nodes...</div>
                   ) : (
-                    messages.map((m, idx) => (
-                      <div key={m.id || idx} className={`message-bubble ${m.role}`}>
-                        {m.role === 'assistant' ? parseMentorText(m.text) : <p style={{ margin: 0 }}>{m.text}</p>}
+                    messages.map((m, idx) => {
+                      const isLong = m.role === 'assistant' && cleanTextForSpeech(m.text, false).length > cleanTextForSpeech(m.text, true).length;
+                      return (
+                        <div key={m.id || idx} className={`message-bubble ${m.role}`}>
+                          {m.role === 'assistant' ? parseMentorText(m.text) : <p style={{ margin: 0 }}>{m.text}</p>}
+                          {isLong && voiceModeEnabled && supported && (
+                            <button
+                              type="button"
+                              className="voice-speak-full-btn"
+                              onClick={() => {
+                                speakTextHelper(m.text, authUser?.preferredLanguage || 'English',
+                                  () => setVoiceState('speaking'),
+                                  () => setVoiceState('idle'),
+                                  () => setVoiceState('error'),
+                                  false // Speak full!
+                                );
+                              }}
+                              style={{
+                                display: 'block',
+                                marginTop: '8px',
+                                padding: '4px 10px',
+                                fontSize: '11px',
+                                color: 'var(--secondary-hover)',
+                                background: 'var(--surface-alt)',
+                                border: '1px solid var(--border)',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s'
+                              }}
+                            >
+                              🔊 Speak Full Response
+                            </button>
+                          )}
                         
                         {m.playgroundChallenge?.evaluation?.feedback && (
                           <div style={{ background: '#09090b', border: '1px solid #1c1c1f', padding: '10px', borderRadius: '6px', marginTop: '10px' }}>
@@ -1967,7 +2187,13 @@ function LearningLab() {
                           </div>
                         )}
                       </div>
-                    ))
+                    );
+                  })
+                  )}
+                  {isAiTyping && (
+                    <div className="message-bubble assistant typing" style={{ display: 'flex', justifyContent: 'flex-start', margin: '8px 0' }}>
+                      <TypingIndicator context={activeSession?.sessionType || "Concept Learning"} />
+                    </div>
                   )}
                   <div ref={messagesEndRef} />
                 </div>
@@ -1991,6 +2217,34 @@ function LearningLab() {
                     </div>
                   ) : (
                     <form onSubmit={handleSendMessage} className="chat-input-wrapper">
+                      {voiceModeEnabled && supported && (
+                        <button
+                          type="button"
+                          className={`mic-btn ${voiceState === 'listening' ? 'listening' : ''}`}
+                          onClick={toggleListening}
+                          style={{
+                            background: voiceState === 'listening' ? 'rgba(239, 68, 68, 0.2)' : 'transparent',
+                            border: 'none',
+                            color: voiceState === 'listening' ? '#ef4444' : 'var(--text-muted)',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '0 8px',
+                            transition: 'all 0.2s',
+                            borderRadius: '4px',
+                            marginRight: '4px',
+                            animation: voiceState === 'listening' ? 'pulse-voice 1.5s infinite' : 'none'
+                          }}
+                          title={voiceState === 'listening' ? 'Listening... Click to stop (or spacebar)' : 'Click to speak (or spacebar)'}
+                        >
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                            <line x1="12" x2="12" y1="19" y2="22" />
+                          </svg>
+                        </button>
+                      )}
                       <input 
                         type="text" 
                         className="chat-input"
@@ -2182,6 +2436,7 @@ function LearningLab() {
                     setDefenseAnswer={setDefenseAnswer}
                     onSubmitDefenseAnswer={handleSubmitDefenseAnswer}
                     isSubmittingDefense={isSubmittingDefense}
+                    setIsAiTyping={setIsAiTyping}
                     top25Expanded={top25QuestionsExpanded}
                     setTop25Expanded={setTop25QuestionsExpanded}
                   />
@@ -2191,7 +2446,9 @@ function LearningLab() {
                 {activeSession.sessionType === 'Career Coach' && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', textAlign: 'left' }}>
                     {loadingCoach ? (
-                      <div style={{ color: '#71717a', textAlign: 'center', marginTop: '40px', fontSize: '13px' }}>Compiling Market Readiness roadmap profiles...</div>
+                      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+                        <TypingIndicator context="career-coach" />
+                      </div>
                     ) : coachData ? (
                       <>
                         <div style={{ padding: '16px', background: 'rgba(6, 182, 212, 0.05)', border: '1px solid rgba(6, 182, 212, 0.15)', borderRadius: '12px' }}>

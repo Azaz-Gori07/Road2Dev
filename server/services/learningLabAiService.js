@@ -134,7 +134,7 @@ const extractJson = (text) => {
 /**
  * AI Mentor: Concept explanation and challenge builder
  */
-export const generateMentorResponse = async ({ topic, mode, messages, personality = 'The Coding Coach', sessionType = 'Concept Learning', learningEngine = null, mentorMemoryContext = '' }) => {
+export const generateMentorResponse = async ({ topic, mode, messages, personality = 'The Coding Coach', sessionType = 'Concept Learning', learningEngine = null, mentorMemoryContext = '', userPreferences }) => {
   const apiKey = process.env.AI_API_KEY;
   if (!apiKey) throw new Error('AI Service not configured.');
 
@@ -164,6 +164,9 @@ export const generateMentorResponse = async ({ topic, mode, messages, personalit
 `;
   }
 
+  const prefLang = userPreferences?.language || 'English';
+  const commMode = userPreferences?.communicationMode || 'Natural';
+
   const systemPrompt = `
 You are a warm, encouraging, highly technical Senior AI Developer Mentor and Career Coach.
 Your goal is to help the candidate understand topics deeply and systematically eliminate knowledge gaps.
@@ -184,6 +187,21 @@ LEARNER MEMORY AND HISTORY:
 ${mentorMemoryContext}
 IMPORTANT: If the learner struggled with this topic in the past (e.g., failureCount > 0 or mastery < 50%), you MUST reference it in your first response (e.g. "Last week you struggled with Closures. Let's quickly revisit one scenario before continuing."). Revisit it briefly and warmly before moving ahead.
 ` : ''}
+
+MULTILINGUAL & COMMUNICATION PREFERENCES:
+You must respect the learner's communication settings:
+- Preferred Language (explanations/feedback): **${prefLang}**
+- Communication Mode: **${commMode}**
+
+### Mode Specific Instructions:
+- **Natural**: Adapt dynamically to the user's input. If the candidate speaks or queries in mixed Hindi + English (Hinglish), adapt and communicate naturally in Hinglish.
+- **Learning Friendly**: Explain concepts, corrections, and feedback primarily in Preferred Language (**${prefLang}**). Keep all code blocks and technical terms strictly in English.
+- **Industry Ready**: Conduct the communication strictly in English. If the candidate replies in another language, understand it but respond in English and provide gentle suggestions/corrections in English to help them phrase it professionally.
+
+### Critical Formatting Rules:
+1. **No Code Translations**: Never translate syntax, variables, comments, or structure inside markdown code blocks. Keep all code blocks strictly in English.
+2. **English Technical Terms**: Keep technical terms in English. If explaining in another language, write the English term (optionally followed by translation in parentheses, e.g. State Management (स्थिति प्रबंधन)).
+3. **User Message Instruction Override**: If the candidate's last message contains an explicit request to explain or speak in a specific language (e.g. "Explain this in English"), override the global preference temporarily for this turn and answer in the requested language.
 
 Rules for teaching:
 0. UNIVERSAL LEARNING PIPELINE:
@@ -342,7 +360,7 @@ Analyze this summary and compile the high-fidelity Architecture Report, Top 25 Q
 /**
  * Project Defense Mode: evaluates answer to question, decides next question or compiles readiness scorecard
  */
-export const evaluateDefenseAnswer = async ({ report, currentQuestion, answer, previousQuestions = [], currentQuestionIndex = 0 }) => {
+export const evaluateDefenseAnswer = async ({ report, currentQuestion, answer, previousQuestions = [], currentQuestionIndex = 0, userPreferences }) => {
   const apiKey = process.env.AI_API_KEY;
 
   if (!apiKey) throw new Error('AI Service not configured.');
@@ -352,6 +370,9 @@ export const evaluateDefenseAnswer = async ({ report, currentQuestion, answer, p
   const timeoutMs = Number(process.env.AI_TIMEOUT_MS) || 25000;
 
   const isFinalTurn = currentQuestionIndex >= 4; // 5 questions defense
+
+  const prefLang = userPreferences?.language || 'English';
+  const commMode = userPreferences?.communicationMode || 'Natural';
 
   const systemPrompt = `
 You are a Senior Project Reviewer and Technical Critic.
@@ -367,6 +388,22 @@ Current Question: "${currentQuestion}"
 Candidate Answer: "${answer}"
 
 Turn status: ${isFinalTurn ? 'FINAL_QUESTION' : 'IN_PROGRESS'}
+
+MULTILINGUAL & COMMUNICATION PREFERENCES:
+You must respect the candidate's communication settings:
+- Preferred Language (explanations/feedback): **${prefLang}**
+- Communication Mode: **${commMode}**
+
+### Mode Specific Instructions:
+- **Natural**: Adapt dynamically to the user's input. If the candidate answers in mixed Hindi + English (Hinglish), write your feedback in Hinglish.
+- **Learning Friendly**: Write your feedback and explanation primarily in Preferred Language (**${prefLang}**). Keep all code blocks and technical terms strictly in English.
+- **Interview Realistic**: Conduct evaluations in the target Interview Language. Scoring must focus on technical capabilities; do not penalize for using other languages.
+- **Industry Ready**: Feedback must be strictly in English, correcting any non-English phrasing to professional English.
+
+### Critical Formatting Rules:
+1. **No Code Translations**: Never translate syntax, variables, comments, or structure inside markdown code blocks. Keep all code blocks strictly in English.
+2. **English Technical Terms**: Keep technical terms in English. If explaining in another language, write the English term (optionally followed by translation in parentheses, e.g. State Management (स्थिति प्रबंधन)).
+3. **User Message Instruction Override**: If the candidate's last message contains an explicit request to explain or speak in a specific language (e.g. "Explain this in English"), override the global preference temporarily for this turn and answer in the requested language.
 
 You must respond in strict JSON only, using this schema:
 {
@@ -410,13 +447,16 @@ Provide the evaluation of the candidate's response. Output strict JSON matching 
 /**
  * Career Coach Service: Generates market readiness and 90-day learning timelines
  */
-export const compileCareerCoachRoadmap = async ({ masteredSkills = [], weakSkills = [], topic = 'Full Stack Development' }) => {
+export const compileCareerCoachRoadmap = async ({ masteredSkills = [], weakSkills = [], topic = 'Full Stack Development', userPreferences }) => {
   const apiKey = process.env.AI_API_KEY;
   if (!apiKey) throw new Error('AI Service not configured.');
 
   const provider = inferProvider(apiKey);
   const model = getDefaultModel(provider);
   const timeoutMs = Number(process.env.AI_TIMEOUT_MS) || 25000;
+
+  const prefLang = userPreferences?.language || 'English';
+  const commMode = userPreferences?.communicationMode || 'Natural';
 
   const systemPrompt = `
 You are a warm, professional tech recruiter and Career Coach.
@@ -425,6 +465,19 @@ Based on the candidate's mastered and weak competencies, your job is to build a 
 Mastered Skills: ${JSON.stringify(masteredSkills)}
 Weak Skills: ${JSON.stringify(weakSkills)}
 Target Profile: "${topic}"
+
+MULTILINGUAL & COMMUNICATION PREFERENCES:
+You must respect the candidate's communication settings:
+- Preferred Language (explanations/feedback): **${prefLang}**
+- Communication Mode: **${commMode}**
+
+### Mode Specific Instructions:
+- **Natural** / **Learning Friendly**: Write the roadmap explanation, descriptions, and phases primarily in Preferred Language (**${prefLang}**). Keep all technical terms strictly in English.
+- **Industry Ready**: Write all roadmap phase names, descriptions, and company recommendations strictly in English.
+
+### Critical Formatting Rules:
+1. **No Code Translations**: Never translate syntax, variables, comments, or structure inside markdown code blocks. Keep all code blocks strictly in English.
+2. **English Technical Terms**: Keep technical terms in English. If explaining in another language, write the English term (optionally followed by translation in parentheses, e.g. State Management (स्थिति प्रबंधन)).
 
 You must respond in strict JSON only, using this schema:
 {

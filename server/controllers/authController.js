@@ -196,7 +196,7 @@ export const updateProfile = async (req, res) => {
     const allowedFields = [
       'name', 'headline', 'location', 'bio', 'stack',
       'expLevel', 'focus', 'language', 'avatar',
-      'emailNotifications', 'publicProfile',
+      'emailNotifications', 'publicProfile', 'communicationMode', 'interviewLanguage',
     ];
 
     const updates = {};

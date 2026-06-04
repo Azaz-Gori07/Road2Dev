@@ -51,7 +51,20 @@ export const generateInterview = async (req, res) => {
   }
 
   try {
-    const interview = await generateInterviewSession(validation.value);
+    const userPreferences = req.user ? {
+      language: req.user.language || 'English',
+      communicationMode: req.user.communicationMode || 'Natural',
+      interviewLanguage: req.user.interviewLanguage || 'English',
+    } : {
+      language: 'English',
+      communicationMode: 'Natural',
+      interviewLanguage: 'English',
+    };
+
+    const interview = await generateInterviewSession({
+      ...validation.value,
+      userPreferences,
+    });
 
     return res.status(200).json({
       success: true,
@@ -126,6 +139,16 @@ export const respondToInterview = async (req, res) => {
 
     const candidateName = req.user ? req.user.name : 'Candidate';
 
+    const userPreferences = req.user ? {
+      language: req.user.language || 'English',
+      communicationMode: req.user.communicationMode || 'Natural',
+      interviewLanguage: req.user.interviewLanguage || 'English',
+    } : {
+      language: 'English',
+      communicationMode: 'Natural',
+      interviewLanguage: 'English',
+    };
+
     const evaluation = await evaluateResponseAndNext({
       field,
       stack,
@@ -134,6 +157,7 @@ export const respondToInterview = async (req, res) => {
       messages,
       previousSummaries,
       candidateName,
+      userPreferences,
     });
 
     return res.status(200).json({

@@ -56,6 +56,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'English',
   },
+  communicationMode: {
+    type: String,
+    enum: ['Natural', 'Learning Friendly', 'Interview Realistic', 'Industry Ready'],
+    default: 'Natural',
+  },
+  interviewLanguage: {
+    type: String,
+    default: 'English',
+  },
   avatar: {
     type: String,
     default: '',
