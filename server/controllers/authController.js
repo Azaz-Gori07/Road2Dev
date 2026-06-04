@@ -112,19 +112,18 @@ export const zenuxsLogin = async (req, res) => {
       return res.status(400).json({ error: 'Token is required' });
     }
 
-    // Verify the token with Zenuxs server
-    const verifyRes = await axios.post(`${AUTH_SERVER}/oauth/introspect`, { token }, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (!verifyRes.data?.active) {
-      return res.status(401).json({ error: 'Invalid or expired token' });
+    // Verify token and fetch user info from Zenuxs in one call
+    let userRes;
+    try {
+      userRes = await axios.get(`${AUTH_SERVER}/oauth/userinfo`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (err) {
+      if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+        return res.status(401).json({ error: 'Invalid or expired token' });
+      }
+      throw err;
     }
-
-    // Fetch user info from Zenuxs
-    const userRes = await axios.get(`${AUTH_SERVER}/oauth/userinfo`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
 
     const zenuxsUser = userRes.data;
     const email = zenuxsUser.email || zenuxsUser.preferred_username;
@@ -242,20 +241,20 @@ export const verifyToken = async (req, res) => {
       return res.status(400).json({ error: 'Token is required' });
     }
 
-    const response = await axios.post(`${AUTH_SERVER}/oauth/introspect`, { token }, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-
     let userInfo = null;
-    if (response.data?.active) {
+    let active = false;
+    try {
       const userRes = await axios.get(`${AUTH_SERVER}/oauth/userinfo`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       userInfo = userRes.data;
+      active = true;
+    } catch (err) {
+      // Invalid or expired token
     }
 
     res.json({
-      active: response.data?.active ?? false,
+      active,
       user: userInfo,
     });
   } catch (error) {
@@ -272,11 +271,11 @@ export const syncUserProfile = async (req, res) => {
       return res.status(400).json({ error: 'Token and userInfo are required' });
     }
 
-    const verifyRes = await axios.post(`${AUTH_SERVER}/oauth/introspect`, { token }, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (!verifyRes.data?.active) {
+    try {
+      await axios.get(`${AUTH_SERVER}/oauth/userinfo`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (err) {
       return res.status(401).json({ error: 'Invalid or expired token' });
     }
 

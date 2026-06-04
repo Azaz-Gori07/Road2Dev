@@ -1075,9 +1075,15 @@ const InterviewPrep = () => {
     abortControllerRef.current = new AbortController();
 
     try {
+      const authToken = getAuthToken();
+      const headers = { 'Content-Type': 'application/json' };
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+
       const response = await fetch(`${API_BASE}/interview/generate`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           field: selectedFieldData.name,
           stack: selectedStackData?.name || '',
@@ -1170,9 +1176,15 @@ const InterviewPrep = () => {
     abortControllerRef.current = new AbortController();
 
     try {
+      const authToken = getAuthToken();
+      const headers = { 'Content-Type': 'application/json' };
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+
       const response = await fetch(`${API_BASE}/interview/respond`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           field: selectedFieldData?.name || '',
           stack: selectedStackData?.name || '',
@@ -1315,9 +1327,15 @@ const InterviewPrep = () => {
     abortControllerRef.current = new AbortController();
 
     try {
+      const authToken = getAuthToken();
+      const headers = { 'Content-Type': 'application/json' };
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+
       const response = await fetch(`${API_BASE}/interview/respond`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           field: selectedFieldData?.name || '',
           stack: selectedStackData?.name || '',
@@ -1409,9 +1427,15 @@ const InterviewPrep = () => {
     abortControllerRef.current = new AbortController();
 
     try {
+      const authToken = getAuthToken();
+      const headers = { 'Content-Type': 'application/json' };
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+
       const response = await fetch(`${API_BASE}/interview/respond`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           field: selectedFieldData?.name || '',
           stack: selectedStackData?.name || '',

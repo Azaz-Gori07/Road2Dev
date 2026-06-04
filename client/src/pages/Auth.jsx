@@ -700,17 +700,12 @@ export default function Auth() {
     setAuthLoading(true);
     setError(null);
     try {
-      let zenuxsToken;
       if (provider === 'google') {
-        zenuxsToken = await loginWithGoogle();
+        await loginWithGoogle();
       } else if (provider === 'github') {
-        zenuxsToken = await loginWithGitHub();
+        await loginWithGitHub();
       } else if (provider === 'linkedin') {
-        zenuxsToken = await loginWithLinkedIn();
-      }
-      // Exchange Zenuxs token for our own JWT
-      if (zenuxsToken) {
-        await loginWithZenuxs(zenuxsToken.access_token || zenuxsToken);
+        await loginWithLinkedIn();
       }
       setToastMessage('Thank You for Logging In! You now have access to all premium interview tracking and score-sharing features.');
       setShowToast(true);

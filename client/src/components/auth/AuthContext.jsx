@@ -95,28 +95,67 @@ export function AuthProvider({ children }) {
     oauthRef.current = oauth;
 
     const isZenuxAuth = oauth.isAuthenticated();
-    if (isZenuxAuth && !isLocalAuthenticated) {
-      setIsAuthenticated(true);
-      const storedTokens = oauth.getTokens();
-      setTokens(storedTokens);
-      oauth.getUserInfo()
-        .then((userInfo) => {
-          if (active) setUser(userInfo);
-        })
-        .catch(() => {
-          if (active) setUser(null);
+
+    // Helper to exchange Zenuxs token for our local JWT token
+    const exchangeZenuxsToken = async (zenuxsToken) => {
+      try {
+        setLoading(true);
+        const res = await fetch(`${API_BASE}/auth/zenuxs`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: zenuxsToken }),
         });
+        const data = await res.json();
+        if (res.ok && data.token) {
+          if (active) {
+            localStorage.setItem('auth_token', data.token);
+            localStorage.setItem('auth_user', JSON.stringify(data.user));
+            setTokens(data.token);
+            setUser(data.user);
+            setIsAuthenticated(true);
+          }
+        } else {
+          if (active) clearSession();
+        }
+      } catch (err) {
+        console.error('Failed to exchange Zenuxs token:', err);
+        if (active) clearSession();
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+
+    if (isZenuxAuth) {
+      const storedTokens = oauth.getTokens();
+      const accessToken = storedTokens?.access_token || storedTokens;
+
+      if (!isLocalAuthenticated && accessToken) {
+        exchangeZenuxsToken(accessToken);
+      } else {
+        oauth.getUserInfo()
+          .then((userInfo) => {
+            if (active) setUser(userInfo);
+          })
+          .catch(() => {
+            if (active) setUser(null);
+          });
+      }
     }
 
     // Zenux Event Listeners
     oauth.on('login', async (tokenData) => {
-      setIsAuthenticated(true);
-      setTokens(tokenData);
-      try {
-        const userInfo = await oauth.getUserInfo();
-        setUser(userInfo);
-      } catch {
-        setUser(null);
+      const accessToken = tokenData?.access_token || tokenData;
+      if (accessToken) {
+        await exchangeZenuxsToken(accessToken);
+      } else {
+        setIsAuthenticated(true);
+        setTokens(tokenData);
+        try {
+          const userInfo = await oauth.getUserInfo();
+          setUser(userInfo);
+        } catch {
+          setUser(null);
+        }
       }
     });
 
@@ -124,6 +163,8 @@ export function AuthProvider({ children }) {
       setIsAuthenticated(false);
       setUser(null);
       setTokens(null);
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_user');
     });
 
     oauth.on('tokenRefresh', (newTokens) => {
@@ -134,7 +175,7 @@ export function AuthProvider({ children }) {
       console.error('OAuth error:', error);
     });
 
-    if (!isLocalAuthenticated) {
+    if (!isLocalAuthenticated && !isZenuxAuth) {
       setLoading(false);
     }
 
