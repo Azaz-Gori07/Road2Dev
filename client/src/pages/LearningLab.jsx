@@ -12,6 +12,7 @@ import {
 import useAuth from '../hooks/useAuth';
 import ProjectDefenseWorkspace from '../components/ProjectDefenseWorkspace';
 import { isProjectScanned } from '../utils/projectScanProgress';
+import { parseProjectDefenseQuestionMessage } from '../utils/projectDefenseWordingCleaner';
 import './LearningLab.css';
 import TypingIndicator from '../components/TypingIndicator';
 import {
@@ -409,7 +410,13 @@ function LearningLab() {
       if (spokenMessageIdRef.current !== msgId) {
         spokenMessageIdRef.current = msgId;
         
-        const textToSpeak = lastMsg.text || '';
+        let textToSpeak = lastMsg.text || '';
+        if (activeSession?.sessionType === 'Project Defense') {
+          const parsed = parseProjectDefenseQuestionMessage(textToSpeak, activeSession?.projectContext);
+          if (parsed) {
+            textToSpeak = (parsed.feedback ? (parsed.feedback + '. ') : '') + parsed.questionText;
+          }
+        }
         if (textToSpeak) {
           speakTextHelper(textToSpeak, authUser?.preferredLanguage || 'English',
             () => setVoiceState('speaking'),
@@ -420,7 +427,7 @@ function LearningLab() {
         }
       }
     }
-  }, [messages, voiceModeEnabled, authUser?.preferredLanguage, supported]);
+  }, [messages, voiceModeEnabled, authUser?.preferredLanguage, supported, activeSession]);
 
   const makeTraceableRequest = async (name, endpoint, options = {}, triggerSource) => {
     // Abort only the same request type to prevent overlap
@@ -2145,16 +2152,46 @@ function LearningLab() {
                     <div style={{ color: '#71717a', textAlign: 'center', marginTop: '40px', fontSize: '13px' }}>Syncing mentor nodes...</div>
                   ) : (
                     messages.map((m, idx) => {
-                      const isLong = m.role === 'assistant' && cleanTextForSpeech(m.text, false).length > cleanTextForSpeech(m.text, true).length;
+                      let textToEvaluate = m.text;
+                      let parsedDefenseQ = null;
+                      if (isProjectDefenseSession && m.role === 'assistant') {
+                        parsedDefenseQ = parseProjectDefenseQuestionMessage(m.text, projectContext);
+                        if (parsedDefenseQ) {
+                          textToEvaluate = (parsedDefenseQ.feedback ? (parsedDefenseQ.feedback + '. ') : '') + parsedDefenseQ.questionText;
+                        }
+                      }
+                      const isLong = m.role === 'assistant' && cleanTextForSpeech(textToEvaluate, false).length > cleanTextForSpeech(textToEvaluate, true).length;
                       return (
                         <div key={m.id || idx} className={`message-bubble ${m.role}`}>
-                          {m.role === 'assistant' ? parseMentorText(m.text) : <p style={{ margin: 0 }}>{m.text}</p>}
+                          {m.role === 'assistant' ? (
+                            parsedDefenseQ ? (
+                              <div className="pd-question-bubble">
+                                {parsedDefenseQ.feedback && (
+                                  <div className="pd-question-bubble__feedback">
+                                    {parsedDefenseQ.feedback}
+                                  </div>
+                                )}
+                                <div className="pd-question-bubble__card">
+                                  <div className="pd-question-bubble__module-header">
+                                    {parsedDefenseQ.moduleName}
+                                  </div>
+                                  <div className="pd-question-bubble__text">
+                                    {parsedDefenseQ.questionText}
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              parseMentorText(m.text)
+                            )
+                          ) : (
+                            <p style={{ margin: 0 }}>{m.text}</p>
+                          )}
                           {isLong && voiceModeEnabled && supported && (
                             <button
                               type="button"
                               className="voice-speak-full-btn"
                               onClick={() => {
-                                speakTextHelper(m.text, authUser?.preferredLanguage || 'English',
+                                speakTextHelper(textToEvaluate, authUser?.preferredLanguage || 'English',
                                   () => setVoiceState('speaking'),
                                   () => setVoiceState('idle'),
                                   () => setVoiceState('error'),

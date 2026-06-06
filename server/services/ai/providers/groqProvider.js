@@ -6,7 +6,7 @@ export class GroqProvider extends AIProvider {
     super('groq');
   }
 
-  async generate({ apiKey, prompt, systemPrompt, model, timeoutMs }) {
+  async generate({ apiKey, prompt, systemPrompt, model, timeoutMs, maxTokens }) {
     const endpoint =
       process.env.GROQ_API_URL?.trim() || 'https://api.groq.com/openai/v1/chat/completions';
 
@@ -25,7 +25,7 @@ export class GroqProvider extends AIProvider {
           },
         ],
         temperature: 0.35,
-        max_tokens: Number(process.env.AI_MAX_TOKENS || 4000),
+        max_tokens: maxTokens || Number(process.env.AI_MAX_TOKENS || 4000),
         response_format: { type: 'json_object' },
       },
       {

@@ -19,6 +19,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { pickLocalProjectFolder, supportsDirectoryPicker } from '../utils/projectFolderScanner';
+import { cleanQuestionText } from '../utils/projectDefenseWordingCleaner';
 import {
   DEFAULT_SCAN_LINES,
   buildScanLinesFromPaths,
@@ -64,6 +65,85 @@ function FallbackModeBanner({ fallbackMode }) {
         <strong>Fallback Mode Active</strong>
         <span>Project analysis unavailable. Questions may be generic. Reason: {fallbackMode.reason || 'AI analysis failed'}</span>
       </div>
+    </div>
+  );
+}
+
+function ProgressiveMapReport({ context }) {
+  const blueprint = context.masterBlueprint;
+  const graph = context.knowledgeGraph || { nodes: [], edges: [] };
+  const modules = context.modules || [];
+
+  return (
+    <div className="pd-prog-layout">
+      {/* 1. Master Project Blueprint Card */}
+      {blueprint && blueprint.summary && (
+        <div className="pd-blueprint-card">
+          <h4><Layers size={14} /> Master Project Blueprint</h4>
+          <div className="pd-blueprint-grid">
+            <div className="pd-blueprint-item">
+              <span>Frameworks</span>
+              <strong>{blueprint.frameworks?.join(', ') || 'N/A'}</strong>
+            </div>
+            <div className="pd-blueprint-item">
+              <span>Database</span>
+              <strong>{blueprint.database || 'N/A'}</strong>
+            </div>
+            <div className="pd-blueprint-item">
+              <span>Auth Strategy</span>
+              <strong>{blueprint.authStrategy || 'N/A'}</strong>
+            </div>
+          </div>
+          {blueprint.summary && <p className="pd-blueprint-summary">{blueprint.summary}</p>}
+        </div>
+      )}
+
+      {/* 2. Knowledge Graph Connections */}
+      {graph.edges && graph.edges.length > 0 && (
+        <div className="pd-graph-card">
+          <h4><GitBranch size={14} /> Project Knowledge Graph</h4>
+          <div className="pd-graph-edges-list">
+            {graph.edges.map((edge, idx) => (
+              <div key={idx} className="pd-graph-edge-item">
+                <span className="pd-graph-node-badge">{edge.from}</span>
+                <span className="pd-graph-arrow">→</span>
+                <span className="pd-graph-node-badge">{edge.to}</span>
+                <span className="pd-graph-edge-type">{edge.type}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 3. Progressive Modules & Subchunks Tree */}
+      {modules.length > 0 && (
+        <div className="pd-prog-tree">
+          <h4 className="pd-prog-tree__title"><FolderGit2 size={14} /> Project Modules Map</h4>
+          <div className="pd-module-list">
+            {modules.map((mod, mIdx) => (
+              <div key={mIdx} className="pd-module-node">
+                <div className="pd-module-node__name">{mod.moduleName}</div>
+                <div className="pd-subchunk-list">
+                  {mod.subchunks.map((sc, sIdx) => {
+                    const isActive = context.defenseStarted && 
+                                     context.currentModuleIndex === mIdx && 
+                                     context.currentSubchunkIndex === sIdx;
+                    const isCompleted = sc.status === 'completed';
+                    const nodeClass = isActive ? 'active' : isCompleted ? 'completed' : 'pending';
+                    const dotClass = isActive ? 'active' : isCompleted ? 'completed' : 'pending';
+                    return (
+                      <div key={sIdx} className={`pd-subchunk-node ${nodeClass}`}>
+                        <span className={`pd-status-dot ${dotClass}`} />
+                        <span>{sc.subchunkName} ({sc.files.length} files)</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -558,27 +638,15 @@ export default function ProjectDefenseWorkspace({
     const renderQuestionText = (q) => (typeof q === 'object' ? q.text : q);
     const renderQuestionSource = (q) => (typeof q === 'object' && q.source ? q.source : null);
 
-    return (
-      <div className="pd-workspace pd-interview">
-        <FallbackModeBanner fallbackMode={projectContext.fallbackMode} />
-        <ConnectionStatus
-          connected
-          projectName={projectContext.projectName}
-          ingestionMethod={projectContext.ingestionMethod}
-        />
+    const isProgressive = Array.isArray(projectContext.modules) && projectContext.modules.length > 0;
 
-        <div className="pd-interview__banner">
-          <Shield size={18} />
-          <div>
-            <strong>Defense in progress — {projectContext.projectName}</strong>
-            <span>
-              Question {(progress?.currentQuestionIndex ?? 0) + 1} of{' '}
-              {progress?.totalQuestions ?? 5}
-              {isFallback && <span className="pd-generic-badge">Generic</span>}
-            </span>
-          </div>
-        </div>
+    const currentModule = isProgressive ? projectContext.modules[projectContext.currentModuleIndex || 0] : null;
+    const currentSubchunk = currentModule?.subchunks?.[projectContext.currentSubchunkIndex || 0];
+    const activeQuestionObj = currentSubchunk?.activeQuestions?.[currentSubchunk?.activeQuestions?.length - 1];
+    const activeDifficulty = activeQuestionObj?.difficulty;
 
+    const renderMainContent = () => (
+      <>
         {activeSession?.status === 'active' && (
           <form className="pd-defense-form" onSubmit={onSubmitDefenseAnswer}>
             <label>Your defense answer</label>
@@ -619,12 +687,22 @@ export default function ProjectDefenseWorkspace({
                       <span className="pd-eval-card__icon">
                         {passed ? <CheckCircle2 size={14} /> : <AlertTriangle size={14} />}
                       </span>
-                      <span className="pd-eval-card__score">
+                      <span className="pd-eval-card__score" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                         Authorship: {ev.authorshipScore ?? '?'}/100
                         {passed ? ' — Passed' : ' — Below threshold'}
+                        {ev.difficulty && (
+                          <span className={`pd-diff-badge ${ev.difficulty.toLowerCase()}`}>
+                            {ev.difficulty}
+                          </span>
+                        )}
+                        {ev.subchunkName && (
+                          <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                            [{ev.subchunkName}]
+                          </span>
+                        )}
                       </span>
                     </div>
-                    <p className="pd-eval-card__question">{ev.question}</p>
+                    <p className="pd-eval-card__question">{cleanQuestionText(ev.question, ev.subchunkName)}</p>
                     {ev.feedback && <p className="pd-eval-card__feedback">{ev.feedback}</p>}
                   </div>
                 );
@@ -646,7 +724,7 @@ export default function ProjectDefenseWorkspace({
               <ol className="pd-top25__list">
                 {projectContext.topQuestions.map((q, idx) => (
                   <li key={idx}>
-                    {renderQuestionText(q)}
+                    {cleanQuestionText(renderQuestionText(q), renderQuestionSource(q))}
                     {renderQuestionSource(q) && (
                       <span className="pd-question-source">
                         <Info size={10} /> Source: {renderQuestionSource(q)}
@@ -657,6 +735,47 @@ export default function ProjectDefenseWorkspace({
               </ol>
             )}
           </div>
+        )}
+      </>
+    );
+
+    return (
+      <div className="pd-workspace pd-interview">
+        <FallbackModeBanner fallbackMode={projectContext.fallbackMode} />
+        <ConnectionStatus
+          connected
+          projectName={projectContext.projectName}
+          ingestionMethod={projectContext.ingestionMethod}
+        />
+
+        <div className="pd-interview__banner">
+          <Shield size={18} />
+          <div>
+            <strong>Defense in progress — {projectContext.projectName}</strong>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              Question {(progress?.currentQuestionIndex ?? 0) + 1} of{' '}
+              {progress?.totalQuestions ?? 5}
+              {isFallback && <span className="pd-generic-badge">Generic</span>}
+              {activeDifficulty && (
+                <span className={`pd-diff-badge ${activeDifficulty.toLowerCase()}`}>
+                  {activeDifficulty}
+                </span>
+              )}
+            </span>
+          </div>
+        </div>
+
+        {isProgressive ? (
+          <div className="pd-interview-split">
+            <div className="pd-interview-sidebar">
+              <ProgressiveMapReport context={projectContext} />
+            </div>
+            <div className="pd-interview-main">
+              {renderMainContent()}
+            </div>
+          </div>
+        ) : (
+          renderMainContent()
         )}
       </div>
     );
@@ -700,7 +819,11 @@ export default function ProjectDefenseWorkspace({
               <span className="pd-generic-note"> (Generic mode — questions will not be project-specific)</span>
             )}
           </p>
-          <ProjectAnalysisReport context={projectContext} />
+          {projectContext?.modules && projectContext.modules.length > 0 ? (
+            <ProgressiveMapReport context={projectContext} />
+          ) : (
+            <ProjectAnalysisReport context={projectContext} />
+          )}
         </>
       )}
 

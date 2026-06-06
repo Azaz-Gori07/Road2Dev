@@ -1,5 +1,5 @@
-import { GeminiProvider } from './providers/geminiProvider.js';
 import { GroqProvider } from './providers/groqProvider.js';
+import { OpenRouterProvider } from './providers/openRouterProvider.js';
 
 const DEFAULT_COOLDOWN_MS = Number(process.env.AI_CIRCUIT_BREAKER_COOLDOWN_MS) || 60_000;
 const FAILURE_COUNT_THRESHOLD = Number(process.env.AI_CIRCUIT_BREAKER_FAILURE_THRESHOLD) || 5;
@@ -11,7 +11,7 @@ const isTimeoutError = (err) => {
 const isNetworkOr5xx = (err) => {
   const status = err?.response?.status;
   if (status && status >= 500) return true;
-  return /ECONNRESET|EAI_AGAIN|ENOTFOUND/i.test(err?.code || '') || /network/i.test(err?.message || '');
+  return /ECONNRESET|EAI_AGAIN|ENOTFOUND|ECONNREFUSED|ENETUNREACH|EHOSTUNREACH|ETIMEDOUT/i.test(err?.code || '') || /network/i.test(err?.message || '');
 };
 
 const isRateLimitLike = (err) => {
@@ -22,23 +22,23 @@ const isRateLimitLike = (err) => {
 
   return (
     status === 429 ||
+    status === 413 ||
     msg.includes('rate limit') ||
     msg.includes('quota') ||
     msg.includes('insufficient') ||
+    msg.includes('too large') ||
     upstreamLower.includes('rate limit') ||
     upstreamLower.includes('quota') ||
     upstreamLower.includes('insufficient')
   );
 };
 
-const getGeminiKey = () => process.env.GEMINI_API_KEY || process.env.AI_API_KEY_2;
-const getGroqKey = () => process.env.GROQ_API_KEY || process.env.AI_API_KEY;
-
 const getDefaultModel = (provider) => {
   if (process.env.AI_MODEL?.trim()) return process.env.AI_MODEL.trim();
   const defaultModels = {
-    gemini: 'gemini-2.5-flash',
-    groq: 'llama-3.3-70b-versatile',
+    groq: 'llama-3.1-8b-instant',
+    openrouter: process.env.DEFENCE_MODEL?.trim() || 'moonshotai/kimi-k2.6:free',
+    openrouter2: process.env.AI_API_KEY_2_MODEL?.trim() || 'openai/gpt-oss-20b:free',
   };
   return defaultModels[provider] || '';
 };
@@ -46,8 +46,9 @@ const getDefaultModel = (provider) => {
 const getTimeoutMs = () => Number(process.env.AI_TIMEOUT_MS) || 20_000;
 
 const aiCircuit = {
-  gemini: { failures: 0, disabledUntil: 0 },
   groq: { failures: 0, disabledUntil: 0 },
+  openrouter: { failures: 0, disabledUntil: 0 },
+  openrouter2: { failures: 0, disabledUntil: 0 },
 };
 
 const shouldSkip = (providerName) => {
@@ -69,17 +70,14 @@ const recordSuccess = (providerName) => {
   state.disabledUntil = 0;
 };
 
-const logProvider = (providerName, endpoint) => {
-  // eslint-disable-next-line no-console
-  console.log('[AI_PROVIDER]', providerName, endpoint, new Date().toISOString());
+const logAiCall = (provider, model, latency, status) => {
+  console.log(JSON.stringify({ provider, model, latency, status }));
 };
 
 const ensureMetrics = () => {
   if (!global.aiMetrics) {
     global.aiMetrics = {
-      geminiRequests: 0,
       groqRequests: 0,
-      geminiFallbacks: 0,
       totalRequests: 0,
     };
   }
@@ -104,59 +102,118 @@ const isMissingKeyLike = (err) => {
   );
 };
 
-
 export async function hybridGenerate(options) {
   const metrics = ensureMetrics();
   metrics.totalRequests += 1;
-
-  const geminiKey = getGeminiKey();
-  const groqKey = getGroqKey();
 
   const timeoutMs = options?.timeoutMs || getTimeoutMs();
   const prompt = options?.prompt;
   const systemPrompt = options?.systemPrompt;
   const jsonResponse = options?.jsonResponse;
+  const maxTokens = options?.maxTokens;
 
-  const geminiModel = options?.geminiModel || getDefaultModel('gemini');
   const groqModel = options?.groqModel || getDefaultModel('groq');
+  const openRouterModel = options?.openRouterModel || getDefaultModel('openrouter');
+  const openRouter2Model = options?.openRouter2Model || getDefaultModel('openrouter2');
 
-  const geminiProvider = new GeminiProvider();
   const groqProvider = new GroqProvider();
+  const openRouterProvider = new OpenRouterProvider();
 
-  const tryGemini = async () => {
-    if (!geminiKey) {
-      const err = new Error('Gemini API key not configured');
-      err.publicMessage = 'Gemini API key not configured';
+  const tryOpenRouter2 = async () => {
+    const key2 = process.env.AI_API_KEY_2;
+    if (!key2) {
+      const err = new Error('AI_API_KEY_2 not configured');
+      err.publicMessage = 'AI_API_KEY_2 not configured';
       err.isMissingKey = true;
       throw err;
     }
-    // If Gemini is circuit-broken, don't attempt it (Gemini primary behavior).
 
-    if (shouldSkip('gemini')) {
-      const err = new Error('Gemini circuit breaker active');
-      err.publicMessage = 'Gemini circuit breaker active';
+    if (shouldSkip('openrouter2')) {
+      const err = new Error('OpenRouter (AI_API_KEY_2) circuit breaker active');
+      err.publicMessage = 'OpenRouter (AI_API_KEY_2) circuit breaker active';
       err.isCircuitBreaker = true;
       throw err;
     }
 
-    metrics.geminiRequests += 1;
+    const start = Date.now();
+    let result;
+    try {
+      result = await openRouterProvider.generate({
+        apiKey: key2,
+        prompt,
+        systemPrompt,
+        model: openRouter2Model,
+        timeoutMs,
+        jsonResponse,
+        maxTokens,
+      });
+    } catch (err) {
+      logAiCall('openrouter2', openRouter2Model, Date.now() - start, 'failure');
+      throw err;
+    }
 
-    const result = await geminiProvider.generate({
-      apiKey: geminiKey,
-      prompt,
-      systemPrompt,
-      model: geminiModel,
-      timeoutMs,
-      jsonResponse,
-    });
+    if (!result?.text?.trim()) {
+      const err = new Error('AI returned an empty response');
+      err.isEmptyResponse = true;
+      throw err;
+    }
 
-    logProvider('Gemini', result?.meta?.endpoint);
-    recordSuccess('gemini');
+    const latency = Date.now() - start;
+    logAiCall('openrouter2', openRouter2Model, latency, 'success');
+    recordSuccess('openrouter2');
+
+    return withMeta(result);
+  };
+
+  const tryOpenRouter = async () => {
+    const openRouterKey = process.env.DEFENCE_API_KEY;
+    if (!openRouterKey) {
+      const err = new Error('DEFENCE_API_KEY not configured');
+      err.publicMessage = 'DEFENCE_API_KEY not configured';
+      err.isMissingKey = true;
+      throw err;
+    }
+
+    if (shouldSkip('openrouter')) {
+      const err = new Error('OpenRouter circuit breaker active');
+      err.publicMessage = 'OpenRouter circuit breaker active';
+      err.isCircuitBreaker = true;
+      throw err;
+    }
+
+    const start = Date.now();
+    let result;
+    try {
+      result = await openRouterProvider.generate({
+        apiKey: openRouterKey,
+        prompt,
+        systemPrompt,
+        model: openRouterModel,
+        timeoutMs,
+        jsonResponse,
+        maxTokens,
+      });
+    } catch (err) {
+      const latency = Date.now() - start;
+      logAiCall('openrouter', openRouterModel, latency, 'failure');
+      throw err;
+    }
+
+    if (!result?.text?.trim()) {
+      const err = new Error('AI returned an empty response');
+      err.isEmptyResponse = true;
+      throw err;
+    }
+
+    const latency = Date.now() - start;
+    logAiCall('openrouter', openRouterModel, latency, 'success');
+    recordSuccess('openrouter');
 
     return withMeta(result);
   };
 
   const tryGroq = async () => {
+    const groqKey = process.env.GROQ_API_KEY || process.env.AI_API_KEY;
     if (!groqKey) {
       const err = new Error('Groq API key not configured');
       err.publicMessage = 'Groq API key not configured';
@@ -180,43 +237,65 @@ export async function hybridGenerate(options) {
       model: groqModel,
       timeoutMs,
       jsonResponse,
+      maxTokens,
     });
 
-    logProvider('Groq', result?.meta?.endpoint);
+    if (!result?.text?.trim()) {
+      const err = new Error('AI returned an empty response');
+      err.isEmptyResponse = true;
+      throw err;
+    }
+
+    logAiCall('groq', groqModel, 0, 'success');
     recordSuccess('groq');
 
     return withMeta(result);
   };
 
-  try {
-    return await tryGemini();
-  } catch (geminiErr) {
-    // Determine if we should fallback.
-    const shouldFallback =
-      isMissingKeyLike(geminiErr) ||
-      geminiErr?.isCircuitBreaker ||
-      isRateLimitLike(geminiErr) ||
-      isTimeoutError(geminiErr) ||
-      isNetworkOr5xx(geminiErr);
+  // Provider chain — iterate in order, fall through on retryable errors
+  // Outer backoff loop: 1s, 2s, 4s — bans immediate retries
+  const providerOrder = options?.providers || ['openrouter2', 'groq'];
+  const BACKOFF_DELAYS = [1000, 2000, 4000];
 
-    if (!shouldFallback) {
-      throw geminiErr;
+  let lastError = null;
+  for (let chainAttempt = 0; chainAttempt <= BACKOFF_DELAYS.length; chainAttempt++) {
+    lastError = null;
+    for (let i = 0; i < providerOrder.length; i++) {
+      const name = providerOrder[i];
+      try {
+        if (name === 'openrouter') return await tryOpenRouter();
+        if (name === 'openrouter2') return await tryOpenRouter2();
+        if (name === 'groq') return await tryGroq();
+        throw new Error(`Unknown provider in chain: ${name}`);
+      } catch (err) {
+        console.error(`[AI_CHAIN_ERROR] Provider ${name} failed:`, err.response?.status, err.message, JSON.stringify(err.response?.data || {}));
+        lastError = err;
+        const isRetryable =
+          isMissingKeyLike(err) ||
+          err?.isCircuitBreaker ||
+          isRateLimitLike(err) ||
+          isTimeoutError(err) ||
+          isNetworkOr5xx(err) ||
+          err?.isEmptyResponse === true;
+
+        if (!isRetryable) {
+          throw err;
+        }
+
+        recordFailure(name);
+
+        if (i === providerOrder.length - 1) {
+          break;
+        }
+      }
     }
 
-    metrics.geminiFallbacks += 1;
-
-    recordFailure('gemini');
-
-    try {
-      return await tryGroq();
-    } catch (groqErr) {
-      recordFailure('groq');
-
-      // If both fail, throw last error.
-      const finalErr = groqErr;
-      finalErr.originalGeminiError = geminiErr;
-      throw finalErr;
+    if (chainAttempt < BACKOFF_DELAYS.length) {
+      const delay = BACKOFF_DELAYS[chainAttempt];
+      console.warn(`[BACKOFF] All providers failed: ${lastError?.message}. Retrying chain in ${delay}ms (attempt ${chainAttempt + 1}/${BACKOFF_DELAYS.length})`);
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
-}
 
+  throw lastError || new Error('All providers exhausted');
+}

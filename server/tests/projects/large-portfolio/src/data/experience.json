@@ -1,0 +1,48 @@
+[
+  {
+    "company":"TechCorp Inc.","role":"Senior Full Stack Developer","period":"2022-Present","location":"San Francisco, CA",
+    "description":"Leading development of enterprise-scale web applications serving 500K+ users. Architecting microservices infrastructure, mentoring junior developers, and establishing coding standards.",
+    "achievements":[
+      "Architected and delivered a real-time analytics platform processing 10M+ events/day",
+      "Reduced API response times by 60% through query optimization and caching strategies",
+      "Led migration from monolithic to microservices architecture serving 5M+ daily requests",
+      "Implemented CI/CD pipeline reducing deployment time from 2 hours to 15 minutes",
+      "Mentored team of 8 developers, conducting code reviews and technical training sessions"
+    ],
+    "technologies":["React","Node.js","PostgreSQL","Redis","Docker","Kubernetes","AWS"]
+  },
+  {
+    "company":"StartupXYZ","role":"Full Stack Developer","period":"2020-2022","location":"Austin, TX",
+    "description":"Built and maintained full-stack features for a rapidly growing SaaS platform. Collaborated with product team to deliver customer-facing features and internal tools.",
+    "achievements":[
+      "Developed real-time collaboration features using WebSocket and Redis pub/sub",
+      "Built comprehensive admin dashboard with advanced data visualization using D3.js",
+      "Implemented OAuth2 authentication flow supporting Google, GitHub, and SSO providers",
+      "Optimized database queries resulting in 40% improvement in page load times",
+      "Created automated testing suite achieving 85% code coverage"
+    ],
+    "technologies":["Vue.js","Express","MongoDB","Socket.io","Docker","Google Cloud"]
+  },
+  {
+    "company":"Digital Agency Co.","role":"Frontend Developer","period":"2018-2020","location":"New York, NY",
+    "description":"Developed responsive web applications for diverse clients across e-commerce, healthcare, and education sectors. Specialized in creating accessible, performant user interfaces.",
+    "achievements":[
+      "Delivered 15+ client projects on time and within budget",
+      "Improved Lighthouse performance scores from 45 to 92 through code splitting and lazy loading",
+      "Introduced TypeScript to the team, reducing production bugs by 30%",
+      "Built reusable component library used across 10+ projects"
+    ],
+    "technologies":["React","Angular","TypeScript","Sass","Webpack","Jest"]
+  },
+  {
+    "company":"Freelance","role":"Web Developer","period":"2016-2018","location":"Remote",
+    "description":"Provided full-stack web development services to small businesses and startups. Managed end-to-end project delivery from requirements gathering to deployment.",
+    "achievements":[
+      "Completed 25+ projects for clients across various industries",
+      "Built custom CMS solutions for content-driven websites",
+      "Integrated third-party APIs including Stripe, Twilio, and Google Maps",
+      "Achieved 5-star rating with 100% project completion rate"
+    ],
+    "technologies":["PHP","WordPress","JavaScript","MySQL","HTML/CSS","jQuery"]
+  }
+]

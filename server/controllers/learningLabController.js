@@ -4,9 +4,12 @@ import MentorMemory from '../models/MentorMemory.js';
 import SandboxSubmission from '../models/SandboxSubmission.js';
 import { 
   generateMentorResponse, 
-  analyzeProjectSummary, 
   evaluateDefenseAnswer,
-  compileCareerCoachRoadmap
+  compileCareerCoachRoadmap,
+  generateProjectStructuralMap,
+  generateDynamicQuestionWording,
+  evaluateProgressiveDefenseAnswer,
+  generateSubchunkQuestionCandidates
 } from '../services/learningLabAiService.js';
 import { executeJsCode } from '../services/codeExecutionService.js';
 import {
@@ -14,6 +17,7 @@ import {
   computeReadinessIndexes,
   analyzeStrengthsAndWeaknesses
 } from '../services/mentorIntelligenceEngine.js';
+import { chunkProjectFiles, estimateTokens } from '../utils/projectChunker.js';
 import { canonicalize } from '../utils/topicNormalizer.js';
 import axios from 'axios';
 import {
@@ -25,8 +29,109 @@ import {
   validateClaimsAgainstEvidence,
   KEY_CONFIG_FILES
 } from '../utils/projectScanUtils.js';
+import { classifyProject } from '../utils/projectClassifier.js';
 
-const isIgnored = (path) => isIgnoredPath(path);
+const isIgnored = (path, size = 0) => isIgnoredPath(path, size);
+
+const generateLocalBlueprint = (files, fileContents) => {
+  const frameworks = new Set();
+  let database = 'None';
+  let authStrategy = 'None';
+  let primaryArchitecturePattern = 'MVC / Client-Server';
+  const criticalDependencies = new Set();
+  
+  const pkgFile = fileContents.find(fc => fc.path.endsWith('package.json'));
+  if (pkgFile && pkgFile.content) {
+    try {
+      const pkg = JSON.parse(pkgFile.content);
+      const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+      
+      Object.keys(deps).forEach(dep => {
+        if (['react', 'react-dom', 'express', 'next', 'vue', 'angular', 'mongoose', 'mongodb', 'pg', 'sequelize', 'typeorm', 'mysql', 'mysql2', 'sqlite3', 'better-sqlite3', 'jsonwebtoken', 'passport', 'next-auth', 'auth0', 'firebase-admin', 'redux', 'zustand'].includes(dep)) {
+          criticalDependencies.add(dep);
+        }
+
+        if (dep === 'react') frameworks.add('React');
+        if (dep === 'express') frameworks.add('Express');
+        if (dep === 'next') frameworks.add('Next.js');
+        if (dep === 'vue') frameworks.add('Vue');
+        if (dep === 'angular') frameworks.add('Angular');
+
+        if (dep === 'mongoose' || dep === 'mongodb') database = 'MongoDB';
+        if (dep === 'pg' || dep === 'sequelize' || dep === 'typeorm') database = 'PostgreSQL';
+        if (dep === 'mysql' || dep === 'mysql2') database = 'MySQL';
+        if (dep === 'sqlite3' || dep === 'better-sqlite3') database = 'SQLite';
+
+        if (dep === 'jsonwebtoken') authStrategy = 'JWT';
+        if (dep === 'passport' || dep === 'next-auth' || dep === 'auth0') authStrategy = 'OAuth2';
+        if (dep === 'firebase-admin') authStrategy = 'Firebase Auth';
+      });
+    } catch (err) {
+      // ignore
+    }
+  }
+
+  if (frameworks.size === 0) {
+    const hasReact = files.some(f => f.path.endsWith('.jsx') || f.path.endsWith('.tsx'));
+    if (hasReact) frameworks.add('React');
+  }
+  
+  const hasControllers = files.some(f => f.path.includes('/controllers/'));
+  const hasRoutes = files.some(f => f.path.includes('/routes/'));
+  const hasModels = files.some(f => f.path.includes('/models/'));
+  if (hasControllers && hasRoutes && hasModels) {
+    primaryArchitecturePattern = 'MVC';
+  }
+
+  return {
+    frameworks: Array.from(frameworks),
+    database,
+    authStrategy,
+    primaryArchitecturePattern,
+    criticalDependencies: Array.from(criticalDependencies)
+  };
+};
+
+const ensureSubchunkCandidatesGenerated = async (session, moduleIndex, subchunkIndex) => {
+  const context = session.projectContext;
+  const currentModule = context.modules[moduleIndex];
+  const currentSubchunk = currentModule?.subchunks[subchunkIndex];
+  if (!currentSubchunk) return;
+
+  if (currentSubchunk.candidatesGenerated && Array.isArray(currentSubchunk.questionCandidates) && currentSubchunk.questionCandidates.length > 0) {
+    return;
+  }
+
+  const filesCode = getSubchunkFilesCode(context, currentSubchunk.files);
+
+  try {
+    const result = await generateSubchunkQuestionCandidates({
+      blueprint: context.masterBlueprint,
+      knowledgeGraph: context.knowledgeGraph,
+      subchunkName: currentSubchunk.subchunkName,
+      filesCode
+    });
+
+    if (result && Array.isArray(result.candidates) && result.candidates.length > 0) {
+      currentSubchunk.questionCandidates = result.candidates;
+    } else {
+      throw new Error('AI returned empty or invalid candidates');
+    }
+  } catch (err) {
+    console.warn(`Failed to lazy-generate candidates for ${currentSubchunk.subchunkName}:`, err.message);
+    currentSubchunk.questionCandidates = [
+      { topic: `High-level design and purpose of ${currentSubchunk.subchunkName}`, difficulty: 'Easy' },
+      { topic: `Key functional patterns and implementation in ${currentSubchunk.subchunkName}`, difficulty: 'Medium' },
+      { topic: `Tradeoffs and future refactoring of ${currentSubchunk.subchunkName}`, difficulty: 'Hard' }
+    ];
+  }
+
+  currentSubchunk.candidatesGenerated = true;
+  currentSubchunk.candidatesGeneratedAt = new Date();
+  session.markModified('projectContext');
+  await session.save();
+};
+
 
 export const logTimelineEvent = async ({ userId, learningSessionId = null, action, topic, detail = '', status = 'active' }) => {
   try {
@@ -194,7 +299,7 @@ const fetchGitHubRepoContents = async (owner, repo, path = '', filesCollected = 
     
     if (Array.isArray(response.data)) {
       for (const item of response.data) {
-        if (isIgnored(item.path)) continue;
+        if (isIgnored(item.path, item.type === 'file' ? item.size : 0)) continue;
         
         if (item.type === 'dir') {
           await fetchGitHubRepoContents(owner, repo, item.path, filesCollected, depth + 1);
@@ -798,11 +903,20 @@ Output strict JSON:
 }
 `;
 
+    const userPreferences = req.user ? {
+      language: req.user.language || 'English',
+      communicationMode: req.user.communicationMode || 'Natural',
+    } : {
+      language: 'English',
+      communicationMode: 'Natural',
+    };
+
     // Make AI call using standard mentor response loop
     const aiResponse = await generateMentorResponse({
       topic: `Code Review: ${challengeTitle || session.topic}`,
       mode: session.mode,
-      messages: [{ role: 'user', text: reviewPrompt }]
+      messages: [{ role: 'user', text: reviewPrompt }],
+      userPreferences
     });
 
     const lastMsgIdx = session.messages.slice().reverse().findIndex(m => m.playgroundChallenge && m.playgroundChallenge.title);
@@ -1028,7 +1142,8 @@ const buildProjectContextFromAnalysis = (analysisReport, {
   filesScanned = 0,
   detectedTechnologiesEvidence = [],
   unverifiedClaims = [],
-  fallbackReason = ''
+  fallbackReason = '',
+  projectClassification = { type: '', confidence: '', evidence: [] }
 }) => {
   const analysisFailed = !analysisReport;
   const fallbackMode = analysisFailed ? {
@@ -1072,7 +1187,8 @@ const buildProjectContextFromAnalysis = (analysisReport, {
     },
     fallbackMode,
     unverifiedClaims,
-    detectedTechnologiesEvidence
+    detectedTechnologiesEvidence,
+    projectClassification,
   };
 
   if (analysisFailed) return base;
@@ -1150,7 +1266,7 @@ export const ingestProject = async (req, res) => {
     } else if (Array.isArray(files) && files.length > 0) {
       resolvedMethod = 'local';
       filesList = files
-        .filter((f) => f?.path && !isIgnored(f.path))
+        .filter((f) => f?.path && !isIgnored(f.path, f.size || (f.content ? f.content.length : 0)))
         .slice(0, 120)
         .map((f) => ({
           path: f.path.replace(/\\/g, '/'),
@@ -1159,7 +1275,7 @@ export const ingestProject = async (req, res) => {
         }));
       fileContents = filesList
         .filter((f) => f.content && isTextSourcePath(f.path))
-        .slice(0, 15)
+        .slice(0, 100)
         .map((f) => ({ path: f.path, content: String(f.content).slice(0, 6000) }));
       sourceLabel = `Ingested Local Project: ${projectName}`;
     } else {
@@ -1173,48 +1289,213 @@ export const ingestProject = async (req, res) => {
     // Step 1: Deterministic technology detection (always runs, no AI needed)
     const deterministicTech = detectTechnologiesFromFiles(filesList, fileContents);
 
-    // Step 2: Build summary for AI
-    const projectSummaryText = buildProjectSummaryText({
-      sourceLabel,
-      repoUrl: githubUrl || '',
+    // Step 1.5: Deterministic project classification (no AI)
+    const projectClassification = classifyProject({
+      technologies: deterministicTech.technologies,
+      languages: deterministicTech.languages,
       files: filesList,
-      fileContents
     });
 
-    // Step 3: AI analysis with multi-provider fallback (Gemini → Groq → Failure)
-    let analysisReport = null;
+    // Step 2.5: Deterministic Token Budget Chunking
+    const modulesList = chunkProjectFiles(filesList, fileContents);
+    const simplifiedModules = modulesList.map(mod => ({
+      moduleName: mod.moduleName,
+      subchunks: mod.subchunks.map(sc => ({
+        subchunkName: sc.subchunkName
+      }))
+    }));
+
+    // Step 2: Build code-free metadata summary for AI to prevent token spikes
+    const metadataSummary = {
+      sourceLabel,
+      repoUrl: githubUrl || '',
+      filesCount: filesList.length,
+      technologies: deterministicTech.technologies.map(t => t.name),
+      languages: deterministicTech.languages,
+      configFiles: filesList.filter(f => KEY_CONFIG_FILES.includes(f.path.split('/').pop())).map(f => f.path)
+    };
+
+    const projectMetadataSummaryText = `
+INGESTION SOURCE: ${metadataSummary.sourceLabel}
+REPO URL: ${metadataSummary.repoUrl}
+TOTAL FILES: ${metadataSummary.filesCount}
+DETECTED TECHNOLOGIES: ${metadataSummary.technologies.join(', ')}
+LANGUAGES: ${metadataSummary.languages.join(', ')}
+CONFIG FILES: ${metadataSummary.configFiles.join(', ')}
+    `.trim();
+
+    // Logging payload sizes for diagnostics
+    let reqBodySize = 0;
+    try { reqBodySize = Buffer.byteLength(JSON.stringify(req.body || {}), 'utf8'); } catch (_) { /* skip */ }
+    const summarySize = Buffer.byteLength(projectMetadataSummaryText, 'utf8');
+    const providerUsed = process.env.AI_PROVIDER || (process.env.AI_API_KEY?.startsWith('AIza') ? 'gemini' : 'groq');
+    console.log('[INGEST_DIAG]', JSON.stringify({
+      reqBodySizeBytes: reqBodySize,
+      summarySizeBytes: summarySize,
+      filesScanned: filesList.length,
+      fileContentsCount: fileContents.length,
+      charsToAi: summarySize,
+      provider: providerUsed,
+      ingestionMethod: resolvedMethod,
+      projectName
+    }));
+
+    // Step 3: AI analysis - compiles Blueprint Summary and Knowledge Graph only
+    let structuralMap = null;
     let aiError = '';
     try {
-      analysisReport = await analyzeProjectSummary({
-        projectSummaryText,
-        repoUrl: githubUrl || ''
+      structuralMap = await generateProjectStructuralMap({
+        projectSummaryText: projectMetadataSummaryText,
+        repoUrl: githubUrl || '',
+        modulesList: simplifiedModules
       });
     } catch (aiErr) {
-      aiError = aiErr?.publicMessage || aiErr?.message || 'AI analysis failed after all providers exhausted';
-      console.warn('Project ingestion AI failed (all providers):', aiError);
+      aiError = aiErr?.publicMessage || aiErr?.message || 'AI structural mapping failed after all providers exhausted';
+      console.warn('Project ingestion AI structural mapping failed (all providers):', aiError);
     }
 
-    // Step 4: Hallucination protection - validate AI claims against evidence
-    let unverifiedClaims = [];
-    if (analysisReport && Array.isArray(analysisReport.detectedTechnologies)) {
-      const validation = validateClaimsAgainstEvidence(
-        analysisReport.detectedTechnologies,
-        deterministicTech.technologies
-      );
-      analysisReport.detectedTechnologies = validation.verified;
-      unverifiedClaims = validation.unverified;
-    }
+    const localBlueprint = generateLocalBlueprint(filesList, fileContents);
+    const isFallback = !structuralMap;
+    const blueprint = {
+      frameworks: localBlueprint.frameworks,
+      database: localBlueprint.database,
+      authStrategy: localBlueprint.authStrategy,
+      primaryArchitecturePattern: localBlueprint.primaryArchitecturePattern,
+      criticalDependencies: localBlueprint.criticalDependencies,
+      majorFeatures: structuralMap?.masterBlueprint?.majorFeatures || [],
+      summary: structuralMap?.masterBlueprint?.summary || aiError || 'No AI project blueprint available.'
+    };
 
-    // Step 5: Build project context
-    const projectContext = buildProjectContextFromAnalysis(analysisReport, {
+    // Construct compatible architecture report for the legacy UI
+    const archReportStructure = modulesList.map(mod => `* **${mod.moduleName}**\n${mod.subchunks.map(sc => `  - ${sc.subchunkName} (${sc.files.length} files)`).join('\n')}`).join('\n');
+    const architectureReport = {
+      structure: archReportStructure,
+      libraries: blueprint.criticalDependencies || [],
+      frameworks: blueprint.frameworks || [],
+      components: [],
+      apis: [],
+      stateManagement: blueprint.primaryArchitecturePattern || 'None',
+      auth: blueprint.authStrategy || 'None',
+      database: blueprint.database || 'None',
+      summary: blueprint.summary || ''
+    };
+
+    // Calculate total questions (3 questions per subchunk)
+    const numSubchunks = modulesList.reduce((acc, m) => acc + m.subchunks.length, 0);
+    const totalQuestions = numSubchunks * 3;
+
+    // Step 4: Build project context
+    const projectContext = {
       projectName,
       repoUrl: githubUrl || '',
       ingestionMethod: resolvedMethod,
-      filesScanned: filesList.length,
+      scanComplete: true,
+      scanStatus: isFallback ? 'failed' : 'success',
+      defenseStarted: false,
+      masterBlueprint: blueprint,
+      knowledgeGraph: structuralMap?.knowledgeGraph || { nodes: [], edges: [] },
+      modules: modulesList,
+      currentModuleIndex: 0,
+      currentSubchunkIndex: 0,
+      projectComplexity: {
+        level: 'Moderate',
+        score: 50,
+        rationale: 'Inferred complexity from progressive modules.'
+      },
+      starterDefenseQuestion: '',
+      detectedTechnologies: blueprint.criticalDependencies || [],
+      detectedFeatures: blueprint.majorFeatures || [],
+      potentialWeakAreas: [],
+      scanStats: { filesScanned: filesList.length, foldersScanned: 0 },
+      architectureReport,
+      defenseProgress: {
+        currentQuestionIndex: 0,
+        totalQuestions,
+        evaluations: []
+      },
+      topQuestions: [],
+      learningReport: {
+        strengths: [],
+        weakAreas: [],
+        missingConcepts: [],
+        suggestedImprovements: [],
+        refactoringIdeas: [],
+        productionReadinessScore: 0,
+        portfolioReadinessScore: 0
+      },
+      fallbackMode: {
+        active: isFallback,
+        reason: aiError,
+        affectedFeatures: []
+      },
+      unverifiedClaims: [],
+      projectClassification,
       detectedTechnologiesEvidence: deterministicTech.technologies,
-      unverifiedClaims,
-      fallbackReason: aiError
+      fileContents: fileContents.map(fc => ({ path: fc.path, content: fc.content || '' }))
+    };
+
+    // Step 5: Generate Ingestion Audit Report (WARNING >= 2500, CRITICAL >= 4000)
+    const projectChunkAudit = {
+      subchunks: [],
+      warningCount: 0,
+      criticalCount: 0,
+      averageTokens: 0,
+      largestTokens: 0,
+      smallestTokens: 99999999
+    };
+
+    let totalTokensAccum = 0;
+
+    modulesList.forEach(mod => {
+      mod.subchunks.forEach(sc => {
+        let characterCount = 0;
+        let lineCount = 0;
+        let tokenCount = 0;
+
+        sc.files.forEach(fPath => {
+          const file = fileContents.find(c => c.path === fPath);
+          const content = file ? (file.content || '') : '';
+          characterCount += content.length;
+          lineCount += content ? content.split('\n').length : 0;
+          tokenCount += estimateTokens(content);
+        });
+
+        let validationStatus = 'OK';
+        if (tokenCount >= 4000) {
+          validationStatus = 'CRITICAL';
+          projectChunkAudit.criticalCount++;
+        } else if (tokenCount >= 2500) {
+          validationStatus = 'WARNING';
+          projectChunkAudit.warningCount++;
+        }
+
+        projectChunkAudit.subchunks.push({
+          moduleName: mod.moduleName,
+          subchunkName: sc.subchunkName,
+          fileCount: sc.files.length,
+          characters: characterCount,
+          lines: lineCount,
+          estimatedTokens: tokenCount,
+          validationStatus
+        });
+
+        totalTokensAccum += tokenCount;
+        if (tokenCount > projectChunkAudit.largestTokens) {
+          projectChunkAudit.largestTokens = tokenCount;
+        }
+        if (tokenCount < projectChunkAudit.smallestTokens) {
+          projectChunkAudit.smallestTokens = tokenCount;
+        }
+      });
     });
+
+    const totalSubchunks = projectChunkAudit.subchunks.length;
+    projectChunkAudit.averageTokens = totalSubchunks > 0 ? Math.round(totalTokensAccum / totalSubchunks) : 0;
+    if (projectChunkAudit.smallestTokens === 99999999) {
+      projectChunkAudit.smallestTokens = 0;
+    }
+
+    console.log('[AUDIT_REPORT] projectChunkAudit:', JSON.stringify(projectChunkAudit, null, 2));
 
     let session;
     if (sessionId) {
@@ -1225,9 +1506,9 @@ export const ingestProject = async (req, res) => {
       session.topic = `Project Defense: ${projectName}`;
       session.sessionType = 'Project Defense';
       session.projectContext = projectContext;
-      const scanText = analysisReport
-        ? `### Project scan complete\nI've analyzed **${projectName}** and prepared your **Project Analysis Report**. Review detected technologies, architecture, and weak areas in the Project tab, then click **Start Defense** when you're ready.`
-        : `### Project scan complete\nI scanned **${projectName}** but could not generate an AI architecture review. Technologies were detected from your project files. You can still start a generic defense interview. Reason: ${aiError}`;
+      const scanText = !isFallback
+        ? `### Project scan complete\nI've analyzed **${projectName}** and generated the **Master Project Blueprint**. Review detected modules, technology tree, and architecture in the Project tab, then click **Start Defense** when you're ready.`
+        : `### Project scan complete\nI scanned **${projectName}** but could not generate the AI structural map. File trees and technologies were parsed. You can still start the defense. Reason: ${aiError}`;
       session.messages.push({
         id: `defense-scan-${Date.now()}`,
         role: 'assistant',
@@ -1238,9 +1519,9 @@ export const ingestProject = async (req, res) => {
         markFirstIncompleteTaskComplete(session, (t) => /connect|github|local|folder/i.test(t.task));
       }
     } else {
-      const scanTextForNew = analysisReport
-        ? `### Project scan complete\nI've analyzed **${projectName}** and prepared your **Project Analysis Report**. Review the findings below, then click **Start Defense** when you're ready for interview questions.`
-        : `### Project scan complete\nI scanned **${projectName}** but could not generate an AI architecture review. Technologies were detected from your project files. You can still start a generic defense interview. Reason: ${aiError}`;
+      const scanTextForNew = !isFallback
+        ? `### Project scan complete\nI've analyzed **${projectName}** and generated the **Master Project Blueprint**. Review the findings below, then click **Start Defense** when you're ready for interview questions.`
+        : `### Project scan complete\nI scanned **${projectName}** but could not generate the AI structural map. File trees and technologies were parsed. You can still start the defense. Reason: ${aiError}`;
       session = new LearningSession({
         userId: req.user._id,
         topic: `Project Defense: ${projectName}`,
@@ -1258,17 +1539,63 @@ export const ingestProject = async (req, res) => {
           { task: 'Connect GitHub repo or local folder', completed: true },
           { task: 'Review project analysis report', completed: false },
           { task: 'Start defense interview', completed: false },
-          { task: 'Complete 5 defense questions', completed: false }
+          { task: 'Complete defense questions', completed: false }
         ]
       });
     }
 
     await session.save();
-    return res.status(sessionId ? 200 : 201).json({ success: true, data: session });
+    return res.status(sessionId ? 200 : 201).json({ success: true, data: session, projectChunkAudit });
   } catch (error) {
     console.error('Project ingestion failed:', error.message);
     return res.status(500).json({ success: false, message: 'Failed to analyze project codebase.' });
   }
+};
+
+const getSubchunkFilesCode = (context, scFiles = [], maxTokens = 3000) => {
+  const contents = context.fileContents || [];
+  
+  const getPriority = (filePath) => {
+    const pathLower = filePath.toLowerCase();
+    if (pathLower.endsWith('.css') || pathLower.endsWith('.scss')) return 1;
+    if (pathLower.endsWith('.json')) return 2;
+    if (pathLower.includes('test') || pathLower.includes('spec')) return 3;
+    if (pathLower.endsWith('.js') || pathLower.endsWith('.jsx') || pathLower.endsWith('.ts') || pathLower.endsWith('.tsx')) return 5;
+    return 4; // general files
+  };
+
+  const sortedFiles = [...scFiles].sort((a, b) => getPriority(b) - getPriority(a));
+
+  let currentTokens = 0;
+  const blocks = [];
+
+  for (const path of sortedFiles) {
+    const file = contents.find(c => c.path === path);
+    const content = file ? (file.content || '') : '';
+    let fileCodeBlock = `\n--- ${path} ---\n${content || '(content unavailable)'}`;
+    
+    const blockTokens = Math.ceil(fileCodeBlock.length / 4);
+
+    if (currentTokens + blockTokens > maxTokens) {
+      const allowedTokens = Math.max(0, maxTokens - currentTokens - 25);
+      const allowedChars = allowedTokens * 4;
+      
+      if (allowedChars > 200 && content) {
+        const truncatedContent = content.slice(0, allowedChars) + '\n// [TRUNCATED FOR TOKENS SAFETY LIMIT]';
+        fileCodeBlock = `\n--- ${path} ---\n${truncatedContent}`;
+        blocks.push(fileCodeBlock);
+        currentTokens += Math.ceil(fileCodeBlock.length / 4);
+      } else {
+        fileCodeBlock = `\n--- ${path} ---\n// [OMITTED - EXCEEDS SAFETY TOKEN BUDGET]`;
+        blocks.push(fileCodeBlock);
+      }
+    } else {
+      blocks.push(fileCodeBlock);
+      currentTokens += blockTokens;
+    }
+  }
+
+  return blocks.join('\n');
 };
 
 /**
@@ -1297,28 +1624,96 @@ export const startProjectDefense = async (req, res) => {
       return res.status(200).json({ success: true, data: session });
     }
 
-    const isFallback = context?.fallbackMode?.active === true;
-    const genericQuestions = [
-      'Explain the core architecture of your project and the main tradeoffs you made.',
-      'Walk me through your authentication flow from client request to protected route.',
-      'How do you structure error responses across your application?',
-      'What database schema decisions did you make and why?',
-      'How do you handle state management across your application?'
-    ];
+    // Check if progressive chunking modules exist
+    if (!Array.isArray(context.modules) || context.modules.length === 0) {
+      // Legacy Fallback
+      const isFallback = context?.fallbackMode?.active === true;
+      const genericQuestions = [
+        'Explain the core architecture of your project and the main tradeoffs you made.',
+        'Walk me through your authentication flow from client request to protected route.',
+        'How do you structure error responses across your application?',
+        'What database schema decisions did you make and why?',
+        'How do you handle state management across your application?'
+      ];
 
-    const starterQuestion = isFallback
-      ? genericQuestions[0]
-      : (context.starterDefenseQuestion || context.topQuestions?.[0] || genericQuestions[0]);
+      const starterQuestion = isFallback
+        ? genericQuestions[0]
+        : (context.starterDefenseQuestion || context.topQuestions?.[0] || genericQuestions[0]);
 
-    // Ensure topQuestions exist even in fallback mode for fallback evaluation
-    if (isFallback && (!Array.isArray(context.topQuestions) || context.topQuestions.length === 0)) {
-      context.topQuestions = genericQuestions;
+      if (isFallback && (!Array.isArray(context.topQuestions) || context.topQuestions.length === 0)) {
+        context.topQuestions = genericQuestions;
+      }
+
+      context.defenseStarted = true;
+      const startMsg = isFallback
+        ? `### Project Defense started (Generic Mode)\nAI architecture review was unavailable. Questions will be based on general project patterns. Here is your first question:\n\n**"${starterQuestion}"**`
+        : `### Project Defense started\nBased on my analysis of your codebase, here is your first question:\n\n**"${starterQuestion}"**`;
+      session.messages.push({
+        id: `defense-start-${Date.now()}`,
+        role: 'assistant',
+        text: startMsg,
+        timestamp: new Date()
+      });
+
+      if (session.missionChecklist?.length) {
+        markFirstIncompleteTaskComplete(session, (t) => /review|analysis|report/i.test(t.task));
+        markFirstIncompleteTaskComplete(session, (t) => /start defense/i.test(t.task));
+      }
+
+      session.markModified('projectContext');
+      session.markModified('messages');
+      await session.save();
+      return res.status(200).json({ success: true, data: session });
     }
 
+    // Progressive Chunking Flow
+    const currentModule = context.modules[context.currentModuleIndex || 0];
+    const currentSubchunk = currentModule?.subchunks[context.currentSubchunkIndex || 0];
+
+    if (!currentSubchunk) {
+      return res.status(400).json({ success: false, message: 'No modules or subchunks mapped for defense.' });
+    }
+
+    // Lazy load subchunk candidates if empty
+    await ensureSubchunkCandidatesGenerated(session, context.currentModuleIndex || 0, context.currentSubchunkIndex || 0);
+
+    // Get Easy candidate topic
+    const easyCandidate = currentSubchunk.questionCandidates?.find(c => c.difficulty === 'Easy') || 
+                          currentSubchunk.questionCandidates?.[0] || 
+                          { topic: 'High-level architecture and purpose' };
+
+    // Format active files contents
+    const filesCode = getSubchunkFilesCode(context, currentSubchunk.files);
+
+    // Call dynamic wording generation
+    let formulatedQuestion = `Explain the high-level purpose and design of the files in the subchunk ${currentSubchunk.subchunkName}.`;
+    try {
+      const result = await generateDynamicQuestionWording({
+        blueprint: context.masterBlueprint,
+        knowledgeGraph: context.knowledgeGraph,
+        subchunkName: currentSubchunk.subchunkName,
+        filesCode,
+        difficulty: 'Easy',
+        topic: easyCandidate.topic
+      });
+      if (result && result.questionText) {
+        formulatedQuestion = result.questionText;
+      }
+    } catch (aiErr) {
+      console.warn('Failed to dynamically formulate question wording, using fallback template:', aiErr.message);
+    }
+
+    // Save active question
+    currentSubchunk.activeQuestions = [{
+      difficulty: 'Easy',
+      questionText: formulatedQuestion,
+      askedAt: new Date()
+    }];
+    currentSubchunk.status = 'active';
+
     context.defenseStarted = true;
-    const startMsg = isFallback
-      ? `### Project Defense started (Generic Mode)\nAI architecture review was unavailable. Questions will be based on general project patterns. Here is your first question:\n\n**"${starterQuestion}"**`
-      : `### Project Defense started\nBased on my analysis of your codebase, here is your first question:\n\n**"${starterQuestion}"**`;
+    const startMsg = `### Project Defense Started!\n\nWe will defend your project chunk-by-chunk. Let's start with **Module: ${currentModule.moduleName}** → **Subchunk: ${currentSubchunk.subchunkName}**.\n\nHere is your first **[Easy]** question:\n\n**"${formulatedQuestion}"**`;
+    
     session.messages.push({
       id: `defense-start-${Date.now()}`,
       role: 'assistant',
@@ -1338,9 +1733,9 @@ export const startProjectDefense = async (req, res) => {
     await logTimelineEvent({
       userId: req.user._id,
       learningSessionId: session._id,
-      action: 'Started project defense',
+      action: 'Started progressive project defense',
       topic: session.topic,
-      detail: `Connected repository/folder`,
+      detail: `Module: ${currentModule.moduleName}, Subchunk: ${currentSubchunk.subchunkName}`,
       status: 'started'
     });
 
@@ -1382,8 +1777,7 @@ export const submitProjectDefenseAnswer = async (req, res) => {
     if (!hasProject) {
       return res.status(400).json({
         success: false,
-        message:
-          'Please connect a GitHub repository or local project folder before starting Project Defense.'
+        message: 'Please connect a GitHub repository or local project folder before starting Project Defense.'
       });
     }
 
@@ -1394,15 +1788,174 @@ export const submitProjectDefenseAnswer = async (req, res) => {
       });
     }
 
-    const progress = context.defenseProgress;
-    const currentQIdx = progress.currentQuestionIndex;
-    
-    // Extract current question text from last message
-    const lastMsg = session.messages[session.messages.length - 1];
-    let currentQuestion = lastMsg.text;
-    if (currentQuestion.includes('**"')) {
-      currentQuestion = currentQuestion.split('**"')[1].split('"**')[0];
+    // Check legacy vs progressive flow
+    if (!Array.isArray(context.modules) || context.modules.length === 0) {
+      // --- LEGACY MONOLITHIC FLOW ---
+      const progress = context.defenseProgress;
+      const currentQIdx = progress.currentQuestionIndex;
+      const lastMsg = session.messages[session.messages.length - 1];
+      let currentQuestion = lastMsg.text;
+      if (currentQuestion.includes('**"')) {
+        currentQuestion = currentQuestion.split('**"')[1].split('"**')[0];
+      }
+
+      const userPreferences = req.user ? {
+        language: req.user.language || 'English',
+        communicationMode: req.user.communicationMode || 'Natural',
+      } : {
+        language: 'English',
+        communicationMode: 'Natural',
+      };
+
+      const evalResult = await evaluateDefenseAnswer({
+        report: context.architectureReport,
+        currentQuestion,
+        answer,
+        currentQuestionIndex: currentQIdx,
+        userPreferences
+      });
+
+      const isDuplicate = progress.evaluations.some(e => e.answer.trim() === answer.trim());
+      if (isDuplicate) {
+        return res.status(400).json({ success: false, message: 'Duplicate answer. Please provide a new response.' });
+      }
+
+      progress.evaluations.push({
+        question: currentQuestion,
+        answer,
+        authorshipScore: evalResult.authorshipScore || 0,
+        technicalCorrectness: evalResult.technicalCorrectness || 0,
+        projectAwareness: evalResult.projectAwareness || 0,
+        architectureUnderstanding: evalResult.architectureUnderstanding || 0,
+        implementationReasoning: evalResult.implementationReasoning || 0,
+        tradeoffUnderstanding: evalResult.tradeoffUnderstanding || 0,
+        feedback: evalResult.feedback || ''
+      });
+
+      session.messages.push({
+        id: `u-def-${Date.now()}`,
+        role: 'user',
+        text: answer,
+        timestamp: new Date()
+      });
+
+      const milestonePassed = (evalResult.authorshipScore || 0) >= 40;
+      if (milestonePassed) {
+        completeLearningStage(session, 'PROJECT_APPLICATION', 'project_defense_answer');
+        applyVerifiedProgress(session, DEFAULT_MASTERY_INCREMENT.projectDefenseMilestonePassed);
+      }
+
+      const totalDefenseQuestions = progress.totalQuestions || context.topQuestions?.length || 5;
+      const isDefenseComplete = currentQIdx >= totalDefenseQuestions - 1;
+
+      if (isDefenseComplete) {
+        session.status = 'completed';
+        markFirstIncompleteTaskComplete(session, task => /defense|project|validated|solve|challenge/i.test(task.task));
+        if (milestonePassed) {
+          completeLearningStage(session, 'INTERVIEW_ROUND', 'project_defense_completed');
+          completeLearningStage(session, 'EVALUATION', 'project_defense_completed');
+          completeLearningStage(session, 'MASTERY_DECISION', 'project_defense_completed');
+          applyVerifiedProgress(session, DEFAULT_MASTERY_INCREMENT.projectDefenseCompleted);
+        }
+        context.learningReport = {
+          strengths: Array.isArray(evalResult.learningReport?.strengths) ? evalResult.learningReport.strengths : [],
+          weakAreas: Array.isArray(evalResult.learningReport?.weakAreas) ? evalResult.learningReport.weakAreas : [],
+          missingConcepts: Array.isArray(evalResult.learningReport?.missingConcepts) ? evalResult.learningReport.missingConcepts : [],
+          suggestedImprovements: Array.isArray(evalResult.learningReport?.suggestedImprovements) ? evalResult.learningReport.suggestedImprovements : [],
+          refactoringIdeas: Array.isArray(evalResult.learningReport?.refactoringIdeas) ? evalResult.learningReport.refactoringIdeas : [],
+          productionReadinessScore: session.masteryPercentage,
+          portfolioReadinessScore: session.masteryPercentage
+        };
+
+        session.messages.push({
+          id: `a-def-summary-${Date.now()}`,
+          role: 'assistant',
+          text: `### 🏁 Project Defense Completed!\n\n**Authorship Check Summary**:\n${evalResult.feedback}\n\nWe have finalized your comprehensive **Project Readiness Report** inside the learning dashboard tab containing refactoring roadmaps and portfolio readiness grades. Great job defending your implementation choices!`,
+          timestamp: new Date()
+        });
+
+        await logTimelineEvent({
+          userId: req.user._id,
+          learningSessionId: session._id,
+          action: 'Completed project defense',
+          topic: session.topic,
+          detail: `Final score: ${session.masteryPercentage}%`,
+          status: 'completed'
+        });
+
+        try {
+          const evaluations = context.defenseProgress.evaluations || [];
+          const authorshipScores = evaluations.map(e => e.authorshipScore || 0);
+          const avgAuthorship = authorshipScores.length > 0
+            ? Math.round(authorshipScores.reduce((a, b) => a + b, 0) / authorshipScores.length)
+            : 70;
+
+          const defenseReport = context.learningReport || {};
+          const productionScore = defenseReport.productionReadinessScore || avgAuthorship;
+          const portfolioScore = defenseReport.portfolioReadinessScore || avgAuthorship;
+
+          const defenseMappedScores = {
+            projectUsage: avgAuthorship,
+            problemSolving: productionScore,
+            codingAbility: portfolioScore,
+            conceptUnderstanding: productionScore,
+            interviewReadiness: avgAuthorship
+          };
+
+          await updateMentorMemory({
+            userId: req.user._id,
+            topic: session.topic.replace('Project Defense: ', ''),
+            scores: defenseMappedScores,
+            passed: avgAuthorship >= 60,
+            sourceInfo: {
+              refType: 'LearningSession',
+              refId: session._id,
+              source: 'project_defense_completed'
+            }
+          });
+        } catch (memErr) {
+          console.error('Failed to sync legacy scores to memory:', memErr.message);
+        }
+      } else {
+        progress.currentQuestionIndex += 1;
+        const nextQ = evalResult.nextQuestion || context.topQuestions?.[progress.currentQuestionIndex] || 'How does the authentication flow work?';
+        const nextQText = typeof nextQ === 'object' ? nextQ.text : nextQ;
+        session.messages.push({
+          id: `a-def-next-${Date.now()}`,
+          role: 'assistant',
+          text: `**Feedback**: ${evalResult.feedback || 'Good effort.'}\n\nHere is your next Project Defense question:\n\n**"${nextQText}"**`,
+          timestamp: new Date()
+        });
+      }
+
+      session.markModified('projectContext');
+      session.markModified('messages');
+      await session.save();
+      return res.status(200).json({ success: true, data: session });
     }
+
+    // --- PROGRESSIVE CHUNKING FLOW ---
+    const progress = context.defenseProgress;
+    let currentModuleIndex = context.currentModuleIndex || 0;
+    let currentSubchunkIndex = context.currentSubchunkIndex || 0;
+
+    let currentModule = context.modules[currentModuleIndex];
+    let currentSubchunk = currentModule?.subchunks[currentSubchunkIndex];
+
+    if (!currentSubchunk) {
+      return res.status(400).json({ success: false, message: 'Active subchunk not found.' });
+    }
+
+    // Deduplication check
+    const isDuplicate = progress.evaluations.some(e => e.answer.trim() === answer.trim());
+    if (isDuplicate) {
+      return res.status(400).json({ success: false, message: 'Duplicate answer. Please provide a new response.' });
+    }
+
+    // Identify active question difficulty from subchunk activeQuestions
+    const activeQuestionObj = currentSubchunk.activeQuestions?.[currentSubchunk.activeQuestions.length - 1];
+    const difficulty = activeQuestionObj?.difficulty || 'Easy';
+    const currentQuestion = activeQuestionObj?.questionText || 'Describe the files in this chunk.';
 
     const userPreferences = req.user ? {
       language: req.user.language || 'English',
@@ -1412,23 +1965,23 @@ export const submitProjectDefenseAnswer = async (req, res) => {
       communicationMode: 'Natural',
     };
 
-    // Evaluate answer with AI
-    const evalResult = await evaluateDefenseAnswer({
-      report: context.architectureReport,
+    // Evaluate progressive answer with active subchunk files
+    const subchunkFilesCode = getSubchunkFilesCode(context, currentSubchunk.files);
+    const evalResult = await evaluateProgressiveDefenseAnswer({
+      blueprint: context.masterBlueprint,
+      subchunkName: currentSubchunk.subchunkName,
+      subchunkFilesCode,
       currentQuestion,
       answer,
-      currentQuestionIndex: currentQIdx,
+      difficulty,
       userPreferences
     });
 
-    // Deduplication: reject exact duplicate of any previous answer
-    const isDuplicate = progress.evaluations.some(e => e.answer.trim() === answer.trim());
-    if (isDuplicate) {
-      return res.status(400).json({ success: false, message: 'Duplicate answer. Please provide a new response.' });
-    }
-
-    // Append evaluation details with multi-dimension scores
+    // Record evaluation
     progress.evaluations.push({
+      moduleName: currentModule.moduleName,
+      subchunkName: currentSubchunk.subchunkName,
+      difficulty,
       question: currentQuestion,
       answer,
       authorshipScore: evalResult.authorshipScore || 0,
@@ -1440,26 +1993,56 @@ export const submitProjectDefenseAnswer = async (req, res) => {
       feedback: evalResult.feedback || ''
     });
 
-    // Append user response to chat logs
+    // Append user message to logs
     session.messages.push({
-      id: `u-def-${Date.now()}`,
+      id: `u-def-prog-${Date.now()}`,
       role: 'user',
       text: answer,
       timestamp: new Date()
     });
 
-    // AI evaluation scoring: award progress based on authorshipScore (>= 40 indicates genuine effort)
+    // Calculate pass/fail effort
     const milestonePassed = (evalResult.authorshipScore || 0) >= 40;
     if (milestonePassed) {
       completeLearningStage(session, 'PROJECT_APPLICATION', 'project_defense_answer');
-      applyVerifiedProgress(session, DEFAULT_MASTERY_INCREMENT.projectDefenseMilestonePassed);
+      applyVerifiedProgress(session, 2); // incremental progress per question
     }
 
-    const totalDefenseQuestions = progress.totalQuestions || context.topQuestions?.length || 5;
-    const isDefenseComplete = currentQIdx >= totalDefenseQuestions - 1;
+    // Progress State Machine: Easy -> Medium -> Hard -> Next Subchunk -> Next Module
+    let nextDifficulty = 'Easy';
+    let subchunkChanged = false;
+    let moduleChanged = false;
+    let isDefenseComplete = false;
+
+    if (difficulty === 'Easy') {
+      nextDifficulty = 'Medium';
+    } else if (difficulty === 'Medium') {
+      nextDifficulty = 'Hard';
+    } else {
+      // Completed current subchunk!
+      currentSubchunk.status = 'completed';
+      subchunkChanged = true;
+
+      // Find next subchunk
+      if (currentSubchunkIndex + 1 < currentModule.subchunks.length) {
+        currentSubchunkIndex += 1;
+        context.currentSubchunkIndex = currentSubchunkIndex;
+      } else {
+        // Find next module
+        moduleChanged = true;
+        if (currentModuleIndex + 1 < context.modules.length) {
+          currentModuleIndex += 1;
+          currentSubchunkIndex = 0;
+          context.currentModuleIndex = currentModuleIndex;
+          context.currentSubchunkIndex = currentSubchunkIndex;
+        } else {
+          isDefenseComplete = true;
+        }
+      }
+    }
 
     if (isDefenseComplete) {
-      // Completed! Generate final learning scores and report
+      // Finalize progressive defense
       session.status = 'completed';
       markFirstIncompleteTaskComplete(session, task => /defense|project|validated|solve|challenge/i.test(task.task));
       if (milestonePassed) {
@@ -1468,82 +2051,63 @@ export const submitProjectDefenseAnswer = async (req, res) => {
         completeLearningStage(session, 'MASTERY_DECISION', 'project_defense_completed');
         applyVerifiedProgress(session, DEFAULT_MASTERY_INCREMENT.projectDefenseCompleted);
       }
-      context.learningReport = {
-        strengths: Array.isArray(evalResult.learningReport?.strengths) ? evalResult.learningReport.strengths : [],
-        weakAreas: Array.isArray(evalResult.learningReport?.weakAreas) ? evalResult.learningReport.weakAreas : [],
-        missingConcepts: Array.isArray(evalResult.learningReport?.missingConcepts) ? evalResult.learningReport.missingConcepts : [],
-        suggestedImprovements: Array.isArray(evalResult.learningReport?.suggestedImprovements) ? evalResult.learningReport.suggestedImprovements : [],
-        refactoringIdeas: Array.isArray(evalResult.learningReport?.refactoringIdeas) ? evalResult.learningReport.refactoringIdeas : [],
-        productionReadinessScore: session.masteryPercentage,
-        portfolioReadinessScore: session.masteryPercentage
-      };
 
-      // MentorMemory update for completed defense with evaluation-based scoring
-      try {
-        const evals = progress.evaluations || [];
-        const avg = (key) => evals.length > 0 ? Math.round(evals.reduce((s, e) => s + (e[key] || 0), 0) / evals.length) : 0;
-        const defenseScores = {
-          conceptUnderstanding: avg('technicalCorrectness'),
-          codingAbility: avg('implementationReasoning'),
-          problemSolving: avg('architectureUnderstanding'),
-          projectUsage: avg('projectAwareness'),
-          interviewReadiness: Math.round((avg('technicalCorrectness') + avg('implementationReasoning') + avg('architectureUnderstanding') + avg('projectAwareness') + avg('tradeoffUnderstanding')) / 5)
-        };
-        await updateMentorMemory({
-          userId: req.user._id,
-          topic: session.topic,
-          scores: defenseScores,
-          passed: milestonePassed,
-          sourceInfo: {
-            refType: 'LearningSession',
-            refId: session._id,
-            source: 'project_defense_completed'
-          }
-        });
-      } catch (memErr) {
-        console.error('Failed to sync defense scores to mentor memory:', memErr.message);
-      }
+      // Compile final report scores
+      const evaluations = progress.evaluations || [];
+      const authorshipScores = evaluations.map(e => e.authorshipScore || 0);
+      const avgAuthorship = authorshipScores.length > 0
+        ? Math.round(authorshipScores.reduce((a, b) => a + b, 0) / authorshipScores.length)
+        : 70;
+
+      // Compile strengths and weak areas from evaluation feedback
+      const weakAreas = [];
+      const strengths = [];
+      evaluations.forEach(e => {
+        if (e.authorshipScore < 50) {
+          weakAreas.push(`${e.subchunkName} (${e.difficulty} difficulty)`);
+        } else {
+          strengths.push(`${e.subchunkName} (${e.difficulty} difficulty)`);
+        }
+      });
+
+      context.learningReport = {
+        strengths: strengths.slice(0, 5),
+        weakAreas: weakAreas.slice(0, 5),
+        missingConcepts: weakAreas.length > 0 ? ['Deep code-level authorship verification'] : [],
+        suggestedImprovements: ['Review codebase comments', 'Refactor complex controller routes'],
+        refactoringIdeas: ['Modularize utils files', 'Standardize authentication middleware hooks'],
+        productionReadinessScore: Math.min(100, Math.max(0, avgAuthorship)),
+        portfolioReadinessScore: Math.min(100, Math.max(0, avgAuthorship))
+      };
 
       session.messages.push({
         id: `a-def-summary-${Date.now()}`,
         role: 'assistant',
-        text: `### 🏁 Project Defense Completed!\n\n**Authorship Check Summary**:\n${evalResult.feedback}\n\nWe have finalized your comprehensive **Project Readiness Report** inside the learning dashboard tab containing refactoring roadmaps and portfolio readiness grades. Great job defending your implementation choices!`,
+        text: `### 🏁 Progressive Project Defense Completed!\n\n**Final Feedback Summary**:\n${evalResult.feedback || 'You have successfully defended your design decisions.'}\n\nWe have generated your comprehensive **Project Readiness Report** inside the learning dashboard tab containing refactoring roadmaps and portfolio readiness grades. Excellent job validating your codebase implementation!`,
         timestamp: new Date()
       });
 
       await logTimelineEvent({
         userId: req.user._id,
         learningSessionId: session._id,
-        action: 'Completed project defense',
+        action: 'Completed progressive project defense',
         topic: session.topic,
         detail: `Final score: ${session.masteryPercentage}%`,
         status: 'completed'
       });
 
-      // Unified Mentor Memory Project Defense Integration
+      // Synchronize to Mentor Memory
       try {
-        const evaluations = context.defenseProgress.evaluations || [];
-        const authorshipScores = evaluations.map(e => e.authorshipScore || 0);
-        const avgAuthorship = authorshipScores.length > 0
-          ? Math.round(authorshipScores.reduce((a, b) => a + b, 0) / authorshipScores.length)
-          : 70;
-
-        const defenseReport = context.learningReport || {};
-        const productionScore = defenseReport.productionReadinessScore || avgAuthorship;
-        const portfolioScore = defenseReport.portfolioReadinessScore || avgAuthorship;
-
-        const defenseMappedScores = {
-          projectUsage: avgAuthorship,
-          problemSolving: productionScore,
-          codingAbility: portfolioScore,
-          conceptUnderstanding: productionScore,
-          interviewReadiness: avgAuthorship
-        };
-
         await updateMentorMemory({
           userId: req.user._id,
           topic: session.topic.replace('Project Defense: ', ''),
-          scores: defenseMappedScores,
+          scores: {
+            projectUsage: avgAuthorship,
+            problemSolving: avgAuthorship,
+            codingAbility: avgAuthorship,
+            conceptUnderstanding: avgAuthorship,
+            interviewReadiness: avgAuthorship
+          },
           passed: avgAuthorship >= 60,
           sourceInfo: {
             refType: 'LearningSession',
@@ -1552,27 +2116,70 @@ export const submitProjectDefenseAnswer = async (req, res) => {
           }
         });
       } catch (memErr) {
-        console.error('Failed to sync project defense score to mentor memory:', memErr.message);
+        console.error('Failed to sync scores to memory:', memErr.message);
       }
     } else {
-      // Prompt next question
-      progress.currentQuestionIndex += 1;
-      const nextQ = evalResult.nextQuestion || context.topQuestions?.[progress.currentQuestionIndex] || 'How does the authentication flow work in your application?';
-      const nextQText = typeof nextQ === 'object' ? nextQ.text : nextQ;
+      // Advance to next question (same subchunk or new subchunk/module)
+      currentModule = context.modules[currentModuleIndex];
       
+      // Lazy load subchunk candidates if empty
+      await ensureSubchunkCandidatesGenerated(session, currentModuleIndex, currentSubchunkIndex);
+      
+      currentSubchunk = currentModule.subchunks[currentSubchunkIndex];
+      currentSubchunk.status = 'active';
+
+      // Find the question candidate topic matching the target difficulty
+      const candidateObj = currentSubchunk.questionCandidates?.find(c => c.difficulty === nextDifficulty) ||
+                            currentSubchunk.questionCandidates?.[0] ||
+                            { topic: `${nextDifficulty} level codebase analysis` };
+
+      // Generate wording for the next question dynamically
+      const nextSubchunkFilesCode = getSubchunkFilesCode(context, currentSubchunk.files);
+      let formulatedQuestion = `Explain how files in ${currentSubchunk.subchunkName} fit into your architecture.`;
+      try {
+        const result = await generateDynamicQuestionWording({
+          blueprint: context.masterBlueprint,
+          knowledgeGraph: context.knowledgeGraph,
+          subchunkName: currentSubchunk.subchunkName,
+          filesCode: nextSubchunkFilesCode,
+          difficulty: nextDifficulty,
+          topic: candidateObj.topic
+        });
+        if (result && result.questionText) {
+          formulatedQuestion = result.questionText;
+        }
+      } catch (aiErr) {
+        console.warn('Failed to dynamically formulate next question, using fallback template:', aiErr.message);
+      }
+
+      // Record active question
+      currentSubchunk.activeQuestions.push({
+        difficulty: nextDifficulty,
+        questionText: formulatedQuestion,
+        askedAt: new Date()
+      });
+
+      progress.currentQuestionIndex += 1;
+
+      let nextMsgText = `**Feedback**: ${evalResult.feedback || 'Good response.'}\n\n`;
+      if (subchunkChanged) {
+        nextMsgText += `--- \n### Moving to Next Section\n**Module: ${currentModule.moduleName}** → **Subchunk: ${currentSubchunk.subchunkName}**.\n\n`;
+      }
+      nextMsgText += `Here is your next **[${nextDifficulty}]** question:\n\n**"${formulatedQuestion}"**`;
+
       session.messages.push({
         id: `a-def-next-${Date.now()}`,
         role: 'assistant',
-        text: `**Feedback**: ${evalResult.feedback || 'Good effort.'}\n\nHere is your next Project Defense question:\n\n**"${nextQText}"**`,
+        text: nextMsgText,
         timestamp: new Date()
       });
 
       await logTimelineEvent({
         userId: req.user._id,
         learningSessionId: session._id,
-        action: 'Completed project defense checkpoint',
+        action: 'Completed project defense progressive checkpoint',
         topic: session.topic,
-        detail: `Question ${currentQIdx + 1} of ${totalDefenseQuestions}`,
+        detail: `Question ${progress.currentQuestionIndex + 1} of ${progress.totalQuestions}`,
         status: 'active'
       });
     }
@@ -1583,49 +2190,30 @@ export const submitProjectDefenseAnswer = async (req, res) => {
 
     return res.status(200).json({ success: true, data: session });
   } catch (error) {
-    console.warn('Submit project defense AI evaluation failed:', error.message);
+    console.error('Submit project defense progressive evaluation failed:', error.message);
+    // Dynamic progressive fallback: save user response and return evaluation failed state to let client retry
     try {
       const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
       if (!session) {
         return res.status(404).json({ success: false, message: 'Learning session not found.' });
       }
-
-      const context = session.projectContext;
-      const progress = context.defenseProgress;
-      const currentQIdx = progress.currentQuestionIndex;
-
-      // Record the user answer without scoring
       session.messages.push({
-        id: `u-def-fallback-${Date.now()}`,
+        id: `u-def-fallback-err-${Date.now()}`,
         role: 'user',
         text: answer,
         timestamp: new Date()
       });
-
-      const totalDefenseQuestions = progress.totalQuestions || context.topQuestions?.length || 5;
-      const isLastQuestion = currentQIdx >= totalDefenseQuestions - 1;
-
-      // Do NOT advance progress or assign fabricated scores
-      // Show evaluation failure message with retry option
-      const evalFailedMsg = isLastQuestion
-        ? `### Evaluation unavailable\nI could not evaluate your final answer due to an AI service error. You may retry or try switching providers.\n\n**Your answer was:** ${answer}`
-        : `### Evaluation unavailable\nI could not evaluate your answer due to an AI service error. Your answer has been recorded but no score was assigned. Please retry or switch providers.\n\n**Your answer was:** ${answer}`;
-
       session.messages.push({
-        id: `a-def-eval-failed-${Date.now()}`,
+        id: `a-def-eval-failed-err-${Date.now()}`,
         role: 'assistant',
-        text: evalFailedMsg,
+        text: `### Evaluation unavailable\nI could not evaluate your answer due to an AI service rate limit or network error. Please click retry or try again in a few seconds.`,
         timestamp: new Date()
       });
-
-      session.markModified('projectContext');
-      session.markModified('messages');
       await session.save();
-
-      return res.status(200).json({ success: false, evaluationFailed: true, message: 'AI evaluation failed. Answer recorded but not scored. Please retry.', data: session });
+      return res.status(200).json({ success: false, evaluationFailed: true, message: 'AI evaluation failed. Click retry to resubmit.', data: session });
     } catch (fallbackErr) {
-      console.error('Submit project defense fallback save failed:', fallbackErr.message);
-      return res.status(500).json({ success: false, message: 'Failed to process project defense response.' });
+      console.error('Submit progressive fallback save failed:', fallbackErr.message);
+      return res.status(500).json({ success: false, message: 'Failed to evaluate response.' });
     }
   }
 };

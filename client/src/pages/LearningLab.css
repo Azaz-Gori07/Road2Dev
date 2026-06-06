@@ -4220,3 +4220,336 @@
   border-color: var(--border-focus) !important;
   color: #fff !important;
 }
+
+/* Progressive Chunking Visual Tree Styles */
+.pd-prog-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pd-prog-tree {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: left;
+}
+
+.pd-prog-tree__title {
+  font-size: 13.5px;
+  font-weight: 800;
+  margin: 0 0 12px 0;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pd-module-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pd-module-node {
+  border-left: 2px solid var(--border);
+  padding-left: 12px;
+}
+
+.pd-module-node__name {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pd-subchunk-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pd-subchunk-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  padding: 4px 0;
+  color: var(--text-muted);
+}
+
+.pd-subchunk-node.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.pd-subchunk-node.completed {
+  color: var(--success);
+}
+
+.pd-subchunk-node.pending {
+  color: var(--text-muted);
+}
+
+.pd-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.pd-status-dot.active {
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
+  animation: pulse-active-dot 1.5s infinite;
+}
+
+.pd-status-dot.completed {
+  background: var(--success);
+}
+
+.pd-status-dot.pending {
+  background: var(--text-muted);
+}
+
+@keyframes pulse-active-dot {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Master Project Blueprint styling */
+.pd-blueprint-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: left;
+}
+
+.pd-blueprint-card h4 {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pd-blueprint-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.pd-blueprint-item {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pd-blueprint-item span {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.pd-blueprint-item strong {
+  font-size: 11.5px;
+  color: var(--text-primary);
+}
+
+.pd-blueprint-summary {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+/* Project Knowledge Graph styling */
+.pd-graph-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: left;
+}
+
+.pd-graph-card h4 {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pd-graph-edges-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pd-graph-edge-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.pd-graph-node-badge {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.pd-graph-arrow {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.pd-graph-edge-type {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  background: var(--border);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* Question Difficulty Badges */
+.pd-diff-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.pd-diff-badge.easy {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.pd-diff-badge.medium {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.pd-diff-badge.hard {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--error);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Split Layout for Interview Workspace */
+.pd-interview-split {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  margin-top: 16px;
+  text-align: left;
+}
+
+.pd-interview-sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.pd-interview-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.pd-interview-sidebar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.pd-interview-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.pd-interview-main::-webkit-scrollbar {
+  width: 4px;
+}
+
+.pd-interview-main::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+/* Premium Project Defense Cleaner styles */
+.pd-question-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.pd-question-bubble__feedback {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.pd-question-bubble__card {
+  background: linear-gradient(135deg, rgba(88, 28, 135, 0.25) 0%, rgba(30, 27, 75, 0.4) 100%);
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  border-radius: 12px;
+  padding: 18px 22px;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.08);
+}
+
+.pd-question-bubble__module-header {
+  color: #c084fc;
+  font-weight: 800;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.pd-question-bubble__text {
+  color: #ffffff;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.6;
+}

@@ -1,0 +1,61 @@
+﻿[dotenv@17.2.3] injecting env (0) from .env -- tip: ΓÜÖ∩╕Å  write to custom object with { processEnv: myObject }
+node : ΓÜá∩╕Å DNS SRV resolution failed. Retrying with Google/Cloudflare public DNS servers...
+At line:1 char:1
++ node index.js 2>&1 | Out-File D:\Git-Projects\Road2Dev\server\server_ ...
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ΓÜá∩╕Å DNS SRV ... DNS servers...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Γ£ô Database connected successfully
+Γ£ô Ready to accept requests on port 5500
+Server is running on port 5500
+{"provider":"openrouter2","model":"qwen/qwen3-next-80b-a3b-instruct:free","latency":1235,"status":"failure"}
+Create learning session AI failed, using high-fidelity fallback welcome response: Request failed with status code 429
+{"provider":"openrouter2","model":"qwen/qwen3-next-80b-a3b-instruct:free","latency":720,"status":"failure"}
+Create learning session AI failed, using high-fidelity fallback welcome response: Request failed with status code 429
+[INGEST_DIAG] {"reqBodySizeBytes":184,"summarySizeBytes":266,"filesScanned":1,"fileContentsCount":1,"charsToAi":266,"provider":"groq","ingestionMethod":"local","projectName":"Verify Defence OR"}
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":1215,"status":"failure"}
+[RETRY] Architecture review attempt 1 failed: Request failed with status code 429. Retrying...
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":739,"status":"failure"}
+[RETRY] Architecture review attempt 2 failed: Request failed with status code 429. Retrying...
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":5517,"status":"success"}
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":7229,"status":"success"}
+{"provider":"openrouter2","model":"qwen/qwen3-next-80b-a3b-instruct:free","latency":857,"status":"failure"}
+Create learning session AI failed, using high-fidelity fallback welcome response: Request failed with status code 429
+{"provider":"openrouter2","model":"qwen/qwen3-next-80b-a3b-instruct:free","latency":933,"status":"failure"}
+Create learning session AI failed, using high-fidelity fallback welcome response: Request failed with status code 429
+{"provider":"openrouter2","model":"qwen/qwen3-next-80b-a3b-instruct:free","latency":708,"status":"failure"}
+Send chat message AI failed, using high-fidelity fallback response: Request failed with status code 429
+Create learning session AI failed, using high-fidelity fallback welcome response: Request failed with status code 429
+[INGEST_DIAG] {"reqBodySizeBytes":765,"summarySizeBytes":812,"filesScanned":4,"fileContentsCount":4,"charsToAi":812,"provider":"groq","ingestionMethod":"local","projectName":"Small Project (3 HTML/CSS/JS files)"}
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":1479,"status":"failure"}
+[RETRY] Architecture review attempt 1 failed: Request failed with status code 429. Retrying...
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":7988,"status":"success"}
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":11978,"status":"success"}
+Create learning session AI failed, using high-fidelity fallback welcome response: Request failed with status code 429
+[INGEST_DIAG] {"reqBodySizeBytes":11073,"summarySizeBytes":9445,"filesScanned":14,"fileContentsCount":14,"charsToAi":9445,"provider":"groq","ingestionMethod":"local","projectName":"Medium Project (React app, ~12 files)"}
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":10788,"status":"success"}
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":873,"status":"failure"}
+[RETRY] Question generation attempt 1 failed: Request failed with status code 429. Retrying...
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":819,"status":"failure"}
+[RETRY] Question generation attempt 2 failed: Request failed with status code 429. Retrying...
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":12595,"status":"success"}
+Create learning session AI failed, using high-fidelity fallback welcome response: Request failed with status code 429
+[INGEST_DIAG] {"reqBodySizeBytes":119938,"summarySizeBytes":11961,"filesScanned":120,"fileContentsCount":15,"charsToAi":11961,"provider":"groq","ingestionMethod":"local","projectName":"Large Portfolio Project (~150 files)"}
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":793,"status":"failure"}
+[RETRY] Architecture review attempt 1 failed: Request failed with status code 429. Retrying...
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":9678,"status":"success"}
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":743,"status":"failure"}
+[RETRY] Question generation attempt 1 failed: Request failed with status code 429. Retrying...
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":1083,"status":"failure"}
+[RETRY] Question generation attempt 2 failed: Request failed with status code 429. Retrying...
+{"provider":"openrouter","model":"moonshotai/kimi-k2.6:free","latency":725,"status":"failure"}
+Project ingestion AI failed (all providers): Request failed with status code 429
+{"provider":"openrouter2","model":"qwen/qwen3-next-80b-a3b-instruct:free","latency":1285,"status":"failure"}
+Create learning session AI failed, using high-fidelity fallback welcome response: Request failed with status code 429
+Interview generation failed: Rate limit reached for model `llama-3.3-70b-versatile` in organization 
+`org_01ka13h5c4e7mr2fgz4waqx5a8` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 94466, Requested 
+8464. Please try again in 42m11.52s. Need more tok
+Interview generation failed: Rate limit reached for model `llama-3.3-70b-versatile` in organization 
+`org_01ka13h5c4e7mr2fgz4waqx5a8` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 94444, Requested 
+8462. Please try again in 41m50.784s. Need more to

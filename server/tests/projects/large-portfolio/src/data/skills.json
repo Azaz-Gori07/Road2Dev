@@ -1,0 +1,42 @@
+{
+  "frontend": [
+    {"name":"React","level":95,"years":5,"projects":["E-Commerce Platform","Social Media Dashboard","Video Conferencing App"]},
+    {"name":"TypeScript","level":90,"years":4,"projects":["E-Commerce Platform","Financial Portfolio Tracker"]},
+    {"name":"Next.js","level":85,"years":3,"projects":["AI Content Generator","Real Estate Marketplace"]},
+    {"name":"Vue.js","level":75,"years":2,"projects":["Task Management System"]},
+    {"name":"Angular","level":70,"years":2,"projects":["Healthcare Portal"]},
+    {"name":"HTML/CSS","level":95,"years":7,"projects":["All Projects"]},
+    {"name":"Tailwind CSS","level":88,"years":3,"projects":["E-Commerce Platform","Social Media Dashboard"]},
+    {"name":"Redux","level":85,"years":4,"projects":["E-Commerce Platform","Financial Portfolio Tracker"]},
+    {"name":"GraphQL","level":80,"years":3,"projects":["Real Estate Marketplace"]},
+    {"name":"Webpack","level":78,"years":4,"projects":["All Projects"]},
+    {"name":"Jest","level":82,"years":3,"projects":["E-Commerce Platform","Social Media Dashboard"]},
+    {"name":"Cypress","level":75,"years":2,"projects":["E-Commerce Platform"]}
+  ],
+  "backend": [
+    {"name":"Node.js","level":92,"years":5,"projects":["E-Commerce Platform","IoT Device Manager","Learning Management System"]},
+    {"name":"Express","level":90,"years":5,"projects":["E-Commerce Platform","Task Management System","Learning Management System"]},
+    {"name":"Python","level":80,"years":3,"projects":["AI Content Generator","Financial Portfolio Tracker","Social Media Dashboard"]},
+    {"name":"PostgreSQL","level":85,"years":4,"projects":["Social Media Dashboard","Real Estate Marketplace","Video Conferencing App"]},
+    {"name":"MongoDB","level":88,"years":4,"projects":["E-Commerce Platform","Learning Management System"]},
+    {"name":"Redis","level":78,"years":3,"projects":["E-Commerce Platform","Financial Portfolio Tracker","Video Conferencing App"]},
+    {"name":"GraphQL","level":80,"years":3,"projects":["Real Estate Marketplace"]},
+    {"name":"Docker","level":82,"years":3,"projects":["Task Management System","Financial Portfolio Tracker","IoT Device Manager"]}
+  ],
+  "devops": [
+    {"name":"AWS","level":80,"years":3,"projects":["Real Estate Marketplace","Learning Management System"]},
+    {"name":"Docker","level":82,"years":3,"projects":["Task Management System","Financial Portfolio Tracker","IoT Device Manager"]},
+    {"name":"Kubernetes","level":65,"years":1,"projects":["IoT Device Manager"]},
+    {"name":"CI/CD","level":78,"years":3,"projects":["All Projects"]},
+    {"name":"Terraform","level":60,"years":1,"projects":["Real Estate Marketplace"]}
+  ],
+  "mobile": [
+    {"name":"React Native","level":72,"years":2,"projects":["Mobile E-Commerce App"]},
+    {"name":"Flutter","level":60,"years":1,"projects":["Fitness Tracking App"]}
+  ],
+  "ai_ml": [
+    {"name":"TensorFlow","level":55,"years":1,"projects":["AI Content Generator"]},
+    {"name":"LangChain","level":65,"years":1,"projects":["AI Content Generator"]},
+    {"name":"OpenAI API","level":70,"years":1,"projects":["AI Content Generator"]}
+  ]
+}

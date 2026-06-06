@@ -1,5 +1,33 @@
 import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { hybridGenerate } from './ai/hybridAiRouter.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const logDebugResponse = (text, errorMessage) => {
+  if (process.env.NODE_ENV === 'production') {
+    console.error('[AI_DEBUG] Parse failure. Set NODE_ENV=development to log responses to disk.');
+    return;
+  }
+  try {
+    const debugDir = path.join(__dirname, '..', 'ai-debug');
+    fs.mkdirSync(debugDir, { recursive: true });
+    const filename = `ai-response-${Date.now()}.json`;
+    fs.writeFileSync(
+      path.join(debugDir, filename),
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        error: errorMessage,
+        rawText: text ? text.substring(0, 50000) : null,
+      }, null, 2)
+    );
+    console.log(`[AI_DEBUG] Response saved to ai-debug/${filename}`);
+  } catch (logErr) {
+    console.error('[AI_DEBUG] Failed to write debug log:', logErr.message);
+  }
+};
 
 
 
@@ -16,7 +44,7 @@ const getDefaultModel = (provider) => {
   if (process.env.AI_MODEL?.trim()) return process.env.AI_MODEL.trim();
   const defaultModels = {
     gemini: 'gemini-1.5-flash',
-    groq: 'llama-3.3-70b-versatile',
+    groq: 'llama-3.1-8b-instant',
     openrouter: 'openai/gpt-4o-mini',
     openai: 'gpt-4o-mini',
   };
@@ -97,39 +125,54 @@ const callOpenAiCompatible = async ({ apiKey, model, provider, timeoutMs, prompt
   return response.data?.choices?.[0]?.message?.content;
 };
 
-const extractJson = (text) => {
+const extractJsonBraceDepth = (text) => {
   if (!text || typeof text !== 'string') {
     throw new Error('AI returned an empty response.');
   }
 
   const cleaned = text.trim().replace(/^```json\s*/i, '').replace(/```$/i, '').trim();
-  const firstBrace = cleaned.indexOf('{');
-  const lastBrace = cleaned.lastIndexOf('}');
 
-  if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
-    console.error('--- INVALID JSON RECEIVED ---');
-    console.error(text);
-    console.error('-----------------------------');
-    throw new Error('AI response was not valid JSON.');
-  }
+  let depth = 0;
+  let start = -1;
+  let inString = false;
+  let escaped = false;
 
-  const jsonStr = cleaned.slice(firstBrace, lastBrace + 1);
-  try {
-    return JSON.parse(jsonStr);
-  } catch (initialError) {
-    try {
-      const fixed = jsonStr.replace(/,\s*([\]}])/g, '$1');
-      return JSON.parse(fixed);
-    } catch (secondError) {
-      console.error('--- JSON PARSE ERROR DETECTED ---');
-      console.error('Raw AI Output:');
-      console.error(text);
-      console.error('Parse Error:', initialError.message);
-      console.error('---------------------------------');
-      throw new Error(`AI JSON parse failed: ${initialError.message}`);
+  for (let i = 0; i < cleaned.length; i++) {
+    const ch = cleaned[i];
+
+    if (escaped) { escaped = false; continue; }
+    if (ch === '\\' && inString) { escaped = true; continue; }
+    if (ch === '"') { inString = !inString; continue; }
+    if (inString) continue;
+
+    if (ch === '{') {
+      if (depth === 0) start = i;
+      depth++;
+    } else if (ch === '}') {
+      depth--;
+      if (depth === 0 && start !== -1) {
+        const jsonStr = cleaned.slice(start, i + 1);
+        try {
+          return JSON.parse(jsonStr);
+        } catch (parseErr) {
+          const fixed = jsonStr.replace(/,\s*([}\]])/g, '$1');
+          try {
+            return JSON.parse(fixed);
+          } catch (secondErr) {
+            logDebugResponse(text, secondErr.message);
+            throw new Error(`AI JSON parse failed: ${secondErr.message}`);
+          }
+        }
+      }
     }
   }
+
+  // Depth never returned to 0 — response was truncated or invalid
+  logDebugResponse(text, 'AI response was truncated or contains no valid JSON object (depth never returned to 0).');
+  throw new Error('AI response was truncated or invalid JSON.');
 };
+
+const extractJson = extractJsonBraceDepth;
 
 /**
  * AI Mentor: Concept explanation and challenge builder
@@ -288,73 +331,15 @@ Generate the mentor response. Respond to the candidate's last request. Output st
   return extractJson(text);
 };
 
-/**
- * Project Ingestion: Generates Project Ingestion Architecture Report
- */
-export const analyzeProjectSummary = async ({ projectSummaryText, repoUrl = '' }) => {
-  const apiKey = process.env.AI_API_KEY;
-  if (!apiKey) throw new Error('AI Service not configured.');
-
-  const provider = inferProvider(apiKey);
-  const model = getDefaultModel(provider);
-  const timeoutMs = Number(process.env.AI_TIMEOUT_MS) || 25000;
-
-  const systemPrompt = `
-You are a Senior Project Reviewer and Technical Architect.
-You are given a text summary of an ingested codebase structure, framework, list of files, and package configurations.
-Your goal is to parse this codebase summary and construct an advanced Project Understanding Architecture Report, top 25 defense questions, and first starter defense question.
-
-Ignore all generic patterns. Focus on the actual frameworks, configurations, components, APIs, state management, auth strategy, and DB usage present in the code.
-
-CRITICAL: Only report technologies and architecture elements that you can verify from the codebase summary. Do NOT hallucinate technologies like Redis, Kafka, Kubernetes, AWS, or Docker unless you see direct evidence in the files. Unsubstantiated claims will be rejected.
-
-You must respond in strict JSON only, using this schema:
-{
-  "architectureReport": {
-    "structure": "Clear markdown list detailing the project's folder layout and component organization.",
-    "libraries": ["List of core libraries scanned from package configurations"],
-    "frameworks": ["Frameworks used, e.g. React, Express, Next.js"],
-    "components": ["List of critical components or modules found in the source code"],
-    "apis": ["List of endpoint route paths or external api calls used"],
-    "stateManagement": "Zustand, Redux, Context API, Vuex, or None",
-    "auth": "JWT, Session Cookies, OAuth2, Firebase Auth, or None",
-    "database": "MongoDB, PostgreSQL, MySQL, Redis, SQLite, or None",
-    "summary": "1-2 paragraph professional architectural breakdown of what this project does and how it is organized."
-  },
-  "detectedTechnologies": ["8-14 technology badges inferred from the codebase, e.g. React 18, Vite, Express, MongoDB, JWT"],
-  "detectedFeatures": ["6-10 concrete product/engineering features detected, e.g. User auth flow, REST API layer, Admin dashboard"],
-  "potentialWeakAreas": ["5-8 specific weak areas or risks to probe in defense, e.g. Missing input validation on auth routes, No error boundary in client"],
-  "projectComplexity": {
-    "level": "Low | Moderate | High | Enterprise",
-    "score": 55,
-    "rationale": "1-2 sentences explaining complexity based on layers, integrations, file count, and architectural depth"
-  },
-  "topQuestions": [
-    "A list of EXACTLY 25 highly customized, project-specific defense questions probing details (e.g. 'Why did you use Redux in cart.js?', 'How does token validation in auth.js work?', 'Explain why MongoDB was selected instead of Postgres here.'). Absolutely NO generic questions. Each question should reference specific files or code patterns visible in the codebase."
-  ],
-  "starterDefenseQuestion": "Your first highly challenging project defense question to start the interview defense session. Choose something related to authentication, state, or database usage."
-}
-`.trim();
-
-  const prompt = `
-PROJECT CODEBASE SUMMARY:
-${projectSummaryText}
-Repo URL (if applicable): ${repoUrl}
-
-INSTRUCTION:
-Analyze this summary and compile the high-fidelity Architecture Report, Top 25 Questions list, and starter defense question. Output strict JSON.
-`.trim();
-
-  const { text } = await hybridGenerate({
-    prompt,
-    systemPrompt,
-    timeoutMs,
-    geminiModel: provider === 'gemini' ? model : undefined,
-    groqModel: provider === 'groq' ? model : undefined,
-    jsonResponse: true,
-  });
-
-  return extractJson(text);
+const getDefenceProviders = () => {
+  if (!process.env.DEFENCE_API_KEY) return {};
+  const providers = ['openrouter'];
+  if (process.env.AI_API_KEY_2) providers.push('openrouter2');
+  providers.push('groq');
+  return {
+    providers,
+    openRouterModel: process.env.DEFENCE_MODEL?.trim() || 'kimi-ai/kimi-k2.6-free'
+  };
 };
 
 /**
@@ -439,6 +424,7 @@ Provide the evaluation of the candidate's response. Output strict JSON matching 
     geminiModel: provider === 'gemini' ? model : undefined,
     groqModel: provider === 'groq' ? model : undefined,
     jsonResponse: true,
+    maxTokens: 2000,
   });
 
   return extractJson(text);
@@ -514,7 +500,308 @@ Generate the Career Coach profile scorecard. Output strict JSON.
     geminiModel: provider === 'gemini' ? model : undefined,
     groqModel: provider === 'groq' ? model : undefined,
     jsonResponse: true,
+    maxTokens: 3000,
   });
 
   return extractJson(text);
 };
+
+const enforceSafetyLimit = (prompt, systemPrompt, stage, subchunkName = 'General') => {
+  const combinedText = `${systemPrompt}\n\n${prompt}`;
+  const totalTokens = Math.ceil(combinedText.length / 4);
+  
+  console.log({
+    stage,
+    subchunk: subchunkName,
+    estimatedTokens: totalTokens
+  });
+
+  const maxPromptTokens = 4000;
+  const hardLimitTokens = 5000;
+
+  if (totalTokens <= maxPromptTokens) {
+    return { prompt, systemPrompt };
+  }
+
+  // Exceeds 4000: truncate prompt text safely
+  let truncatedPrompt = prompt;
+  const allowedChars = maxPromptTokens * 4 - systemPrompt.length - 200;
+  if (allowedChars > 500) {
+    const tempSlice = prompt.substring(0, allowedChars);
+    const lastBoundary = tempSlice.lastIndexOf('\n--- ');
+    if (lastBoundary > 100) {
+      truncatedPrompt = tempSlice.substring(0, lastBoundary) + '\n\n// [TRUNCATED FOR TOKENS SAFETY LIMIT]';
+    } else {
+      truncatedPrompt = tempSlice + '\n\n// [TRUNCATED FOR TOKENS SAFETY LIMIT]';
+    }
+  }
+
+  // Hard limit at 5000 tokens
+  const absoluteHardChars = hardLimitTokens * 4 - systemPrompt.length - 100;
+  const currentTokens = Math.ceil((systemPrompt.length + truncatedPrompt.length) / 4);
+  if (currentTokens > hardLimitTokens && absoluteHardChars > 500) {
+    truncatedPrompt = prompt.substring(0, absoluteHardChars) + '\n\n// [TRUNCATED - EXCEEDS HARD LIMIT]';
+  }
+
+  return { prompt: truncatedPrompt, systemPrompt };
+};
+
+/**
+ * Stage 1 Refactored: Generates Master Project Blueprint Summary & Knowledge Graph from Metadata manifest.
+ * Omit deterministic details (auth, database, frameworks) and question candidates (deferred to later lazy-generation).
+ */
+export const generateProjectStructuralMap = async ({ projectSummaryText, repoUrl = '', modulesList = [] }) => {
+  const apiKey = process.env.AI_API_KEY;
+  if (!apiKey) throw new Error('AI Service not configured.');
+
+  const provider = inferProvider(apiKey);
+  const model = getDefaultModel(provider);
+  const timeoutMs = Number(process.env.AI_TIMEOUT_MS) || 35000;
+
+  const systemPrompt = `
+You are a Senior Project Reviewer and Technical Architect.
+You are given a parsed repository metadata manifest (dependencies, languages, file structure, and logical module groups).
+Your goal is to parse this information and compile:
+1. A Master Project Blueprint (1-3 KB): A detailed list of major product features and a professional architectural summary of what this project does and how it is organized.
+2. A Project Knowledge Graph: Nodes representing module names (e.g., "Backend Server", "Frontend UI") and edges showing logical dependencies between them.
+
+You must respond in strict JSON only, using this schema:
+{
+  "masterBlueprint": {
+    "majorFeatures": ["User Auth", "Dashboard"],
+    "summary": "1-2 paragraphs breakdown of project architecture and design."
+  },
+  "knowledgeGraph": {
+    "nodes": ["Backend Server", "Frontend UI", "Configuration & Setup"],
+    "edges": [
+      { "from": "Frontend UI", "to": "Backend Server", "type": "requires_api" }
+    ]
+  }
+}
+`.trim();
+
+  const prompt = `
+PROJECT CODEBASE SUMMARY:
+${projectSummaryText}
+Repo URL (if applicable): ${repoUrl}
+
+PROJECT MODULES AND SUBCHUNKS:
+${JSON.stringify(modulesList, null, 2)}
+
+INSTRUCTION:
+Analyze this metadata summary and compile the Master Project Blueprint features, summary, and Project Knowledge Graph. Output strict JSON.
+`.trim();
+
+  const { text } = await hybridGenerate({
+    prompt,
+    systemPrompt,
+    timeoutMs,
+    ...getDefenceProviders(),
+    geminiModel: provider === 'gemini' ? model : undefined,
+    groqModel: provider === 'groq' ? model : undefined,
+    jsonResponse: true,
+    maxTokens: 1500,
+  });
+
+  return extractJson(text);
+};
+
+/**
+ * Lazy Question Candidates Generation: Generates question outlines (Easy, Medium, Hard topic/concepts)
+ * for a single active subchunk when it is first activated.
+ */
+export const generateSubchunkQuestionCandidates = async ({ blueprint, knowledgeGraph, subchunkName, filesCode }) => {
+  const apiKey = process.env.AI_API_KEY;
+  if (!apiKey) throw new Error('AI Service not configured.');
+
+  const provider = inferProvider(apiKey);
+  const model = getDefaultModel(provider);
+  const timeoutMs = Number(process.env.AI_TIMEOUT_MS) || 25000;
+
+  let systemPrompt = `
+You are a Senior Technical Architect and Interviewer.
+You are given:
+1. The Master Project Blueprint: ${JSON.stringify(blueprint)}
+2. The Project Knowledge Graph: ${JSON.stringify(knowledgeGraph)}
+3. The active Subchunk name: "${subchunkName}"
+
+Your goal is to analyze the source code of this specific subchunk and generate exactly 3 question candidates (Easy, Medium, Hard) that test the candidate's understanding of the code in these files.
+Each candidate should be a short topic or outline, not a full question (e.g. "JWT token validation logic in auth.js", "Express error handling middleware").
+
+You must respond in strict JSON only, using this schema:
+{
+  "candidates": [
+    { "topic": "Short Easy question topic/concept", "difficulty": "Easy" },
+    { "topic": "Short Medium question topic/concept", "difficulty": "Medium" },
+    { "topic": "Short Hard question topic/concept", "difficulty": "Hard" }
+  ]
+}
+`.trim();
+
+  let prompt = `
+SUBCHUNK FILES SOURCE CODE:
+${filesCode}
+
+INSTRUCTION:
+Generate 3 question candidates for the subchunk "${subchunkName}". Output strict JSON.
+`.trim();
+
+  const safe = enforceSafetyLimit(prompt, systemPrompt, 'generateSubchunkQuestionCandidates', subchunkName);
+  prompt = safe.prompt;
+  systemPrompt = safe.systemPrompt;
+
+  const { text } = await hybridGenerate({
+    prompt,
+    systemPrompt,
+    timeoutMs,
+    ...getDefenceProviders(),
+    geminiModel: provider === 'gemini' ? model : undefined,
+    groqModel: provider === 'groq' ? model : undefined,
+    jsonResponse: true,
+    maxTokens: 1500,
+  });
+
+  return extractJson(text);
+};
+
+/**
+ * Dynamic Question Formulation: Formulates the actual wording of a question based on a candidate topic and subchunk code.
+ */
+export const generateDynamicQuestionWording = async ({ blueprint, knowledgeGraph, subchunkName, filesCode, difficulty, topic }) => {
+  const apiKey = process.env.AI_API_KEY;
+  if (!apiKey) throw new Error('AI Service not configured.');
+
+  const provider = inferProvider(apiKey);
+  const model = getDefaultModel(provider);
+  const timeoutMs = Number(process.env.AI_TIMEOUT_MS) || 25000;
+
+  let systemPrompt = `
+You are a Senior Technical Interviewer conducting a Project Defence interview.
+You are given:
+1. The Master Project Blueprint: ${JSON.stringify(blueprint)}
+2. The Project Knowledge Graph: ${JSON.stringify(knowledgeGraph)}
+3. The active Subchunk name: "${subchunkName}"
+4. The full source code of key files in this subchunk.
+5. The target candidate topic and difficulty: "${topic}" (${difficulty}).
+
+Your goal is to formulate a single, highly specific, challenging, and file-level question based on the target topic.
+CRITICAL RULES:
+- The question MUST refer to specific files, functions, variables, or patterns present in the active subchunk's source files.
+- The tone should be professional, direct, and realistic for a technical interview.
+- Do NOT ask generic questions. Embed the code details in the question text.
+
+You must respond in strict JSON only, using this schema:
+{
+  "questionText": "Your formulated question here."
+}
+`.trim();
+
+  let prompt = `
+SUBCHUNK FILES SOURCE CODE:
+${filesCode}
+
+INSTRUCTION:
+Formulate the final question wording for the topic "${topic}" (${difficulty}) based on the blueprint, knowledge graph, and code above. Output strict JSON.
+`.trim();
+
+  const safe = enforceSafetyLimit(prompt, systemPrompt, 'generateDynamicQuestionWording', subchunkName);
+  prompt = safe.prompt;
+  systemPrompt = safe.systemPrompt;
+
+  const { text } = await hybridGenerate({
+    prompt,
+    systemPrompt,
+    timeoutMs,
+    ...getDefenceProviders(),
+    geminiModel: provider === 'gemini' ? model : undefined,
+    groqModel: provider === 'groq' ? model : undefined,
+    jsonResponse: true,
+    maxTokens: 1000,
+  });
+
+  return extractJson(text);
+};
+
+/**
+ * Progressive Answer Evaluation: Evaluates a candidate's response to a progressive question.
+ */
+export const evaluateProgressiveDefenseAnswer = async ({
+  blueprint,
+  subchunkName,
+  subchunkFilesCode,
+  currentQuestion,
+  answer,
+  difficulty,
+  userPreferences
+}) => {
+  const apiKey = process.env.AI_API_KEY;
+  if (!apiKey) throw new Error('AI Service not configured.');
+
+  const provider = inferProvider(apiKey);
+  const model = getDefaultModel(provider);
+  const timeoutMs = Number(process.env.AI_TIMEOUT_MS) || 25000;
+
+  const prefLang = userPreferences?.language || 'English';
+  const commMode = userPreferences?.communicationMode || 'Natural';
+
+  let systemPrompt = `
+You are a Senior Project Reviewer and Technical Critic.
+You are evaluating a candidate's answer to a Project Defence question for the subchunk "${subchunkName}".
+
+Context provided:
+1. Master Project Blueprint: ${JSON.stringify(blueprint)}
+2. Subchunk files code:
+${subchunkFilesCode}
+
+Question asked: "${currentQuestion}"
+Difficulty: "${difficulty}"
+Candidate's Answer: "${answer}"
+
+Your goal is to detect true authorship:
+- Does the candidate show genuine awareness of their own implementation, files, variables, and logic?
+- Or are they giving shallow, ChatGPT-like generic explanations?
+
+MULTILINGUAL & COMMUNICATION PREFERENCES:
+You must respect the candidate's communication settings:
+- Preferred Language (explanations/feedback): **${prefLang}**
+- Communication Mode: **${commMode}**
+
+### Mode Specific Instructions:
+- **Natural**: Adapt dynamically to the user's input. If the candidate answers in mixed Hindi + English (Hinglish), write your feedback in Hinglish.
+- **Learning Friendly**: Write your feedback and explanation primarily in Preferred Language (**${prefLang}**). Keep all code blocks and technical terms strictly in English.
+- **Interview Realistic**: Conduct evaluations in the target Interview Language. Scoring must focus on technical capabilities; do not penalize for using other languages.
+- **Industry Ready**: Feedback must be strictly in English, correcting any non-English phrasing to professional English.
+
+You must respond in strict JSON only, using this schema:
+{
+  "authorshipScore": 85, // 1-100 score on authorship confidence based on this answer.
+  "technicalCorrectness": 80, // 1-100
+  "projectAwareness": 90, // 1-100: does it match the subchunk files?
+  "architectureUnderstanding": 75, // 1-100
+  "implementationReasoning": 85, // 1-100
+  "tradeoffUnderstanding": 70, // 1-100
+  "feedback": "Honest, constructive feedback in target language/style."
+}
+`.trim();
+
+  let prompt = `
+Provide the evaluation of the candidate's response. Output strict JSON matching the instructions.
+`.trim();
+
+  const safe = enforceSafetyLimit(prompt, systemPrompt, 'evaluateProgressiveDefenseAnswer', subchunkName);
+  prompt = safe.prompt;
+  systemPrompt = safe.systemPrompt;
+
+  const { text } = await hybridGenerate({
+    prompt,
+    systemPrompt,
+    timeoutMs,
+    geminiModel: provider === 'gemini' ? model : undefined,
+    groqModel: provider === 'groq' ? model : undefined,
+    jsonResponse: true,
+    maxTokens: 1500,
+  });
+
+  return extractJson(text);
+};
+

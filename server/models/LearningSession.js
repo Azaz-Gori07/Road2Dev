@@ -126,6 +126,47 @@ const learningSessionSchema = new mongoose.Schema({
   
   // Project Ingestion Context
   projectContext: {
+    // Master Project Blueprint (1-3 KB)
+    masterBlueprint: {
+      frameworks: [String],
+      database: { type: String },
+      authStrategy: { type: String },
+      primaryArchitecturePattern: { type: String },
+      majorFeatures: [String],
+      criticalDependencies: [String],
+      summary: { type: String }
+    },
+    // Project Knowledge Graph
+    knowledgeGraph: {
+      nodes: [String],
+      edges: [{
+        from: { type: String },
+        to: { type: String },
+        type: { type: String }
+      }]
+    },
+    // 2-Level Modules & Subchunks
+    modules: [{
+      moduleName: { type: String },
+      subchunks: [{
+        subchunkName: { type: String },
+        files: [String],
+        status: { type: String, enum: ['pending', 'active', 'completed'], default: 'pending' },
+        candidatesGenerated: { type: Boolean, default: false },
+        candidatesGeneratedAt: { type: Date },
+        questionCandidates: [{
+          topic: { type: String },
+          difficulty: { type: String, enum: ['Easy', 'Medium', 'Hard'] }
+        }],
+        activeQuestions: [{
+          difficulty: { type: String },
+          questionText: { type: String },
+          askedAt: { type: Date }
+        }]
+      }]
+    }],
+    currentModuleIndex: { type: Number, default: 0 },
+    currentSubchunkIndex: { type: Number, default: 0 },
     projectName: { type: String },
     repoUrl: { type: String },
     ingestionMethod: { type: String, enum: ['github', 'local', ''], default: '' },
@@ -160,6 +201,9 @@ const learningSessionSchema = new mongoose.Schema({
       currentQuestionIndex: { type: Number, default: 0 },
       totalQuestions: { type: Number, default: 5 },
       evaluations: [{
+        moduleName: String,
+        subchunkName: String,
+        difficulty: String,
         question: String,
         answer: String,
         authorshipScore: Number,
@@ -192,11 +236,21 @@ const learningSessionSchema = new mongoose.Schema({
       status: { type: String, default: 'unverified' },
       reason: { type: String, default: '' }
     }],
+    projectClassification: {
+      type: { type: String, default: '' },
+      confidence: { type: String, enum: ['High', 'Medium', 'Low', 'Unknown', ''], default: '' },
+      evidence: [String]
+    },
     // Deterministic evidence for architecture claims
     detectedTechnologiesEvidence: [{
       name: { type: String },
       evidence: [String],
       paths: [String]
+    }],
+    // Persisted text file contents for progressive queries
+    fileContents: [{
+      path: { type: String },
+      content: { type: String }
     }]
   },
   

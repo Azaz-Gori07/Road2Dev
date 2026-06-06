@@ -167,7 +167,7 @@ const getDefaultModel = (provider) => {
 
   const defaultModels = {
     gemini: 'gemini-1.5-flash',
-    groq: 'llama-3.3-70b-versatile',
+    groq: 'llama-3.1-8b-instant',
     openrouter: 'openai/gpt-4o-mini',
     openai: 'gpt-4o-mini',
   };
@@ -611,7 +611,7 @@ export const evaluateResponseAndNext = async (request) => {
   const provider = inferProvider(apiKey);
   const model = getDefaultModel(provider);
 
-  const { field, stack, experienceLevel, interviewType, messages = [], previousSummaries = [], candidateName = 'Candidate' } = request;
+  const { field, stack, experienceLevel, interviewType, messages = [], previousSummaries = [], candidateName = 'Candidate', userPreferences } = request;
   const questionCount = messages.filter((m) => m.type === 'question').length;
   
   const systemPrompt = buildInterviewerSystemPrompt({
@@ -622,6 +622,7 @@ export const evaluateResponseAndNext = async (request) => {
     questionCount,
     previousSummaries,
     candidateName,
+    userPreferences,
   });
 
   const formattedHistory = formatConversationHistory(messages);
@@ -655,6 +656,7 @@ INSTRUCTION FOR THIS TURN:
       geminiModel: provider === 'gemini' ? model : undefined,
       groqModel: provider === 'groq' ? model : undefined,
       jsonResponse: true,
+      maxTokens: 2000,
     });
 
     const parsed = extractJson(text);
@@ -717,6 +719,7 @@ export const generateInterviewSession = async (request) => {
       geminiModel: provider === 'gemini' ? model : undefined,
       groqModel: provider === 'groq' ? model : undefined,
       jsonResponse: true,
+      maxTokens: 3000,
     });
 
     const parsed = extractJson(text);

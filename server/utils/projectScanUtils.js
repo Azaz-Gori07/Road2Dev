@@ -1,24 +1,25 @@
 const IGNORE_PATTERNS = [
   /node_modules/i,
-  /(^|\/)dist(\/|$)/i,
-  /(^|\/)build(\/|$)/i,
-  /(^|\/)coverage(\/|$)/i,
+  /(^|\/)(languages|language|locales|locale|translations|translation|i18n|mock-data|mock|fixtures|seeds|seed|generated|dist|build|coverage)(\/|$)/i,
   /(^|\/)assets(\/|$)/i,
   /(^|\/)public\/uploads/i,
   /\.git(\/|$)/i,
   /\.cache/i,
-  /package-lock\.json/i,
   /yarn\.lock/i,
   /pnpm-lock\.yaml/i,
   /bun\.lockb/i,
-  /\.(png|jpe?g|gif|svg|webp|woff2?|eot|ttf|mp3|mp4|webm|zip|tar\.gz|ico|map|pdf|exe|dll|so|dylib|bin|wasm)$/i
+  /\.(png|jpe?g|gif|svg|webp|mp4|mov|zip|pdf)$/i
 ];
 
 const TEXT_EXTENSIONS = /\.(jsx?|tsx?|mjs|cjs|json|md|mdx|css|scss|sass|less|html?|vue|svelte|yml|yaml|toml|env\.example|prisma|graphql|sql|sh|bat|ps1|dockerfile)$/i;
 
 const KEY_CONFIG_FILES = [
   'package.json',
+  'package-lock.json',
   'tsconfig.json',
+  'tsconfig.app.json',
+  'tsconfig.node.json',
+  'vite.config.json',
   'vite.config.js',
   'vite.config.ts',
   'next.config.js',
@@ -30,7 +31,36 @@ const KEY_CONFIG_FILES = [
   'requirements.txt'
 ];
 
-export const isIgnoredPath = (filePath) => IGNORE_PATTERNS.some((pattern) => pattern.test(filePath));
+const WHITELIST_JSON = [
+  'package.json',
+  'package-lock.json',
+  'tsconfig.json',
+  'tsconfig.app.json',
+  'tsconfig.node.json',
+  'vite.config.json'
+];
+
+export const isIgnoredPath = (filePath, size = 0) => {
+  const normalizedPath = filePath.replace(/\\/g, '/');
+  
+  // 1. Check general ignore patterns (directories & binary extensions)
+  if (IGNORE_PATTERNS.some((pattern) => pattern.test(normalizedPath))) {
+    return true;
+  }
+
+  // 2. Check JSON size limits
+  if (normalizedPath.toLowerCase().endsWith('.json')) {
+    const fileName = normalizedPath.split('/').pop().toLowerCase();
+    if (WHITELIST_JSON.includes(fileName)) {
+      return false; // Exempt from large JSON filters
+    }
+    if (size > 20000) {
+      return true; // Ignore JSON > 20KB
+    }
+  }
+
+  return false;
+};
 
 export const isTextSourcePath = (filePath) => TEXT_EXTENSIONS.test(filePath) || KEY_CONFIG_FILES.some((name) => filePath.endsWith(name));
 
@@ -54,10 +84,10 @@ export const buildProjectSummaryText = ({
 
   const contentBlocks = fileContents
     .slice(0, 12)
-    .map((f) => `\n--- ${f.path} ---\n${(f.content || '').slice(0, 4000)}`)
+    .map((f) => `\n--- ${f.path} ---\n${(f.content || '').slice(0, 2500)}`)
     .join('\n');
 
-  return `
+  let summary = `
 ${sourceLabel}
 ${repoUrl ? `Repository: ${repoUrl}` : ''}
 Scanned ${files.length} relevant files (ignored node_modules, dist, build, coverage, lock files, media, binaries).
@@ -68,6 +98,14 @@ ${fileLines || '(no files)'}
 Key file excerpts:
 ${contentBlocks || '(no excerpts)'}
 `.trim();
+
+  // Enforce a hard limit on the total characters sent to AI to prevent 413 Payload Too Large
+  const MAX_CHARS = 24000;
+  if (summary.length > MAX_CHARS) {
+    summary = summary.substring(0, MAX_CHARS) + '\n\n...[TRUNCATED DUE TO SIZE LIMITS]';
+  }
+  
+  return summary;
 };
 
 const TECH_EVIDENCE_PATTERNS = [
@@ -141,7 +179,7 @@ const LANGUAGE_BY_EXTENSION = {
   '.ps1': 'PowerShell',
 };
 
-const HIGH_RISK_CLAIMS = ['Redis', 'Kafka', 'Kubernetes', 'AWS', 'Docker'];
+const HIGH_RISK_CLAIMS = ['Redis', 'Kafka', 'Kubernetes', 'AWS'];
 
 /**
  * Detect technologies deterministically from scanned file contents.
