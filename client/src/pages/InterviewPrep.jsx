@@ -5,12 +5,15 @@ import { FiMic, FiSend, FiDownload, FiCheckCircle } from 'react-icons/fi';
 import useAuth from '../hooks/useAuth';
 import './InterviewPrep.css';
 import TypingIndicator from '../components/TypingIndicator';
+import VoiceDiagnosticsPanel from '../components/VoiceDiagnosticsPanel';
 import {
   isVoiceSupported,
   getLangLocaleCode,
   cleanTextForSpeech,
   speakTextHelper,
-  initSpeechRecognition
+  initSpeechRecognition,
+  getVoiceDiagnosticsData,
+  isLanguageAvailableForTTS
 } from '../utils/voiceEngine';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
@@ -640,6 +643,8 @@ const InterviewPrep = () => {
   const supported = typeof window !== 'undefined' &&
     'speechSynthesis' in window &&
     ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
+  const [showVoiceDiagnostics, setShowVoiceDiagnostics] = useState(false);
+  const [voiceWarning, setVoiceWarning] = useState('');
 
   const selectedFieldData = FIELDS.find((f) => f.id === selectedField);
   const selectedStackData = selectedFieldData?.stacks.find((s) => s.id === selectedStack);
@@ -890,6 +895,23 @@ const InterviewPrep = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [voiceModeEnabled, voiceState, supported]);
+
+  // Voice availability warning effect
+  useEffect(() => {
+    if (voiceModeEnabled && supported && user?.preferredLanguage && user.preferredLanguage !== 'English') {
+      const available = isLanguageAvailableForTTS(user.preferredLanguage);
+      if (!available) {
+        const msg = `Your browser/device does not have a voice installed for "${user.preferredLanguage}". Speech will use English.`;
+        setVoiceWarning(msg);
+        const timer = setTimeout(() => setVoiceWarning(''), 6000);
+        return () => clearTimeout(timer);
+      } else {
+        setVoiceWarning('');
+      }
+    } else {
+      setVoiceWarning('');
+    }
+  }, [voiceModeEnabled, supported, user?.preferredLanguage]);
 
   // Automatic Speech Playback Effect
   useEffect(() => {
@@ -2616,6 +2638,37 @@ const InterviewPrep = () => {
               >
                 🎤 Voice Mode: {voiceModeEnabled ? 'ON' : 'OFF'}
               </button>
+              {supported && (
+                <button
+                  type="button"
+                  onClick={() => setShowVoiceDiagnostics(!showVoiceDiagnostics)}
+                  style={{
+                    background: 'transparent',
+                    border: '1px solid var(--border)',
+                    color: 'var(--text-muted)',
+                    cursor: 'pointer',
+                    padding: '4px 8px',
+                    borderRadius: '6px',
+                    fontSize: '11px',
+                    fontWeight: '600',
+                    height: '28px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    transition: 'all 0.2s',
+                  }}
+                  title="Voice Diagnostics — view available voices and locales"
+                >
+                  ℹ️
+                </button>
+              )}
+              {showVoiceDiagnostics && (
+                <div style={{ width: '100%' }}>
+                  <VoiceDiagnosticsPanel
+                    preferredLanguage={user?.preferredLanguage}
+                    onClose={() => setShowVoiceDiagnostics(false)}
+                  />
+                </div>
+              )}
               {!supported && (
                 <span style={{ fontSize: '11px', color: '#f87171', display: 'block', width: '100%', textAlign: 'right' }}>
                   Voice Mode works best in Chrome, Edge, and Safari.
@@ -2656,7 +2709,27 @@ const InterviewPrep = () => {
             <div ref={chatEndRef} />
           </div>
 
-          <div className="chat-input-panel">
+          <div className="chat-input-panel" style={{ position: 'relative' }}>
+            {voiceWarning && (
+              <div style={{
+                position: 'absolute',
+                bottom: '100%',
+                left: 0,
+                right: 0,
+                padding: '6px 10px',
+                marginBottom: '6px',
+                background: 'rgba(245, 158, 11, 0.12)',
+                border: '1px solid rgba(245, 158, 11, 0.25)',
+                borderRadius: '6px',
+                fontSize: '10.5px',
+                color: '#f59e0b',
+                fontWeight: '500',
+                zIndex: 10,
+                pointerEvents: 'none',
+              }}>
+                ⚠️ {voiceWarning}
+              </div>
+            )}
             <div className="chat-input-row">
               <button
                 className={`icon-button ${voiceState === 'listening' ? 'listening' : ''}`}

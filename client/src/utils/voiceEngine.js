@@ -5,6 +5,52 @@ export const isVoiceSupported = () => {
     ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
 };
 
+// --- Module-level voice cache (async loading fix) ---
+let _cachedVoices = null;
+let _voicesLoaded = false;
+
+const _initVoiceCache = () => {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+  try {
+    const initial = window.speechSynthesis.getVoices();
+    if (initial.length > 0) {
+      _cachedVoices = initial;
+      _voicesLoaded = true;
+    }
+    window.speechSynthesis.addEventListener('voiceschanged', () => {
+      _cachedVoices = window.speechSynthesis.getVoices();
+      _voicesLoaded = true;
+    });
+  } catch (e) { /* some environments block addEventListener on speechSynthesis */ }
+};
+_initVoiceCache();
+
+const _getVoices = () => {
+  if (_cachedVoices) return _cachedVoices;
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return [];
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length > 0) {
+    _cachedVoices = voices;
+    _voicesLoaded = true;
+  }
+  return voices;
+};
+
+export const areVoicesLoaded = () => _voicesLoaded;
+export const waitForVoices = (timeoutMs = 3000) => {
+  return new Promise((resolve) => {
+    if (_voicesLoaded) return resolve(true);
+    const timer = setTimeout(() => resolve(false), timeoutMs);
+    const handler = () => {
+      clearTimeout(timer);
+      resolve(true);
+    };
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      try { window.speechSynthesis.addEventListener('voiceschanged', handler, { once: true }); } catch (e) { clearTimeout(timer); resolve(false); }
+    } else { clearTimeout(timer); resolve(false); }
+  });
+};
+
 // Maps supported user languages to standard BCP-47 locale codes
 export const getLangLocaleCode = (langName) => {
   const langMap = {
@@ -25,6 +71,86 @@ export const getLangLocaleCode = (langName) => {
     'Vietnamese': 'vi-VN'
   };
   return langMap[langName] || 'en-US';
+};
+
+// Returns all available browser voices with metadata
+export const getAvailableVoices = () => {
+  const voices = _getVoices();
+  return voices.map(v => ({
+    name: v.name,
+    lang: v.lang,
+    voiceURI: v.voiceURI,
+    default: v.default,
+    localService: v.localService,
+  }));
+};
+
+// Finds the best matching voice for a given language name
+// Priority: exact locale match → language prefix match → English fallback → null
+export const getBestVoiceMatch = (langName) => {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+    return { voice: null, log: { requested: langName, targetLocale: getLangLocaleCode(langName), voicesAvailable: 0, selected: null, fallbackReason: 'SpeechSynthesis API not available' } };
+  }
+
+  const targetLocale = getLangLocaleCode(langName);
+  const voices = _getVoices();
+  const log = {
+    requested: langName,
+    targetLocale,
+    voicesAvailable: voices.length,
+    selected: null,
+    fallbackReason: null,
+  };
+
+  // 1. Exact locale match (e.g. "hi-IN")
+  const exact = voices.find(v => v.lang === targetLocale);
+  if (exact) {
+    log.selected = { name: exact.name, lang: exact.lang };
+    return { voice: exact, log };
+  }
+
+  // 2. Language prefix match (e.g. "hi")
+  const langPrefix = targetLocale.split('-')[0];
+  const prefixMatch = voices.find(v => v.lang.startsWith(langPrefix));
+  if (prefixMatch) {
+    log.selected = { name: prefixMatch.name, lang: prefixMatch.lang };
+    return { voice: prefixMatch, log };
+  }
+
+  // 3. English fallback if this is not already English
+  if (langPrefix !== 'en') {
+    const enVoice = voices.find(v => v.lang.startsWith('en'));
+    if (enVoice) {
+      log.selected = { name: enVoice.name, lang: enVoice.lang };
+      log.fallbackReason = `Your browser/device does not have a voice installed for "${langName}" (${targetLocale}). Falling back to English.`;
+      return { voice: enVoice, log };
+    }
+  }
+
+  // 4. No voice at all
+  log.fallbackReason = 'No suitable voice found on this device for any language.';
+  return { voice: null, log };
+};
+
+// Returns comprehensive voice diagnostics data
+export const getVoiceDiagnosticsData = () => {
+  const voices = getAvailableVoices();
+  const sttAvailable = typeof window !== 'undefined' &&
+    ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
+  const ttsAvailable = typeof window !== 'undefined' && 'speechSynthesis' in window;
+  return {
+    ttsSupported: ttsAvailable,
+    sttSupported: sttAvailable,
+    totalVoices: voices.length,
+    voices,
+  };
+};
+
+// Checks if TTS has any voice available for a given language
+export const isLanguageAvailableForTTS = (langName) => {
+  if (!_voicesLoaded) return true; // Assume available until we know — prevents false warning banner
+  const { voice } = getBestVoiceMatch(langName);
+  return voice !== null;
 };
 
 // Strip markdown code blocks completely and sanitize text for speech synthesis
@@ -67,7 +193,7 @@ export const cleanTextForSpeech = (text, limitLength = true) => {
 export const speakTextHelper = (text, langName, onStart, onEnd, onError, limitLength = false) => {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) return null;
 
-  window.speechSynthesis.cancel(); // Stop any ongoing speech
+  window.speechSynthesis.cancel();
 
   const cleanedText = cleanTextForSpeech(text, limitLength);
   if (!cleanedText) {
@@ -75,18 +201,50 @@ export const speakTextHelper = (text, langName, onStart, onEnd, onError, limitLe
     return null;
   }
 
+  const { voice, log } = getBestVoiceMatch(langName);
+
+  // If voices aren't loaded yet, wait and retry
+  if (log.voicesAvailable === 0 && !_voicesLoaded && typeof window !== 'undefined') {
+    let cancelled = false;
+    const retry = () => {
+      try { window.speechSynthesis.removeEventListener('voiceschanged', retry); } catch (e) {}
+      if (!cancelled) speakTextHelper(text, langName, onStart, onEnd, onError, limitLength);
+    };
+    try { window.speechSynthesis.addEventListener('voiceschanged', retry); } catch (e) { /* ignore */ }
+    setTimeout(() => {
+      if (!_voicesLoaded && !cancelled) {
+        cancelled = true;
+        try { window.speechSynthesis.removeEventListener('voiceschanged', retry); } catch (e) {}
+        doSpeak(cleanedText, { voice: null, log }, onStart, onEnd, onError);
+      }
+    }, 3000);
+    return null;
+  }
+
+  return doSpeak(cleanedText, { voice, log }, onStart, onEnd, onError);
+};
+
+// Internal: does the actual window.speechSynthesis.speak() call
+const doSpeak = (cleanedText, { voice, log }, onStart, onEnd, onError) => {
+  console.log(`[VOICE_TTS] Requested: "${log.requested}" | Locale: "${log.targetLocale}" | Voices: ${log.voicesAvailable}`);
+  if (log.selected) {
+    console.log(`[VOICE_TTS] Selected voice: "${log.selected.name}" (${log.selected.lang})`);
+  }
+  if (log.fallbackReason) {
+    console.warn(`[VOICE_TTS] ${log.fallbackReason}`);
+  }
+
   const utterance = new SpeechSynthesisUtterance(cleanedText);
-  const targetLocale = getLangLocaleCode(langName);
-  utterance.lang = targetLocale;
 
-  // Bind the best available system voice matching language
-  const voices = window.speechSynthesis.getVoices();
-  const matchedVoice = voices.find(v => v.lang.startsWith(targetLocale.split('-')[0])) || 
-                       voices.find(v => v.lang === targetLocale) ||
-                       null;
+  // Set lang to the TARGET locale regardless of voice.
+  utterance.lang = log.targetLocale;
 
-  if (matchedVoice) {
-    utterance.voice = matchedVoice;
+  // Only assign voice if it supports the target language (exact or prefix match).
+  // For fallback (e.g. English voice for Hindi), do NOT assign voice —
+  // let the browser use its default for the target locale.
+  const targetPrefix = log.targetLocale.split('-')[0];
+  if (voice && voice.lang.startsWith(targetPrefix)) {
+    utterance.voice = voice;
   }
 
   utterance.onstart = () => onStart?.();
@@ -104,10 +262,24 @@ export const initSpeechRecognition = (langName, onStart, onEnd, onResult, onErro
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) return null;
 
+  const targetLocale = getLangLocaleCode(langName);
+
+  console.log(`[VOICE_STT] Requested language: "${langName}"`);
+  console.log(`[VOICE_STT] Target locale: "${targetLocale}"`);
+
+  // Check if TTS has a voice for this language — used as a hint for STT support
+  const { voice, log: ttsLog } = getBestVoiceMatch(langName);
+  let effectiveLocale = targetLocale;
+
+  if (!voice && langName !== 'English') {
+    console.warn(`[VOICE_STT] WARNING: No TTS voice available for "${langName}" (${targetLocale}). Speech recognition may not work for this language. Falling back to en-US.`);
+    effectiveLocale = 'en-US';
+  }
+
   const recognition = new SpeechRecognition();
   recognition.continuous = false;
   recognition.interimResults = false;
-  recognition.lang = getLangLocaleCode(langName);
+  recognition.lang = effectiveLocale;
 
   recognition.onstart = () => onStart?.();
   recognition.onend = () => onEnd?.();

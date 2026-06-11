@@ -94,54 +94,6 @@ export function AuthProvider({ children }) {
 
     oauthRef.current = oauth;
 
-    const isZenuxAuth = oauth.isAuthenticated();
-
-    // Helper to exchange Zenuxs token for our local JWT token
-    const exchangeZenuxsToken = async (zenuxsToken) => {
-      try {
-        setLoading(true);
-        const res = await fetch(`${API_BASE}/auth/zenuxs`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token: zenuxsToken }),
-        });
-        const data = await res.json();
-        if (res.ok && data.token) {
-          if (active) {
-            localStorage.setItem('auth_token', data.token);
-            localStorage.setItem('auth_user', JSON.stringify(data.user));
-            setTokens(data.token);
-            setUser(data.user);
-            setIsAuthenticated(true);
-          }
-        } else {
-          if (active) clearSession();
-        }
-      } catch (err) {
-        console.error('Failed to exchange Zenuxs token:', err);
-        if (active) clearSession();
-      } finally {
-        if (active) setLoading(false);
-      }
-    };
-
-    if (isZenuxAuth) {
-      const storedTokens = oauth.getTokens();
-      const accessToken = storedTokens?.access_token || storedTokens;
-
-      if (!isLocalAuthenticated && accessToken) {
-        exchangeZenuxsToken(accessToken);
-      } else {
-        oauth.getUserInfo()
-          .then((userInfo) => {
-            if (active) setUser(userInfo);
-          })
-          .catch(() => {
-            if (active) setUser(null);
-          });
-      }
-    }
-
     // Zenux Event Listeners
     oauth.on('login', async (tokenData) => {
       const accessToken = tokenData?.access_token || tokenData;
@@ -175,9 +127,66 @@ export function AuthProvider({ children }) {
       console.error('OAuth error:', error);
     });
 
-    if (!isLocalAuthenticated && !isZenuxAuth) {
-      setLoading(false);
-    }
+    // Helper to exchange Zenuxs token for our local JWT token
+    const exchangeZenuxsToken = async (zenuxsToken) => {
+      try {
+        setLoading(true);
+        const res = await fetch(`${API_BASE}/auth/zenuxs`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: zenuxsToken }),
+        });
+        const data = await res.json();
+        if (res.ok && data.token) {
+          if (active) {
+            localStorage.setItem('auth_token', data.token);
+            localStorage.setItem('auth_user', JSON.stringify(data.user));
+            setTokens(data.token);
+            setUser(data.user);
+            setIsAuthenticated(true);
+          }
+        } else {
+          if (active) clearSession();
+        }
+      } catch (err) {
+        console.error('Failed to exchange Zenuxs token:', err);
+        if (active) clearSession();
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+
+    // Call init to handle same-page callbacks and restore session state
+    oauth.init().then(() => {
+      if (!active) return;
+      const isZenuxAuth = oauth.isAuthenticated();
+      if (isZenuxAuth) {
+        const storedTokens = oauth.getTokens();
+        const accessToken = storedTokens?.access_token || storedTokens;
+
+        if (!isLocalAuthenticated && accessToken) {
+          exchangeZenuxsToken(accessToken);
+        } else {
+          oauth.getUserInfo()
+            .then((userInfo) => {
+              if (active) setUser(userInfo);
+            })
+            .catch(() => {
+              if (active) setUser(null);
+            })
+            .finally(() => {
+              if (active) setLoading(false);
+            });
+        }
+      } else if (!isLocalAuthenticated) {
+        setLoading(false);
+      }
+    }).catch((err) => {
+      console.error('ZenuxOAuth initialization error:', err);
+      if (active && !isLocalAuthenticated) {
+        setLoading(false);
+      }
+    });
 
     return () => {
       active = false;
@@ -302,7 +311,7 @@ export function AuthProvider({ children }) {
     if (!oauth) throw new Error('OAuth not initialized');
 
     const options = {
-      popup: true,
+      mode: 'popup',
       popupWidth: 600,
       popupHeight: 700,
     };

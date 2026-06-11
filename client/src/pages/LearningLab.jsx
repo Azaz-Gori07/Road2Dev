@@ -15,12 +15,15 @@ import { isProjectScanned } from '../utils/projectScanProgress';
 import { parseProjectDefenseQuestionMessage } from '../utils/projectDefenseWordingCleaner';
 import './LearningLab.css';
 import TypingIndicator from '../components/TypingIndicator';
+import VoiceDiagnosticsPanel from '../components/VoiceDiagnosticsPanel';
 import {
   isVoiceSupported,
   getLangLocaleCode,
   cleanTextForSpeech,
   speakTextHelper,
-  initSpeechRecognition
+  initSpeechRecognition,
+  getVoiceDiagnosticsData,
+  isLanguageAvailableForTTS
 } from '../utils/voiceEngine';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
@@ -268,6 +271,8 @@ function LearningLab() {
   const supported = typeof window !== 'undefined' &&
     'speechSynthesis' in window &&
     ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
+  const [showVoiceDiagnostics, setShowVoiceDiagnostics] = useState(false);
+  const [voiceWarning, setVoiceWarning] = useState('');
 
   const messagesEndRef = useRef(null);
   const currentRouteWorkflowTab = getRouteWorkflowTab(location.pathname);
@@ -399,6 +404,23 @@ function LearningLab() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [voiceModeEnabled, voiceState, supported]);
+
+  // Voice availability warning effect
+  useEffect(() => {
+    if (voiceModeEnabled && supported && authUser?.preferredLanguage && authUser.preferredLanguage !== 'English') {
+      const available = isLanguageAvailableForTTS(authUser.preferredLanguage);
+      if (!available) {
+        const msg = `Your browser/device does not have a voice installed for "${authUser.preferredLanguage}". Speech will use English.`;
+        setVoiceWarning(msg);
+        const timer = setTimeout(() => setVoiceWarning(''), 6000);
+        return () => clearTimeout(timer);
+      } else {
+        setVoiceWarning('');
+      }
+    } else {
+      setVoiceWarning('');
+    }
+  }, [voiceModeEnabled, supported, authUser?.preferredLanguage]);
 
   // Automatic Speech Playback Effect
   useEffect(() => {
@@ -2103,6 +2125,36 @@ function LearningLab() {
                     >
                       🎤 {voiceModeEnabled ? 'Voice: ON' : 'Voice: OFF'}
                     </button>
+                    {supported && (
+                      <button
+                        type="button"
+                        onClick={() => setShowVoiceDiagnostics(!showVoiceDiagnostics)}
+                        style={{
+                          background: 'transparent',
+                          border: '1px solid var(--border)',
+                          color: 'var(--text-muted)',
+                          cursor: 'pointer',
+                          padding: '6px 8px',
+                          borderRadius: '6px',
+                          fontSize: '11px',
+                          fontWeight: '600',
+                          height: '32px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          transition: 'all 0.2s',
+                        }}
+                        title="Voice Diagnostics — view available voices and locales"
+                      >
+                        ℹ️
+                      </button>
+                    )}
+                    {showVoiceDiagnostics && (
+                      <VoiceDiagnosticsPanel
+                        preferredLanguage={authUser?.preferredLanguage}
+                        onClose={() => setShowVoiceDiagnostics(false)}
+                      />
+                    )}
                     {!supported && (
                       <span style={{ fontSize: '10px', color: '#f87171' }} title="Voice Mode works best in Chrome, Edge, and Safari.">
                         (Unsupported)
@@ -2253,7 +2305,27 @@ function LearningLab() {
                       </button>
                     </div>
                   ) : (
-                    <form onSubmit={handleSendMessage} className="chat-input-wrapper">
+                    <form onSubmit={handleSendMessage} className="chat-input-wrapper" style={{ position: 'relative' }}>
+                      {voiceWarning && (
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '100%',
+                          left: 0,
+                          right: 0,
+                          padding: '6px 10px',
+                          marginBottom: '6px',
+                          background: 'rgba(245, 158, 11, 0.12)',
+                          border: '1px solid rgba(245, 158, 11, 0.25)',
+                          borderRadius: '6px',
+                          fontSize: '10.5px',
+                          color: '#f59e0b',
+                          fontWeight: '500',
+                          zIndex: 10,
+                          pointerEvents: 'none',
+                        }}>
+                          ⚠️ {voiceWarning}
+                        </div>
+                      )}
                       {voiceModeEnabled && supported && (
                         <button
                           type="button"
