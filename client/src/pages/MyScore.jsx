@@ -37,20 +37,14 @@ const styles = `
 }
 
   .dash {
-  background:
-    radial-gradient(
-      circle at top right,
-      var(--primary-translucent),
-      transparent 30%
-    ),
-    var(--background);
-}
-
-  .dash {
     display: grid;
     grid-template-rows: 52px 1fr;
     height: 100vh;
-    background: var(--bg0);
+    background: radial-gradient(
+      circle at top right,
+      var(--primary-translucent),
+      transparent 30%
+    ), var(--bg0);
     overflow: hidden;
   }
 

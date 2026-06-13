@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { error } from '../utils/response.js';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -8,7 +9,7 @@ const auth = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Authentication required. No token provided.' });
+      return error(res, { message: 'Authentication required. No token provided.', status: 401 });
     }
 
     const token = authHeader.split(' ')[1];
@@ -18,19 +19,19 @@ const auth = async (req, res, next) => {
     const user = await User.findById(decoded.id);
 
     if (!user) {
-      return res.status(401).json({ error: 'User not found. Token is invalid.' });
+      return error(res, { message: 'User not found. Token is invalid.', status: 401 });
     }
 
     req.user = user;
     next();
-  } catch (error) {
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(401).json({ error: 'Invalid token' });
+  } catch (err) {
+    if (err.name === 'JsonWebTokenError') {
+      return error(res, { message: 'Invalid token', status: 401 });
     }
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ error: 'Token has expired' });
+    if (err.name === 'TokenExpiredError') {
+      return error(res, { message: 'Token has expired', status: 401 });
     }
-    return res.status(500).json({ error: 'Authentication failed' });
+    return error(res, { message: 'Authentication failed', status: 500 });
   }
 };
 
@@ -47,12 +48,12 @@ const optionalAuth = async (req, res, next) => {
       }
     }
     next();
-  } catch (error) {
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(401).json({ error: 'Invalid token' });
+  } catch (err) {
+    if (err.name === 'JsonWebTokenError') {
+      return error(res, { message: 'Invalid token', status: 401 });
     }
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ error: 'Token has expired' });
+    if (err.name === 'TokenExpiredError') {
+      return error(res, { message: 'Token has expired', status: 401 });
     }
     next();
   }

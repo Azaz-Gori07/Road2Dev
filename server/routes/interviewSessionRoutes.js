@@ -1,5 +1,6 @@
 import express from 'express';
 import auth from '../middleware/auth.js';
+import { draftLimiter, publishLimiter } from '../middleware/rateLimiter.js';
 import {
   createInterviewSession,
   getInterviewSession,
@@ -13,9 +14,9 @@ const router = express.Router();
 router.use(auth);
 
 router.get('/', getInterviewSessions);
-router.post('/', createInterviewSession);
+router.post('/', draftLimiter, createInterviewSession);
 router.get('/:id', getInterviewSession);
-router.put('/:id', updateInterviewSession);
-router.delete('/:id', deleteInterviewSession);
+router.put('/:id', draftLimiter, updateInterviewSession);
+router.delete('/:id', publishLimiter, deleteInterviewSession);
 
 export default router;

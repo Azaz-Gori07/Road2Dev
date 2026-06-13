@@ -4,6 +4,7 @@ import Otp from '../models/Otp.js';
 import User from '../models/User.js';
 import { sendOtpEmail } from '../utils/mailer.js';
 import jwt from 'jsonwebtoken';
+import { success, error } from '../utils/response.js';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -17,6 +18,11 @@ const generateOtp = () => {
   return crypto.randomInt(100000, 1000000).toString();
 };
 
+// Helper: Hash OTP for storage (never store plaintext)
+const hashOtp = (otp) => {
+  return crypto.createHash('sha256').update(otp).digest('hex');
+};
+
 /**
  * POST /api/auth/send-otp
  * Send OTP to email for registration
@@ -26,17 +32,17 @@ export const sendOtp = async (req, res) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ error: 'Name, email, and password are required' });
+      return error(res, { message: 'Name, email, and password are required', status: 400 });
     }
 
     if (password.length < 6) {
-      return res.status(400).json({ error: 'Password must be at least 6 characters' });
+      return error(res, { message: 'Password must be at least 6 characters', status: 400 });
     }
 
     // Check if email already registered
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: 'An account with this email already exists' });
+      return error(res, { message: 'An account with this email already exists', status: 400 });
     }
 
     // Delete any previous OTPs for this email
@@ -51,7 +57,7 @@ export const sendOtp = async (req, res) => {
 
     await Otp.create({
       email,
-      otp,
+      otp: hashOtp(otp),
       name,
       password: hashedPassword,
       expiresAt,
@@ -65,16 +71,13 @@ export const sendOtp = async (req, res) => {
       console.warn('OTP email could not be sent. Check EMAIL_USER/EMAIL_PASS in .env');
     }
 
-    res.json({
-      message: 'OTP sent successfully to your email',
-      email,
-    });
+    return success(res, { message: 'OTP sent successfully to your email', data: { email } });
   } catch (error) {
     console.error('Send OTP error:', error.message);
     if (error.code === 11000) {
-      return res.status(400).json({ error: 'An account with this email already exists' });
+      return error(res, { message: 'An account with this email already exists', status: 400 });
     }
-    res.status(500).json({ error: 'Failed to send OTP. Please try again.' });
+    return error(res, { message: 'Failed to send OTP. Please try again.', status: 500 });
   }
 };
 
@@ -87,33 +90,33 @@ export const verifyOtp = async (req, res) => {
     const { email, otp } = req.body;
 
     if (!email || !otp) {
-      return res.status(400).json({ error: 'Email and OTP are required' });
+      return error(res, { message: 'Email and OTP are required', status: 400 });
     }
 
     // Find the OTP record
     const otpRecord = await Otp.findOne({ email, verified: false });
 
     if (!otpRecord) {
-      return res.status(400).json({ error: 'No OTP found. Please request a new one.' });
+      return error(res, { message: 'No OTP found. Please request a new one.', status: 400 });
     }
 
     // Check expiry
     if (new Date() > otpRecord.expiresAt) {
       await Otp.deleteOne({ _id: otpRecord._id });
-      return res.status(400).json({ error: 'OTP has expired. Please request a new one.' });
+      return error(res, { message: 'OTP has expired. Please request a new one.', status: 400 });
     }
 
     // Check attempts (max 5)
     if (otpRecord.attempts >= 5) {
       await Otp.deleteOne({ _id: otpRecord._id });
-      return res.status(400).json({ error: 'Too many failed attempts. Please request a new OTP.' });
+      return error(res, { message: 'Too many failed attempts. Please request a new OTP.', status: 400 });
     }
 
     // Verify OTP
-    if (otpRecord.otp !== otp) {
+    if (otpRecord.otp !== hashOtp(otp)) {
       otpRecord.attempts += 1;
       await otpRecord.save();
-      return res.status(400).json({ error: 'Invalid OTP. Please try again.' });
+      return error(res, { message: 'Invalid OTP. Please try again.', status: 400 });
     }
 
     // Mark as verified
@@ -126,6 +129,7 @@ export const verifyOtp = async (req, res) => {
       email: otpRecord.email,
       password: otpRecord.password,
       authProvider: 'local',
+      emailVerified: true,
     });
 
     // Delete OTP record
@@ -133,21 +137,17 @@ export const verifyOtp = async (req, res) => {
 
     const token = generateToken(user._id);
 
-    res.status(201).json({
-      message: 'Account created successfully',
-      token,
-      user: user.toJSON(),
-    });
+    return success(res, { message: 'Account created successfully', data: { token, user: user.toJSON() }, status: 201 });
   } catch (error) {
     console.error('Verify OTP error:', error.message);
     if (error.code === 11000) {
-      return res.status(400).json({ error: 'An account with this email already exists' });
+      return error(res, { message: 'An account with this email already exists', status: 400 });
     }
     if (error.name === 'ValidationError') {
       const messages = Object.values(error.errors).map(e => e.message);
-      return res.status(400).json({ error: messages.join('. ') });
+      return error(res, { message: messages.join('. '), status: 400 });
     }
-    res.status(500).json({ error: 'Verification failed. Please try again.' });
+    return error(res, { message: 'Verification failed. Please try again.', status: 500 });
   }
 };
 
@@ -160,21 +160,21 @@ export const resendOtp = async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ error: 'Email is required' });
+      return error(res, { message: 'Email is required', status: 400 });
     }
 
     // Find existing OTP record
     const otpRecord = await Otp.findOne({ email, verified: false });
 
     if (!otpRecord) {
-      return res.status(400).json({ error: 'No pending registration found. Please start again.' });
+      return error(res, { message: 'No pending registration found. Please start again.', status: 400 });
     }
 
     // Generate new OTP
     const otp = generateOtp();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-    otpRecord.otp = otp;
+    otpRecord.otp = hashOtp(otp);
     otpRecord.expiresAt = expiresAt;
     otpRecord.attempts = 0;
     await otpRecord.save();
@@ -182,12 +182,9 @@ export const resendOtp = async (req, res) => {
     // Send OTP email
     await sendOtpEmail(email, otp);
 
-    res.json({
-      message: 'OTP resent successfully',
-      email,
-    });
+    return success(res, { message: 'OTP resent successfully', data: { email } });
   } catch (error) {
     console.error('Resend OTP error:', error.message);
-    res.status(500).json({ error: 'Failed to resend OTP. Please try again.' });
+    return error(res, { message: 'Failed to resend OTP. Please try again.', status: 500 });
   }
 };

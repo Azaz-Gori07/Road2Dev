@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import styles from "./Auth.module.css";
 import useZenuxAuth from "../hooks/useZenuxAuth";
 import useAuth from "../hooks/useAuth";
@@ -362,8 +362,33 @@ function SignupPanel({ go, onGoogleLogin, onGitHubLogin, onLinkedInLogin, authLo
   );
 }
 
-function ForgotPanel({ go }) {
+function ForgotPanel({ go, onForgotPassword, authLoading }) {
   const [email, setEmail] = useState("");
+  const [sentMessage, setSentMessage] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleReset = async () => {
+    setError("");
+    setSentMessage("");
+    if (!email || !email.trim()) {
+      setError("Email address is required.");
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    setLoading(true);
+    try {
+      await onForgotPassword(email.trim());
+      setSentMessage("If the email exists, a reset link has been sent.");
+    } catch (err) {
+      setError(err.message || 'Failed to send reset email');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className={styles.panelContainer}>
@@ -380,15 +405,157 @@ function ForgotPanel({ go }) {
         <p className={styles.formSubtitleForgot}>
           Enter your registered email address and we'll send you a link to reset your password.
         </p>
-        <Field label="Email" id="f-email" type="email" placeholder="Enter your email" value={email} onChange={e => setEmail(e.target.value)}/>
-        <div style={{ marginBottom: 20 }} />
-        <GradBtn onClick={() => console.log("Reset link sent")}>SEND RESET LINK</GradBtn>
+        <Field label="Email" id="f-email" type="email" placeholder="Enter your email" value={email} onChange={e => { setEmail(e.target.value); setError(""); setSentMessage(""); }}/>
+        <div style={{ marginBottom: 10 }} />
+        {error && <div style={{ color: '#ff4f5e', fontSize: '12.5px', marginBottom: 12, fontFamily: 'DM Sans, sans-serif', fontWeight: '500' }}>⚠ {error}</div>}
+        {sentMessage && <div style={{ color: '#3de8a0', fontSize: '12.5px', marginBottom: 12, fontFamily: 'DM Sans, sans-serif', fontWeight: '500' }}>✔ {sentMessage}</div>}
+        <GradBtn onClick={handleReset} disabled={loading || authLoading}>SEND RESET LINK</GradBtn>
         <div className={styles.backToLogin}>
           <p>Remember your password?</p>
           <button onClick={() => go("login")} type="button" className={styles.backLink}>
             Back to Login
           </button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ResetPanel({ go, onResetPassword, authLoading }) {
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleReset = async () => {
+    setError("");
+    setSuccessMessage("");
+    if (!token) {
+      setError("Invalid reset link. No token found.");
+      return;
+    }
+    if (!password || password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+    if (password !== confirm) {
+      setError("Passwords do not match.");
+      return;
+    }
+    setLoading(true);
+    try {
+      await onResetPassword(token, password);
+      setSuccessMessage("Password reset successful! Logging you in...");
+      setTimeout(() => go("login"), 1200);
+    } catch (err) {
+      setError(err.message || 'Failed to reset password');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className={styles.panelContainer}>
+      <div className={styles.authLeftReset}>
+        <Logo />
+        <h1 className={styles.authHeadline}>Set New Password</h1>
+        <p className={styles.authSubheadlineReset}>
+          Enter your new password below.
+        </p>
+        <EnvelopeSVG />
+      </div>
+      <div className={styles.authRight}>
+        <h2 className={styles.formTitle}>Reset Password</h2>
+        <p className={styles.formSubtitleForgot}>
+          Choose a strong password you haven't used before.
+        </p>
+        <Field label="New Password" id="r-pass" type="password" placeholder="Enter new password" value={password} onChange={e => { setPassword(e.target.value); setError(""); }} />
+        <Field label="Confirm Password" id="r-conf" type="password" placeholder="Confirm new password" value={confirm} onChange={e => { setConfirm(e.target.value); setError(""); }} />
+        <div style={{ marginBottom: 10 }} />
+        {error && <div style={{ color: '#ff4f5e', fontSize: '12.5px', marginBottom: 12, fontFamily: 'DM Sans, sans-serif', fontWeight: '500' }}>⚠ {error}</div>}
+        {successMessage && <div style={{ color: '#3de8a0', fontSize: '12.5px', marginBottom: 12, fontFamily: 'DM Sans, sans-serif', fontWeight: '500' }}>✔ {successMessage}</div>}
+        <GradBtn onClick={handleReset} disabled={loading || authLoading}>RESET PASSWORD</GradBtn>
+        <div className={styles.backToLogin}>
+          <p>Remember your password?</p>
+          <button onClick={() => go("login")} type="button" className={styles.backLink}>
+            Back to Login
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VerifyPanel({ go, onVerifyEmail, authLoading }) {
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("verify");
+  const [verifying, setVerifying] = useState(true);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!token) {
+      setVerifying(false);
+      setError("Invalid verification link. No token found.");
+      return;
+    }
+    setVerifying(true);
+    onVerifyEmail(token)
+      .then(() => {
+        setSuccess(true);
+        setVerifying(false);
+      })
+      .catch((err) => {
+        setError(err.message || "Verification failed");
+        setVerifying(false);
+      });
+  }, [token, onVerifyEmail]);
+
+  return (
+    <div className={styles.panelContainer}>
+      <div className={styles.authLeftReset}>
+        <Logo />
+        <h1 className={styles.authHeadline}>Email Verification</h1>
+        <p className={styles.authSubheadlineReset}>
+          {verifying ? "Verifying your email..." : success ? "Your email has been verified!" : "Verification failed"}
+        </p>
+        <div style={{ textAlign: "center", marginTop: 40 }}>
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke={success ? "#3de8a0" : error ? "#ff4f5e" : "#40c8e0"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            {success ? (
+              <>
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </>
+            ) : (
+              <>
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <polyline points="22,6 12,13 2,6" />
+              </>
+            )}
+          </svg>
+        </div>
+      </div>
+      <div className={styles.authRight}>
+        <h2 className={styles.formTitle}>
+          {verifying ? "Verifying..." : success ? "Verified!" : "Verification Failed"}
+        </h2>
+        <p className={styles.formSubtitleForgot}>
+          {verifying
+            ? "Please wait while we verify your email address."
+            : success
+              ? "Your email has been successfully verified. You can now access all features."
+              : error || "The verification link is invalid or has expired."}
+        </p>
+        <div style={{ marginBottom: 10 }} />
+        {success && (
+          <GradBtn onClick={() => go("login")}>GO TO LOGIN</GradBtn>
+        )}
+        {error && !verifying && (
+          <GradBtn onClick={() => go("login")}>BACK TO LOGIN</GradBtn>
+        )}
       </div>
     </div>
   );
@@ -549,9 +716,11 @@ const TRANSITIONS = {
   "forgot→login":  { exitY: 0,   enterY: 0,    exitX: 90,  enterX: -90 },
   "signup→forgot": { exitY: 0,   enterY: 0,    exitX: -90, enterX: 90  },
   "forgot→signup": { exitY: 0,   enterY: 0,    exitX: 90,  enterX: -90 },
+  "reset→login":   { exitY: 0,   enterY: 0,    exitX: 90,  enterX: -90 },
+  "login→reset":   { exitY: 0,   enterY: 0,    exitX: -90, enterX: 90  },
 };
 
-const PAGES = { login: LoginPanel, signup: SignupPanel, forgot: ForgotPanel, otp: OtpPanel };
+const PAGES = { login: LoginPanel, signup: SignupPanel, forgot: ForgotPanel, reset: ResetPanel, verify: VerifyPanel, otp: OtpPanel };
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -570,6 +739,10 @@ export default function Auth() {
     sendOtp,
     verifyOtp,
     resendOtp,
+    forgotPassword: forgotPasswordAction,
+    resetPassword: resetPasswordAction,
+    verifyEmail: verifyEmailAction,
+    resendVerification: resendVerificationAction,
   } = useAuth();
 
   // Zenuxs OAuth (popup-based social login)
@@ -585,7 +758,11 @@ export default function Auth() {
   const isAuthenticated = isAuthLocal || isAuthZenuxs;
   const loading = loadingLocal || loadingZenuxs;
 
-  const [current, setCurrent] = useState("login");
+  const [searchParams] = useSearchParams();
+  const [current, setCurrent] = useState(
+    searchParams.has("verify") ? "verify" :
+    searchParams.has("token") ? "reset" : "login"
+  );
   const [next, setNext] = useState(null);
   const [phase, setPhase] = useState("idle");
   const [tKey, setTKey] = useState(null);
@@ -596,10 +773,10 @@ export default function Auth() {
 
   // If already authenticated, redirect to requested path or home
   useEffect(() => {
-    if (!loading && isAuthenticated && !showToast) {
+    if (!loading && isAuthenticated && !showToast && !searchParams.has("token") && !searchParams.has("verify")) {
       navigate(redirectPath, { replace: true });
     }
-  }, [loading, isAuthenticated, navigate, redirectPath, showToast]);
+  }, [loading, isAuthenticated, navigate, redirectPath, showToast, searchParams]);
 
   useEffect(() => {
     return () => {
@@ -763,6 +940,10 @@ export default function Auth() {
               onVerify={handleVerifyOtp}
               onResend={handleResendOtp}
               onBack={handleBackToSignup}
+              onForgotPassword={forgotPasswordAction}
+              onResetPassword={resetPasswordAction}
+              onVerifyEmail={verifyEmailAction}
+              onResendVerification={resendVerificationAction}
             />
           </div>
 
@@ -788,6 +969,10 @@ export default function Auth() {
                 onVerify={handleVerifyOtp}
                 onResend={handleResendOtp}
                 onBack={handleBackToSignup}
+                onForgotPassword={forgotPasswordAction}
+                onResetPassword={resetPasswordAction}
+                onVerifyEmail={verifyEmailAction}
+                onResendVerification={resendVerificationAction}
               />
             </div>
           )}

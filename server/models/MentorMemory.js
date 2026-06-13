@@ -28,5 +28,8 @@ const mentorMemorySchema = new mongoose.Schema({
   timestamps: true
 });
 
+mentorMemorySchema.index({ userId: 1, topic: 1 }, { unique: true });
+mentorMemorySchema.index({ userId: 1 });
+
 const MentorMemory = mongoose.model('MentorMemory', mentorMemorySchema);
 export default MentorMemory;

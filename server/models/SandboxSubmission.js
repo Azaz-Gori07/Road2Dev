@@ -23,5 +23,8 @@ const sandboxSubmissionSchema = new mongoose.Schema({
   timestamps: true
 });
 
+sandboxSubmissionSchema.index({ userId: 1, createdAt: -1 });
+sandboxSubmissionSchema.index({ learningSessionId: 1 });
+
 const SandboxSubmission = mongoose.model('SandboxSubmission', sandboxSubmissionSchema);
 export default SandboxSubmission;

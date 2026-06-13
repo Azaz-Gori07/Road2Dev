@@ -272,5 +272,9 @@ const learningSessionSchema = new mongoose.Schema({
   timestamps: true
 });
 
+learningSessionSchema.index({ userId: 1 });
+learningSessionSchema.index({ userId: 1, status: 1 });
+learningSessionSchema.index({ topic: 1 });
+
 const LearningSession = mongoose.model('LearningSession', learningSessionSchema);
 export default LearningSession;

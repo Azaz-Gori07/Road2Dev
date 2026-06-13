@@ -20,6 +20,7 @@ import {
 import { chunkProjectFiles, estimateTokens } from '../utils/projectChunker.js';
 import { canonicalize } from '../utils/topicNormalizer.js';
 import axios from 'axios';
+import { success, error } from '../utils/response.js';
 import {
   isIgnoredPath,
   isTextSourcePath,
@@ -143,8 +144,8 @@ export const logTimelineEvent = async ({ userId, learningSessionId = null, actio
       detail,
       status
     });
-  } catch (error) {
-    console.error('Failed to log timeline event:', error.message);
+  } catch (err) {
+    console.error('Failed to log timeline event:', err.message);
   }
 };
 
@@ -212,8 +213,8 @@ export const updateMentorMemory = async ({ userId, topic: rawTopic, scores = {},
 
     await memory.save();
     return memory;
-  } catch (error) {
-    console.error('Failed to update mentor memory:', error.message);
+  } catch (err) {
+    console.error('Failed to update mentor memory:', err.message);
   }
 };
 
@@ -312,8 +313,8 @@ const fetchGitHubRepoContents = async (owner, repo, path = '', filesCollected = 
         }
       }
     }
-  } catch (error) {
-    console.error(`GitHub fetch error for path ${path}:`, error.message);
+  } catch (err) {
+    console.error(`GitHub fetch error for path ${path}:`, err.message);
   }
   return filesCollected;
 };
@@ -509,9 +510,9 @@ export const getLearningSessions = async (req, res) => {
       .sort({ updatedAt: -1 })
       .select('topic mode sessionType masteryPercentage updatedAt createdAt status learningEngine');
       
-    return res.status(200).json({ success: true, data: sessions });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return success(res, { message: 'Sessions retrieved', data: sessions });
+  } catch (err) {
+    return error(res, { message: err.message, status: 500 });
   }
 };
 
@@ -522,11 +523,11 @@ export const getLearningSession = async (req, res) => {
   try {
     const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
     if (!session) {
-      return res.status(404).json({ success: false, message: 'Learning session not found.' });
+      return error(res, { message: 'Learning session not found.', status: 404 });
     }
-    return res.status(200).json({ success: true, data: session });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return success(res, { message: 'Session retrieved', data: session });
+  } catch (err) {
+    return error(res, { message: err.message, status: 500 });
   }
 };
 
@@ -536,7 +537,7 @@ export const getLearningSession = async (req, res) => {
 export const createLearningSession = async (req, res) => {
   const { topic, mode = 'Intermediate', personality = 'The Coding Coach', sessionType = 'Concept Learning' } = req.body || {};
   if (!topic) {
-    return res.status(400).json({ success: false, message: 'A topic is required.' });
+    return error(res, { message: 'A topic is required.', status: 400 });
   }
 
   try {
@@ -576,7 +577,7 @@ export const createLearningSession = async (req, res) => {
         topic: topic,
         status: 'started'
       });
-      return res.status(201).json({ success: true, data: session });
+      return success(res, { message: 'Session created', data: session, status: 201 });
     }
 
     // Load mentor memory context
@@ -653,9 +654,9 @@ ${currentTopicMemory ? `- Past attempts on this topic: ${currentTopicMemory.atte
       status: 'started'
     });
 
-    return res.status(201).json({ success: true, data: session });
-  } catch (error) {
-    console.warn('Create learning session AI failed, using high-fidelity fallback welcome response:', error.message);
+    return success(res, { message: 'Session created', data: session, status: 201 });
+  } catch (err) {
+    console.warn('Create learning session AI failed, using high-fidelity fallback welcome response:', err.message);
     try {
       const session = new LearningSession({
         userId: req.user._id,
@@ -708,10 +709,10 @@ Ask me any questions you have on the left, or try compiling a script in the edit
         status: 'started'
       });
 
-      return res.status(201).json({ success: true, data: session });
+      return success(res, { message: 'Session created', data: session, status: 201 });
     } catch (dbError) {
       console.error('Create learning session fallback DB save failed:', dbError.message);
-      return res.status(500).json({ success: false, message: 'Failed to start learning session.' });
+      return error(res, { message: 'Failed to start learning session.', status: 500 });
     }
   }
 };
@@ -723,13 +724,13 @@ export const sendChatMessage = async (req, res) => {
   const { text: rawText } = req.body || {};
   const text = (rawText || '').trim().slice(0, 5000);
   if (!text) {
-    return res.status(400).json({ success: false, message: 'Message text is required.' });
+    return error(res, { message: 'Message text is required.', status: 400 });
   }
 
   try {
     const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
     if (!session) {
-      return res.status(404).json({ success: false, message: 'Learning session not found.' });
+      return error(res, { message: 'Learning session not found.', status: 404 });
     }
 
     if (session.sessionType === 'Project Defense') {
@@ -740,19 +741,11 @@ export const sendChatMessage = async (req, res) => {
       const interviewActive = ctx?.defenseStarted === true;
 
       if (!hasProject) {
-        return res.status(400).json({
-          success: false,
-          message:
-            'Please connect a GitHub repository or local project folder before starting Project Defense.'
-        });
+        return error(res, { message: 'Please connect a GitHub repository or local project folder before starting Project Defense.', status: 400 });
       }
 
       if (!interviewActive) {
-        return res.status(400).json({
-          success: false,
-          message:
-            'Review the project analysis report and click Start Defense before using the interview chat.'
-        });
+        return error(res, { message: 'Review the project analysis report and click Start Defense before using the interview chat.', status: 400 });
       }
     }
 
@@ -800,13 +793,13 @@ export const sendChatMessage = async (req, res) => {
     appendSuggestedChecklistTasks(session, aiResponse.missionChecklistUpdates);
     await session.save();
 
-    return res.status(200).json({ success: true, data: session });
-  } catch (error) {
-    console.warn('Send chat message AI failed, using high-fidelity fallback response:', error.message);
+    return success(res, { message: 'Chat message processed', data: session });
+  } catch (err) {
+    console.warn('Send chat message AI failed, using high-fidelity fallback response:', err.message);
     try {
       const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
       if (!session) {
-        return res.status(404).json({ success: false, message: 'Learning session not found.' });
+        return error(res, { message: 'Learning session not found.', status: 404 });
       }
 
       // Check if user is asking for challenge or help
@@ -840,10 +833,10 @@ Try implementing a simple script to verify how closures keep references to paren
 
       await session.save();
 
-      return res.status(200).json({ success: true, data: session });
+      return success(res, { message: 'Chat message processed', data: session });
     } catch (dbError) {
       console.error('Send chat message fallback DB save failed:', dbError.message);
-      return res.status(500).json({ success: false, message: 'Failed to process chat message.' });
+      return error(res, { message: 'Failed to process chat message.', status: 500 });
     }
   }
 };
@@ -854,14 +847,14 @@ Try implementing a simple script to verify how closures keep references to paren
 export const runSandboxCode = async (req, res) => {
   const { code } = req.body;
   if (!code) {
-    return res.status(400).json({ success: false, message: 'Code is required.' });
+    return error(res, { message: 'Code is required.', status: 400 });
   }
 
   try {
     const result = await executeJsCode(code);
-    return res.status(200).json({ success: true, data: result });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return success(res, { message: 'Code executed', data: result });
+  } catch (err) {
+    return error(res, { message: err.message, status: 500 });
   }
 };
 
@@ -871,7 +864,7 @@ export const runSandboxCode = async (req, res) => {
 export const submitSandboxCode = async (req, res) => {
   const { code, challengeTitle, sandboxMode = 'challenge' } = req.body || {};
   if (!code) {
-    return res.status(400).json({ success: false, message: 'Code is required.' });
+    return error(res, { message: 'Code is required.', status: 400 });
   }
 
   const mode = normalizeSandboxMode(sandboxMode);
@@ -879,7 +872,7 @@ export const submitSandboxCode = async (req, res) => {
   try {
     const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
     if (!session) {
-      return res.status(404).json({ success: false, message: 'Learning session not found.' });
+      return error(res, { message: 'Learning session not found.', status: 404 });
     }
 
     // Exec sandbox
@@ -1011,24 +1004,13 @@ Output strict JSON:
       await session.save();
     }
 
-    return res.status(200).json({
-      success: true,
-      data: {
-        passed: appPassed,
-        feedback,
-        mode: effectiveMode,
-        scores,
-        stdout: runResult.stdout,
-        error: runResult.error,
-        masteryPercentage: session.masteryPercentage
-      }
-    });
-  } catch (error) {
-    console.warn('Submit code evaluation failed, using high-fidelity code verification fallback:', error.message);
+    return success(res, { message: 'Code evaluated', data: { passed: appPassed, feedback, mode: effectiveMode, scores, stdout: runResult.stdout, evalError: runResult.error, masteryPercentage: session.masteryPercentage } });
+  } catch (err) {
+    console.warn('Submit code evaluation failed, using high-fidelity code verification fallback:', err.message);
     try {
       const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
       if (!session) {
-        return res.status(404).json({ success: false, message: 'Learning session not found.' });
+        return error(res, { message: 'Learning session not found.', status: 404 });
       }
 
       // Safe JS compiler run results
@@ -1116,21 +1098,10 @@ Output strict JSON:
         await session.save();
       }
 
-      return res.status(200).json({
-        success: true,
-        data: {
-          passed,
-          feedback,
-          mode: effectiveMode,
-          scores,
-          stdout: runResult.stdout,
-          error: runResult.error,
-          masteryPercentage: session.masteryPercentage
-        }
-      });
+      return success(res, { message: 'Code evaluated', data: { passed, feedback, mode: effectiveMode, scores, stdout: runResult.stdout, evalError: runResult.error, masteryPercentage: session.masteryPercentage } });
     } catch (fallbackErr) {
       console.error('Submit code fallback failed:', fallbackErr.message);
-      return res.status(500).json({ success: false, message: 'Failed to evaluate code submission.' });
+      return error(res, { message: 'Failed to evaluate code submission.', status: 500 });
     }
   }
 };
@@ -1257,7 +1228,7 @@ export const ingestProject = async (req, res) => {
     if (githubUrl) {
       const parsed = parseGitHubUrl(githubUrl);
       if (!parsed) {
-        return res.status(400).json({ success: false, message: 'Invalid GitHub URL. Use https://github.com/owner/repo' });
+        return error(res, { message: 'Invalid GitHub URL. Use https://github.com/owner/repo', status: 400 });
       }
       resolvedMethod = 'github';
       filesList = await fetchGitHubRepoContents(parsed.owner, parsed.repo);
@@ -1279,11 +1250,11 @@ export const ingestProject = async (req, res) => {
         .map((f) => ({ path: f.path, content: String(f.content).slice(0, 6000) }));
       sourceLabel = `Ingested Local Project: ${projectName}`;
     } else {
-      return res.status(400).json({ success: false, message: 'Provide a GitHub URL or local folder files.' });
+      return error(res, { message: 'Provide a GitHub URL or local folder files.', status: 400 });
     }
 
     if (!filesList.length) {
-      return res.status(400).json({ success: false, message: 'No scannable project files found. Check the path or repository visibility.' });
+      return error(res, { message: 'No scannable project files found. Check the path or repository visibility.', status: 400 });
     }
 
     // Step 1: Deterministic technology detection (always runs, no AI needed)
@@ -1501,7 +1472,7 @@ CONFIG FILES: ${metadataSummary.configFiles.join(', ')}
     if (sessionId) {
       session = await LearningSession.findOne({ _id: sessionId, userId: req.user._id });
       if (!session) {
-        return res.status(404).json({ success: false, message: 'Learning session not found.' });
+        return error(res, { message: 'Learning session not found.', status: 404 });
       }
       session.topic = `Project Defense: ${projectName}`;
       session.sessionType = 'Project Defense';
@@ -1545,10 +1516,10 @@ CONFIG FILES: ${metadataSummary.configFiles.join(', ')}
     }
 
     await session.save();
-    return res.status(sessionId ? 200 : 201).json({ success: true, data: session, projectChunkAudit });
-  } catch (error) {
-    console.error('Project ingestion failed:', error.message);
-    return res.status(500).json({ success: false, message: 'Failed to analyze project codebase.' });
+    return success(res, { message: 'Project ingested', data: session, projectChunkAudit });
+  } catch (err) {
+    console.error('Project ingestion failed:', err.message);
+    return error(res, { message: 'Failed to analyze project codebase.', status: 500 });
   }
 };
 
@@ -1605,7 +1576,7 @@ export const startProjectDefense = async (req, res) => {
   try {
     const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
     if (!session) {
-      return res.status(404).json({ success: false, message: 'Learning session not found.' });
+      return error(res, { message: 'Learning session not found.', status: 404 });
     }
 
     const context = session.projectContext;
@@ -1614,14 +1585,10 @@ export const startProjectDefense = async (req, res) => {
       (Boolean(context?.architectureReport) && (context?.scanStats?.filesScanned ?? 0) > 0);
 
     if (!hasProject) {
-      return res.status(400).json({
-        success: false,
-        message:
-          'Please connect a GitHub repository or local project folder before starting Project Defense.'
-      });
+      return error(res, { message: 'Please connect a GitHub repository or local project folder before starting Project Defense.', status: 400 });
     }
     if (context.defenseStarted) {
-      return res.status(200).json({ success: true, data: session });
+      return success(res, { message: 'Defense already started', data: session });
     }
 
     // Check if progressive chunking modules exist
@@ -1663,7 +1630,7 @@ export const startProjectDefense = async (req, res) => {
       session.markModified('projectContext');
       session.markModified('messages');
       await session.save();
-      return res.status(200).json({ success: true, data: session });
+      return success(res, { message: 'Defense started', data: session });
     }
 
     // Progressive Chunking Flow
@@ -1671,7 +1638,7 @@ export const startProjectDefense = async (req, res) => {
     const currentSubchunk = currentModule?.subchunks[context.currentSubchunkIndex || 0];
 
     if (!currentSubchunk) {
-      return res.status(400).json({ success: false, message: 'No modules or subchunks mapped for defense.' });
+      return error(res, { message: 'No modules or subchunks mapped for defense.', status: 400 });
     }
 
     // Lazy load subchunk candidates if empty
@@ -1739,10 +1706,10 @@ export const startProjectDefense = async (req, res) => {
       status: 'started'
     });
 
-    return res.status(200).json({ success: true, data: session });
-  } catch (error) {
-    console.error('Start project defense failed:', error.message);
-    return res.status(500).json({ success: false, message: 'Failed to start project defense.' });
+    return success(res, { message: 'Defense started', data: session });
+  } catch (err) {
+    console.error('Start project defense failed:', err.message);
+    return error(res, { message: 'Failed to start project defense.', status: 500 });
   }
 };
 
@@ -1752,22 +1719,22 @@ export const startProjectDefense = async (req, res) => {
 export const submitProjectDefenseAnswer = async (req, res) => {
   const { answer } = req.body;
   if (!answer) {
-    return res.status(400).json({ success: false, message: 'Answer is required.' });
+    return error(res, { message: 'Answer is required.', status: 400 });
   }
 
   try {
     const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
     if (!session) {
-      return res.status(404).json({ success: false, message: 'Learning session not found.' });
+      return error(res, { message: 'Learning session not found.', status: 404 });
     }
 
     if (session.status === 'completed') {
-      return res.status(400).json({ success: false, message: 'This project defense has already been completed.' });
+      return error(res, { message: 'This project defense has already been completed.', status: 400 });
     }
 
     const context = session.projectContext;
     if (!context || (!context.architectureReport && context?.fallbackMode?.active !== true)) {
-      return res.status(400).json({ success: false, message: 'This learning session is not a project defense session.' });
+      return error(res, { message: 'This learning session is not a project defense session.', status: 400 });
     }
 
     const hasProject =
@@ -1775,17 +1742,11 @@ export const submitProjectDefenseAnswer = async (req, res) => {
       (Boolean(context?.architectureReport) && (context?.scanStats?.filesScanned ?? 0) > 0);
 
     if (!hasProject) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please connect a GitHub repository or local project folder before starting Project Defense.'
-      });
+      return error(res, { message: 'Please connect a GitHub repository or local project folder before starting Project Defense.', status: 400 });
     }
 
     if (!context.defenseStarted) {
-      return res.status(400).json({
-        success: false,
-        message: 'Review the analysis report and click Start Defense first.'
-      });
+      return error(res, { message: 'Review the analysis report and click Start Defense first.', status: 400 });
     }
 
     // Check legacy vs progressive flow
@@ -1817,7 +1778,7 @@ export const submitProjectDefenseAnswer = async (req, res) => {
 
       const isDuplicate = progress.evaluations.some(e => e.answer.trim() === answer.trim());
       if (isDuplicate) {
-        return res.status(400).json({ success: false, message: 'Duplicate answer. Please provide a new response.' });
+        return error(res, { message: 'Duplicate answer. Please provide a new response.', status: 400 });
       }
 
       progress.evaluations.push({
@@ -1931,7 +1892,7 @@ export const submitProjectDefenseAnswer = async (req, res) => {
       session.markModified('projectContext');
       session.markModified('messages');
       await session.save();
-      return res.status(200).json({ success: true, data: session });
+      return success(res, { message: 'Answer submitted', data: session });
     }
 
     // --- PROGRESSIVE CHUNKING FLOW ---
@@ -1943,13 +1904,13 @@ export const submitProjectDefenseAnswer = async (req, res) => {
     let currentSubchunk = currentModule?.subchunks[currentSubchunkIndex];
 
     if (!currentSubchunk) {
-      return res.status(400).json({ success: false, message: 'Active subchunk not found.' });
+      return error(res, { message: 'Active subchunk not found.', status: 400 });
     }
 
     // Deduplication check
     const isDuplicate = progress.evaluations.some(e => e.answer.trim() === answer.trim());
     if (isDuplicate) {
-      return res.status(400).json({ success: false, message: 'Duplicate answer. Please provide a new response.' });
+      return error(res, { message: 'Duplicate answer. Please provide a new response.', status: 400 });
     }
 
     // Identify active question difficulty from subchunk activeQuestions
@@ -2188,14 +2149,14 @@ export const submitProjectDefenseAnswer = async (req, res) => {
     session.markModified('messages');
     await session.save();
 
-    return res.status(200).json({ success: true, data: session });
-  } catch (error) {
-    console.error('Submit project defense progressive evaluation failed:', error.message);
+    return success(res, { message: 'Answer submitted', data: session });
+  } catch (err) {
+    console.error('Submit project defense progressive evaluation failed:', err.message);
     // Dynamic progressive fallback: save user response and return evaluation failed state to let client retry
     try {
       const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
       if (!session) {
-        return res.status(404).json({ success: false, message: 'Learning session not found.' });
+        return error(res, { message: 'Learning session not found.', status: 404 });
       }
       session.messages.push({
         id: `u-def-fallback-err-${Date.now()}`,
@@ -2210,10 +2171,10 @@ export const submitProjectDefenseAnswer = async (req, res) => {
         timestamp: new Date()
       });
       await session.save();
-      return res.status(200).json({ success: false, evaluationFailed: true, message: 'AI evaluation failed. Click retry to resubmit.', data: session });
+      return res.status(200).json({ success: false, message: 'AI evaluation failed. Click retry to resubmit.', data: { session }, error: 'AI evaluation failed' });
     } catch (fallbackErr) {
       console.error('Submit progressive fallback save failed:', fallbackErr.message);
-      return res.status(500).json({ success: false, message: 'Failed to evaluate response.' });
+      return error(res, { message: 'Failed to evaluate response.', status: 500 });
     }
   }
 };
@@ -2258,19 +2219,7 @@ export const getCareerCoachRoadmap = async (req, res) => {
     });
 
     if (completedSessions.length === 0 && memories.length === 0) {
-      return res.status(200).json({
-        success: true,
-        data: {
-          insufficientData: true,
-          reason: 'Career recommendations require completed learning sessions or mentor memory topics.',
-          weakSkills: [],
-          masteredSkills: [],
-          recommendedRoles: [],
-          recommendedCompanies: [],
-          learningRoadmap: [],
-          readinessScores: null
-        }
-      });
+      return success(res, { message: 'Career coach data retrieved', data: { insufficientData: true, reason: 'Career recommendations require completed learning sessions or mentor memory topics.', weakSkills: [], masteredSkills: [], recommendedRoles: [], recommendedCompanies: [], learningRoadmap: [], readinessScores: null } });
     }
 
     const userPreferences = req.user ? {
@@ -2335,24 +2284,9 @@ export const getCareerCoachRoadmap = async (req, res) => {
       console.warn('Failed to persist career coach data to session:', persistErr.message);
     }
 
-    return res.status(200).json({
-      success: true,
-      data: {
-        ...coachData,
-        weakSkills,
-        masteredSkills,
-        insufficientData: false,
-        readinessScores: readiness ? {
-          interviewReadiness: readiness.interviewReadinessIndex,
-          projectReadiness: readiness.projectReadinessIndex,
-          hiringReadiness: readiness.hiringReadinessIndex,
-          consistencyScore: readiness.consistencyScore,
-          overallMastery: readiness.overallMastery
-        } : null
-      }
-    });
-  } catch (error) {
-    console.warn('Career Coach generation AI failed, serving robust high-fidelity fallback:', error.message);
+    return success(res, { message: 'Career coach data retrieved', data: { ...coachData, weakSkills, masteredSkills, insufficientData: false, readinessScores: readiness ? { interviewReadiness: readiness.interviewReadinessIndex, projectReadiness: readiness.projectReadinessIndex, hiringReadiness: readiness.hiringReadinessIndex, consistencyScore: readiness.consistencyScore, overallMastery: readiness.overallMastery } : null } });
+  } catch (err) {
+    console.warn('Career Coach generation AI failed, serving robust high-fidelity fallback:', err.message);
     
     let fallbackReadiness = null;
     try {
@@ -2376,7 +2310,7 @@ export const getCareerCoachRoadmap = async (req, res) => {
       } : null
     };
     
-    return res.status(200).json({ success: true, data: fallbackData });
+    return success(res, { message: 'Career coach data retrieved', data: fallbackData });
   }
 };
 
@@ -2388,7 +2322,7 @@ export const updateLearningSession = async (req, res) => {
   try {
     const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
     if (!session) {
-      return res.status(404).json({ success: false, message: 'Learning session not found.' });
+      return error(res, { message: 'Learning session not found.', status: 404 });
     }
     
     if (mode) session.mode = mode;
@@ -2459,9 +2393,9 @@ export const updateLearningSession = async (req, res) => {
     }
     
     await session.save();
-    return res.status(200).json({ success: true, data: session });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return success(res, { message: 'Session updated', data: session });
+  } catch (err) {
+    return error(res, { message: err.message, status: 500 });
   }
 };
 
@@ -2472,7 +2406,7 @@ export const updateLearningSession = async (req, res) => {
 export const createLearningPathFromRecommendation = async (req, res) => {
   const { topic, mode = 'Intermediate', sessionType = 'Concept Learning', personality = 'The Coding Coach' } = req.body || {};
   if (!topic) {
-    return res.status(400).json({ success: false, message: 'Topic is required to create a learning path.' });
+    return error(res, { message: 'Topic is required to create a learning path.', status: 400 });
   }
 
   try {
@@ -2509,10 +2443,10 @@ export const createLearningPathFromRecommendation = async (req, res) => {
       status: 'active'
     });
 
-    return res.status(201).json({ success: true, data: session });
-  } catch (error) {
-    console.error('Create learning path failed:', error.message);
-    return res.status(500).json({ success: false, message: error.message });
+    return success(res, { message: 'Learning path created', data: session, status: 201 });
+  } catch (err) {
+    console.error('Create learning path failed:', err.message);
+    return error(res, { message: err.message, status: 500 });
   }
 };
 
@@ -2564,10 +2498,10 @@ export const getUnifiedDashboard = async (req, res) => {
       coachSessionId: latestCoach?._id || null
     };
 
-    return res.status(200).json({ success: true, data });
-  } catch (error) {
-    console.error('Unified dashboard failed:', error.message);
-    return res.status(500).json({ success: false, message: error.message });
+    return success(res, { message: 'Dashboard data retrieved', data });
+  } catch (err) {
+    console.error('Unified dashboard failed:', err.message);
+    return error(res, { message: err.message, status: 500 });
   }
 };
 
@@ -2575,9 +2509,9 @@ export const getTimelineEvents = async (req, res) => {
   try {
     const events = await TimelineEvent.find({ userId: req.user._id })
       .sort({ createdAt: -1 });
-    return res.status(200).json({ success: true, data: events });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return success(res, { message: 'Timeline events retrieved', data: events });
+  } catch (err) {
+    return error(res, { message: err.message, status: 500 });
   }
 };
 
@@ -2616,9 +2550,9 @@ export const getSandboxHistory = async (req, res) => {
       return group;
     });
 
-    return res.status(200).json({ success: true, data });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return success(res, { message: 'Sandbox history retrieved', data });
+  } catch (err) {
+    return error(res, { message: err.message, status: 500 });
   }
 };
 
@@ -2691,8 +2625,6 @@ export const getLearningAnalytics = async (req, res) => {
       }
     }
 
-    const hoursPracticed = Math.round((sessions.length * 20 + submissions.length * 10) / 60 * 10) / 10 || 0;
-
     const lastSixSessions = [...sessions]
       .sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt))
       .slice(0, 6)
@@ -2740,55 +2672,51 @@ export const getLearningAnalytics = async (req, res) => {
       console.warn('Unified readiness engine failed, using legacy calculations:', engineErr.message);
     }
 
-    return res.status(200).json({
-      success: true,
-      data: {
-        overview: {
-          topicsLearned,
-          challengesSolved,
-          assessmentsPassed,
-          masteryAvg,
-          interviewReadiness,
-          projectReadiness,
-          learningStreak: streak,
-          hoursPracticed,
-          // Unified indexes (fall back to legacy if engine unavailable)
-          unifiedInterviewReadiness: unifiedReadiness?.interviewReadinessIndex ?? interviewReadiness,
-          unifiedProjectReadiness: unifiedReadiness?.projectReadinessIndex ?? projectReadiness,
-          hiringReadinessIndex: unifiedReadiness?.hiringReadinessIndex ?? 0,
-          consistencyScore: unifiedReadiness?.consistencyScore ?? 0,
-          overallMastery: unifiedReadiness?.overallMastery ?? masteryAvg
+    const analyticsData = {
+      overview: {
+        topicsLearned,
+        challengesSolved,
+        assessmentsPassed,
+        masteryAvg,
+        interviewReadiness,
+        projectReadiness,
+        learningStreak: streak,
+        unifiedInterviewReadiness: unifiedReadiness?.interviewReadinessIndex ?? interviewReadiness,
+        unifiedProjectReadiness: unifiedReadiness?.projectReadinessIndex ?? projectReadiness,
+        hiringReadinessIndex: unifiedReadiness?.hiringReadinessIndex ?? 0,
+        consistencyScore: unifiedReadiness?.consistencyScore ?? 0,
+        overallMastery: unifiedReadiness?.overallMastery ?? masteryAvg
+      },
+      charts: {
+        masteryGrowth,
+        weeklyProgress,
+        successRate,
+        completionRate: {
+          completed: completedTopics,
+          active: activeTopics
         },
-        charts: {
-          masteryGrowth,
-          weeklyProgress,
-          successRate,
-          completionRate: {
-            completed: completedTopics,
-            active: activeTopics
-          },
-          interviewReadinessTrend
-        },
-        unified: unifiedReadiness ? {
-          dimensionAverages: unifiedReadiness.dimensionAverages,
-          rawAverages: unifiedReadiness.rawAverages,
-          weakTopics: swot?.weakTopics ?? [],
-          strongTopics: swot?.strongTopics ?? []
-        } : null
-      }
-    });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+        interviewReadinessTrend
+      },
+      unified: unifiedReadiness ? {
+        dimensionAverages: unifiedReadiness.dimensionAverages,
+        rawAverages: unifiedReadiness.rawAverages,
+        weakTopics: swot?.weakTopics ?? [],
+        strongTopics: swot?.strongTopics ?? []
+      } : null
+    };
+    return success(res, { message: 'Analytics retrieved', data: analyticsData });
+  } catch (err) {
+    return error(res, { message: err.message, status: 500 });
   }
 };
 
 export const getRecommendations = async (req, res) => {
   try {
     const recommendations = await generateRecommendations(req.user._id);
-    return res.status(200).json({ success: true, data: recommendations });
-  } catch (error) {
-    console.error('Recommendations generation failed:', error.message);
-    return res.status(500).json({ success: false, message: error.message });
+    return success(res, { message: 'Recommendations retrieved', data: recommendations });
+  } catch (err) {
+    console.error('Recommendations generation failed:', err.message);
+    return error(res, { message: err.message, status: 500 });
   }
 };
 
@@ -2796,7 +2724,7 @@ export const archiveLearningSession = async (req, res) => {
   try {
     const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
     if (!session) {
-      return res.status(404).json({ success: false, message: 'Learning session not found.' });
+      return error(res, { message: 'Learning session not found.', status: 404 });
     }
 
     session.status = 'completed';
@@ -2841,9 +2769,9 @@ export const archiveLearningSession = async (req, res) => {
       console.error('Failed to sync learning session score to mentor memory:', memErr.message);
     }
 
-    return res.status(200).json({ success: true, data: session });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return success(res, { message: 'Session archived', data: session });
+  } catch (err) {
+    return error(res, { message: err.message, status: 500 });
   }
 };
 
@@ -2851,7 +2779,7 @@ export const deleteLearningSession = async (req, res) => {
   try {
     const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
     if (!session) {
-      return res.status(404).json({ success: false, message: 'Learning session not found.' });
+      return error(res, { message: 'Learning session not found.', status: 404 });
     }
 
     await TimelineEvent.deleteMany({ learningSessionId: session._id });
@@ -2859,8 +2787,8 @@ export const deleteLearningSession = async (req, res) => {
     await MentorMemory.deleteOne({ userId: req.user._id, topic: session.topic });
     await LearningSession.deleteOne({ _id: session._id });
 
-    return res.status(200).json({ success: true, message: 'Learning session and all associated files/logs permanently deleted.' });
-  } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return success(res, { message: 'Learning session and all associated files/logs permanently deleted.' });
+  } catch (err) {
+    return error(res, { message: err.message, status: 500 });
   }
 };

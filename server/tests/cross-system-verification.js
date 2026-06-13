@@ -14,8 +14,19 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
+import dns from 'dns';
 
 dotenv.config({ path: 'D:\\Git-Projects\\Road2Dev\\server\\.env', quiet: true });
+
+if (process.env.DNS_SERVERS) {
+  try {
+    const servers = process.env.DNS_SERVERS.split(",").map(s => s.trim());
+    dns.setServers(servers);
+    console.log(`✓ DNS servers set to: ${servers.join(", ")}`);
+  } catch (err) {
+    console.warn(`⚠️ Failed to set DNS servers from env: ${err.message}`);
+  }
+}
 
 // ── Models ──
 import User from '../models/User.js';

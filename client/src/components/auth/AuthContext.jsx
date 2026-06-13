@@ -124,7 +124,7 @@ export function AuthProvider({ children }) {
     });
 
     oauth.on('error', (error) => {
-      console.error('OAuth error:', error);
+      console.error('OAuth error:', error?.message || error);
     });
 
     // Helper to exchange Zenuxs token for our local JWT token
@@ -149,7 +149,7 @@ export function AuthProvider({ children }) {
           if (active) clearSession();
         }
       } catch (err) {
-        console.error('Failed to exchange Zenuxs token:', err);
+        console.error('Failed to exchange Zenuxs token:', err?.message || err);
         if (active) clearSession();
       } finally {
         if (active) setLoading(false);
@@ -182,7 +182,7 @@ export function AuthProvider({ children }) {
         setLoading(false);
       }
     }).catch((err) => {
-      console.error('ZenuxOAuth initialization error:', err);
+      console.error('ZenuxOAuth initialization error:', err?.message || err);
       if (active && !isLocalAuthenticated) {
         setLoading(false);
       }
@@ -271,6 +271,75 @@ export function AuthProvider({ children }) {
     return data.user;
   }, []);
 
+  const forgotPassword = useCallback(async (email) => {
+    const res = await fetch(`${API_BASE}/auth/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to send reset email');
+    }
+    return data;
+  }, []);
+
+  const resetPassword = useCallback(async (token, password) => {
+    const res = await fetch(`${API_BASE}/auth/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, password }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to reset password');
+    }
+    saveSession(data.token, data.user);
+    return data.user;
+  }, []);
+
+  const verifyEmail = useCallback(async (token) => {
+    const res = await fetch(`${API_BASE}/auth/verify-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Verification failed');
+    }
+
+    const storedUser = localStorage.getItem('auth_user');
+    if (storedUser) {
+      const parsed = JSON.parse(storedUser);
+      parsed.emailVerified = true;
+      localStorage.setItem('auth_user', JSON.stringify(parsed));
+      setUser(parsed);
+    }
+
+    return data;
+  }, []);
+
+  const resendVerification = useCallback(async () => {
+    const storedToken = localStorage.getItem('auth_token');
+    const res = await fetch(`${API_BASE}/auth/resend-verification`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${storedToken}`,
+      },
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to resend verification email');
+    }
+    return data;
+  }, []);
+
   const logout = useCallback(async () => {
     clearSession();
     const oauth = oauthRef.current;
@@ -350,6 +419,10 @@ export function AuthProvider({ children }) {
       resendOtp,
       loginWithEmail,
       loginWithZenuxs,
+      forgotPassword,
+      resetPassword,
+      verifyEmail,
+      resendVerification,
       logout,
       updateProfile,
       loginZenuxOAuth,

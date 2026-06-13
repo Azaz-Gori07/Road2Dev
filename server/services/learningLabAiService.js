@@ -328,7 +328,15 @@ Generate the mentor response. Respond to the candidate's last request. Output st
     jsonResponse: true,
   });
 
-  return extractJson(text);
+  const parsed = extractJson(text);
+  if (parsed && parsed.playgroundChallenge) {
+    const pc = parsed.playgroundChallenge;
+    const validTypes = ['coding', 'predict_output', 'debugging', 'fill_blanks'];
+    if (!pc.type || pc.type === 'null' || pc.type === 'None' || !validTypes.includes(pc.type)) {
+      delete parsed.playgroundChallenge;
+    }
+  }
+  return parsed;
 };
 
 const getDefenceProviders = () => {
@@ -600,7 +608,7 @@ Analyze this metadata summary and compile the Master Project Blueprint features,
     geminiModel: provider === 'gemini' ? model : undefined,
     groqModel: provider === 'groq' ? model : undefined,
     jsonResponse: true,
-    maxTokens: 1500,
+    maxTokens: 3000,
   });
 
   return extractJson(text);

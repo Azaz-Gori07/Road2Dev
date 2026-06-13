@@ -18,14 +18,33 @@ const CELL_STYLE = {
   borderBottom: '1px solid rgba(255,255,255,0.04)',
 };
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
+
 export default function VoiceDiagnosticsPanel({ preferredLanguage, onClose }) {
   const [diagData, setDiagData] = useState(null);
   const [recommended, setRecommended] = useState(null);
   const [expanded, setExpanded] = useState(false);
+  const [nvidiaTtsActive, setNvidiaTtsActive] = useState(false);
+  const [nvidiaModel, setNvidiaModel] = useState('');
+
+  const checkNvidiaStatus = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_BASE}/tts/status`);
+      const data = await res.json();
+      if (data.success) {
+        setNvidiaTtsActive(data.active);
+        setNvidiaModel(data.model);
+      }
+    } catch (e) {
+      console.warn('[DIAGNOSTICS] Failed to fetch NVIDIA TTS status:', e);
+      setNvidiaTtsActive(false);
+    }
+  }, []);
 
   const refresh = useCallback(() => {
     const data = getVoiceDiagnosticsData();
     setDiagData(data);
+    checkNvidiaStatus();
 
     if (preferredLanguage) {
       const match = getBestVoiceMatch(preferredLanguage);
@@ -35,7 +54,7 @@ export default function VoiceDiagnosticsPanel({ preferredLanguage, onClose }) {
         setRecommended({ name: null, lang: null, log: match.log });
       }
     }
-  }, [preferredLanguage]);
+  }, [preferredLanguage, checkNvidiaStatus]);
 
   useEffect(() => {
     const handler = () => refresh();
@@ -58,7 +77,7 @@ export default function VoiceDiagnosticsPanel({ preferredLanguage, onClose }) {
     marginTop: '8px',
     fontSize: '12px',
     color: 'var(--text-secondary)',
-    maxHeight: expanded ? '400px' : '52px',
+    maxHeight: expanded ? '500px' : '52px',
     overflow: 'hidden',
     transition: 'max-height 0.3s ease',
     position: 'relative',
@@ -72,15 +91,28 @@ export default function VoiceDiagnosticsPanel({ preferredLanguage, onClose }) {
     userSelect: 'none',
   };
 
-  const badgeStyle = (ok) => ({
-    display: 'inline-block',
-    padding: '2px 8px',
-    borderRadius: '4px',
-    fontSize: '10px',
-    fontWeight: '700',
-    background: ok ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-    color: ok ? '#10b981' : '#ef4444',
-  });
+  const badgeStyle = (ok, type = 'success') => {
+    let bg = 'rgba(16, 185, 129, 0.15)';
+    let color = '#10b981';
+    
+    if (!ok) {
+      bg = 'rgba(239, 68, 68, 0.15)';
+      color = '#ef4444';
+    } else if (type === 'info') {
+      bg = 'rgba(6, 182, 212, 0.15)';
+      color = '#06b6d4';
+    }
+    
+    return {
+      display: 'inline-block',
+      padding: '2px 8px',
+      borderRadius: '4px',
+      fontSize: '10px',
+      fontWeight: '700',
+      background: bg,
+      color: color,
+    };
+  };
 
   if (!diagData) {
     return (
@@ -98,15 +130,67 @@ export default function VoiceDiagnosticsPanel({ preferredLanguage, onClose }) {
       <div style={headerStyle} onClick={() => setExpanded(!expanded)}>
         <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>🎤 Voice Diagnostics</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={badgeStyle(diagData.ttsSupported)}>TTS {diagData.ttsSupported ? '✓' : '✗'}</span>
-          <span style={badgeStyle(diagData.sttSupported)}>STT {diagData.sttSupported ? '✓' : '✗'}</span>
-          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{diagData.totalVoices} voices</span>
+          <span style={badgeStyle(nvidiaTtsActive, 'info')}>NVIDIA Speech {nvidiaTtsActive ? '✓' : '✗'}</span>
+          <span style={badgeStyle(diagData.ttsSupported)}>Browser TTS {diagData.ttsSupported ? '✓' : '✗'}</span>
+          <span style={badgeStyle(diagData.sttSupported || nvidiaTtsActive)}>STT {(diagData.sttSupported || nvidiaTtsActive) ? '✓' : '✗'}</span>
           <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{expanded ? '▲' : '▼'}</span>
         </div>
       </div>
 
       {expanded && (
         <div style={{ marginTop: '10px' }}>
+          {/* NVIDIA Cloud Status detail section */}
+          <div style={{
+            padding: '8px 10px',
+            borderRadius: '6px',
+            marginBottom: '10px',
+            background: nvidiaTtsActive
+              ? 'rgba(6, 182, 212, 0.08)'
+              : 'rgba(245, 158, 11, 0.08)',
+            border: nvidiaTtsActive
+              ? '1px solid rgba(6, 182, 212, 0.2)'
+              : '1px solid rgba(245, 158, 11, 0.2)',
+          }}>
+            <div style={{ fontWeight: '600', fontSize: '11px', color: 'var(--text-primary)', marginBottom: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span>☁️ NVIDIA Speech AI</span>
+              <span style={{ color: nvidiaTtsActive ? '#06b6d4' : '#f59e0b' }}>
+                {nvidiaTtsActive ? 'Active' : 'Not Configured'}
+              </span>
+            </div>
+            <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
+              {nvidiaTtsActive
+                ? `TTS: NVIDIA Magpie NIM (${nvidiaModel}) | STT: Whisper Cloud ASR.`
+                : 'To enable premium high-quality voices and cloud-based STT, configure NVIDIA_API_KEY in the server environment.'}
+            </div>
+          </div>
+
+          {/* NVIDIA STT Forced Mode Selector */}
+          {nvidiaTtsActive && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '6px 10px',
+              borderRadius: '6px',
+              marginBottom: '10px',
+              background: 'rgba(255,255,255,0.02)',
+              border: '1px solid var(--border)',
+            }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+                🎙️ Force NVIDIA Cloud ASR (Whisper)
+              </span>
+              <input
+                type="checkbox"
+                checked={localStorage.getItem('road2dev-use-nvidia-stt') === 'true'}
+                onChange={(e) => {
+                  localStorage.setItem('road2dev-use-nvidia-stt', e.target.checked ? 'true' : 'false');
+                  refresh();
+                }}
+                style={{ cursor: 'pointer' }}
+              />
+            </div>
+          )}
+
           {/* Recommended voice section */}
           {preferredLanguage && recommended && (
             <div style={{

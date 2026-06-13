@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes.js';
 import interviewRoutes from './routes/interviewRoutes.js';
 import interviewSessionRoutes from './routes/interviewSessionRoutes.js';
 import learningLabRoutes from './routes/learningLabRoutes.js';
+import ttsRoutes from './routes/ttsRoutes.js';
 
 dotenv.config({ quiet: true });
 
@@ -40,6 +41,8 @@ app.use(cors({
     if (!origin) return callback(null, true);
     // Allow if in the explicit allowlist
     if (staticOrigins.includes(origin)) return callback(null, true);
+    // Allow localhost or 127.0.0.1 on any port in development
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return callback(null, true);
     // Allow Vercel preview deployments
     if (origin.startsWith('https://') && origin.endsWith('.vercel.app')) return callback(null, true);
     callback(null, false);
@@ -86,5 +89,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/interview', interviewRoutes);
 app.use('/api/interview-sessions', interviewSessionRoutes);
 app.use('/api/learning-lab', learningLabRoutes);
+app.use('/api/tts', ttsRoutes);
 
 export default app;

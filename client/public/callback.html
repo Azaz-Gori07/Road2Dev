@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline' 'self'; script-src 'self'; connect-src 'self' https://api.auth.zenuxs.in; img-src 'self' data:;">
     <title>OAuth Callback - Authentication</title>
     <style>
         * {
@@ -166,11 +167,14 @@
             let logMessage = `[${timestamp}] ${message}`;
             
             if (data) {
-                logMessage += '\n' + JSON.stringify(data, null, 2);
+                // Sanitize: never log secrets (tokens, codes, verifiers)
+                const sanitized = { ...data };
+                ['code', 'codeVerifier', 'tokens', 'access_token', 'id_token', 'refresh_token']
+                    .forEach(k => { if (sanitized[k] !== undefined) sanitized[k] = `[REDACTED ${typeof sanitized[k]}]`; });
+                logMessage += '\n' + JSON.stringify(sanitized, null, 2);
             }
             
             elements.debug.textContent += logMessage + '\n\n';
-            console.log('[OAuth Callback]', message, data);
         }
 
         // Show section
@@ -230,22 +234,19 @@
         function getOAuthConfig() {
             const urlParams = new URLSearchParams(window.location.search);
             
-            // Try to get from parent window first (for popup mode)
-            let clientId = urlParams.get('client_id');
-            let authServer = urlParams.get('auth_server');
+            // Only accept client_id from parent window or storage — NEVER from URL
+            let clientId = null;
             
-            if (!clientId && window.opener && window.opener.ZenuxOAuthInstance) {
+            if (window.opener && window.opener.ZenuxOAuthInstance) {
                 clientId = window.opener.ZenuxOAuthInstance.config.clientId;
-                authServer = window.opener.ZenuxOAuthInstance.config.authServer;
             }
             
             if (!clientId) {
                 clientId = getFromStorage('client_id');
             }
             
-            if (!authServer) {
-                authServer = getFromStorage('auth_server') || 'https://api.auth.zenuxs.in';
-            }
+            // auth_server is read from storage ONLY — never from URL (prevents injection)
+            const authServer = getFromStorage('auth_server') || 'https://api.auth.zenuxs.in';
             
             return {
                 clientId: clientId,
@@ -346,13 +347,22 @@
                 return false;
             }
 
-            debugLog(`Sending message to parent: ${type}`, data);
-            
+            debugLog(`Sending message to parent: ${type}`);
+
+            // Get trusted parent origin from opener (same-origin popup)
+            let trustedOrigin;
+            try {
+                trustedOrigin = window.opener.origin;
+            } catch {
+                // Cross-origin opener: use a strict allowlist
+                trustedOrigin = window.location.origin;
+            }
+
             window.opener.postMessage({
                 type: `zenux_oauth_${type}`,
                 ...data,
                 timestamp: Date.now()
-            }, '*');
+            }, trustedOrigin);
 
             return true;
         }
@@ -494,7 +504,8 @@
 
         // Handle messages from parent (if needed)
         window.addEventListener('message', (event) => {
-            debugLog('Message received from parent', event.data);
+            if (event.origin !== window.location.origin) return;
+            debugLog('Message received from parent', { type: event.data?.type });
         });
     </script>
 </body>

@@ -1,3 +1,5 @@
+import { error } from '../utils/response.js';
+
 export const createRateLimiter = ({
   windowMs = 60 * 1000,
   maxRequests = 8,
@@ -37,13 +39,39 @@ export const createRateLimiter = ({
     if (bucket.count > maxRequests) {
       const retryAfter = Math.ceil((bucket.startedAt + windowMs - now) / 1000);
 
-      return res.status(429).json({
-        success: false,
-        message,
-        retryAfter,
-      });
+      return error(res, { message, status: 429 });
     }
 
     return next();
   };
 };
+
+export const authLimiter = createRateLimiter({
+  windowMs: 15 * 1000,
+  maxRequests: 10,
+  message: 'Too many authentication attempts. Please try again later.',
+});
+
+export const aiLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: 30,
+  message: 'Too many AI requests. Please wait before sending more.',
+});
+
+export const draftLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: 60,
+  message: 'Too many saves. Please slow down.',
+});
+
+export const publishLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: 20,
+  message: 'Too many publish actions. Please slow down.',
+});
+
+export const notifLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: 60,
+  message: 'Too many notification requests. Please slow down.',
+});

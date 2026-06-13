@@ -6,6 +6,7 @@ import {
   deleteSession,
 } from '../services/interviewSessionService.js';
 import { logTimelineEvent, updateMentorMemory } from './learningLabController.js';
+import { success, error } from '../utils/response.js';
 
 const VALID_STATUS = new Set(['draft', 'incomplete', 'active', 'completed', 'archived', 'in_progress', 'abandoned']);
 
@@ -104,7 +105,7 @@ export const createInterviewSession = async (req, res) => {
   const validation = validateCreatePayload(req.body);
 
   if (validation.error) {
-    return res.status(400).json({ success: false, message: validation.error });
+    return error(res, { message: validation.error, status: 400 });
   }
 
   try {
@@ -118,10 +119,10 @@ export const createInterviewSession = async (req, res) => {
       status: 'started'
     });
 
-    return res.status(201).json({ success: true, data: session });
+    return success(res, { message: 'Session created', data: session, status: 201 });
   } catch (error) {
     console.error('Create interview session failed:', error.message);
-    return res.status(500).json({ success: false, message: 'Unable to create interview session.' });
+    return error(res, { message: 'Unable to create interview session.', status: 500 });
   }
 };
 
@@ -130,23 +131,23 @@ export const getInterviewSession = async (req, res) => {
     const session = await getSessionById(req.params.id, req.user._id);
 
     if (!session) {
-      return res.status(404).json({ success: false, message: 'Interview session not found.' });
+      return error(res, { message: 'Interview session not found.', status: 404 });
     }
 
-    return res.status(200).json({ success: true, data: session });
+    return success(res, { message: 'Session retrieved', data: session });
   } catch (error) {
     console.error('Fetch interview session failed:', error.message);
-    return res.status(500).json({ success: false, message: 'Unable to fetch interview session.' });
+    return error(res, { message: 'Unable to fetch interview session.', status: 500 });
   }
 };
 
 export const getInterviewSessions = async (req, res) => {
   try {
     const sessions = await listSessionsForUser(req.user._id);
-    return res.status(200).json({ success: true, data: sessions });
+    return success(res, { message: 'Sessions retrieved', data: sessions });
   } catch (error) {
     console.error('List interview sessions failed:', error.message);
-    return res.status(500).json({ success: false, message: 'Unable to list interview sessions.' });
+    return error(res, { message: 'Unable to list interview sessions.', status: 500 });
   }
 };
 
@@ -237,14 +238,14 @@ export const updateInterviewSession = async (req, res) => {
   const updates = sanitizePayload(req.body);
 
   if (Object.keys(updates).length === 0) {
-    return res.status(400).json({ success: false, message: 'No valid fields provided for update.' });
+    return error(res, { message: 'No valid fields provided for update.', status: 400 });
   }
 
   try {
     const updated = await updateSession(req.params.id, req.user._id, updates);
 
     if (!updated) {
-      return res.status(404).json({ success: false, message: 'Interview session not found or not owned by user.' });
+      return error(res, { message: 'Interview session not found or not owned by user.', status: 404 });
     }
 
     if (updates.status === 'completed') {
@@ -281,10 +282,10 @@ export const updateInterviewSession = async (req, res) => {
       }
     }
 
-    return res.status(200).json({ success: true, data: updated });
+    return success(res, { message: 'Session updated', data: updated });
   } catch (error) {
     console.error('Update interview session failed:', error.message);
-    return res.status(500).json({ success: false, message: 'Unable to update interview session.' });
+    return error(res, { message: 'Unable to update interview session.', status: 500 });
   }
 };
 
@@ -293,12 +294,12 @@ export const deleteInterviewSession = async (req, res) => {
     const removed = await deleteSession(req.params.id, req.user._id);
 
     if (!removed) {
-      return res.status(404).json({ success: false, message: 'Interview session not found or not owned by user.' });
+      return error(res, { message: 'Interview session not found or not owned by user.', status: 404 });
     }
 
-    return res.status(200).json({ success: true, message: 'Interview session deleted.' });
+    return success(res, { message: 'Interview session deleted.' });
   } catch (error) {
     console.error('Delete interview session failed:', error.message);
-    return res.status(500).json({ success: false, message: 'Unable to delete interview session.' });
+    return error(res, { message: 'Unable to delete interview session.', status: 500 });
   }
 };

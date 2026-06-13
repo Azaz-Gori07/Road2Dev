@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Brain, Award, Calendar, Clock, BarChart3, TrendingUp, Flame, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Brain, Award, BarChart3, Flame, CheckCircle } from 'lucide-react';
 import './LearningAnalytics.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
@@ -169,8 +169,7 @@ export default function LearningAnalytics() {
     masteryAvg: 0,
     interviewReadiness: 0,
     projectReadiness: 0,
-    learningStreak: 0,
-    hoursPracticed: 0
+    learningStreak: 0
   };
 
   const hasTimelineData = data?.charts?.masteryGrowth?.length > 0;
@@ -233,15 +232,6 @@ export default function LearningAnalytics() {
               </div>
             </div>
 
-            <div className="an-stat-card">
-              <div className="an-stat-icon-wrap icon-cyan">
-                <Clock size={20} />
-              </div>
-              <div className="an-stat-info">
-                <span>Hours Practiced</span>
-                <h3>{stats.hoursPracticed} hr</h3>
-              </div>
-            </div>
           </div>
 
           {/* Readiness Indicators */}

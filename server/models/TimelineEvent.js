@@ -11,5 +11,8 @@ const timelineEventSchema = new mongoose.Schema({
   timestamps: true
 });
 
+timelineEventSchema.index({ userId: 1, createdAt: -1 });
+timelineEventSchema.index({ action: 1 });
+
 const TimelineEvent = mongoose.model('TimelineEvent', timelineEventSchema);
 export default TimelineEvent;

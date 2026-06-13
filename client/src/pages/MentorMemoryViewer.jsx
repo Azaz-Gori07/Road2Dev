@@ -269,7 +269,7 @@ export default function MentorMemoryViewer() {
                   </div>
                   <div className="mmv-expanded-actions">
                     {topic.mastery < 75 && (
-                      <button onClick={(e) => { e.stopPropagation(); navigate(`/learning-lab?remediate=true`, { state: { focusTopic: topic.topic } }); }} className="mmv-action-btn mmv-action-fix">
+                      <button onClick={(e) => { e.stopPropagation(); navigate(`/learning-lab?topic=${encodeURIComponent(topic.topic)}&remediate=true`); }} className="mmv-action-btn mmv-action-fix">
                         <Zap size={14} /> Improve {topic.topic}
                       </button>
                     )}

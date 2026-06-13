@@ -86,6 +86,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  emailVerified: {
+    type: Boolean,
+    default: false,
+  },
 }, {
   timestamps: true,
   toJSON: {
@@ -109,6 +113,9 @@ userSchema.pre('save', async function () {
 userSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
+
+userSchema.index({ zenuxsId: 1 });
+userSchema.index({ authProvider: 1 });
 
 const User = mongoose.model('User', userSchema);
 export default User;

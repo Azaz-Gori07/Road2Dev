@@ -600,7 +600,7 @@ const normalizeEvaluationResponse = (parsed, questionCount) => {
 
 export const evaluateResponseAndNext = async (request) => {
   const apiKey = process.env.AI_API_KEY;
-  const timeoutMs = Number(process.env.AI_TIMEOUT_MS) || 20000;
+  const timeoutMs = Number(process.env.AI_TIMEOUT_MS) || 60000;
 
   if (!apiKey) {
     const error = new Error('AI service is not configured.');
@@ -698,7 +698,7 @@ INSTRUCTION FOR THIS TURN:
 
 export const generateInterviewSession = async (request) => {
   const apiKey = process.env.AI_API_KEY;
-  const timeoutMs = Number(process.env.AI_TIMEOUT_MS) || 20000;
+  const timeoutMs = Number(process.env.AI_TIMEOUT_MS) || 60000;
 
   if (!apiKey) {
     const error = new Error('AI service is not configured.');

@@ -1,5 +1,6 @@
 import { GroqProvider } from './providers/groqProvider.js';
 import { OpenRouterProvider } from './providers/openRouterProvider.js';
+import { NvidiaProvider } from './providers/nvidiaProvider.js';
 
 const DEFAULT_COOLDOWN_MS = Number(process.env.AI_CIRCUIT_BREAKER_COOLDOWN_MS) || 60_000;
 const FAILURE_COUNT_THRESHOLD = Number(process.env.AI_CIRCUIT_BREAKER_FAILURE_THRESHOLD) || 5;
@@ -39,16 +40,18 @@ const getDefaultModel = (provider) => {
     groq: 'llama-3.1-8b-instant',
     openrouter: process.env.DEFENCE_MODEL?.trim() || 'moonshotai/kimi-k2.6:free',
     openrouter2: process.env.AI_API_KEY_2_MODEL?.trim() || 'openai/gpt-oss-20b:free',
+    nvidia: process.env.NVIDIA_TEXT_MODEL?.trim() || 'meta/llama-3.3-70b-instruct',
   };
   return defaultModels[provider] || '';
 };
 
-const getTimeoutMs = () => Number(process.env.AI_TIMEOUT_MS) || 20_000;
+const getTimeoutMs = () => Number(process.env.AI_TIMEOUT_MS) || 60_000;
 
 const aiCircuit = {
   groq: { failures: 0, disabledUntil: 0 },
   openrouter: { failures: 0, disabledUntil: 0 },
   openrouter2: { failures: 0, disabledUntil: 0 },
+  nvidia: { failures: 0, disabledUntil: 0 },
 };
 
 const shouldSkip = (providerName) => {
@@ -115,9 +118,57 @@ export async function hybridGenerate(options) {
   const groqModel = options?.groqModel || getDefaultModel('groq');
   const openRouterModel = options?.openRouterModel || getDefaultModel('openrouter');
   const openRouter2Model = options?.openRouter2Model || getDefaultModel('openrouter2');
+  const nvidiaModel = options?.nvidiaModel || getDefaultModel('nvidia');
 
   const groqProvider = new GroqProvider();
   const openRouterProvider = new OpenRouterProvider();
+  const nvidiaProvider = new NvidiaProvider();
+
+  const tryNvidia = async () => {
+    const nvidiaKey = process.env.NVIDIA_TEXT_API_KEY;
+    if (!nvidiaKey) {
+      const err = new Error('NVIDIA_TEXT_API_KEY not configured');
+      err.publicMessage = 'NVIDIA_TEXT_API_KEY not configured';
+      err.isMissingKey = true;
+      throw err;
+    }
+
+    if (shouldSkip('nvidia')) {
+      const err = new Error('NVIDIA circuit breaker active');
+      err.publicMessage = 'NVIDIA circuit breaker active';
+      err.isCircuitBreaker = true;
+      throw err;
+    }
+
+    const start = Date.now();
+    let result;
+    try {
+      result = await nvidiaProvider.generate({
+        apiKey: nvidiaKey,
+        prompt,
+        systemPrompt,
+        model: nvidiaModel,
+        timeoutMs,
+        jsonResponse,
+        maxTokens,
+      });
+    } catch (err) {
+      logAiCall('nvidia', nvidiaModel, Date.now() - start, 'failure');
+      throw err;
+    }
+
+    if (!result?.text?.trim()) {
+      const err = new Error('AI returned an empty response');
+      err.isEmptyResponse = true;
+      throw err;
+    }
+
+    const latency = Date.now() - start;
+    logAiCall('nvidia', nvidiaModel, latency, 'success');
+    recordSuccess('nvidia');
+
+    return withMeta(result);
+  };
 
   const tryOpenRouter2 = async () => {
     const key2 = process.env.AI_API_KEY_2;
@@ -254,7 +305,7 @@ export async function hybridGenerate(options) {
 
   // Provider chain — iterate in order, fall through on retryable errors
   // Outer backoff loop: 1s, 2s, 4s — bans immediate retries
-  const providerOrder = options?.providers || ['openrouter2', 'groq'];
+  const providerOrder = options?.providers || ['nvidia', 'openrouter2', 'groq'];
   const BACKOFF_DELAYS = [1000, 2000, 4000];
 
   let lastError = null;
@@ -263,6 +314,7 @@ export async function hybridGenerate(options) {
     for (let i = 0; i < providerOrder.length; i++) {
       const name = providerOrder[i];
       try {
+        if (name === 'nvidia') return await tryNvidia();
         if (name === 'openrouter') return await tryOpenRouter();
         if (name === 'openrouter2') return await tryOpenRouter2();
         if (name === 'groq') return await tryGroq();

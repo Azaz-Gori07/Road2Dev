@@ -392,7 +392,7 @@ function ProfileView({ data, sessions = [], learningSessions = [], onEdit }) {
 /* ═══════════════════════════════════════════════════
    EDIT PROFILE VIEW
    ═══════════════════════════════════════════════════ */
-function EditProfile({ data, onSave, onCancel, onLogout }) {
+function EditProfile({ data, onSave, onCancel, onLogout, saving, saveError }) {
   const [form, setForm] = useState({ ...data });
   const [emailNotif, setEmailNotif] = useState(true);
   const [publicProf, setPublicProf] = useState(true);
@@ -419,6 +419,11 @@ function EditProfile({ data, onSave, onCancel, onLogout }) {
       </div>
 
       <div className="edit-content">
+        {saveError && (
+          <div className="profile-error-banner" style={{ gridColumn: '1 / -1', background: 'rgba(239, 68, 68, 0.12)', border: '1px solid #ef4444', padding: '12px 16px', borderRadius: '10px', color: '#ef4444', marginBottom: '16px', fontSize: '13px', fontWeight: '500', fontFamily: 'DM Sans, sans-serif' }}>
+            ⚠ {saveError}
+          </div>
+        )}
         {/* Left: Profile Info */}
         <div className="profile-info-section">
           <h3 className="section-title-small">Profile Information</h3>
@@ -522,11 +527,11 @@ function EditProfile({ data, onSave, onCancel, onLogout }) {
 
           {/* Action buttons */}
           <div className="action-buttons">
-            <button {...hCancelP} onClick={onCancel} className={`cancel-btn ${hCancel ? "cancel-btn-hover" : ""}`}>
+            <button {...hCancelP} onClick={onCancel} disabled={saving} className={`cancel-btn ${hCancel ? "cancel-btn-hover" : ""}`}>
               CANCEL
             </button>
-            <button {...hSaveP} onClick={() => onSave(form)} className={`save-btn ${hSave ? "save-btn-hover" : ""}`}>
-              SAVE CHANGES
+            <button {...hSaveP} onClick={() => onSave(form)} disabled={saving} className={`save-btn ${hSave ? "save-btn-hover" : ""}`} style={saving ? { opacity: 0.6, cursor: 'not-allowed' } : {}}>
+              {saving ? "SAVING..." : "SAVE CHANGES"}
             </button>
           </div>
           
@@ -552,6 +557,7 @@ export default function ProfilePage() {
   const authUser = customAuth.user || zenuxAuth.user;
   const [view, setView] = useState("profile");
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const [sessions, setSessions] = useState([]);
   const [sessionsLoading, setSessionsLoading] = useState(true);
   const [learningSessions, setLearningSessions] = useState([]);
@@ -658,7 +664,25 @@ export default function ProfilePage() {
   };
 
   const handleSaveProfile = async (updated) => {
+    if (!updated.name || !updated.name.trim()) {
+      setSaveError("Full Name is required.");
+      return;
+    }
+    if (updated.name.trim().length < 2) {
+      setSaveError("Name must be at least 2 characters.");
+      return;
+    }
+    if (!updated.email || !updated.email.trim()) {
+      setSaveError("Email address is required.");
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(updated.email.trim())) {
+      setSaveError("Please provide a valid email address.");
+      return;
+    }
+
     setSaving(true);
+    setSaveError("");
     try {
       if (customAuth.isAuthenticated && customAuth.updateProfile) {
         const updatedUser = await customAuth.updateProfile(updated);
@@ -684,6 +708,7 @@ export default function ProfilePage() {
       setView("profile");
     } catch (error) {
       console.error("Profile save failed:", error);
+      setSaveError(error.message || "Failed to save profile. Please check your inputs.");
     } finally {
       setSaving(false);
     }
@@ -713,8 +738,10 @@ export default function ProfilePage() {
         ? <ProfileView data={data} sessions={sessions} learningSessions={learningSessions} onEdit={() => setView("edit")} />
         : <EditProfile data={data}
             onSave={handleSaveProfile}
-            onCancel={() => setView("profile")}
+            onCancel={() => { setView("profile"); setSaveError(""); }}
             onLogout={handleLogout}
+            saving={saving}
+            saveError={saveError}
           />
       }
       {isAuthenticated && view === "profile" && (

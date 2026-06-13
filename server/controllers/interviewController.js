@@ -1,5 +1,6 @@
 import { generateInterviewSession, evaluateResponseAndNext } from '../services/interviewAiService.js';
 import InterviewSession from '../models/InterviewSession.js';
+import { success, error } from '../utils/response.js';
 
 const MAX_FIELD_LENGTH = 80;
 const MAX_STACK_LENGTH = 80;
@@ -44,10 +45,7 @@ export const generateInterview = async (req, res) => {
   const validation = validateRequestBody(req.body);
 
   if (validation.error) {
-    return res.status(400).json({
-      success: false,
-      message: validation.error,
-    });
+    return error(res, { message: validation.error, status: 400 });
   }
 
   try {
@@ -66,19 +64,13 @@ export const generateInterview = async (req, res) => {
       userPreferences,
     });
 
-    return res.status(200).json({
-      success: true,
-      data: interview,
-    });
+    return success(res, { message: 'Interview generated', data: interview });
   } catch (error) {
     const statusCode = error.statusCode || 500;
 
     console.error('Interview generation failed:', error.message);
 
-    return res.status(statusCode).json({
-      success: false,
-      message: error.publicMessage || 'Interview generation failed. Please try again later.',
-    });
+    return error(res, { message: error.publicMessage || 'Interview generation failed. Please try again later.', status: statusCode });
   }
 };
 
@@ -91,19 +83,19 @@ export const respondToInterview = async (req, res) => {
   const currentSessionId = req.body.sessionId ? cleanText(req.body.sessionId) : null;
 
   if (!field) {
-    return res.status(400).json({ success: false, message: 'A valid field/domain is required.' });
+    return error(res, { message: 'A valid field/domain is required.', status: 400 });
   }
 
   if (!VALID_EXPERIENCE.has(experienceLevel)) {
-    return res.status(400).json({ success: false, message: 'A valid experience level is required.' });
+    return error(res, { message: 'A valid experience level is required.', status: 400 });
   }
 
   if (!VALID_INTERVIEW_TYPES.has(interviewType)) {
-    return res.status(400).json({ success: false, message: 'A valid interview type is required.' });
+    return error(res, { message: 'A valid interview type is required.', status: 400 });
   }
 
   if (!Array.isArray(messages) || messages.length === 0) {
-    return res.status(400).json({ success: false, message: 'Messages conversation history is required.' });
+    return error(res, { message: 'Messages conversation history is required.', status: 400 });
   }
 
   try {
@@ -160,16 +152,10 @@ export const respondToInterview = async (req, res) => {
       userPreferences,
     });
 
-    return res.status(200).json({
-      success: true,
-      data: evaluation,
-    });
+    return success(res, { message: 'Response evaluated', data: evaluation });
   } catch (error) {
     const statusCode = error.statusCode || 500;
     console.error('Interview response evaluation failed:', error.message);
-    return res.status(statusCode).json({
-      success: false,
-      message: error.publicMessage || 'Interview evaluation failed. Please try again later.',
-    });
+    return error(res, { message: error.publicMessage || 'Interview evaluation failed. Please try again later.', status: statusCode });
   }
 };

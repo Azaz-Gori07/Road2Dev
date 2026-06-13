@@ -120,7 +120,6 @@ const TECH_EVIDENCE_PATTERNS = [
   { name: 'MongoDB', patterns: [/mongodb|mongoose|mongod/i] },
   { name: 'MySQL', patterns: [/mysql|mariadb/i] },
   { name: 'SQLite', patterns: [/sqlite|sqlite3|better-sqlite3/i] },
-  { name: 'Redis', patterns: [/redis/i] },
   { name: 'JWT', patterns: [/jsonwebtoken|jwt/i] },
   { name: 'OAuth', patterns: [/oauth|passport|auth0/i] },
   { name: 'Firebase', patterns: [/firebase/i] },
@@ -135,7 +134,7 @@ const TECH_EVIDENCE_PATTERNS = [
   { name: 'React Router', patterns: [/react-router/i] },
   { name: 'Axios', patterns: [/axios/i] },
   { name: 'Express', patterns: [/express/i] },
-  { name: 'Next.js', patterns: [/next/i] },
+  { name: 'Next.js', patterns: [/next[\/\.-]|"next"|'next'|next\.config/i] },
   { name: 'Vue', patterns: [/vue/i] },
   { name: 'Angular', patterns: [/@angular/i] },
   { name: 'Svelte', patterns: [/svelte/i] },
@@ -163,6 +162,27 @@ const TECH_EVIDENCE_PATTERNS = [
   { name: 'Gunicorn', patterns: [/gunicorn/i] },
   { name: 'Django', patterns: [/django/i] },
   { name: 'FastAPI', patterns: [/fastapi/i] },
+  // Missing frameworks added
+  { name: 'NestJS', patterns: [/@nestjs|nestjs/i] },
+  { name: 'Spring Boot', patterns: [/spring-boot|springframework|spring/i] },
+  { name: 'Flutter', patterns: [/flutter/i] },
+  { name: 'Tauri', patterns: [/tauri/i] },
+  { name: 'Three.js', patterns: [/three[\/\.-]/i] },
+  { name: '.NET', patterns: [/dotnet|asp\.net|\.net\b|maui|wpf|blazor/i] },
+  { name: 'Rails', patterns: [/rails|ruby on rails/i] },
+  // Databases
+  { name: 'Supabase', patterns: [/supabase/i] },
+  // Infrastructure / DevOps
+  { name: 'GitHub Actions', patterns: [/\.github\/workflows|actions\//i] },
+  { name: 'Azure', patterns: [/azure/i] },
+  { name: 'GCP', patterns: [/google-cloud|gcp|@google-cloud/i] },
+  { name: 'Nginx', patterns: [/nginx/i] },
+  { name: 'Terraform', patterns: [/terraform|\.tf\b|hcl/i] },
+  { name: 'Ansible', patterns: [/ansible|playbook/i] },
+  { name: 'GitLab CI', patterns: [/\.gitlab-ci\.yml|gitlab-ci/i] },
+  { name: 'Jenkins', patterns: [/Jenkinsfile|jenkins/i] },
+  { name: 'Prometheus', patterns: [/prometheus/i] },
+  { name: 'Grafana', patterns: [/grafana/i] }
 ];
 
 const LANGUAGE_BY_EXTENSION = {
@@ -177,6 +197,8 @@ const LANGUAGE_BY_EXTENSION = {
   '.yaml': 'YAML', '.yml': 'YAML', '.toml': 'TOML',
   '.dockerfile': 'Docker', '.sh': 'Shell', '.bat': 'Batch',
   '.ps1': 'PowerShell',
+  '.cpp': 'C++', '.cxx': 'C++', '.hpp': 'C++', '.h': 'C++',
+  '.dart': 'Dart',
 };
 
 const HIGH_RISK_CLAIMS = ['Redis', 'Kafka', 'Kubernetes', 'AWS'];
@@ -230,7 +252,13 @@ export const detectTechnologiesFromFiles = (files = [], fileContents = []) => {
   // 3. Detect languages from file extensions
   const languages = new Set();
   for (const path of allPaths) {
-    const ext = Object.keys(LANGUAGE_BY_EXTENSION).find(e => path.endsWith(e) || path.toLowerCase().includes(e));
+    const lowerPath = path.toLowerCase();
+    const ext = Object.keys(LANGUAGE_BY_EXTENSION).find(e => {
+      if (e.startsWith('.')) {
+        return lowerPath.endsWith(e);
+      }
+      return lowerPath.endsWith(e) || lowerPath.split('/').pop() === e;
+    });
     if (ext) {
       languages.add(LANGUAGE_BY_EXTENSION[ext]);
     }

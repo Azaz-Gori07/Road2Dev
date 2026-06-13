@@ -114,5 +114,9 @@ const interviewSessionSchema = new mongoose.Schema(
   }
 );
 
+interviewSessionSchema.index({ userId: 1, status: 1, createdAt: -1 });
+interviewSessionSchema.index({ userId: 1, createdAt: -1 });
+interviewSessionSchema.index({ field: 1 });
+
 const InterviewSession = mongoose.model('InterviewSession', interviewSessionSchema);
 export default InterviewSession;
