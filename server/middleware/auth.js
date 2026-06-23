@@ -48,13 +48,7 @@ const optionalAuth = async (req, res, next) => {
       }
     }
     next();
-  } catch (err) {
-    if (err.name === 'JsonWebTokenError') {
-      return error(res, { message: 'Invalid token', status: 401 });
-    }
-    if (err.name === 'TokenExpiredError') {
-      return error(res, { message: 'Token has expired', status: 401 });
-    }
+  } catch {
     next();
   }
 };

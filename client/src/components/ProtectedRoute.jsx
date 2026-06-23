@@ -1,6 +1,7 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import useZenuxAuth from '../hooks/useZenuxAuth';
 import useAuth from '../hooks/useAuth';
+import LoadingSpinner from './ui/LoadingSpinner';
 
 export default function ProtectedRoute({ children }) {
   const location = useLocation();
@@ -10,7 +11,7 @@ export default function ProtectedRoute({ children }) {
   const loading = customAuth.loading || zenuxAuth.loading;
 
   if (loading) {
-    return null;
+    return <LoadingSpinner message="Checking authentication..." />;
   }
 
   if (!isAuthenticated) {

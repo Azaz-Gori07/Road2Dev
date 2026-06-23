@@ -12,7 +12,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Helper: Generate JWT access token (short-lived)
 const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '15m' });
+  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '7d' });
 };
 
 // Helper: Generate refresh token (long-lived, stored in DB)

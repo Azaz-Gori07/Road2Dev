@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import AppLayout from "./layout/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 import Home from "./pages/Home";
 import Learning from "./pages/Learning";
@@ -24,6 +25,7 @@ import MentorMemoryViewer from "./pages/MentorMemoryViewer";
 
 function App() {
   return (
+    <ErrorBoundary>
     <Routes>
       <Route path="/auth" element={<Auth />} />
       <Route path="/onboarding" element={<Onboarding />} />
@@ -148,6 +150,7 @@ function App() {
         />
       </Route>
     </Routes>
+    </ErrorBoundary>
   );
 }
 

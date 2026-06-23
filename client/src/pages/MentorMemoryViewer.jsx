@@ -2,6 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, BrainCircuit, Shield, AlertTriangle, CheckCircle, Clock, Activity, BookOpen, BarChart3, Zap, ExternalLink, Search, Mic } from 'lucide-react';
 import './MentorMemoryViewer.css';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import EmptyState from '../components/ui/EmptyState';
+import ErrorDisplay from '../components/ui/ErrorDisplay';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
 
@@ -89,13 +92,13 @@ export default function MentorMemoryViewer() {
 
   if (loading) return (
     <div className="mmv-container">
-      <div className="mmv-loading"><BrainCircuit size={32} /> Loading mentor memory...</div>
+      <LoadingSpinner message="Loading mentor memory..." />
     </div>
   );
 
   if (error) return (
     <div className="mmv-container">
-      <div className="mmv-loading mmv-error-state">{error}</div>
+      <ErrorDisplay message={error} onRetry={fetchData} />
     </div>
   );
 

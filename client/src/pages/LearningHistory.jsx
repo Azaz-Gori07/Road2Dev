@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Trash2, Archive, Play, AlertTriangle, BookOpen, Award, CheckCircle, Flame } from 'lucide-react';
 import './LearningHistory.css';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import EmptyState from '../components/ui/EmptyState';
+import ErrorDisplay from '../components/ui/ErrorDisplay';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
 
@@ -95,18 +98,17 @@ export default function LearningHistory() {
       </header>
 
       {loading ? (
-        <div className="lh-loading">Syncing workspace logs...</div>
+        <LoadingSpinner message="Syncing workspace logs..." />
       ) : error ? (
-        <div className="lh-error">{error}</div>
+        <ErrorDisplay message={error} onRetry={fetchSessions} />
       ) : sessions.length === 0 ? (
-        <div className="lh-empty-state">
-          <BookOpen size={48} className="lh-empty-icon" />
-          <h2>No learning history yet.</h2>
-          <p>Start your first learning mission to begin building your learning history.</p>
-          <button onClick={() => navigate('/learning-lab')} className="lh-primary-btn">
-            Launch Learning Lab
-          </button>
-        </div>
+        <EmptyState
+          icon={BookOpen}
+          title="No learning history yet."
+          message="Start your first learning mission to begin building your learning history."
+          actionLabel="Launch Learning Lab"
+          onAction={() => navigate('/learning-lab')}
+        />
       ) : (
         <div className="lh-grid">
           {sessions.map((session) => {

@@ -589,7 +589,7 @@ function LearningLab() {
           setActiveTab(routeWorkflowTab);
         } else if (['playground', 'project', 'coach', 'memory'].includes(savedUiState.activeTab)) {
           setActiveTab(savedUiState.activeTab);
-        } else if (session.sessionType === 'Project Defense' || session.topic.startsWith('Project Defense:')) {
+        } else if (session.sessionType === 'Project Defense' || session.topic?.startsWith('Project Defense:')) {
           setActiveTab('project');
           if (!isProjectScanned(session.projectContext)) {
             setMobilePane('workspace');
@@ -1230,7 +1230,7 @@ function LearningLab() {
   };
 
   const projectContext = activeSession?.projectContext;
-  const isProjectSession = activeSession?.topic.startsWith('Project Defense:');
+  const isProjectSession = activeSession?.topic?.startsWith('Project Defense:');
   const isProjectDefenseSession = activeSession?.sessionType === 'Project Defense';
   const projectDefenseScanned = isProjectScanned(projectContext);
   const projectDefenseInterviewActive =

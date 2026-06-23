@@ -187,7 +187,7 @@ html, body {
   border-radius: var(--radius-lg);
   padding: 24px 28px 20px;
   flex: 1;
-  overflow: hidden;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
 }
@@ -215,6 +215,7 @@ html, body {
 
 .screen.active {
   display: flex;
+  overflow-y: auto;
 }
 
 /* ── Field grid ─────────────────────────────────── */
@@ -619,8 +620,10 @@ html, body {
   align-items: center;
   text-align: center;
   flex: 1;
-  justify-content: center;
+  justify-content: start;
   gap: 18px;
+  overflow-y: scroll;
+  height: 100%;
 }
 
 .start-icon {
@@ -631,7 +634,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
+  font-size: 46px;
   animation: pulse 2s infinite;
 }
 

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Code, ChevronDown, ChevronUp, Clock, CheckCircle2, XCircle, FileCode } from 'lucide-react';
 import './SandboxHistory.css';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import EmptyState from '../components/ui/EmptyState';
+import ErrorDisplay from '../components/ui/ErrorDisplay';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
 
@@ -69,18 +72,17 @@ export default function SandboxHistory() {
       </header>
 
       {loading ? (
-        <div className="sh-loading">Syncing compiler logs...</div>
+        <LoadingSpinner message="Syncing compiler logs..." />
       ) : error ? (
-        <div className="sh-error">{error}</div>
+        <ErrorDisplay message={error} onRetry={fetchSandboxHistory} />
       ) : challenges.length === 0 ? (
-        <div className="sh-empty-state">
-          <Code size={48} className="sh-empty-icon" />
-          <h2>No sandbox coding history yet.</h2>
-          <p>Open the sandbox in AI Mentor Lab and submit your first coding challenge script to trace attempts here.</p>
-          <button onClick={() => navigate('/learning-lab')} className="sh-primary-btn">
-            Open Practice Workspace
-          </button>
-        </div>
+        <EmptyState
+          icon={Code}
+          title="No sandbox coding history yet."
+          message="Open the sandbox in AI Mentor Lab and submit your first coding challenge script to trace attempts here."
+          actionLabel="Open Practice Workspace"
+          onAction={() => navigate('/learning-lab')}
+        />
       ) : (
         <div className="sh-list">
           {challenges.map((chal) => {

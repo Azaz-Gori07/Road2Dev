@@ -20,11 +20,14 @@ export function AuthProvider({ children }) {
   }, []);
 
   // Save session for email/password auth
-  const saveSession = (token, userData) => {
-    localStorage.setItem('auth_token', token);
-    localStorage.setItem('auth_user', JSON.stringify(userData));
-    setTokens(token);
-    setUser(userData);
+  const saveSession = (data) => {
+    localStorage.setItem('auth_token', data.token);
+    localStorage.setItem('auth_user', JSON.stringify(data.user));
+    if (data.refreshToken) {
+      localStorage.setItem('auth_refresh_token', data.refreshToken);
+    }
+    setTokens(data.token);
+    setUser(data.user);
     setIsAuthenticated(true);
   };
 
@@ -32,6 +35,7 @@ export function AuthProvider({ children }) {
   const clearSession = () => {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user');
+    localStorage.removeItem('auth_refresh_token');
     setTokens(null);
     setUser(null);
     setIsAuthenticated(false);
@@ -44,9 +48,14 @@ export function AuthProvider({ children }) {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
-        const data = await res.json();
-        setUser(data.user);
-        localStorage.setItem('auth_user', JSON.stringify(data.user));
+        const body = await res.json();
+        const userData = body?.data?.user || body?.user;
+        if (userData) {
+          setUser(userData);
+          localStorage.setItem('auth_user', JSON.stringify(userData));
+        } else {
+          clearSession();
+        }
       } else {
         clearSession();
       }
@@ -136,14 +145,10 @@ export function AuthProvider({ children }) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token: zenuxsToken }),
         });
-        const data = await res.json();
-        if (res.ok && data.token) {
+        const body = await res.json();
+        if (res.ok && body?.data?.token) {
           if (active) {
-            localStorage.setItem('auth_token', data.token);
-            localStorage.setItem('auth_user', JSON.stringify(data.user));
-            setTokens(data.token);
-            setUser(data.user);
-            setIsAuthenticated(true);
+            saveSession(body.data);
           }
         } else {
           if (active) clearSession();
@@ -219,12 +224,12 @@ export function AuthProvider({ children }) {
       body: JSON.stringify({ email, otp }),
     });
 
-    const data = await res.json();
+    const body = await res.json();
     if (!res.ok) {
-      throw new Error(data.error || 'Verification failed');
+      throw new Error(body.error || 'Verification failed');
     }
-    saveSession(data.token, data.user);
-    return data.user;
+    saveSession(body.data);
+    return body.data?.user;
   }, []);
 
   const resendOtp = useCallback(async (email) => {
@@ -248,12 +253,12 @@ export function AuthProvider({ children }) {
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await res.json();
+    const body = await res.json();
     if (!res.ok) {
-      throw new Error(data.error || 'Login failed');
+      throw new Error(body.error || 'Login failed');
     }
-    saveSession(data.token, data.user);
-    return data.user;
+    saveSession(body.data);
+    return body.data?.user;
   }, []);
 
   const loginWithZenuxs = useCallback(async (zenuxsToken) => {
@@ -263,12 +268,12 @@ export function AuthProvider({ children }) {
       body: JSON.stringify({ token: zenuxsToken }),
     });
 
-    const data = await res.json();
+    const body = await res.json();
     if (!res.ok) {
-      throw new Error(data.error || 'OAuth login failed');
+      throw new Error(body.error || 'OAuth login failed');
     }
-    saveSession(data.token, data.user);
-    return data.user;
+    saveSession(body.data);
+    return body.data?.user;
   }, []);
 
   const forgotPassword = useCallback(async (email) => {
@@ -292,12 +297,12 @@ export function AuthProvider({ children }) {
       body: JSON.stringify({ token, password }),
     });
 
-    const data = await res.json();
+    const body = await res.json();
     if (!res.ok) {
-      throw new Error(data.error || 'Failed to reset password');
+      throw new Error(body.error || 'Failed to reset password');
     }
-    saveSession(data.token, data.user);
-    return data.user;
+    saveSession(body.data);
+    return body.data?.user;
   }, []);
 
   const verifyEmail = useCallback(async (token) => {
@@ -341,14 +346,22 @@ export function AuthProvider({ children }) {
   }, []);
 
   const logout = useCallback(async () => {
+    const storedRefreshToken = localStorage.getItem('auth_refresh_token');
+    if (storedRefreshToken) {
+      try {
+        await fetch(`${API_BASE}/auth/revoke`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refreshToken: storedRefreshToken }),
+        });
+      } catch {}
+    }
     clearSession();
     const oauth = oauthRef.current;
     if (oauth && oauth.isAuthenticated()) {
       try {
         await oauth.logout({ revokeTokens: true });
-      } catch (error) {
-        console.error('Logout error:', error);
-      }
+      } catch {}
     }
   }, []);
 

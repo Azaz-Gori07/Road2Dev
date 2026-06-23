@@ -9,6 +9,22 @@ const Roadmap = () => {
   const roadmapKey = stackSlug || fieldSlug;
   const roadmap = stackFlow[roadmapKey];
 
+  if (!roadmap) {
+    return (
+      <div className="roadmap-container">
+        <div className="roadmap-header">
+          <h1 className="heading">ROADMAP</h1>
+          <p className="roadmap-subtitle" style={{ color: 'var(--text-secondary)' }}>
+            Roadmap "{roadmapKey}" not found.
+          </p>
+          <button className="btn-secondary" onClick={() => navigate('/learning')} style={{ marginTop: '12px' }}>
+            Back to Learning
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const handleClick = (slug) => {
     navigate(`/learning/${fieldSlug}/${stackSlug}/${slug}`);
   };

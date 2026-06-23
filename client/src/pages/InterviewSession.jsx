@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import ErrorDisplay from '../components/ui/ErrorDisplay';
+import EmptyState from '../components/ui/EmptyState';
+import { Shield } from 'lucide-react';
 import './InterviewSession.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5500/api';
@@ -146,7 +150,7 @@ const InterviewSession = () => {
           </div>
           <div className="feedback-detail" style={{ borderLeft: '3px solid var(--secondary-translucent)', paddingLeft: '12px', background: 'var(--surface-alt)', padding: '10px 12px', borderRadius: '6px', margin: '12px 0' }}>
             <strong style={{ color: 'var(--secondary)', fontSize: '12px' }}>Scoring Evidence & Justification:</strong>
-            <p style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: '12.5px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>{message.analysis.scoringJustification}</p>
+            <p style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: '12.5px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>{message.analysis?.scoringJustification ?? 'No evidence available.'}</p>
           </div>
           {(message.analysis?.skillsPerformance?.length > 0 || message.analysis?.coveredSkills?.length > 0 || message.analysis?.strongSkills?.length > 0 || message.analysis?.weakSkills?.length > 0) && (
             <div className="feedback-detail" style={{ border: '1px solid var(--border)', padding: '16px', borderRadius: '12px', background: 'var(--surface)', margin: '12px 0', textAlign: 'left' }}>
@@ -429,13 +433,13 @@ const InterviewSession = () => {
             <div className="summary-section" style={{ textAlign: 'left' }}>
               <strong style={{ fontSize: '13px', color: 'var(--success)', display: 'block', marginBottom: '8px' }}>✔ Key Strengths</strong>
               <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '12.5px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                {message.summary.strengths.map((item) => <li key={item} style={{ marginBottom: '4px' }}>{item}</li>)}
+                {(message.summary.strengths || []).map((item) => <li key={item} style={{ marginBottom: '4px' }}>{item}</li>)}
               </ul>
             </div>
             <div className="summary-section" style={{ textAlign: 'left' }}>
               <strong style={{ fontSize: '13px', color: 'var(--error)', display: 'block', marginBottom: '8px' }}>⚠ Core Weaknesses</strong>
               <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '12.5px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                {message.summary.weaknesses.map((item) => <li key={item} style={{ marginBottom: '4px' }}>{item}</li>)}
+                {(message.summary.weaknesses || []).map((item) => <li key={item} style={{ marginBottom: '4px' }}>{item}</li>)}
               </ul>
             </div>
           </div>
@@ -506,7 +510,7 @@ const InterviewSession = () => {
   if (loading) {
     return (
       <div className="page-container session-page">
-        <div className="session-loading">Loading interview session…</div>
+        <LoadingSpinner message="Loading interview session..." />
       </div>
     );
   }
@@ -514,10 +518,12 @@ const InterviewSession = () => {
   if (error) {
     return (
       <div className="page-container session-page">
-        <div className="session-error">{error}</div>
-        <button className="btn-secondary" onClick={() => navigate('/interview/history')}>
-          Back to History
-        </button>
+        <ErrorDisplay message={error} detail="Please try again or go back to the interview history." />
+        <div className="flex justify-center mt-4">
+          <button className="btn-secondary" onClick={() => navigate('/interview/history')}>
+            Back to History
+          </button>
+        </div>
       </div>
     );
   }
@@ -525,7 +531,12 @@ const InterviewSession = () => {
   if (!session) {
     return (
       <div className="page-container session-page">
-        <div className="session-empty">Interview session data is unavailable.</div>
+        <EmptyState
+          icon={Shield}
+          title="Interview session data is unavailable."
+          actionLabel="Back to History"
+          onAction={() => navigate('/interview/history')}
+        />
       </div>
     );
   }
