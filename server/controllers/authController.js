@@ -63,17 +63,17 @@ export const register = async (req, res) => {
       },
       status: 201,
     });
-  } catch (error) {
-    console.error('Register error:', error.message);
-    console.error('Full error:', error);
-    if (error.code === 11000) {
+  } catch (err) {
+    console.error('Register error:', err.message);
+    console.error('Full error:', err);
+    if (err.code === 11000) {
       return error(res, { message: 'An account with this email already exists', status: 400 });
     }
-    if (error.name === 'ValidationError') {
-      const messages = Object.values(error.errors).map(e => e.message);
+    if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(e => e.message);
       return error(res, { message: messages.join('. '), status: 400 });
     }
-    if (error.name === 'MongooseError' || error.name === 'MongoServerSelectionError') {
+    if (err.name === 'MongooseError' || err.name === 'MongoServerSelectionError') {
       return error(res, { message: 'Database connection error. Please check your MongoDB connection.', status: 500 });
     }
     return error(res, { message: 'Registration failed. Please try again.', status: 500 });
@@ -116,8 +116,8 @@ export const login = async (req, res) => {
         user: user.toJSON(),
       },
     });
-  } catch (error) {
-    console.error('Login error:', error.message);
+  } catch (err) {
+    console.error('Login error:', err.message);
     return error(res, { message: 'Login failed. Please try again.', status: 500 });
   }
 };
@@ -193,8 +193,8 @@ export const zenuxsLogin = async (req, res) => {
         user: user.toJSON(),
       },
     });
-  } catch (error) {
-    console.error('Zenuxs login error:', error.message);
+  } catch (err) {
+    console.error('Zenuxs login error:', err.message);
     return error(res, { message: 'OAuth login failed. Please try again.', status: 500 });
   }
 };
@@ -217,8 +217,8 @@ export const getProfile = async (req, res) => {
       message: 'Profile retrieved',
       data: { user: user.toJSON() },
     });
-  } catch (error) {
-    console.error('Get profile error:', error.message);
+  } catch (err) {
+    console.error('Get profile error:', err.message);
     return error(res, { message: 'Failed to fetch profile', status: 500 });
   }
 };
@@ -255,10 +255,10 @@ export const updateProfile = async (req, res) => {
       message: 'Profile updated successfully',
       data: { user: user.toJSON() },
     });
-  } catch (error) {
-    console.error('Update profile error:', error.message);
-    if (error.name === 'ValidationError') {
-      const messages = Object.values(error.errors).map(e => e.message);
+  } catch (err) {
+    console.error('Update profile error:', err.message);
+    if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(e => e.message);
       return error(res, { message: messages.join('. '), status: 400 });
     }
     return error(res, { message: 'Failed to update profile', status: 500 });
@@ -297,8 +297,8 @@ export const refreshAccessToken = async (req, res) => {
         refreshTokenExpiresAt: rotated.expiresAt,
       },
     });
-  } catch (error) {
-    console.error('Refresh token error:', error.message);
+  } catch (err) {
+    console.error('Refresh token error:', err.message);
     return error(res, { message: 'Failed to refresh token', status: 500 });
   }
 };
@@ -318,8 +318,8 @@ export const revokeRefreshToken = async (req, res) => {
     await RefreshToken.revoke(refreshToken);
 
     return success(res, { message: 'Token revoked successfully' });
-  } catch (error) {
-    console.error('Revoke token error:', error.message);
+  } catch (err) {
+    console.error('Revoke token error:', err.message);
     return error(res, { message: 'Failed to revoke token', status: 500 });
   }
 };
@@ -336,8 +336,8 @@ export const revokeAllRefreshTokens = async (req, res) => {
     await RefreshToken.revokeAllForUser(req.user._id, exceptToken);
 
     return success(res, { message: 'All tokens revoked successfully' });
-  } catch (error) {
-    console.error('Revoke all tokens error:', error.message);
+  } catch (err) {
+    console.error('Revoke all tokens error:', err.message);
     return error(res, { message: 'Failed to revoke tokens', status: 500 });
   }
 };
@@ -377,8 +377,8 @@ export const forgotPassword = async (req, res) => {
       message: 'If the email exists, a reset link has been sent.',
       data: { expiresAt },
     });
-  } catch (error) {
-    console.error('Forgot password error:', error.message);
+  } catch (err) {
+    console.error('Forgot password error:', err.message);
     return error(res, { message: 'Failed to process request. Please try again.', status: 500 });
   }
 };
@@ -429,10 +429,10 @@ export const resetPassword = async (req, res) => {
         user: user.toJSON(),
       },
     });
-  } catch (error) {
-    console.error('Reset password error:', error.message);
-    if (error.name === 'ValidationError') {
-      const messages = Object.values(error.errors).map(e => e.message);
+  } catch (err) {
+    console.error('Reset password error:', err.message);
+    if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(e => e.message);
       return error(res, { message: messages.join('. '), status: 400 });
     }
     return error(res, { message: 'Failed to reset password. Please try again.', status: 500 });
@@ -475,8 +475,8 @@ export const verifyEmail = async (req, res) => {
       message: 'Email verified successfully',
       data: { user: user.toJSON() },
     });
-  } catch (error) {
-    console.error('Verify email error:', error.message);
+  } catch (err) {
+    console.error('Verify email error:', err.message);
     return error(res, { message: 'Failed to verify email. Please try again.', status: 500 });
   }
 };
@@ -510,8 +510,8 @@ export const resendVerification = async (req, res) => {
       message: 'Verification email sent successfully',
       data: { expiresAt },
     });
-  } catch (error) {
-    console.error('Resend verification error:', error.message);
+  } catch (err) {
+    console.error('Resend verification error:', err.message);
     return error(res, { message: 'Failed to resend verification email. Please try again.', status: 500 });
   }
 };
@@ -544,8 +544,8 @@ export const verifyToken = async (req, res) => {
       message: 'Token verification completed',
       data: { active, user: userInfo },
     });
-  } catch (error) {
-    console.error('Token verification error:', error.message);
+  } catch (err) {
+    console.error('Token verification error:', err.message);
     return error(res, { message: 'Failed to verify token', status: 500 });
   }
 };
@@ -570,8 +570,8 @@ export const syncUserProfile = async (req, res) => {
       message: 'User profile synced successfully',
       data: { user: userInfo },
     });
-  } catch (error) {
-    console.error('Profile sync error:', error.message);
+  } catch (err) {
+    console.error('Profile sync error:', err.message);
     return error(res, { message: 'Failed to sync profile', status: 500 });
   }
 };

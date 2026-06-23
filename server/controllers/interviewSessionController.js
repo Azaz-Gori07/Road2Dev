@@ -120,8 +120,8 @@ export const createInterviewSession = async (req, res) => {
     });
 
     return success(res, { message: 'Session created', data: session, status: 201 });
-  } catch (error) {
-    console.error('Create interview session failed:', error.message);
+  } catch (err) {
+    console.error('Create interview session failed:', err.message);
     return error(res, { message: 'Unable to create interview session.', status: 500 });
   }
 };
@@ -135,8 +135,8 @@ export const getInterviewSession = async (req, res) => {
     }
 
     return success(res, { message: 'Session retrieved', data: session });
-  } catch (error) {
-    console.error('Fetch interview session failed:', error.message);
+  } catch (err) {
+    console.error('Fetch interview session failed:', err.message);
     return error(res, { message: 'Unable to fetch interview session.', status: 500 });
   }
 };
@@ -145,8 +145,8 @@ export const getInterviewSessions = async (req, res) => {
   try {
     const sessions = await listSessionsForUser(req.user._id);
     return success(res, { message: 'Sessions retrieved', data: sessions });
-  } catch (error) {
-    console.error('List interview sessions failed:', error.message);
+  } catch (err) {
+    console.error('List interview sessions failed:', err.message);
     return error(res, { message: 'Unable to list interview sessions.', status: 500 });
   }
 };
@@ -283,8 +283,8 @@ export const updateInterviewSession = async (req, res) => {
     }
 
     return success(res, { message: 'Session updated', data: updated });
-  } catch (error) {
-    console.error('Update interview session failed:', error.message);
+  } catch (err) {
+    console.error('Update interview session failed:', err.message);
     return error(res, { message: 'Unable to update interview session.', status: 500 });
   }
 };
@@ -298,8 +298,8 @@ export const deleteInterviewSession = async (req, res) => {
     }
 
     return success(res, { message: 'Interview session deleted.' });
-  } catch (error) {
-    console.error('Delete interview session failed:', error.message);
+  } catch (err) {
+    console.error('Delete interview session failed:', err.message);
     return error(res, { message: 'Unable to delete interview session.', status: 500 });
   }
 };

@@ -65,12 +65,12 @@ export const generateInterview = async (req, res) => {
     });
 
     return success(res, { message: 'Interview generated', data: interview });
-  } catch (error) {
-    const statusCode = error.statusCode || 500;
+  } catch (err) {
+    const statusCode = err.statusCode || 500;
 
-    console.error('Interview generation failed:', error.message);
+    console.error('Interview generation failed:', err.message);
 
-    return error(res, { message: error.publicMessage || 'Interview generation failed. Please try again later.', status: statusCode });
+    return error(res, { message: err.publicMessage || 'Interview generation failed. Please try again later.', status: statusCode });
   }
 };
 
@@ -153,9 +153,9 @@ export const respondToInterview = async (req, res) => {
     });
 
     return success(res, { message: 'Response evaluated', data: evaluation });
-  } catch (error) {
-    const statusCode = error.statusCode || 500;
-    console.error('Interview response evaluation failed:', error.message);
-    return error(res, { message: error.publicMessage || 'Interview evaluation failed. Please try again later.', status: statusCode });
+  } catch (err) {
+    const statusCode = err.statusCode || 500;
+    console.error('Interview response evaluation failed:', err.message);
+    return error(res, { message: err.publicMessage || 'Interview evaluation failed. Please try again later.', status: statusCode });
   }
 };

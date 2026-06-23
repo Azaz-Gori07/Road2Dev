@@ -72,9 +72,9 @@ export const sendOtp = async (req, res) => {
     }
 
     return success(res, { message: 'OTP sent successfully to your email', data: { email } });
-  } catch (error) {
-    console.error('Send OTP error:', error.message);
-    if (error.code === 11000) {
+  } catch (err) {
+    console.error('Send OTP error:', err.message);
+    if (err.code === 11000) {
       return error(res, { message: 'An account with this email already exists', status: 400 });
     }
     return error(res, { message: 'Failed to send OTP. Please try again.', status: 500 });
@@ -138,13 +138,13 @@ export const verifyOtp = async (req, res) => {
     const token = generateToken(user._id);
 
     return success(res, { message: 'Account created successfully', data: { token, user: user.toJSON() }, status: 201 });
-  } catch (error) {
-    console.error('Verify OTP error:', error.message);
-    if (error.code === 11000) {
+  } catch (err) {
+    console.error('Verify OTP error:', err.message);
+    if (err.code === 11000) {
       return error(res, { message: 'An account with this email already exists', status: 400 });
     }
-    if (error.name === 'ValidationError') {
-      const messages = Object.values(error.errors).map(e => e.message);
+    if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(e => e.message);
       return error(res, { message: messages.join('. '), status: 400 });
     }
     return error(res, { message: 'Verification failed. Please try again.', status: 500 });
@@ -183,8 +183,8 @@ export const resendOtp = async (req, res) => {
     await sendOtpEmail(email, otp);
 
     return success(res, { message: 'OTP resent successfully', data: { email } });
-  } catch (error) {
-    console.error('Resend OTP error:', error.message);
+  } catch (err) {
+    console.error('Resend OTP error:', err.message);
     return error(res, { message: 'Failed to resend OTP. Please try again.', status: 500 });
   }
 };

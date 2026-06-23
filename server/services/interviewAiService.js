@@ -64,6 +64,25 @@ Rules:
 `.trim();
 };
 
+const tryRepairJson = (str) => {
+  // Strip trailing incomplete key-value pairs (e.g. `"status":` or `"status": "partial`)
+  let repaired = str.replace(/,?\s*"[^"]*"\s*:\s*("[^"]*"?)?\s*$/, '');
+  // Remove any orphaned colon at the end
+  repaired = repaired.replace(/:\s*("[^"]*"?)?\s*$/, '');
+  // Remove trailing comma
+  repaired = repaired.replace(/,\s*$/, '');
+
+  const openBraces = (repaired.match(/\{/g) || []).length;
+  const closeBraces = (repaired.match(/\}/g) || []).length;
+  const openBrackets = (repaired.match(/\[/g) || []).length;
+  const closeBrackets = (repaired.match(/\]/g) || []).length;
+
+  for (let i = 0; i < openBraces - closeBraces; i++) repaired += '}';
+  for (let i = 0; i < openBrackets - closeBrackets; i++) repaired += ']';
+
+  return repaired;
+};
+
 const extractJson = (text) => {
   if (!text || typeof text !== 'string') {
     throw new Error('AI returned an empty response.');
@@ -74,6 +93,14 @@ const extractJson = (text) => {
   const lastBrace = cleaned.lastIndexOf('}');
 
   if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
+    if (firstBrace !== -1) {
+      const repaired = tryRepairJson(cleaned.slice(firstBrace));
+      try {
+        return JSON.parse(repaired);
+      } catch {
+        // fall through to error
+      }
+    }
     console.error('--- INVALID JSON RECEIVED ---');
     console.error(text);
     console.error('-----------------------------');
@@ -88,6 +115,13 @@ const extractJson = (text) => {
       const fixed = jsonStr.replace(/,\s*([\]}])/g, '$1');
       return JSON.parse(fixed);
     } catch (secondError) {
+      try {
+        const repaired = tryRepairJson(jsonStr);
+        return JSON.parse(repaired);
+      } catch {
+        // fall through
+      }
+
       console.error('--- JSON PARSE ERROR DETECTED ---');
       console.error('Raw AI Output:');
       console.error(text);
@@ -656,7 +690,7 @@ INSTRUCTION FOR THIS TURN:
       geminiModel: provider === 'gemini' ? model : undefined,
       groqModel: provider === 'groq' ? model : undefined,
       jsonResponse: true,
-      maxTokens: 2000,
+      maxTokens: 4000,
     });
 
     const parsed = extractJson(text);

@@ -1270,14 +1270,6 @@ const InterviewPrep = () => {
 
       setInterviewSession(result.data);
       setCurrentStep(5);
-      saveInterviewSessionToServer({
-        statusOverride: 'draft',
-        messages: [],
-        scoreOverride: 0,
-        feedbackOverride: '',
-        questionsOverride: result.data.questions,
-        tipsOverride: result.data.tips || [],
-      });
     } catch (requestError) {
       if (requestError.name !== 'AbortError') {
         setError(requestError.message || 'Unable to generate interview questions.');
