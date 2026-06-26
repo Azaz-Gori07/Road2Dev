@@ -7,6 +7,19 @@ const MAX_STACK_LENGTH = 80;
 const VALID_EXPERIENCE = new Set(['fresher', 'junior', 'mid', 'senior']);
 const VALID_INTERVIEW_TYPES = new Set(['technical', 'hr', 'behavioral', 'system-design', 'mixed']);
 
+const sanitizeText = (text) => {
+  if (typeof text !== 'string') return '';
+  return text
+    .replace(/\[SYSTEM_BOUNDARY\]/gi, '')
+    .replace(/\[USER_INPUT_START\]/gi, '')
+    .replace(/\[USER_INPUT_END\]/gi, '')
+    .replace(/\[END_SYSTEM_BOUNDARY\]/gi, '')
+    .replace(/system instruction/gi, '')
+    .replace(/ignore all previous/gi, '')
+    .replace(/you are (now|not)/gi, '')
+    .slice(0, 10000);
+};
+
 const cleanText = (value) => (typeof value === 'string' ? value.trim() : '');
 
 const validateRequestBody = (body = {}) => {
@@ -98,6 +111,11 @@ export const respondToInterview = async (req, res) => {
     return error(res, { message: 'Messages conversation history is required.', status: 400 });
   }
 
+  const sanitizedMessages = messages.map(m => ({
+    ...m,
+    text: m.text ? sanitizeText(m.text) : m.text,
+  }));
+
   try {
     let previousSummaries = [];
     if (req.user && req.user._id) {
@@ -146,7 +164,7 @@ export const respondToInterview = async (req, res) => {
       stack,
       experienceLevel,
       interviewType,
-      messages,
+      messages: sanitizedMessages,
       previousSummaries,
       candidateName,
       userPreferences,

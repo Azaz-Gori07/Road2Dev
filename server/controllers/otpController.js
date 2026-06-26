@@ -106,8 +106,8 @@ export const verifyOtp = async (req, res) => {
       return error(res, { message: 'OTP has expired. Please request a new one.', status: 400 });
     }
 
-    // Check attempts (max 5)
-    if (otpRecord.attempts >= 5) {
+    // Check attempts (max 3)
+    if (otpRecord.attempts >= 3) {
       await Otp.deleteOne({ _id: otpRecord._id });
       return error(res, { message: 'Too many failed attempts. Please request a new OTP.', status: 400 });
     }

@@ -12,7 +12,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Helper: Generate JWT access token (short-lived)
 const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '15m' });
 };
 
 // Helper: Generate refresh token (long-lived, stored in DB)
@@ -365,7 +365,7 @@ export const forgotPassword = async (req, res) => {
       return success(res, { message: 'If the email exists, a reset link has been sent.' });
     }
 
-    const { token, expiresAt } = await PasswordResetToken.createForUser(user._id, 60);
+    const { token, expiresAt } = await PasswordResetToken.createForUser(user._id, 15);
 
     const sent = await sendPasswordResetEmail(email, token, user.name);
 

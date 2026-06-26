@@ -346,7 +346,7 @@ const getDefenceProviders = () => {
   providers.push('groq');
   return {
     providers,
-    openRouterModel: process.env.DEFENCE_MODEL?.trim() || 'kimi-ai/kimi-k2.6-free'
+    openRouterModel: process.env.DEFENCE_MODEL?.trim() || 'deepseek/deepseek-chat-v3-0324:free'
   };
 };
 

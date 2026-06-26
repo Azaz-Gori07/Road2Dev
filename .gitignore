@@ -1,9 +1,6 @@
-server/.env
 .env
 .env*
 !.env.example
-server/.env
-client/.env
 node_modules/
 dist/
 .agent.md

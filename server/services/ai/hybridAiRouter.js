@@ -1,6 +1,7 @@
 import { GroqProvider } from './providers/groqProvider.js';
 import { OpenRouterProvider } from './providers/openRouterProvider.js';
 import { NvidiaProvider } from './providers/nvidiaProvider.js';
+import { GeminiProvider } from './providers/geminiProvider.js';
 
 const DEFAULT_COOLDOWN_MS = Number(process.env.AI_CIRCUIT_BREAKER_COOLDOWN_MS) || 60_000;
 const FAILURE_COUNT_THRESHOLD = Number(process.env.AI_CIRCUIT_BREAKER_FAILURE_THRESHOLD) || 5;
@@ -38,9 +39,9 @@ const getDefaultModel = (provider) => {
   if (process.env.AI_MODEL?.trim()) return process.env.AI_MODEL.trim();
   const defaultModels = {
     groq: 'llama-3.1-8b-instant',
-    openrouter: process.env.DEFENCE_MODEL?.trim() || 'moonshotai/kimi-k2.6:free',
-    openrouter2: process.env.AI_API_KEY_2_MODEL?.trim() || 'openai/gpt-oss-20b:free',
-    nvidia: process.env.NVIDIA_TEXT_MODEL?.trim() || 'meta/llama-3.3-70b-instruct',
+    openrouter: 'openai/gpt-4o-mini',
+    openrouter2: process.env.AI_API_KEY_2_MODEL || 'deepseek/deepseek-chat-v3-0324:free',
+    nvidia: process.env.NVIDIA_TEXT_MODEL || 'meta/llama-3.3-70b-instruct',
   };
   return defaultModels[provider] || '';
 };
@@ -52,6 +53,7 @@ const aiCircuit = {
   openrouter: { failures: 0, disabledUntil: 0 },
   openrouter2: { failures: 0, disabledUntil: 0 },
   nvidia: { failures: 0, disabledUntil: 0 },
+  gemini: { failures: 0, disabledUntil: 0 },
 };
 
 const shouldSkip = (providerName) => {
@@ -123,6 +125,7 @@ export async function hybridGenerate(options) {
   const groqProvider = new GroqProvider();
   const openRouterProvider = new OpenRouterProvider();
   const nvidiaProvider = new NvidiaProvider();
+  const geminiProvider = new GeminiProvider();
 
   const tryNvidia = async () => {
     const nvidiaKey = process.env.NVIDIA_TEXT_API_KEY;
@@ -166,6 +169,51 @@ export async function hybridGenerate(options) {
     const latency = Date.now() - start;
     logAiCall('nvidia', nvidiaModel, latency, 'success');
     recordSuccess('nvidia');
+
+    return withMeta(result);
+  };
+
+  const tryGemini = async () => {
+    const geminiKey = process.env.AI_API_KEY;
+    if (!geminiKey || !geminiKey.startsWith('AIza')) {
+      const err = new Error('Gemini API key not configured or invalid');
+      err.publicMessage = 'Gemini API key not configured';
+      err.isMissingKey = true;
+      throw err;
+    }
+
+    if (shouldSkip('gemini')) {
+      const err = new Error('Gemini circuit breaker active');
+      err.publicMessage = 'Gemini circuit breaker active';
+      err.isCircuitBreaker = true;
+      throw err;
+    }
+
+    const start = Date.now();
+    let result;
+    try {
+      result = await geminiProvider.generate({
+        apiKey: geminiKey,
+        prompt,
+        systemPrompt,
+        model: 'gemini-1.5-flash',
+        timeoutMs,
+        jsonResponse,
+      });
+    } catch (err) {
+      logAiCall('gemini', 'gemini-1.5-flash', Date.now() - start, 'failure');
+      throw err;
+    }
+
+    if (!result?.text?.trim()) {
+      const err = new Error('AI returned an empty response');
+      err.isEmptyResponse = true;
+      throw err;
+    }
+
+    const latency = Date.now() - start;
+    logAiCall('gemini', 'gemini-1.5-flash', latency, 'success');
+    recordSuccess('gemini');
 
     return withMeta(result);
   };
@@ -305,7 +353,7 @@ export async function hybridGenerate(options) {
 
   // Provider chain — iterate in order, fall through on retryable errors
   // Outer backoff loop: 1s, 2s, 4s — bans immediate retries
-  const providerOrder = options?.providers || ['nvidia', 'openrouter2', 'groq'];
+  const providerOrder = options?.providers || ['groq', 'openrouter2'];
   const BACKOFF_DELAYS = [1000, 2000, 4000];
 
   let lastError = null;
@@ -315,6 +363,7 @@ export async function hybridGenerate(options) {
       const name = providerOrder[i];
       try {
         if (name === 'nvidia') return await tryNvidia();
+        if (name === 'gemini') return await tryGemini();
         if (name === 'openrouter') return await tryOpenRouter();
         if (name === 'openrouter2') return await tryOpenRouter2();
         if (name === 'groq') return await tryGroq();

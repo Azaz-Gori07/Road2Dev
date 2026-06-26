@@ -727,6 +727,17 @@ export const sendChatMessage = async (req, res) => {
     return error(res, { message: 'Message text is required.', status: 400 });
   }
 
+  // Sanitize: strip prompt injection markers
+  const sanitizedText = text
+    .replace(/\[SYSTEM_BOUNDARY\]/gi, '')
+    .replace(/\[USER_INPUT_START\]/gi, '')
+    .replace(/\[USER_INPUT_END\]/gi, '')
+    .replace(/\[END_SYSTEM_BOUNDARY\]/gi, '')
+    .replace(/system instruction/gi, '')
+    .replace(/ignore all previous/gi, '')
+    .replace(/you are (now|not)/gi, '')
+    .slice(0, 5000);
+
   try {
     const session = await LearningSession.findOne({ _id: req.params.id, userId: req.user._id });
     if (!session) {
@@ -753,7 +764,7 @@ export const sendChatMessage = async (req, res) => {
     session.messages.push({
       id: `u-${Date.now()}`,
       role: 'user',
-      text,
+      text: sanitizedText,
       timestamp: new Date()
     });
 
